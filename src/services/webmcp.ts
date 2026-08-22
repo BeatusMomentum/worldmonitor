@@ -14,6 +14,8 @@
 //   4. open_dashboard_panel()     — opens an already-live panel.
 //   5. set_map_view()             — moves the visible map.
 //   6. set_map_layers()           — changes allowed visible map layers.
+//   7. search_dashboard()         — searches the live dashboard index.
+//   8. open_search_result()       — selects an opaque, revalidated result.
 //
 // No tool is conditionally registered. Live controls re-check auth and
 // entitlement through the agent-bus applier on every invocation, so a single
@@ -24,7 +26,13 @@
 // Register synchronously from App.ts (no dynamic import, no init-phase
 // awaits) so the probe finds the tools before it gives up.
 
-import { track, type UmamiEvent } from './analytics';
+import { trackPrivacyRestricted, type UmamiEvent } from './analytics';
+import {
+  WEBMCP_SPA_TOOL,
+  WEBMCP_SPA_TOOL_NAMES,
+  WEBMCP_TOOL_BUDGETS,
+  type WebMcpSpaToolName,
+} from '../config/webmcp';
 import {
   DASHBOARD_MAP_MAX_LATITUDE,
   DASHBOARD_MAP_VIEWS,
@@ -43,6 +51,43 @@ export interface WebMcpAppBindings {
   openSearch(): void | Promise<void>;
   getDashboardContext(): DashboardContextSnapshot | Promise<DashboardContextSnapshot>;
   applyDashboardAction(action: unknown): DashboardActionResult | Promise<DashboardActionResult>;
+  searchDashboard(
+    query: string,
+    scope: DashboardSearchScope,
+    limit: number,
+  ): DashboardSearchResponse | Promise<DashboardSearchResponse>;
+  openSearchResult(resultKey: string): DashboardSearchOpenResult | Promise<DashboardSearchOpenResult>;
+}
+
+export type DashboardSearchScope = 'all' | 'signals' | 'map' | 'panels' | 'actions';
+
+export interface DashboardSearchDescriptor {
+  key: string;
+  type: string;
+  title: string;
+  subtitle?: string;
+  executable: boolean;
+}
+
+export interface DashboardSearchResponse {
+  queryLength: number;
+  results: DashboardSearchDescriptor[];
+  resultCount: number;
+  truncated: boolean;
+}
+
+export type DashboardSearchOpenReason =
+  | 'malformed_arguments'
+  | 'invalid_or_expired_key'
+  | 'search_state_changed'
+  | 'result_no_longer_available'
+  | 'result_no_longer_executable';
+
+export interface DashboardSearchOpenResult {
+  ok: boolean;
+  status: 'opened' | 'denied';
+  type?: string;
+  reason?: DashboardSearchOpenReason;
 }
 
 export interface DashboardContextSnapshot {
@@ -89,14 +134,16 @@ export class DashboardBindingError extends Error {
   }
 }
 
-type DashboardWebMcpToolName =
-  | 'openCountryBrief'
-  | 'openSearch'
-  | 'get_dashboard_context'
-  | 'open_dashboard_panel'
-  | 'set_map_view'
-  | 'set_map_layers';
 type WebMcpAnalytics = (event: UmamiEvent, data?: Record<string, unknown>) => void;
+type WebMcpInvocationOutcome = 'success' | 'denied' | 'failure';
+type WebMcpInvocationReason =
+  | 'completed'
+  | 'validation'
+  | 'entitlement'
+  | 'unavailable'
+  | 'stale'
+  | 'cancelled'
+  | 'internal';
 type RegistrationFailureReason =
   | 'invalid-state'
   | 'security'
@@ -105,7 +152,7 @@ type RegistrationFailureReason =
   | 'unknown';
 
 type DashboardWebMcpTool = WebMCP.ModelContextTool & {
-  name: DashboardWebMcpToolName;
+  name: WebMcpSpaToolName;
   execute: WebMCP.ToolExecuteCallback<Record<string, unknown>>;
 };
 
@@ -116,20 +163,71 @@ interface WebMcpRegistrationRuntime {
 }
 
 const ISO2 = /^[A-Z]{2}$/;
-const MAX_OUTPUT_CHARS = 1_500;
+const SEARCH_RESULT_KEY = /^sr_[a-f0-9]{32}$/;
+const DASHBOARD_SEARCH_SCOPES = new Set<DashboardSearchScope>([
+  'all', 'signals', 'map', 'panels', 'actions',
+]);
+const DASHBOARD_SEARCH_OPEN_REASONS = new Set<DashboardSearchOpenReason>([
+  'malformed_arguments',
+  'invalid_or_expired_key',
+  'search_state_changed',
+  'result_no_longer_available',
+  'result_no_longer_executable',
+]);
+const MAX_SEARCH_QUERY_CHARS = 160;
+const MAX_SEARCH_RESULTS = 10;
+const DEFAULT_SEARCH_RESULTS = 8;
+const MAX_OUTPUT_CHARS = WEBMCP_TOOL_BUDGETS.outputJsonChars;
 const TARGET_OUTPUT_CHARS = 1_400;
-const TOOL_FAILURE_MESSAGES: Record<DashboardWebMcpToolName, string> = {
+export const DASHBOARD_SEARCH_OUTPUT_TARGET_CHARS = 1_400;
+export const DASHBOARD_SEARCH_TYPE_MAX_CHARS = 32;
+export const DASHBOARD_SEARCH_TITLE_MAX_CHARS = 160;
+export const DASHBOARD_SEARCH_SUBTITLE_MAX_CHARS = 180;
+const SEARCH_RESULT_TYPE_BUCKETS = new Set([
+  'command',
+  'country',
+  'news',
+  'hotspot',
+  'market',
+  'prediction',
+  'conflict',
+  'base',
+  'pipeline',
+  'cable',
+  'datacenter',
+  'earthquake',
+  'outage',
+  'nuclear',
+  'irradiator',
+  'techcompany',
+  'ailab',
+  'startup',
+  'techevent',
+  'techhq',
+  'accelerator',
+  'exchange',
+  'financialcenter',
+  'centralbank',
+  'commodityhub',
+  'flight',
+]);
+const TOOL_FAILURE_MESSAGES: Record<WebMcpSpaToolName, string> = {
   openCountryBrief: 'World Monitor could not open that country brief.',
   openSearch: 'World Monitor could not open search.',
   get_dashboard_context: 'World Monitor could not read dashboard context.',
   open_dashboard_panel: 'World Monitor could not open that dashboard panel.',
   set_map_view: 'World Monitor could not move the map.',
   set_map_layers: 'World Monitor could not update map layers.',
+  search_dashboard: 'World Monitor could not search the dashboard.',
+  open_search_result: 'World Monitor could not open that search result.',
 };
 
 class SafeWebMcpError extends Error {
-  public constructor(message: string) {
-    super(message);
+  public constructor(
+    message: string,
+    public readonly analyticsReason: WebMcpInvocationReason = 'internal',
+  ) {
+    super(message.slice(0, WEBMCP_TOOL_BUDGETS.errorMessageChars));
     this.name = 'WebMcpToolError';
   }
 }
@@ -146,33 +244,127 @@ function reportWebMcpEvent(
   }
 }
 
+function errorName(error: unknown): string {
+  try {
+    return error && typeof error === 'object' && 'name' in error
+      ? String((error as { name?: unknown }).name ?? '')
+      : '';
+  } catch {
+    return '';
+  }
+}
+
 function withInvocationLogging(
-  name: DashboardWebMcpToolName,
-  fn: WebMCP.ToolExecuteCallback<Record<string, unknown>>,
+  name: WebMcpSpaToolName,
+  fn: (
+    input: Record<string, unknown>,
+    extra?: { signal?: AbortSignal },
+  ) => Promise<unknown> | unknown,
   trackEvent: WebMcpAnalytics,
+  successMetadata?: (
+    args: Record<string, unknown>,
+    result: unknown,
+  ) => Record<string, unknown>,
 ): WebMCP.ToolExecuteCallback<Record<string, unknown>> {
-  return async (args) => {
+  return async (args, extra?: { signal?: AbortSignal }) => {
     try {
-      const result = await fn(args);
+      const result = await fn(args, extra);
+      enforceOutputBudget(result);
+      const invocation = classifyInvocationResult(result);
       reportWebMcpEvent(trackEvent, 'webmcp-tool-invoked', {
         tool: name,
-        outcome: 'success',
+        ...invocation,
+        ...(successMetadata?.(args, result) ?? {}),
       });
       return result;
     } catch (error) {
+      const reason = classifyInvocationError(error);
       reportWebMcpEvent(trackEvent, 'webmcp-tool-invoked', {
         tool: name,
         outcome: 'failure',
+        reason,
       });
       if (error instanceof SafeWebMcpError) throw error;
+      if (errorName(error) === 'AbortError') throw error;
       if (error instanceof DashboardBindingError) {
         throw new SafeWebMcpError(
           `Dashboard unavailable: ${boundedText(error.message, 160)} Reason: ${error.reason}.`,
+          'unavailable',
         );
       }
       throw new SafeWebMcpError(TOOL_FAILURE_MESSAGES[name]);
     }
   };
+}
+
+function enforceOutputBudget(value: unknown): void {
+  const serialized = JSON.stringify(value);
+  if (typeof serialized !== 'string' || serialized.length > MAX_OUTPUT_CHARS) {
+    throw new SafeWebMcpError('Tool output exceeded the safe output limit.');
+  }
+}
+
+function structuredResultReasons(result: Record<string, unknown>): string[] {
+  const reasons = typeof result.reason === 'string' ? [result.reason] : [];
+  if (!Array.isArray(result.targets)) return reasons;
+  for (const target of result.targets) {
+    if (target && typeof target === 'object' && 'reason' in target) {
+      const reason = (target as { reason?: unknown }).reason;
+      if (typeof reason === 'string') reasons.push(reason);
+    }
+  }
+  return reasons;
+}
+
+const VALIDATION_DENIAL_REASONS = new Set([
+  'malformed_arguments',
+  'invalid_action',
+  'not_dashboard_control',
+]);
+const ENTITLEMENT_DENIAL_REASONS = new Set([
+  'panel_not_entitled',
+  'layer_not_entitled',
+]);
+const STALE_DENIAL_REASONS = new Set([
+  'invalid_or_expired_key',
+  'search_state_changed',
+  'result_no_longer_available',
+  'result_no_longer_executable',
+]);
+
+function classifyStructuredDenial(result: Record<string, unknown>): WebMcpInvocationReason {
+  if (result.status === 'invalid') return 'validation';
+  const reasons = structuredResultReasons(result);
+  if (reasons.some((reason) => VALIDATION_DENIAL_REASONS.has(reason))) return 'validation';
+  if (reasons.some((reason) => ENTITLEMENT_DENIAL_REASONS.has(reason))) return 'entitlement';
+  if (reasons.some((reason) => STALE_DENIAL_REASONS.has(reason))) return 'stale';
+  return 'unavailable';
+}
+
+function classifyInvocationResult(result: unknown): {
+  outcome: WebMcpInvocationOutcome;
+  reason: WebMcpInvocationReason;
+} {
+  if (result && typeof result === 'object') {
+    const record = result as Record<string, unknown>;
+    if (record.ok === false || ['denied', 'invalid', 'skipped'].includes(String(record.status))) {
+      return { outcome: 'denied', reason: classifyStructuredDenial(record) };
+    }
+  }
+  return { outcome: 'success', reason: 'completed' };
+}
+
+function classifyInvocationError(error: unknown): WebMcpInvocationReason {
+  if (error instanceof SafeWebMcpError) return error.analyticsReason;
+  if (error instanceof DashboardBindingError) return 'unavailable';
+  if (errorName(error) === 'AbortError') return 'cancelled';
+  return 'internal';
+}
+
+function searchResultTypeBucket(value: unknown): string {
+  return typeof value === 'string' && SEARCH_RESULT_TYPE_BUCKETS.has(value)
+    ? value
+    : 'other';
 }
 
 function boundedText(value: unknown, maxLength: number): string {
@@ -266,6 +458,64 @@ function boundDashboardActionResult(result: DashboardActionResult): Record<strin
   return bounded;
 }
 
+function boundDashboardSearchResult(result: DashboardSearchResponse): DashboardSearchResponse {
+  const sourceResults = Array.isArray(result.results) ? result.results : [];
+  const results = sourceResults
+    .filter((match) => typeof match?.key === 'string' && SEARCH_RESULT_KEY.test(match.key))
+    .slice(0, MAX_SEARCH_RESULTS)
+    .map((match) => ({
+      key: match.key,
+      type: boundedText(match?.type, DASHBOARD_SEARCH_TYPE_MAX_CHARS),
+      title: boundedText(match?.title, DASHBOARD_SEARCH_TITLE_MAX_CHARS),
+      ...(match?.subtitle ? {
+        subtitle: boundedText(match.subtitle, DASHBOARD_SEARCH_SUBTITLE_MAX_CHARS),
+      } : {}),
+      executable: match?.executable === true,
+    }));
+  let truncated = result.truncated === true || results.length < sourceResults.length;
+  const bounded: DashboardSearchResponse = {
+    queryLength: Math.max(0, Math.floor(boundedNumber(result.queryLength))),
+    results,
+    resultCount: results.length,
+    truncated,
+  };
+
+  while (
+    JSON.stringify(bounded).length > DASHBOARD_SEARCH_OUTPUT_TARGET_CHARS
+    && results.length > 0
+  ) {
+    results.pop();
+    truncated = true;
+    bounded.resultCount = results.length;
+    bounded.truncated = truncated;
+  }
+  if (JSON.stringify(bounded).length > MAX_OUTPUT_CHARS) {
+    throw new SafeWebMcpError('Dashboard search result exceeded the safe output limit.');
+  }
+  return bounded;
+}
+
+function boundSearchOpenResult(result: DashboardSearchOpenResult): DashboardSearchOpenResult {
+  const opened = result.ok === true && result.status === 'opened';
+  const reason = result.reason && DASHBOARD_SEARCH_OPEN_REASONS.has(result.reason)
+    ? result.reason
+    : 'invalid_or_expired_key';
+  return {
+    ok: opened,
+    status: opened ? 'opened' : 'denied',
+    ...(result.type ? { type: boundedText(result.type, 32) } : {}),
+    ...(!opened ? { reason } : {}),
+  };
+}
+
+function hasOnlyOwnKeys(
+  value: Record<string, unknown>,
+  allowedKeys: readonly string[],
+): boolean {
+  const allowed = new Set(allowedKeys);
+  return Object.keys(value).every((key) => allowed.has(key));
+}
+
 async function applyDashboardAction(
   action: unknown,
   app: WebMcpAppBindings,
@@ -279,11 +529,11 @@ async function applyDashboardAction(
 
 export function buildWebMcpTools(
   app: WebMcpAppBindings,
-  trackEvent: WebMcpAnalytics = track,
+  trackEvent: WebMcpAnalytics = trackPrivacyRestricted,
 ): DashboardWebMcpTool[] {
-  return [
+  const tools: DashboardWebMcpTool[] = [
     {
-      name: 'openCountryBrief',
+      name: WEBMCP_SPA_TOOL.openCountryBrief,
       title: 'Open Country Brief',
       description:
         'Open the intelligence brief panel for a country by ISO 3166-1 alpha-2 code (e.g. "DE", "IR"). Routes the user to the country deep-dive view; the brief itself is fetched by the same path a click would take.',
@@ -300,20 +550,21 @@ export function buildWebMcpTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false },
-      execute: withInvocationLogging('openCountryBrief', async (args) => {
+      execute: withInvocationLogging(WEBMCP_SPA_TOOL.openCountryBrief, async (args) => {
         const iso2 = typeof args.iso2 === 'string' ? args.iso2.toUpperCase() : '';
         if (!ISO2.test(iso2)) {
           throw new SafeWebMcpError(
             'iso2 must be an ISO 3166-1 alpha-2 code, such as "DE" or "IR".',
+            'validation',
           );
         }
-        const name = app.resolveCountryName(iso2);
+        const name = boundedText(app.resolveCountryName(iso2), 160) || iso2;
         await app.openCountryBriefByCode(iso2, name);
         return `Opened intelligence brief for ${name} (${iso2}).`;
       }, trackEvent),
     },
     {
-      name: 'openSearch',
+      name: WEBMCP_SPA_TOOL.openSearch,
       title: 'Open Search',
       description:
         'Open the global search command palette so the user can find countries, signals, alerts, and other entities tracked by World Monitor.',
@@ -323,13 +574,13 @@ export function buildWebMcpTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false },
-      execute: withInvocationLogging('openSearch', async () => {
+      execute: withInvocationLogging(WEBMCP_SPA_TOOL.openSearch, async () => {
         await app.openSearch();
         return 'Opened search palette.';
       }, trackEvent),
     },
     {
-      name: 'get_dashboard_context',
+      name: WEBMCP_SPA_TOOL.getDashboardContext,
       title: 'Get Dashboard Context',
       description:
         'Read a bounded snapshot of the visible dashboard: active variant, map view, center, zoom, time range, enabled layers, and mounted or enabled panel IDs.',
@@ -339,15 +590,15 @@ export function buildWebMcpTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: true },
-      execute: withInvocationLogging('get_dashboard_context', async () => (
+      execute: withInvocationLogging(WEBMCP_SPA_TOOL.getDashboardContext, async () => (
         boundDashboardContext(await app.getDashboardContext())
       ), trackEvent),
     },
     {
-      name: 'open_dashboard_panel',
+      name: WEBMCP_SPA_TOOL.openDashboardPanel,
       title: 'Open Dashboard Panel',
       description:
-        'Open and scroll to an already-live dashboard panel through the same entitlement-aware control path used by World Monitor.',
+        'Open and scroll to an already-live, currently enabled dashboard panel through the same entitlement-aware control path used by World Monitor. Disabled panels return panel_disabled. A person can enable them from dashboard search or settings; this tool does not enable panels itself.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -363,7 +614,7 @@ export function buildWebMcpTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false },
-      execute: withInvocationLogging('open_dashboard_panel', async (args) => (
+      execute: withInvocationLogging(WEBMCP_SPA_TOOL.openDashboardPanel, async (args) => (
         applyDashboardAction({
           type: 'open_panel',
           panelId: args.panelId,
@@ -371,7 +622,7 @@ export function buildWebMcpTools(
       ), trackEvent),
     },
     {
-      name: 'set_map_view',
+      name: WEBMCP_SPA_TOOL.setMapView,
       title: 'Set Map View',
       description:
         'Move the visible map to a named world region or a bounded latitude/longitude pair, with an optional zoom level.',
@@ -404,23 +655,25 @@ export function buildWebMcpTools(
         },
         oneOf: [
           {
+            properties: { view: {} },
             required: ['view'],
             not: {
               anyOf: [
-                { required: ['lat'] },
-                { required: ['lon'] },
+                { properties: { lat: {} }, required: ['lat'] },
+                { properties: { lon: {} }, required: ['lon'] },
               ],
             },
           },
           {
+            properties: { lat: {}, lon: {} },
             required: ['lat', 'lon'],
-            not: { required: ['view'] },
+            not: { properties: { view: {} }, required: ['view'] },
           },
         ],
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false },
-      execute: withInvocationLogging('set_map_view', async (args) => (
+      execute: withInvocationLogging(WEBMCP_SPA_TOOL.setMapView, async (args) => (
         applyDashboardAction({
           type: 'set_view',
           view: args.view,
@@ -431,7 +684,7 @@ export function buildWebMcpTools(
       ), trackEvent),
     },
     {
-      name: 'set_map_layers',
+      name: WEBMCP_SPA_TOOL.setMapLayers,
       title: 'Set Map Layers',
       description:
         'Enable or disable explicit visible map layers through World Monitor’s variant, renderer, and entitlement-aware control path.',
@@ -456,14 +709,140 @@ export function buildWebMcpTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false },
-      execute: withInvocationLogging('set_map_layers', async (args) => (
+      execute: withInvocationLogging(WEBMCP_SPA_TOOL.setMapLayers, async (args) => (
         applyDashboardAction({
           type: 'set_layers',
           layers: args.layers,
         }, app)
       ), trackEvent),
     },
+    {
+      name: WEBMCP_SPA_TOOL.searchDashboard,
+      title: 'Search Dashboard',
+      description:
+        'Search the current World Monitor country, signal, map, panel, finance, and action indexes without opening the command palette or changing the dashboard.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          query: {
+            type: 'string',
+            description: 'Search text. It is never included in analytics.',
+            minLength: 1,
+            maxLength: MAX_SEARCH_QUERY_CHARS,
+          },
+          scope: {
+            type: 'string',
+            description: 'Optional dashboard surface to search.',
+            enum: [...DASHBOARD_SEARCH_SCOPES],
+            default: 'all',
+          },
+          limit: {
+            type: 'integer',
+            description: 'Maximum number of concise results to return.',
+            minimum: 1,
+            maximum: MAX_SEARCH_RESULTS,
+            default: DEFAULT_SEARCH_RESULTS,
+          },
+        },
+        required: ['query'],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true, untrustedContentHint: true },
+      execute: withInvocationLogging(WEBMCP_SPA_TOOL.searchDashboard, async (args) => {
+        if (!hasOnlyOwnKeys(args, ['query', 'scope', 'limit'])) {
+          throw new SafeWebMcpError(
+            'search_dashboard accepts only query, scope, and limit.',
+            'validation',
+          );
+        }
+        if (typeof args.query !== 'string') {
+          throw new SafeWebMcpError('query must be a string.', 'validation');
+        }
+        if (args.query.length > MAX_SEARCH_QUERY_CHARS) {
+          throw new SafeWebMcpError(
+            `query must be at most ${MAX_SEARCH_QUERY_CHARS} characters.`,
+            'validation',
+          );
+        }
+        const query = args.query.trim();
+        if (!query) throw new SafeWebMcpError('query must not be empty.', 'validation');
+
+        const scope = args.scope === undefined ? 'all' : args.scope;
+        if (typeof scope !== 'string' || !DASHBOARD_SEARCH_SCOPES.has(scope as DashboardSearchScope)) {
+          throw new SafeWebMcpError(
+            'scope must be one of: all, signals, map, panels, actions.',
+            'validation',
+          );
+        }
+        const limit = args.limit === undefined ? DEFAULT_SEARCH_RESULTS : args.limit;
+        if (!Number.isInteger(limit) || Number(limit) < 1 || Number(limit) > MAX_SEARCH_RESULTS) {
+          throw new SafeWebMcpError(
+            `limit must be an integer from 1 to ${MAX_SEARCH_RESULTS}.`,
+            'validation',
+          );
+        }
+
+        return boundDashboardSearchResult(await app.searchDashboard(
+          query,
+          scope as DashboardSearchScope,
+          Number(limit),
+        ));
+      }, trackEvent, (args, value) => {
+        const result = value as DashboardSearchResponse;
+        return {
+          queryLength: typeof args.query === 'string' ? args.query.trim().length : 0,
+          resultCount: result.resultCount,
+          resultTypes: [...new Set(
+            result.results.map((match) => searchResultTypeBucket(match.type)),
+          )].sort(),
+        };
+      }),
+    },
+    {
+      name: WEBMCP_SPA_TOOL.openSearchResult,
+      title: 'Open Search Result',
+      description:
+        'Open one result previously issued by search_dashboard after rechecking that it is still live, allowed, compatible, and entitled.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          resultKey: {
+            type: 'string',
+            description: 'Opaque key returned by search_dashboard on this page.',
+            pattern: '^sr_[a-f0-9]{32}$',
+          },
+        },
+        required: ['resultKey'],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: false },
+      execute: withInvocationLogging(WEBMCP_SPA_TOOL.openSearchResult, async (args) => {
+        if (!hasOnlyOwnKeys(args, ['resultKey'])) {
+          return boundSearchOpenResult({
+            ok: false,
+            status: 'denied',
+            reason: 'malformed_arguments',
+          });
+        }
+        const resultKey = typeof args.resultKey === 'string' ? args.resultKey : '';
+        if (!SEARCH_RESULT_KEY.test(resultKey)) {
+          return boundSearchOpenResult({
+            ok: false,
+            status: 'denied',
+            reason: 'malformed_arguments',
+          });
+        }
+        return boundSearchOpenResult(await app.openSearchResult(resultKey));
+      }, trackEvent),
+    },
   ];
+  const registered = new Set(tools.map((tool) => tool.name));
+  for (const name of WEBMCP_SPA_TOOL_NAMES) {
+    if (!registered.has(name)) {
+      throw new Error(`WebMCP SPA inventory is missing ${name}.`);
+    }
+  }
+  return tools;
 }
 
 function registrationFailureReason(error: unknown): RegistrationFailureReason | 'aborted' {
@@ -508,7 +887,7 @@ function observeRegistration(
     () => !controller.signal.aborted,
     (error: unknown) => {
       const reason = registrationFailureReason(error);
-      if (!controller.signal.aborted && reason !== 'aborted') {
+      if (!controller.signal.aborted) {
         reportWebMcpEvent(trackEvent, 'webmcp-registration-failed', {
           tool: tool.name,
           reason,
@@ -535,7 +914,8 @@ function startRegistration(
     if (toolCount === 0) return;
     reportWebMcpEvent(trackEvent, 'webmcp-registered', {
       toolCount,
-      api: 'registerTool',
+      pageSurface: 'dashboard',
+      api: 'document-current',
     });
   });
 }
@@ -555,7 +935,7 @@ export function registerWebMcpTools(
 
   const runtimeWindow = runtime.window
     ?? (typeof window === 'undefined' ? null : window);
-  const trackEvent = runtime.track ?? track;
+  const trackEvent = runtime.track ?? trackPrivacyRestricted;
   const tools = buildWebMcpTools(app, trackEvent);
   const controller = new AbortController();
   let registrationStarted = false;

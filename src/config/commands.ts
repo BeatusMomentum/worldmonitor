@@ -1,7 +1,7 @@
 import type { MapLayers } from '@/types';
 import { CURATED_COUNTRIES } from '@/config/countries';
 // boundary-ignore: commands are built lazily at runtime via getAllCommands()
-import { getCurrentLanguage, t } from '@/services/i18n';
+import { getCurrentLanguage, getCurrentLanguageTag, t } from '@/services/i18n';
 import { toFlagEmoji } from '@/utils/country-flag';
 
 export interface Command {
@@ -172,6 +172,7 @@ export const COMMANDS: Command[] = [
   { id: 'panel:security-advisories', keywords: ['advisories', 'travel advisory', 'security advisory', 'travel warning'], label: 'Panel: Security Advisories', icon: '\u{1F6C2}', category: 'panels' },
   { id: 'panel:oref-sirens', keywords: ['sirens', 'oref', 'israel sirens', 'red alert', 'iron dome'], label: 'Panel: Israel Sirens', icon: '\u{1F6A8}', category: 'panels' },
   { id: 'panel:telegram-intel', keywords: ['telegram', 'telegram intel', 'osint'], label: 'Panel: Telegram Intel', icon: '\u{1F4E8}', category: 'panels' },
+  { id: 'panel:x-intel', keywords: ['x news', 'twitter', 'x accounts', 'news accounts'], label: 'Panel: X News Accounts', icon: '\u{1F426}', category: 'panels' },
   { id: 'panel:airline-intel', keywords: ['airline', 'airline intelligence', 'aviation intel', 'flight news'], label: 'Panel: Airline Intelligence', icon: '\u2708\uFE0F', category: 'panels' },
   { id: 'panel:tech-readiness', keywords: ['tech readiness', 'digital readiness', 'technology index'], label: 'Panel: Tech Readiness Index', icon: '\u{1F4F1}', category: 'panels' },
   { id: 'panel:world-clock', keywords: ['clock', 'world clock', 'time zones', 'timezone'], label: 'Panel: World Clock', icon: '\u{1F570}\uFE0F', category: 'panels' },
@@ -344,7 +345,12 @@ function injectLocalizedKeywords(commands: Command[]): Command[] {
 }
 
 function buildCountryCommands(): Command[] {
-  const lang = getCurrentLanguage();
+  // Script-sensitive, so the full tag: Intl.DisplayNames renders `zh` as
+  // Simplified — 美国, and 韩国 where Traditional readers say 南韓, a different
+  // word rather than a different character. The memo key reads the same
+  // accessor on purpose; keying it on the stripped code would let whichever
+  // catalogue built first answer for both.
+  const lang = getCurrentLanguageTag();
   if (lang === _cachedLang && _cachedCountryCommands.length > 0) {
     return _cachedCountryCommands;
   }
