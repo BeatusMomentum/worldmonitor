@@ -918,6 +918,32 @@ The response is `{operation, data}`, retaining the existing API payload, includi
 
 For example, `get_stock_research` with `{"operation":"history","symbols":["AAPL","MSFT"],"limit_per_symbol":2}` reads saved analyses without generating new ones.
 
+### `get_gold_intelligence`
+
+Read seeded precious-metal futures quotes and optional gold COT positioning, session ranges, returns, drivers, ETF holdings and central-bank reserves. No tool-specific parameters. Universal `jmespath` projection remains available.
+
+The response retains source fields and optional enrichment. Prices are USD per troy ounce unless a cross-currency row names another currency; changes/returns are percentages. COT position counts are decimal strings, preserving int64 precision. ETF and reserve quantities are tonnes; ETF AUM is USD. Retain each observation date. The enrichment `updatedAt` does not establish freshness of every source. `unavailable: true`, absent enrichment and placeholder zero quotes are not confirmed zero market observations.
+
+- **API endpoint:** `GET /api/market/v1/get-gold-intelligence`.
+- **Access:** subscription. One signed downstream GET uses the standard API allowance weight of 2; a dedicated MCP allowance charges one call. Billing denial and retry/backoff contracts remain active.
+- **Output budget:** 128 KiB. The tool is read-only and does not create a trade or research snapshot.
+
+### `get_internet_activity`
+
+Read seeded Cloudflare Radar traffic anomalies or global DDoS summaries. Missing caches return an error; valid empty snapshots retain empty lists.
+
+| Name | Type | Description |
+|------|------|-------------|
+| `dataset` | string: traffic / ddos | Required. Select one dataset. |
+| `country` | string | Traffic only. Optional ISO code or country name. Rejected for global DDoS summaries. |
+| `limit` | integer | Cap each list independently. Default 30; range 1 through 100. |
+
+The result is `{dataset, data, truncated}`. Traffic `totalCount` remains global before filtering; it is not the number of selected matches or shown rows. Traffic dates are epoch milliseconds and `endDate: 0` means ongoing. Global DDoS protocol/vector percentages and target locations retain `dateRangeStart` and `dateRangeEnd`. `truncated: true` means at least one list was capped. Loading a snapshot does not establish its source freshness.
+
+- **API endpoints:** `GET /api/infrastructure/v1/list-internet-traffic-anomalies`, `GET /api/infrastructure/v1/list-internet-ddos-attacks`.
+- **Access:** subscription. One signed downstream GET uses the standard API allowance weight of 2; a dedicated MCP allowance charges one call. Billing denial and retry/backoff contracts remain active.
+- **Output budget:** 128 KiB. The tool is read-only.
+
 ### `get_macro_history`
 
 Dated CPI, interest-rate, and sovereign-yield observations from the existing EconomicService seed readers. This tool preserves source labels, CPI index bases, observation frequency, and yield measures. It does not claim that every source is current.

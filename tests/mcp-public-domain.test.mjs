@@ -70,13 +70,13 @@ describe('public domain MCP tools', () => {
       await assert.rejects(call('get_internet_activity', args), e => e.name === 'RpcValidationError');
     }
   });
-  it('advertises source-shaped schemas, read-only subscription access and one request cost', () => {
+  it('advertises source-shaped schemas, read-only subscription access and standard downstream weight', () => {
     const ajv = new Ajv2020({ strict: true, strictRequired: false, allowUnionTypes: true, validateFormats: false });
     for (const [name, value] of [['get_gold_intelligence', gold], ['get_internet_activity', { dataset: 'ddos', data: ddos, truncated: false }],
       ['get_internet_activity', { dataset: 'traffic', data: { anomalies: [anomaly], totalCount: 1 }, truncated: false }]]) {
       const t = tool(name); const validate = ajv.compile(buildPublicTool(t, { compressDescriptions: true }).outputSchema.anyOf[0]);
       assert.ok(validate(value), JSON.stringify(validate.errors));
-      assert.equal(toolAccess(t), 'subscription'); assert.equal(toolWeight(t), 1);
+      assert.equal(toolAccess(t), 'subscription'); assert.equal(toolWeight(t), 2);
       assert.equal(t.annotations.readOnlyHint, true);
     }
   });
