@@ -161,6 +161,9 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await app.getByRole('button', { name: 'Clear filters' }).click();
   await expect(app.locator('.news-location-marker')).toHaveCount(4);
   await page.screenshot({ path: testInfo.outputPath('news-markers-desktop.png'), fullPage: true });
+  await app.locator('.news-location-marker').first().click();
+  await expect(app.locator('.map-popup')).toContainText('Ports review shipping schedules as trade routes shift');
+  await app.locator('.map-popup .popup-close').click();
   expect(await app.locator('body').evaluate(async (_element, assetUrl) => {
     const blob = `data:text/javascript;charset=utf-8,${encodeURIComponent(`import ${JSON.stringify(assetUrl)};self.postMessage({pluginWorkerReady:true});`)}`;
     const worker = new Worker(blob, { type: 'module' });
@@ -275,15 +278,28 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await app.getByRole('button', { name: 'Refresh map data' }).click();
   await expect(app.locator('#pluginMapStatus')).toContainText('earthquakes: 0 valid');
   await expect(app.locator('.earthquake-marker')).toHaveCount(0);
-  await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', id: 'fixture-mobile-news', method: 'tools/call', params: { name: 'apply_news_view', arguments: { map_layers: [], map_latitude: 52.5, map_longitude: 13.4, map_zoom: 3 } } }, '*'));
-  await expect.poll(() => page.evaluate(() => (window as any).calls.find((call: any) => call.id === 'fixture-mobile-news')?.result?.structuredContent?.applied)).toBe(true);
-  await expect(app.locator('.news-location-marker')).toHaveCount(4);
-  await page.screenshot({ path: testInfo.outputPath('news-markers-mobile.png'), fullPage: true });
   const crowded = Array.from({ length: 350 }, (_, index) => item('Fixture', `Located headline ${index}`, `https://example.com/news/${index}`));
   await page.evaluate(items => (window as any).sendResult({ structuredContent: { categories: { politics: { items } }, feedStatuses: {}, generatedAt: '', requestedView: { map_layers: [] } } }), crowded);
   await expect(app.locator('[data-panel="politics"]')).toContainText('Located headline 0');
   await expect(app.locator('.news-location-marker')).toHaveCount(300);
   await expect(app.locator('.map-truncation-summary')).toHaveText('300/350 markers');
+  await page.evaluate(() => {
+    (window as any).calls = [];
+    const frame = document.querySelector('iframe')!;
+    frame.srcdoc = frame.srcdoc;
+  });
+  await expect(app.locator('[data-panel="politics"]')).toContainText('Ports review shipping');
+  await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', id: 'fixture-mobile-news', method: 'tools/call', params: { name: 'apply_news_view', arguments: { map_layers: [], map_latitude: 52.5, map_longitude: 13.4, map_zoom: 3 } } }, '*'));
+  await expect.poll(() => page.evaluate(() => (window as any).calls.find((call: any) => call.id === 'fixture-mobile-news')?.result?.structuredContent?.applied)).toBe(true);
+  await expect(app.locator('.news-location-marker')).toHaveCount(4);
+  await page.screenshot({ path: testInfo.outputPath('news-markers-mobile.png'), fullPage: true });
+  await app.locator('.news-location-marker').first().press('Enter');
+  await expect(app.locator('.map-popup-sheet')).toContainText('Ports review shipping schedules as trade routes shift');
+  await page.screenshot({ path: testInfo.outputPath('news-marker-mobile-details.png'), fullPage: true });
+  await app.locator('.map-popup .popup-close').click();
+  await page.evaluate(items => (window as any).sendResult({ structuredContent: { categories: { politics: { items } }, feedStatuses: {}, generatedAt: '', requestedView: { map_layers: [] } } }), crowded);
+  await expect(app.locator('.news-location-marker')).toHaveCount(150);
+  await expect(app.locator('.map-truncation-summary')).toHaveText('150/350 markers');
   await page.evaluate(() => (window as any).sendResult({ structuredContent: { categories: {}, feedStatuses: {}, generatedAt: '' } }));
   await expect(app.locator('.panel')).toHaveCount(0);
   await expect(app.locator('.news-location-marker')).toHaveCount(0);
