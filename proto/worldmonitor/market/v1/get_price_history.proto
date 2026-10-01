@@ -20,7 +20,7 @@ message GetPriceHistoryRequest {
   // Lookback window: 1mo, 3mo, 6mo or 1y. Empty means 3mo.
   string range = 2 [
     (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE,
-    (buf.validate.field).string.pattern = "^(1mo|3mo|6mo|1y)$",
+    (buf.validate.field).string.pattern = "^(1mo|3mo|6mo|1y)?$",
     (sebuf.http.query) = {name: "range"}
   ];
 }

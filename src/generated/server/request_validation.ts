@@ -1921,7 +1921,7 @@ export const GENERATED_MESSAGE_RULES = {
       "range": {
         "kind": "string",
         "ignore": "IGNORE_IF_ZERO_VALUE",
-        "stringPattern": "^(1mo|3mo|6mo|1y)$",
+        "stringPattern": "^(1mo|3mo|6mo|1y)?$",
         "stringMaxBytes": 65536
       }
     }

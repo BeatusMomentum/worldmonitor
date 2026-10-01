@@ -20856,7 +20856,7 @@ paths:
                      are reported in `unavailable`. A single string because the widget relay
                      sets each query parameter once.
                   required: true
-                  example: "AAPL"
+                  example: "GC=F,SI=F"
                   schema:
                     type: string
                     pattern: '^ *[A-Za-z0-9^=.&-]{1,20} *(, *[A-Za-z0-9^=.&-]{1,20} *){0,3}$'
@@ -20864,10 +20864,10 @@ paths:
                   in: query
                   description: 'Lookback window: 1mo, 3mo, 6mo or 1y. Empty means 3mo.'
                   required: false
-                  example: "1mo"
+                  example: "3mo"
                   schema:
                     type: string
-                    pattern: '^(1mo|3mo|6mo|1y)$'
+                    pattern: '^(1mo|3mo|6mo|1y)?$'
                 - name: jmespath
                   in: query
                   description: |-
@@ -20882,17 +20882,32 @@ paths:
                     content:
                         application/json:
                             example:
-                                "range": "example"
+                                "range": "3mo"
                                 "series":
                                     - "closes":
-                                        - 1.5
+                                        - 4176.4
+                                        - 4183.1
+                                        - 4192
                                       "currency": "USD"
-                                      "name": "WorldMonitor Analyst"
-                                      "symbol": "AAPL"
+                                      "name": "Gold"
+                                      "symbol": "GC=F"
                                       "timestamps":
-                                          - 1717200000000
+                                          - 1785542400000
+                                          - 1785628800000
+                                          - 1785715200000
+                                    - "closes":
+                                        - 60.84
+                                        - 61.02
+                                        - 61.25
+                                      "currency": "USD"
+                                      "name": "Silver"
+                                      "symbol": "SI=F"
+                                      "timestamps":
+                                          - 1785542400000
+                                          - 1785628800000
+                                          - 1785715200000
                                 "unavailable":
-                                    - "example"
+                                    []
                             schema:
                                 $ref: '#/components/schemas/worldmonitor_market_v1_GetPriceHistoryResponse'
                 "400":
@@ -49461,7 +49476,7 @@ components:
                          sets each query parameter once.
                 range:
                     type: string
-                    pattern: ^(1mo|3mo|6mo|1y)$
+                    pattern: ^(1mo|3mo|6mo|1y)?$
                     description: 'Lookback window: 1mo, 3mo, 6mo or 1y. Empty means 3mo.'
             required:
                 - symbols
