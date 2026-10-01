@@ -12,7 +12,7 @@ let workerAsset: string;
 const origin = 'https://worldmonitor.test';
 const item = (source: string, title: string, link: string) => ({ source, title, link, publishedAt: Date.now(), isAlert: false, locationName: 'Berlin', location: { latitude: 52.5, longitude: 13.4 }, importanceScore: 70, credibilityScore: 80, corroborationCount: 1, snippet: 'Fixture news. No live provider request.', tickers: [] });
 const payload = { categories: {
-  politics: { items: [item('Reuters', 'Ports review shipping schedules as trade routes shift', 'https://example.com/news'), { ...item('AP', 'Science team announces new satellite research', 'https://example.com/science'), publishedAt: Date.now() - 2 * 60 * 60 * 1000, locationName: 'Helsinki', location: { latitude: 60.17, longitude: 24.94 } }, { ...item('Missing link feed', 'Headline with no supplied source URL', ''), locationName: 'London', location: { latitude: 51.5, longitude: -0.12 } }] },
+  politics: { items: [{ ...item('Reuters', 'Ports review shipping schedules as trade routes shift in Berlin', 'https://example.com/news'), location: undefined, locationName: '' }, { ...item('AP', 'Science team announces new satellite research', 'https://example.com/science'), publishedAt: Date.now() - 2 * 60 * 60 * 1000, locationName: 'Helsinki', location: { latitude: 60.17, longitude: 24.94 } }, { ...item('Missing link feed', 'Headline with no supplied source URL', ''), locationName: 'London', location: { latitude: 51.5, longitude: -0.12 } }] },
   europe: { items: [{ ...item('BBC', 'Energy ministers meet to discuss winter supply', 'https://example.com/energy'), locationName: 'Paris', location: { latitude: 48.86, longitude: 2.35 } }] },
 }, feedStatuses: {}, generatedAt: new Date().toISOString() };
 const hazards = { structuredContent: { data: {
@@ -43,16 +43,6 @@ test.describe('2D basemap with enforced CSP', () => {
     const errors: string[] = [];
     const mapPayload = { ...payload, categories: Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`region-${index}`, payload.categories.politics])) };
     page.on('pageerror', error => errors.push(error.message));
-    await page.addInitScript(() => {
-      const getExtension = WebGL2RenderingContext.prototype.getExtension;
-      WebGL2RenderingContext.prototype.getExtension = function (name: string) {
-        return name === 'WEBGL_debug_renderer_info' ? null : Reflect.apply(getExtension, this, [name]);
-      };
-      const getContext = HTMLCanvasElement.prototype.getContext;
-      HTMLCanvasElement.prototype.getContext = function (type: string, options?: object) {
-        return Reflect.apply(getContext, this, [type, type.startsWith('webgl') ? { ...options, preserveDrawingBuffer: true } : options]);
-      } as typeof getContext;
-    });
     await page.context().route('**/*', async route => {
       const url = new URL(route.request().url());
       if (url.origin === 'https://tiles.openfreemap.org') {
@@ -71,11 +61,21 @@ test.describe('2D basemap with enforced CSP', () => {
       catch { return route.abort(); }
     });
     const domains = NEWS_DASHBOARD_META.ui.csp;
-    const csp = `default-src 'none'; script-src 'unsafe-inline' ${origin} data:; worker-src blob:; style-src 'unsafe-inline' ${origin}; font-src ${origin} data:; img-src ${origin} ${domains.resourceDomains.join(' ')}; connect-src ${origin} ${domains.connectDomains.join(' ')}; base-uri ${origin}`;
-    const strictHtml = html.replace('<head>', `<head><meta http-equiv="Content-Security-Policy" content="${csp}"><script>document.documentElement.dataset.cspViolations='0';document.addEventListener('securitypolicyviolation',()=>document.documentElement.dataset.cspViolations=String(Number(document.documentElement.dataset.cspViolations)+1));</script>`);
+    const csp = `default-src 'none'; script-src 'unsafe-inline' ${origin} data:; worker-src blob: data:; style-src 'unsafe-inline' ${origin}; font-src ${origin} data:; img-src ${origin} ${domains.resourceDomains.join(' ')}; connect-src ${origin} ${domains.connectDomains.join(' ')}; base-uri ${origin}`;
+    const strictHtml = html.replace('<head>', `<head><meta http-equiv="Content-Security-Policy" content="${csp}"><script>(() => {
+      const getExtension = WebGL2RenderingContext.prototype.getExtension;
+      WebGL2RenderingContext.prototype.getExtension = function (name) {
+        return name === 'WEBGL_debug_renderer_info' ? null : Reflect.apply(getExtension, this, [name]);
+      };
+      const getContext = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (type, options) {
+        return Reflect.apply(getContext, this, [type, type.startsWith('webgl') ? { ...options, preserveDrawingBuffer: true } : options]);
+      };
+})();
+document.documentElement.dataset.cspViolations='0';document.addEventListener('securitypolicyviolation',()=>document.documentElement.dataset.cspViolations=String(Number(document.documentElement.dataset.cspViolations)+1));</script>`);
     await page.setViewportSize({ width: 1200, height: 1000 });
     await page.goto(origin);
-    await page.setContent(`<iframe title="WorldMonitor plugin" style="border:0;width:100%;height:1000px" sandbox="allow-scripts allow-same-origin"></iframe><script>
+    await page.setContent(`<iframe title="WorldMonitor plugin" style="border:0;width:100%;height:1000px" sandbox="allow-scripts"></iframe><script>
       const frame=document.querySelector('iframe');window.calls=[];window.addEventListener('message',e=>{if(e.source!==frame.contentWindow)return;const m=e.data;window.calls.push(m);const send=o=>frame.contentWindow.postMessage({jsonrpc:'2.0',...o},'*');
       if(m.method==='ui/initialize')send({id:m.id,result:{hostCapabilities:{},hostContext:{theme:'dark'}}});
       if(m.method==='ui/notifications/initialized')send({method:'ui/notifications/tool-result',params:{structuredContent:${JSON.stringify(mapPayload)}}});});frame.srcdoc=${JSON.stringify(strictHtml).replace(/</g, '\\u003c')};</script>`);
@@ -111,9 +111,9 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   test.setTimeout(180_000);
   await page.addInitScript(() => {
     const getContext = HTMLCanvasElement.prototype.getContext;
-    HTMLCanvasElement.prototype.getContext = function (type: string, options?: object) {
+    HTMLCanvasElement.prototype.getContext = function (type, options) {
       return type.startsWith('webgl') ? null : Reflect.apply(getContext, this, [type, options]);
-    } as typeof getContext;
+    };
   });
   const errors: string[] = [];
   let releaseGeometry!: () => void;
@@ -153,7 +153,7 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await page.evaluate(value => { (window as any).hazards = value; }, hazards);
   await expect(app.locator('#mapContainer svg').first()).toBeVisible();
   await expect(app.locator('.news-location-marker')).toHaveCount(4);
-  await expect(app.locator('.news-location-marker').first()).toHaveAttribute('title', 'Ports review shipping schedules as trade routes shift');
+  await expect(app.locator('.news-location-marker').first()).toHaveAttribute('title', 'Ports review shipping schedules as trade routes shift in Berlin (approximate location: Berlin)');
   await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-input', params: { arguments: { query: 'Energy', map_latitude: 52.5, map_longitude: 13.4, map_zoom: 4 } } }, '*'));
   await expect(app.locator('.search-input:visible')).toHaveValue('Energy');
   await expect.poll(() => page.evaluate(() => (window as any).calls.filter((call: any) => call.method === 'ui/update-model-context').at(-1)?.params?.content?.[0]?.text)).toContain('52.5');
