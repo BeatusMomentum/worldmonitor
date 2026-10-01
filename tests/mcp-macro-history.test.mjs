@@ -6,6 +6,11 @@ import handler from '../api/mcp.ts';
 import { TOOL_REGISTRY, buildPublicTool, toolAccess, toolWeight } from '../api/mcp/registry/index.ts';
 import { buildUsCpiMonths } from '../server/worldmonitor/economic/v1/us-cpi-monthly.ts';
 import { buildUsInterestRates } from '../server/worldmonitor/economic/v1/us-interest-rates.ts';
+import { getUsCpiMonthly } from '../server/worldmonitor/economic/v1/get-us-cpi-monthly.ts';
+import { getUsInterestRates } from '../server/worldmonitor/economic/v1/get-us-interest-rates.ts';
+import { getUsTreasuryParYieldCurve } from '../server/worldmonitor/economic/v1/get-us-treasury-par-yield-curve.ts';
+import { getWorldCpiMonthly } from '../server/worldmonitor/economic/v1/get-world-cpi-monthly.ts';
+import { getGovernmentYieldCurve } from '../server/worldmonitor/economic/v1/get-government-yield-curve.ts';
 
 const originalFetch = globalThis.fetch;
 const originalSecret = process.env.MCP_INTERNAL_HMAC_SECRET;
@@ -27,6 +32,14 @@ const call = args => tool()._execute(args, 'https://worldmonitor.app', { kind: '
 const curves = Array.from({ length: 40 }, (_, i) => ({ date: Date.UTC(2026, 0, i + 1), tenYear: i === 39 ? 0 : 4 }));
 
 describe('macro history MCP workflow', () => {
+  it('rejects invalid downstream windows before any cache request for every macro route', async () => {
+    globalThis.fetch = async () => { throw new Error('Invalid limit must not reach Redis'); };
+    for (const handler of [getUsCpiMonthly, getUsInterestRates, getUsTreasuryParYieldCurve, getWorldCpiMonthly, getGovernmentYieldCurve]) {
+      for (const limit of [-1, 0.5, 367, NaN, null, '1']) {
+        await assert.rejects(handler({}, { country: 'DE', history: true, limit }), error => error.violations?.[0]?.field === 'limit');
+      }
+    }
+  });
   it('reaches each fixed EconomicService route and preserves source-shaped responses', async () => {
     const fixtures = [
       ['us-cpi', 'get-us-cpi-monthly', { months: buildUsCpiMonths({ components: { headline: [
@@ -50,6 +63,7 @@ describe('macro history MCP workflow', () => {
         assert.equal(url.origin, 'https://worldmonitor.app');
         assert.equal(url.pathname, `/api/economic/v1/${route}`);
         assert.equal(url.searchParams.get('history'), 'true');
+        assert.equal(url.searchParams.get('limit'), '366');
         assert.equal(url.searchParams.get('country'), ['world-cpi', 'government-yields'].includes(dataset) ? 'DE' : null);
         assert.equal(init.headers['X-WorldMonitor-Key'], 'wm_macro_fixture');
         assert.equal(init.headers['User-Agent'], 'worldmonitor-mcp-edge/1.0');
@@ -64,7 +78,11 @@ describe('macro history MCP workflow', () => {
   });
 
   it('keeps the newest observations in chronological order and reports truncation', async () => {
-    globalThis.fetch = async () => Response.json({ curves, unavailable: false });
+    globalThis.fetch = async input => {
+      const limit = Number(new URL(String(input)).searchParams.get('limit'));
+      assert.ok(limit >= 2 && limit <= 366);
+      return Response.json({ curves: curves.slice(-limit), unavailable: false });
+    };
     const result = await call({ dataset: 'us-treasury-yields', limit: 2 });
     assert.deepEqual(result.data.curves.map(row => row.date), curves.slice(-2).map(row => row.date));
     assert.equal(result.data.curves[1].tenYear, 0);

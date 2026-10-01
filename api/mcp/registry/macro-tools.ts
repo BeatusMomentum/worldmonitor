@@ -108,7 +108,7 @@ export const MACRO_TOOLS: ToolDef[] = [{
     }
     const country = selected.country ? requireCountryCode(params.country, 'get_macro_history', 'country') : undefined;
     const history = params.history ?? true;
-    const query = new URLSearchParams({ history: String(history), ...(country ? { country } : {}) });
+    const query = new URLSearchParams({ history: String(history), limit: String(limit + 1), ...(country ? { country } : {}) });
     const url = `${base}${selected.path}?${query}`;
     const auth = await buildAuthHeaders(context, 'GET', url, null);
     const response = await fetchMcpDownstream(url, {
