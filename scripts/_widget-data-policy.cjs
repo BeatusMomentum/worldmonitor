@@ -132,7 +132,7 @@ const BOOTSTRAP = [
 const RPCS = [
   { path: "/api/market/v1/list-market-quotes", group: "Markets", params: "symbols (one ticker per call, e.g. TSLA)", holds: "Current price and change % for a stock ticker not in marketQuotes; no sparkline for non-seeded tickers" },
   { path: "/api/market/v1/get-country-stock-index", group: "Markets", params: "country_code (ISO2, required)", holds: "A country's main stock index: name, symbol, price, 1-week change %, currency" },
-  { path: "/api/market/v1/get-price-history", group: "Markets", params: "symbols (comma-separated, max 4, from commodityQuotes/marketQuotes/gulfQuotes symbols, e.g. GC=F,SI=F), range (1mo|3mo|6mo|1y, default 3mo)", holds: "Dated daily closes per symbol: timestamps (epoch ms) and closes, aligned arrays; up to 1 year" },
+  { path: "/api/market/v1/get-price-history", group: "Markets", params: "symbols (comma-separated, max 4, from commodityQuotes/marketQuotes/gulfQuotes symbols, e.g. GC=F,SI=F), range (1mo|3mo|6mo|1y, default 3mo)", holds: "Dated daily closes: timestamps (epoch ms) + closes, aligned; up to 1y. No history for ^TASI.SR, DFMGI.AE, ^MSM" },
   { path: "/api/market/v1/list-earnings-calendar", group: "Markets", params: "fromDate, toDate (YYYY-MM-DD)", holds: "Company earnings dates: symbol, date, hour, EPS and revenue estimate and actual, surprise" },
   { path: "/api/market/v1/get-cot-positioning", group: "Markets", params: "", holds: "CFTC Commitments of Traders, latest report: per futures contract long/short by trader type, net %" },
   { path: "/api/market/v1/get-gold-intelligence", group: "Markets", params: "", holds: "Gold/silver/platinum/palladium prices, gold-silver ratio, gold 1w/1m/YTD/1y returns, 52w range, COT" },

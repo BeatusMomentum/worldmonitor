@@ -50,7 +50,9 @@ function fetchSeries(symbol: string, name: string, range: string): Promise<Price
       timestamps.push(seconds * 1000);
       closes.push(close);
     });
-    if (closes.length === 0) return null;
+    // Yahoo serves some local Gulf indices (^TASI.SR, DFMGI.AE) as a single
+    // current bar at every range; one point is not a history.
+    if (closes.length < 2) return null;
 
     return { symbol, name, currency: result?.meta?.currency || 'USD', timestamps, closes };
   });
