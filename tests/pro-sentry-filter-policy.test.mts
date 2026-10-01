@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -41,13 +41,20 @@ function marketingFirstPartySources(): { rel: string; code: string }[] {
     const rel = `pro-test/src/${f}`;
     seen.set(rel, readFileSync(resolve(root, rel), 'utf-8'));
   }
-  // `from '../../shared/<mod>'` → `shared/<mod>.ts`. The shared modules in use
-  // today are import-free leaves, so one hop is the whole closure; the
-  // reachability test below keeps that assumption visible.
-  for (const code of [...seen.values()]) {
-    for (const m of code.matchAll(/from '\.\.\/\.\.\/(shared\/[\w./-]+)'/g)) {
-      const rel = `${m[1]}.ts`;
-      if (!seen.has(rel)) seen.set(rel, readFileSync(resolve(root, rel), 'utf-8'));
+  // Resolve each `shared/` import from the importing file's own directory, so
+  // `../../` from App.tsx and `../../../` from components/ land on the same
+  // tree, and accept `.ts` or `.js` leaves. Walked as a queue so a shared
+  // module that imports another is covered too.
+  const queue = [...seen.keys()];
+  while (queue.length > 0) {
+    const from = queue.shift()!;
+    for (const m of seen.get(from)!.matchAll(/from '(\.\.?\/[\w./-]+)'/g)) {
+      const stem = resolve(root, dirname(from), m[1]!).slice(root.length + 1).replace(/\.js$/, '');
+      if (!stem.startsWith('shared/')) continue;
+      const rel = [`${stem}.ts`, `${stem}.js`].find((candidate) => existsSync(resolve(root, candidate)));
+      if (!rel || seen.has(rel)) continue;
+      seen.set(rel, readFileSync(resolve(root, rel), 'utf-8'));
+      queue.push(rel);
     }
   }
   for (const rel of MARKETING_INLINE_SCRIPT_FILES) {
@@ -1500,6 +1507,24 @@ describe('marketing ignoreErrors — injected-script classes (2026-09-02 triage)
       isIgnored('Error', 'NotReadableError: An unknown error occurred while talking to the credential manager. Retrying'),
       false,
     );
+  });
+
+  it('scans every repo-root shared module the marketing sources import, at any depth', () => {
+    // The licence scans above are only as wide as this inventory. Components
+    // and services sit one directory deeper than App.tsx, so they reach
+    // `shared/` through `../../../`, and one import names a `.js` leaf.
+    const inventory = new Set(marketingFirstPartySources().map((f) => f.rel));
+    const missing: string[] = [];
+    for (const f of readdirSync(resolve(root, 'pro-test/src'), { recursive: true, encoding: 'utf-8' })) {
+      if (!/\.(ts|tsx)$/.test(f)) continue;
+      const code = readFileSync(resolve(root, 'pro-test/src', f), 'utf-8');
+      for (const m of code.matchAll(/from '((?:\.\.\/)+shared\/[\w./-]+)'/g)) {
+        const target = resolve(root, 'pro-test/src', dirname(f), m[1]!).slice(root.length + 1);
+        const stem = target.replace(/\.js$/, '');
+        if (![`${stem}.ts`, `${stem}.js`].some((rel) => inventory.has(rel))) missing.push(`${f} -> ${m[1]}`);
+      }
+    }
+    assert.deepEqual(missing, []);
   });
 
   it('pins the marketing surface as credential-manager-free, the 11B rule\'s own licence', () => {
