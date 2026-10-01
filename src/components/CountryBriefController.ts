@@ -71,7 +71,7 @@ export class CountryBriefController {
     this.request = new AbortController();
     this.premiumRequest = new AbortController();
     this.snapshot = { countryCode, revision: this.snapshot.revision, sections: {} };
-    const code = countryCode;
+    const code = countryCode.toUpperCase();
     let latestStock: StockIndexData | null = null;
     const stockPromise = this.read('stock', async signal => {
       const stock = await this.source.market.getCountryStockIndex({ countryCode: code }, { signal });
@@ -110,7 +110,7 @@ export class CountryBriefController {
       this.panel.setSectionFailure?.('trade', 'locked', 'Upgrade to PRO for trade exposure');
       return;
     }
-    const code = this.snapshot.countryCode;
+    const code = this.snapshot.countryCode.toUpperCase();
     if (!code) return;
     void this.read('military', signal => getCountryDefenseIndustrialBase(code, this.source.military, signal), value => this.panel.updateDefenseIndustrialBase?.(value.available ? value : null), true);
     void this.read('commodities', signal => this.source.supply.getCountryVulnerabilities({ iso2: code }, { signal }), value => this.panel.updateCommodityVulnerabilities?.(value), true);
