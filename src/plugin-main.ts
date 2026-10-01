@@ -17,7 +17,7 @@ import { getCountryMapFocus } from '@/app/country-map-focus';
 import { preloadCountryGeometry } from '@/services/country-geometry';
 import { initI18n } from '@/services/i18n';
 import { LAYER_REGISTRY } from '@/config/map-layer-definitions';
-import { parsePluginHazardSnapshot, type PluginHazardSnapshot } from '@/services/plugin-map-snapshot';
+import { loadPluginHazardSnapshot, type PluginHazardSnapshot } from '@/services/plugin-map-snapshot';
 
 const panels = new Map<string, NewsPanel>();
 const status = document.getElementById('pluginStatus')!;
@@ -71,9 +71,13 @@ function renderResult(result: unknown): void {
     return;
   }
   digest = data;
+  renderDigest();
   if (data.requestedView) {
-    void applyView(data.requestedView).catch(() => { status.textContent = 'The requested view could not be applied.'; });
-  } else renderDigest();
+    void applyView(data.requestedView).catch(error => {
+      status.textContent = 'The requested view could not be applied. Showing news with the previous filters.';
+      mapStatus.textContent = error instanceof Error ? error.message : 'The requested map view is unavailable.';
+    });
+  }
 }
 
 function renderDigest(): void {
@@ -137,13 +141,12 @@ async function applyView(input: unknown, reset = false): Promise<object> {
 }
 
 async function updateView(next: PluginNewsView, reset: boolean): Promise<object> {
-  const intended = { ...(reset ? {} : view), ...next };
+  const intended = { ...(reset ? { map_layers: view.map_layers } : view), ...next };
   const selectedLayers = intended.map_layers ?? [];
   let snapshot: PluginHazardSnapshot | undefined;
   if (next.map_layers?.some(layer => layer === 'natural' || layer === 'fires')) {
     if (!serverTools) throw new Error('Hazard snapshots are unavailable in this host.');
-    const dataset = [...(selectedLayers.includes('natural') ? ['earthquakes', 'other'] : []), ...(selectedLayers.includes('fires') ? ['wildfires'] : [])];
-    snapshot = parsePluginHazardSnapshot(await request('tools/call', { name: 'get_natural_disasters', arguments: { dataset, limit: 100 } }), selectedLayers);
+    snapshot = await loadPluginHazardSnapshot(selectedLayers, args => request('tools/call', { name: 'get_natural_disasters', arguments: args }));
   }
   let renderer: object | undefined;
   if (next.renderer) {
@@ -194,12 +197,12 @@ async function updateView(next: PluginNewsView, reset: boolean): Promise<object>
   const activeSources = [...(effectiveLayers.includes('natural') ? ['earthquakes', 'events'] : []), ...(effectiveLayers.includes('fires') ? ['fires'] : [])];
   const coverage = Object.fromEntries(Object.entries(hazardSnapshot?.coverage ?? {}).filter(([key]) => activeSources.includes(key)));
   mapStatus.textContent = effectiveLayers.some(layer => layer === 'natural' || layer === 'fires')
-    ? `Global hazard snapshot (up to 100/source): ${Object.entries(coverage).map(([key, value]) => `${key}: ${value.accepted} valid, ${value.skipped} skipped`).join('; ')}. Country filters apply to news; time controls apply to the map.`
+    ? `Global hazard snapshot (up to ${hazardSnapshot?.limitPerSource ?? 100}/source): ${Object.entries(coverage).map(([key, value]) => `${key}: ${value.accepted} valid, ${value.skipped} skipped`).join('; ')}. Country filters apply to news; time controls apply to the map.`
     : effectiveLayers.length ? 'Landmarks from WorldMonitor reference data; these do not show live activity.' : '';
   if (reset && !next.country) map.clearCountryHighlight();
   renderDigest();
   if (next.query !== undefined) { search.open(); search.applyQuery(next.query); }
-  const receipt = { applied: true, view, center: map.getCenter(), map: map.getState(), ...(hazardSnapshot && activeSources.length ? { hazardSnapshot: { coverage, loadedAt: hazardSnapshot.loadedAt, scope: 'global', limitPerSource: 100 } } : {}), ...(renderer ? { renderer } : {}) };
+  const receipt = { applied: true, view, center: map.getCenter(), map: map.getState(), ...(hazardSnapshot && activeSources.length ? { hazardSnapshot: { coverage, loadedAt: hazardSnapshot.loadedAt, scope: 'global', limitPerSource: hazardSnapshot.limitPerSource } } : {}), ...(renderer ? { renderer } : {}) };
   if (modelContext) void request('ui/update-model-context', { content: [{ type: 'text', text: JSON.stringify(receipt) }] }).catch(() => {});
   return receipt;
 }

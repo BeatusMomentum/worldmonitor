@@ -38,14 +38,28 @@ export interface PluginHazardSnapshot {
   fires?: ReturnType<typeof toMapFires>;
   coverage: Record<string, { accepted: number; skipped: number; received: number }>;
   loadedAt: string;
+  limitPerSource: number;
 }
 
-export function parsePluginHazardSnapshot(result: unknown, layers: readonly PluginMapLayer[]): PluginHazardSnapshot {
+export async function loadPluginHazardSnapshot(
+  layers: readonly PluginMapLayer[],
+  callTool: (args: { dataset: string[]; limit: number }) => Promise<unknown>,
+): Promise<PluginHazardSnapshot> {
+  const dataset = [...(layers.includes('natural') ? ['earthquakes', 'other'] : []), ...(layers.includes('fires') ? ['wildfires'] : [])];
+  const budgetEnvelope = z.object({ isError: z.literal(false).optional(), structuredContent: z.object({ _budget_exceeded: z.literal(true) }) });
+  for (const limit of [100, 20, 1]) {
+    const result = await callTool({ dataset, limit });
+    if (!budgetEnvelope.safeParse(result).success) return parsePluginHazardSnapshot(result, layers, limit);
+  }
+  throw new Error('Hazard snapshot exceeds the tool size limit. Previous map data remains visible.');
+}
+
+export function parsePluginHazardSnapshot(result: unknown, layers: readonly PluginMapLayer[], limitPerSource = 100): PluginHazardSnapshot {
   if (result && typeof result === 'object' && 'isError' in result && result.isError) throw new Error('Hazard access was denied or unavailable. Previous map data remains visible.');
   const envelope = z.object({ structuredContent: z.object({ data: z.record(z.string(), z.unknown()) }) }).safeParse(result);
   if (!envelope.success) throw new Error('Hazard data is unavailable. Previous map data remains visible.');
   const response = envelope.data;
-  const snapshot: PluginHazardSnapshot = { coverage: {}, loadedAt: new Date().toISOString() };
+  const snapshot: PluginHazardSnapshot = { coverage: {}, loadedAt: new Date().toISOString(), limitPerSource };
   const read = <T>(key: string, field: string, convert: (row: unknown) => T): T[] => {
     const bucket = z.object({ dataAvailable: z.boolean().optional() }).passthrough().safeParse(response.structuredContent.data[key]);
     if (!bucket.success || bucket.data.dataAvailable === false || !Array.isArray(bucket.data[field])) {
@@ -54,7 +68,7 @@ export function parsePluginHazardSnapshot(result: unknown, layers: readonly Plug
     const rows = bucket.data[field] as unknown[];
     const accepted: T[] = [];
     let skipped = 0;
-    for (const row of rows.slice(0, 100)) {
+    for (const row of rows.slice(0, limitPerSource)) {
       try { accepted.push(convert(row)); } catch { skipped++; }
     }
     if (rows.length > 0 && accepted.length === 0) throw new Error(`The ${key} snapshot has no valid map locations. Previous map data remains visible.`);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parsePluginHazardSnapshot } from '@/services/plugin-map-snapshot';
+import { loadPluginHazardSnapshot, parsePluginHazardSnapshot } from '@/services/plugin-map-snapshot';
 
 const quake = { id: 'fixture', place: 'Fixture', magnitude: 5, depthKm: 10, location: { latitude: 0, longitude: 0 }, occurredAt: Date.now(), sourceUrl: 'https://example.com/quake', source: 'USGS fixture', category: 'earthquake' };
 const event = { id: 'storm', title: 'Storm fixture', category: 'severeStorms', categoryTitle: 'Storms', lat: 20, lon: -60, date: Date.now(), sourceUrl: 'https://example.com/storm', sourceName: 'NHC fixture', closed: false };
@@ -36,5 +36,34 @@ describe('plugin hazard snapshot boundary', () => {
     expect(snapshot.fires).toHaveLength(1);
     expect(snapshot.fires?.[0]).toMatchObject({ lat: 0, lon: 0, confidence: 95 });
     expect(snapshot.coverage.fires?.skipped).toBe(1);
+  });
+
+  it('narrows only explicit output-budget responses and reports the effective snapshot limit', async () => {
+    const limits: number[] = [];
+    const snapshot = await loadPluginHazardSnapshot(['natural'], async args => {
+      expect(args.dataset).toEqual(['earthquakes', 'other']);
+      limits.push(args.limit);
+      return args.limit > 20 ? { structuredContent: { _budget_exceeded: true, budget_bytes: 131072, actual_bytes: 200000 } } : result(Array(21).fill(quake));
+    });
+    expect(limits).toEqual([100, 20]);
+    expect(snapshot.limitPerSource).toBe(20);
+    expect(snapshot.earthquakes).toHaveLength(20);
+  });
+
+  it('bounds retries even when a single geometry cannot fit', async () => {
+    const limits: number[] = [];
+    await expect(loadPluginHazardSnapshot(['natural'], async args => {
+      limits.push(args.limit);
+      return { structuredContent: { _budget_exceeded: true } };
+    })).rejects.toThrow(/size limit.*Previous map data remains visible/);
+    expect(limits).toEqual([100, 20, 1]);
+  });
+
+  it('does not retry denied or unavailable snapshots', async () => {
+    for (const response of [{ isError: true, structuredContent: { _budget_exceeded: true } }, { structuredContent: { data: {} } }]) {
+      let calls = 0;
+      await expect(loadPluginHazardSnapshot(['natural'], async () => { calls++; return response; })).rejects.toThrow(/Previous map data remains visible/);
+      expect(calls).toBe(1);
+    }
   });
 });
