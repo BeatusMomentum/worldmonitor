@@ -4893,9 +4893,9 @@ export class MapComponent {
     this.render();
   }
 
-  public setEarthquakes(earthquakes: Earthquake[]): void {
+  public setEarthquakes(earthquakes: Earthquake[], options: { replaceEmpty?: boolean } = {}): void {
     console.log('[Map] setEarthquakes called with', earthquakes.length, 'earthquakes');
-    if (earthquakes.length > 0 || this.earthquakes.length === 0) {
+    if (options.replaceEmpty || earthquakes.length > 0 || this.earthquakes.length === 0) {
       this.earthquakes = earthquakes;
     } else {
       console.log('[Map] Keeping existing', this.earthquakes.length, 'earthquakes (new data was empty)');
