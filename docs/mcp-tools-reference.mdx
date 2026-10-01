@@ -855,6 +855,25 @@ curl -s https://worldmonitor.app/mcp \
 
 ## Energy
 
+### `get_macro_history`
+
+Dated CPI, interest-rate, and sovereign-yield observations from the existing EconomicService seed readers. This tool preserves source labels, CPI index bases, observation frequency, and yield measures. It does not claim that every source is current.
+
+| Name | Type | Description |
+|------|------|-------------|
+| `dataset` | `us-cpi / us-interest-rates / us-treasury-yields / world-cpi / government-yields` | Required. Select one dataset. |
+| `country` | string | Required for `world-cpi` and `government-yields`. Accepts an ISO code or country name. Rejected for US-only datasets. |
+| `history` | boolean | Default true. False requests the latest available snapshot. |
+| `limit` | integer | Maximum newest observations per series, retained in chronological order. Default 30; range 1 through 365. |
+
+The result contains `dataset`, `history`, `truncated`, and the original API `data` with bounded observation lists. `truncated: true` means that the response omits older observations. `unavailable: true` or an empty list is not a confirmed zero rate. Missing CPI components and missing yield tenors remain absent.
+
+Dates use Unix milliseconds. Interest rates and yields use percentages. CPI index levels retain each source's index base. Country CPI can have different frequencies and definitions. Sovereign curves can use par, spot, benchmark, or monthly 10-year measures. Preserve those labels when comparing observations.
+
+- **API endpoints:** `GET /api/economic/v1/get-us-cpi-monthly`, `GET /api/economic/v1/get-us-interest-rates`, `GET /api/economic/v1/get-us-treasury-par-yield-curve`, `GET /api/economic/v1/get-world-cpi-monthly`, `GET /api/economic/v1/get-government-yield-curve`
+- **Access:** `subscription`. Each call makes one signed gateway request and uses the existing MCP quota policy. It accepts the universal `jmespath` argument.
+- **Example:** `{"dataset":"government-yields","country":"Japan","limit":30}` returns the newest available Japanese curve observations.
+
 ### `get_energy_intelligence`
 
 Energy supply, prices, storage, disruptions, and policy: EIA petroleum stocks, electricity prices (Ember), gas storage (GIE), fuel shortages, fossil & renewable shares, active energy disruptions, government crisis policies.
