@@ -8,7 +8,7 @@ Baseline source: `53298ec964f88b50d65a675362310dd797bbfbef`. Implementation base
 
 A request for “USA country brief” should open the WorldMonitor country interface inside ChatGPT. Today `get_country_brief` returns an AI assessment, evidence and articles. Its compact widget renders those fields. The website instead assembles `CountryDeepDivePanel`, with 23 ordinary section cards, CII and resilience summaries, and an additional China section when relevant. The AI assessment is one section. The MCP data contract cannot currently populate the whole country interface.
 
-The captured baseline inventory contains 84 tools, 11 linked UI resources, ten compact widgets and one news/map view using real dashboard components. The country mismatch is confirmed. The other nine compact widgets need behavioral comparison. The 73 tools without their own UI are data capabilities, not 73 established defects. Their data should serve the relevant embedded views.
+The captured baseline inventory contains compact widgets and a news/map view using real dashboard components. The country mismatch is confirmed. Other compact widgets need behavioral comparison. Tools without their own UI are data capabilities rather than established defects. Their data should serve the relevant embedded views. Current tool totals come from the generated server card and inventory facts.
 
 ## Usage
 
@@ -176,7 +176,7 @@ Controlled iframe checks exercise the compiled entry with an opaque origin, sour
 - Toolbar refresh also invokes the existing food, demographics, factors and resilience loaders. Resilience uses its existing error/refresh presentation; native recovery still requires acceptance.
 - Persistent follow/notification actions use an explicit website handoff under the current read-only scope.
 - Ordinary prompt routing, host-mediated source reads, follow-up selection, native downloads and composer layout must be tested in the installed draft after deployment. US, UA and CN native acceptance remains open.
-- The other compact widgets and full map interaction scope remain unaccepted. Neither 86 tools nor 12 UI resources establish feature parity or store readiness.
+- The other compact widgets and full map interaction scope remain unaccepted. Tool and resource totals do not establish feature parity or store readiness.
 - Assessment quality remains a separate server concern. This renderer displays the accepted assessment contract and does not validate unsupported causal claims or undefined forecast events.
 
 ## Risks to resolve through tests
