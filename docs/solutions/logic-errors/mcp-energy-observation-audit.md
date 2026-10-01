@@ -74,7 +74,7 @@ Sixteen additional live responses passed the current advertised output schemas w
 
 Regressions reproduce missing country observations and empty EIA units before repair. Producer fixtures use raw EIA thousand-barrel values. Country observations are checked through the MCP dispatcher and advertised schema. The gas publication test drives the real seed entry point and checks the aggregate against the same per-country payloads and coverage index.
 
-The aggregate and country keys share a seed pipeline and TTL. Upstash pipelines are not transactions. This change retains the existing publication mechanism. A failed seed extends existing content TTLs without refreshing its observation dates or freshness metadata.
+The aggregate, coverage index, country keys, and freshness metadata publish through one MSET inside a Redis transaction with matching TTLs. Missing or invalid fill and storage measurements are rejected; measured zero remains valid. These two producer defects were confirmed during PR review. A failed seed extends existing content TTLs without refreshing its observation dates or freshness metadata.
 
 All 340 selected tests passed, including the five no-coverage regressions. API type checking, schema coverage, bootstrap parity, the existing MCP suite, and diff whitespace checks passed. The proto source comment change also updates generated OpenAPI descriptions. No generated interface changes are required.
 
