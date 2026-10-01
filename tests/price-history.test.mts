@@ -110,7 +110,7 @@ describe('GetPriceHistory', () => {
   });
 
   it('reports an untracked symbol as unavailable without fetching it', async () => {
-    yahooReplies['^GSPC'] = { status: 200, timestamps: [T0], closes: [6000] };
+    yahooReplies['^GSPC'] = { status: 200, timestamps: [T0, T0 + DAY], closes: [6000, 6010] };
 
     const { status, body } = await get('symbols=NOTREAL,%5EGSPC&range=1mo');
 
@@ -132,7 +132,7 @@ describe('GetPriceHistory', () => {
   });
 
   it('defaults the range to 3mo', async () => {
-    yahooReplies['^TASI.SR'] = { status: 200, timestamps: [T0], closes: [11000], currency: 'SAR' };
+    yahooReplies['^TASI.SR'] = { status: 200, timestamps: [T0, T0 + DAY], closes: [11000, 11050], currency: 'SAR' };
 
     const { status, body } = await get('symbols=%5ETASI.SR');
 
@@ -165,9 +165,20 @@ describe('GetPriceHistory', () => {
     }
     assert.deepEqual(yahooRequests, []);
   });
+  it('reports a symbol with only one close as unavailable, since one bar is not a history', async () => {
+    yahooReplies['^TASI.SR'] = { status: 200, timestamps: [T0], closes: [10392.97], currency: 'SAR' };
+    yahooReplies['SARUSD=X'] = { status: 200, timestamps: [T0, T0 + DAY], closes: [0.2667, 0.2664] };
+
+    const { status, body } = await get('symbols=%5ETASI.SR,SARUSD%3DX&range=3mo');
+
+    assert.equal(status, 200);
+    assert.deepEqual(body.unavailable, ['^TASI.SR']);
+    assert.deepEqual(body.series.map((s: { symbol: string }) => s.symbol), ['SARUSD=X']);
+  });
+
   it('marks a response no-store when a tracked symbol failed upstream, so a 429 is not cached for hours', async () => {
     yahooReplies['HG=F'] = { status: 429 };
-    yahooReplies['PL=F'] = { status: 200, timestamps: [T0], closes: [1000] };
+    yahooReplies['PL=F'] = { status: 200, timestamps: [T0, T0 + DAY], closes: [1000, 1010] };
     const degraded = new Request('https://worldmonitor.app/api/market/v1/get-price-history');
     await getPriceHistory({ request: degraded } as never, { symbols: 'HG=F,PL=F', range: '1mo' });
     assert.equal(drainResponseHeaders(degraded)?.['X-No-Cache'], '1');
@@ -178,7 +189,7 @@ describe('GetPriceHistory', () => {
   });
 
   it('answers within its time budget, serving finished symbols and listing a hung one as unavailable', async () => {
-    yahooReplies['GC=F'] = { status: 200, timestamps: [T0], closes: [2400] };
+    yahooReplies['GC=F'] = { status: 200, timestamps: [T0, T0 + DAY], closes: [2400, 2410] };
     yahooReplies['SI=F'] = { status: 'hang' };
     const request = new Request('https://worldmonitor.app/api/market/v1/get-price-history');
     const started = Date.now();
