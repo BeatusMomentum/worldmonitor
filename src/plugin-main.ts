@@ -4,6 +4,7 @@ import './styles/base-layer.css';
 import { pluginNewsViewSchema, PLUGIN_NEWS_VIEW_INPUT_SCHEMA, PLUGIN_MAP_LAYERS, type PluginNewsView } from '../shared/plugin-news-view';
 import { countryMentionTerms, mentionsCountry } from '../shared/country-mention.js';
 import { clusterNews } from '@/services/clustering';
+import { inferGeoHubsFromTitle } from '@/services/geo-hub-index';
 import './styles/plugin.css';
 import { SearchModal } from '@/components/SearchModal';
 import type { NewsItem } from '@/types';
@@ -116,8 +117,12 @@ function renderDigest(): void {
     if (items.length || !allItems.length) panel.renderNews(items);
     else panel.renderFilteredEmpty('No news matches these filters.');
     for (const item of view.category && view.category !== category ? [] : items) {
-      if (Number.isFinite(item.lat) && Number.isFinite(item.lon)) {
-        locations.push({ lat: item.lat!, lon: item.lon!, title: item.title, threatLevel: item.threat?.level ?? 'info', timestamp: item.pubDate });
+      const hub = item.lat == null || item.lon == null ? inferGeoHubsFromTitle(item.title)[0]?.hub : undefined;
+      const lat = hub?.lat ?? item.lat;
+      const lon = hub?.lon ?? item.lon;
+      if (Number.isFinite(lat) && Number.isFinite(lon)) {
+        const title = hub ? `${item.title} (approximate location: ${hub.name})` : item.title;
+        locations.push({ lat: lat!, lon: lon!, title, threatLevel: item.threat?.level ?? 'info', timestamp: item.pubDate });
       }
     }
   }
@@ -224,7 +229,7 @@ async function start(): Promise<void> {
   const workerModuleUrl = new URL(mapLibreWorkerAsset, import.meta.url).href;
   const workerResponse = await fetch(workerModuleUrl, { credentials: 'omit', signal: AbortSignal.timeout(15_000) });
   if (!workerResponse.ok) throw new Error(`Map worker could not load (${workerResponse.status})`);
-  const workerUrl = URL.createObjectURL(new Blob([await workerResponse.text()], { type: 'text/javascript' }));
+  const workerUrl = `data:text/javascript;charset=utf-8,${encodeURIComponent(await workerResponse.text())}`;
   map = new MapContainer(document.getElementById('mapContainer')!, { zoom: 1, pan: { x: 0, y: 0 }, view: 'global', layers, timeRange: 'all' }, false, { mapLibreWorkerUrl: workerUrl });
   const layerControls = document.createElement('fieldset');
   layerControls.id = 'pluginMapLayers';
@@ -365,7 +370,6 @@ async function start(): Promise<void> {
     search.close();
     for (const panel of panels.values()) panel.destroy();
     map.destroy();
-    URL.revokeObjectURL(workerUrl);
   }, { once: true });
 }
 

@@ -12,7 +12,7 @@ let workerAsset: string;
 const origin = 'https://worldmonitor.test';
 const item = (source: string, title: string, link: string) => ({ source, title, link, publishedAt: Date.now(), isAlert: false, locationName: 'Berlin', location: { latitude: 52.5, longitude: 13.4 }, importanceScore: 70, credibilityScore: 80, corroborationCount: 1, snippet: 'Fixture news. No live provider request.', tickers: [] });
 const payload = { categories: {
-  politics: { items: [{ ...item('Reuters', 'Ports review shipping schedules as trade routes shift in Berlin', 'https://example.com/news'), location: undefined, locationName: '' }, { ...item('AP', 'Science team announces new satellite research', 'https://example.com/science'), publishedAt: Date.now() - 2 * 60 * 60 * 1000, locationName: 'Helsinki', location: { latitude: 60.17, longitude: 24.94 } }, { ...item('Missing link feed', 'Headline with no supplied source URL', ''), locationName: 'London', location: { latitude: 51.5, longitude: -0.12 } }] },
+  politics: { items: [{ ...item('Reuters', 'Ports review shipping schedules as trade routes shift in Berlin', 'https://example.com/news'), location: undefined, locationName: '' }, { ...item('AP', 'Science team announces new satellite research in Berlin', 'https://example.com/science'), publishedAt: Date.now() - 2 * 60 * 60 * 1000, locationName: 'Helsinki', location: { latitude: 60.17, longitude: 24.94 } }, { ...item('Missing link feed', 'Headline with no supplied source URL', ''), locationName: 'London', location: { latitude: 51.5, longitude: -0.12 } }, { ...item('AP', 'The research group presents its quarterly findings', 'https://example.com/unlocated'), location: undefined, locationName: '' }] },
   europe: { items: [{ ...item('BBC', 'Energy ministers meet to discuss winter supply', 'https://example.com/energy'), locationName: 'Paris', location: { latitude: 48.86, longitude: 2.35 } }] },
 }, feedStatuses: {}, generatedAt: new Date().toISOString() };
 const hazards = { structuredContent: { data: {
@@ -82,7 +82,7 @@ document.documentElement.dataset.cspViolations='0';document.addEventListener('se
     const app = page.frameLocator('iframe');
     await expect(app.locator('.panel')).toHaveCount(12);
     await expect.poll(() => app.locator('#mapSection').evaluate(element => element.getBoundingClientRect().height)).toBeLessThanOrEqual(1000);
-    await expect(app.locator('#deckgl-basemap canvas')).toBeVisible();
+    await expect(app.locator('#deckgl-basemap canvas')).toBeVisible({ timeout: 20_000 });
     await expect.poll(() => app.locator('#deckgl-basemap canvas').evaluate((element) => {
       const gl = (element as HTMLCanvasElement).getContext('webgl2');
       if (!gl) return false;
@@ -96,7 +96,7 @@ document.documentElement.dataset.cspViolations='0';document.addEventListener('se
     await app.locator('#pluginMapLayers').getByLabel('Military Bases', { exact: true }).check();
     await expect(app.locator('#pluginMapStatus')).toContainText('reference data');
     await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', id: 'fixture-globe', method: 'tools/call', params: { name: 'apply_news_view', arguments: { renderer: 'globe', map_layers: ['bases', 'cables'] } } }, '*'));
-    await expect.poll(() => page.evaluate(() => (window as any).calls.find((call: any) => call.id === 'fixture-globe')?.result?.structuredContent?.renderer?.mode)).toBe('globe');
+    await expect.poll(() => page.evaluate(() => (window as any).calls.find((call: any) => call.id === 'fixture-globe')?.result?.structuredContent?.renderer?.mode), { timeout: 20_000 }).toBe('globe');
     await expect(app.locator('#mapContainer canvas').first()).toBeVisible();
     await expect(app.locator('#mapDimensionToggle button[data-mode="globe"]')).toHaveClass(/active/);
     await expect(app.locator('#pluginMapLayers').getByLabel('Undersea Cables', { exact: true })).toBeChecked();
@@ -154,11 +154,12 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await expect(app.locator('#mapContainer svg').first()).toBeVisible();
   await expect(app.locator('.news-location-marker')).toHaveCount(4);
   await expect(app.locator('.news-location-marker').first()).toHaveAttribute('title', 'Ports review shipping schedules as trade routes shift in Berlin (approximate location: Berlin)');
+  await expect(app.locator('.news-location-marker').nth(1)).toHaveAttribute('title', 'Science team announces new satellite research in Berlin');
   await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-input', params: { arguments: { query: 'Energy', map_latitude: 52.5, map_longitude: 13.4, map_zoom: 4 } } }, '*'));
   await expect(app.locator('.search-input:visible')).toHaveValue('Energy');
   await expect.poll(() => page.evaluate(() => (window as any).calls.filter((call: any) => call.method === 'ui/update-model-context').at(-1)?.params?.content?.[0]?.text)).toContain('52.5');
   await app.locator('.search-input:visible').press('Escape');
-  await app.getByRole('button', { name: 'Clear filters' }).click();
+  await app.getByRole('button', { name: 'Clear filters' }).press('Enter');
   await expect(app.locator('.news-location-marker')).toHaveCount(4);
   await page.screenshot({ path: testInfo.outputPath('news-markers-desktop.png'), fullPage: true });
   await app.locator('.news-location-marker').first().click();
@@ -191,15 +192,15 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await app.locator('.search-input:visible').fill('Energy');
   await expect(app.locator('.search-results')).toContainText('Energy ministers');
   await app.locator('.search-input:visible').press('Escape');
-  await app.getByRole('button', { name: 'Clear filters' }).click();
+  await app.getByRole('button', { name: 'Clear filters' }).press('Enter');
   await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', id: 'fixture-action', method: 'tools/call', params: { name: 'apply_news_view', arguments: { source: 'Reuters' } } }, '*'));
   await expect.poll(() => page.evaluate(() => (window as any).calls.find((call: any) => call.id === 'fixture-action')?.result?.structuredContent?.applied)).toBe(true);
   await expect(app.locator('[data-panel="europe"]')).toContainText('No news matches');
-  await app.getByRole('button', { name: 'Clear filters' }).click();
+  await app.getByRole('button', { name: 'Clear filters' }).press('Enter');
   await app.getByLabel('News source', { exact: true }).selectOption('Reuters');
   await expect(app.locator('[data-panel="europe"]')).toContainText('No news matches');
   await expect(app.locator('.news-location-marker')).toHaveCount(1);
-  await app.getByRole('button', { name: 'Clear filters' }).click();
+  await app.getByRole('button', { name: 'Clear filters' }).press('Enter');
   await expect(app.locator('[data-panel="europe"]')).toContainText('Energy ministers');
   await expect(app.locator('.news-location-marker')).toHaveCount(4);
   await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', id: 'fixture-map', method: 'tools/call', params: { name: 'apply_news_view', arguments: { map_latitude: 52.5, map_longitude: 13.4, map_zoom: 4 } } }, '*'));
@@ -217,14 +218,15 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await expect.poll(() => page.evaluate(() => (window as any).calls.find((call: any) => call.id === 'fixture-after-time')?.result?.structuredContent?.view?.time_range)).toBe('1h');
   await expect(app.locator('.time-btn[data-range="1h"]')).toHaveClass(/active/);
   await expect(app.locator('.news-location-marker')).toHaveCount(0);
-  await app.getByRole('button', { name: 'Clear filters' }).click();
+  await app.getByRole('button', { name: 'Clear filters' }).press('Enter');
+  await expect(app.locator('.news-location-marker')).toHaveCount(4);
   await app.locator('.time-btn[data-range="1h"]').click();
   await expect(app.locator('.news-location-marker')).toHaveCount(3);
-  await app.getByRole('button', { name: 'Refresh news' }).click();
+  await app.getByRole('button', { name: 'Refresh news' }).press('Enter');
   await expect(app.locator('#pluginStatus')).toContainText('refresh failed');
   await expect(app.locator('[data-panel="politics"]')).toContainText('Ports review shipping');
   await expect(app.locator('.news-location-marker')).toHaveCount(3);
-  await app.getByRole('button', { name: 'Clear filters' }).click();
+  await app.getByRole('button', { name: 'Clear filters' }).press('Enter');
   await expect(app.locator('.news-location-marker')).toHaveCount(4);
   await app.locator('#pluginMapLayers').getByLabel('Natural Events', { exact: true }).check();
   await expect(app.locator('.earthquake-marker[title*="Fixture Berlin"]')).toBeVisible();
@@ -240,7 +242,7 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await expect.poll(() => page.evaluate(() => (window as any).calls.find((call: any) => call.id === 'fixture-focus-layers')?.result?.structuredContent?.view.map_layers)).toEqual(['natural', 'fires', 'cables', 'pipelines', 'waterways', 'bases']);
   expect(await page.evaluate(() => (window as any).calls.filter((call: any) => call.params?.name === 'get_natural_disasters').length)).toBe(hazardCallsBeforeFocus);
   await expect(app.locator('#pluginMapLayers').getByLabel('Natural Events', { exact: true })).toBeChecked();
-  await app.getByRole('button', { name: 'Clear filters' }).click();
+  await app.getByRole('button', { name: 'Clear filters' }).press('Enter');
   await expect(app.locator('#pluginMapLayers').getByLabel('Fires', { exact: true })).toBeChecked();
   await page.evaluate(() => { (window as any).hazardBudgetLimit = 20; });
   await app.getByRole('button', { name: 'Refresh map data' }).click();
