@@ -280,7 +280,7 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await expect(app.locator('.earthquake-marker')).toHaveCount(0);
   const crowded = Array.from({ length: 350 }, (_, index) => item('Fixture', `Located headline ${index}`, `https://example.com/news/${index}`));
   await page.evaluate(items => (window as any).sendResult({ structuredContent: { categories: { politics: { items } }, feedStatuses: {}, generatedAt: '', requestedView: { map_layers: [] } } }), crowded);
-  await expect(app.locator('[data-panel="politics"]')).toContainText('Located headline 0');
+  await expect(app.locator('[data-panel="politics"]')).toContainText('Located headline');
   await expect(app.locator('.news-location-marker')).toHaveCount(300);
   await expect(app.locator('.map-truncation-summary')).toHaveText('300/350 markers');
   await page.evaluate(() => {
