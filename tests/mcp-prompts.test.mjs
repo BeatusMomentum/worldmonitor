@@ -344,6 +344,7 @@ describe('api/mcp.ts — prompts capability + JMESPath-vs-schema parity', () => 
   // contract gate. These values only need to exercise the declared JMESPath
   // branches; the captured fixtures remain the broad payload proof.
   const FIXTURE_BUILDERS = {
+    open_country_brief: () => ({ countryCode: 'US', topic: 'overview' }),
     // Mirrors the GetCountryRiskResponse the handler actually returns
     // (server/worldmonitor/intelligence/v1/get-country-risk.ts:76-85), NOT the
     // pre-#7189 shape: `cii` is an OBJECT whose `combinedScore` is the headline

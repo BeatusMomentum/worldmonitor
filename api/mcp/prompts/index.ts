@@ -43,7 +43,7 @@ export const PROMPT_REGISTRY: McpPromptDef[] = [
   {
     name: 'country-briefing',
     description:
-      'Multi-tool country brief: quantitative risk score + LLM-synthesised intelligence brief + macro indicators for a single ISO 3166-1 alpha-2 country.',
+      'Interactive country brief with assessment, resilience, energy, trade, security and source evidence. Text-only clients can use the existing data tools.',
     arguments: [
       {
         name: 'iso2',
@@ -51,28 +51,14 @@ export const PROMPT_REGISTRY: McpPromptDef[] = [
         required: true,
       },
     ],
-    steps: [
-      {
-        tool: 'get_country_risk',
-        args: { country_code: '${iso2}' },
-        jmespath: '{cii: cii.combinedScore, trend: cii.trend, components: cii.components, advisoryLevel: advisoryLevel, sanctionsActive: sanctionsActive, sanctionsCount: sanctionsCount, upstreamUnavailable: upstreamUnavailable}',
-        purpose: 'Quantitative Composite Instability Index (CII) + component breakdown + travel advisory + OFAC sanctions exposure. upstreamUnavailable is projected so an all-upstreams-down response is not read as a calm country.',
-      },
-      {
-        tool: 'get_country_brief',
-        args: { country_code: '${iso2}' },
-        jmespath: '{countryCode: countryCode, brief: brief}',
-        purpose: 'LLM-synthesised geopolitical + economic narrative grounded on the latest headlines.',
-      },
-      {
-        tool: 'get_country_macro',
-        args: { countries: ['${iso2}'] },
-        jmespath: '{macro: data.macro.countries, growth: data.growth.countries, labor: data.labor.countries}',
-        purpose: 'IMF WEO macro/growth/labor indicators (one-country slice; external excluded — broad WEO retraction 2026-04).',
-      },
-    ],
+    steps: [{
+      tool: 'open_country_brief',
+      args: { country_code: '${iso2}' },
+      jmespath: '{countryCode: countryCode, topic: topic}',
+      purpose: 'Open the embedded country interface. Its sections load through the authenticated host and keep their observation dates and source states.',
+    }],
     intro:
-      'Build a country briefing for ${iso2}. Execute the three steps below in order; combine the results into a single concise brief (CII score and components, travel/sanctions posture, the LLM brief, then the key macro indicators).',
+      'Open the WorldMonitor country brief for ${iso2} with the linked interactive view. Use its topic tabs and evidence rather than replacing the interface with paragraphs. If the user explicitly requests text only or the host cannot render apps, use get_country_risk, get_country_brief and get_country_macro for a labeled text assessment.',
   },
   {
     name: 'energy-shock-watch',
