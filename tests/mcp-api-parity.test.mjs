@@ -134,8 +134,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
   // reservation; env-key (`wm_`) callers are bounded by the 60/min/key limiter
   // only (see docs/mcp-tools-reference.mdx). Do not restate this as "the daily
   // quota bounds it" without qualifying the env-key path.
-  ["GET /api/market/v1/analyze-stock",
-    "llm-passthrough: invokes callLlm — per-call LLM cost prohibits open MCP exposure"],
 
   // === fetch-on-miss (30) ===
   ["GET /api/intelligence/v1/get-risk-scores",
@@ -168,8 +166,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
     "fetch-on-miss: paid-upstream — external upstream fetch per cache miss"],
   ["GET /api/maritime/v1/list-navigational-warnings",
     "fetch-on-miss: paid-upstream — external feed fetch per request"],
-  ["GET /api/market/v1/backtest-stock",
-    "fetch-on-miss: high-cardinality-input — arbitrary query/symbol/identifier params, not enumerable"],
   ["GET /api/market/v1/get-country-stock-index",
     "fetch-on-miss: paid-upstream — external upstream fetch per cache miss"],
   ["GET /api/market/v1/get-insider-transactions",
@@ -227,10 +223,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
   ["GET /api/intelligence/v1/list-market-implications",
     "manual-mapping: parameterized cache key not statically resolvable — equivalent data covered by sibling cache tool at the prefix level"],
   ["GET /api/intelligence/v1/list-telegram-feed",
-    "manual-mapping: handler uses inline Redis or Convex (not server/_shared/redis) — manual triage"],
-  ["GET /api/market/v1/get-stock-analysis-history",
-    "manual-mapping: handler uses inline Redis or Convex (not server/_shared/redis) — manual triage"],
-  ["GET /api/market/v1/list-stored-stock-backtests",
     "manual-mapping: handler uses inline Redis or Convex (not server/_shared/redis) — manual triage"],
   ["GET /api/military/v1/get-wingbits-status",
     "manual-mapping: handler uses inline Redis or Convex (not server/_shared/redis) — manual triage"],

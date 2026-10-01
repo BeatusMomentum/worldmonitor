@@ -855,6 +855,28 @@ curl -s https://worldmonitor.app/mcp \
 
 ## Energy
 
+### `get_stock_research`
+
+Subscriber stock research through existing MarketService routes. Analysis and backtesting accept one symbol; saved-history operations accept a watchlist. Analysis generation may use paid source data and an LLM, and analysis/backtest generation can save shared research snapshots. No trading or account changes occur.
+
+**Parameters (tool-specific):**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `operation` | string: analysis / backtest / history / stored-backtests | Required. Select current analysis, technical backtest, saved analysis history, or saved backtests. |
+| `symbols` | array of strings | Required. One ticker for analysis/backtest; up to 50 for saved results. Trimmed and uppercased; no silent truncation. |
+| `include_news` | boolean | Analysis/history only. Default false. |
+| `limit_per_symbol` | integer | History only. Default 4, range 1..32. |
+| `eval_window_days` | integer | Backtest/stored-backtests only. Default 10 trading days, range 3..30. |
+
+The response is `{operation, data}`, retaining the existing API payload, including availability, generated timestamps, risk factors, model/fallback provenance and simulation basis. Empty saved results and unavailable analyses do not imply a zero return. Technical backtests omit point-in-time fundamentals and do not establish future performance.
+
+- **API endpoints:** `GET /api/market/v1/analyze-stock`, `GET /api/market/v1/backtest-stock`, `GET /api/market/v1/get-stock-analysis-history`, `GET /api/market/v1/list-stored-stock-backtests`.
+- **Access:** subscription. Existing MCP metering, gateway subscription checks, provider quotas, billing denial and retry/backoff contracts remain active. Cold analysis may take longer than seeded reads. The tool may save shared snapshots, so its read-only and idempotent hints are false; its destructive hint is false.
+- **Output budget:** 512 KiB. For a large watchlist use fewer symbols/snapshots or `jmespath` to select the fields needed. A budget-exceeded envelope is not complete history.
+
+For example, `get_stock_research` with `{"operation":"history","symbols":["AAPL","MSFT"],"limit_per_symbol":2}` reads saved analyses without generating new ones.
+
 ### `get_macro_history`
 
 Dated CPI, interest-rate, and sovereign-yield observations from the existing EconomicService seed readers. This tool preserves source labels, CPI index bases, observation frequency, and yield measures. It does not claim that every source is current.
