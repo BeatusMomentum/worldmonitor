@@ -171,6 +171,13 @@
       "removal_issue": null
     },
     {
+      "path": "api/mcp/registry/macro-tools.ts",
+      "category": "external-protocol",
+      "reason": "MCP TOOL_REGISTRY macro-history tool entry (get_macro_history) over the existing sebuf economic RPCs (US CPI, US interest rates, US Treasury and government yield curves, world CPI). Tool metadata and execution envelopes follow the external MCP protocol; exports no JSON data route. Same external-protocol constraint as its sibling registry modules.",
+      "owner": "@SebastienMelki",
+      "removal_issue": null
+    },
+    {
       "path": "api/mcp/registry/index.ts",
       "category": "external-protocol",
       "reason": "MCP TOOL_REGISTRY merge + buildPublicTool + SUMMARY_SCHEMA + TOOL_LIST_RESPONSE precompute + collision guard. Extracted from api/mcp.ts during the structural split; same external-protocol constraint as the parent shim.",
