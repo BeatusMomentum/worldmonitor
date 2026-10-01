@@ -59,6 +59,7 @@ const REQUIRED_ARGS = {
   },
   describe_tool: { tool_name: 'get_market_data' },
   get_macro_history: { dataset: 'us-cpi' },
+  get_internet_activity: { dataset: 'traffic' },
   get_stock_research: { operation: 'analysis', symbols: ['AAPL'] },
   get_supply_chain_cost_shock: { mode: 'energy', country: 'JP', chokepoint_id: 'suez' },
   compute_energy_shock: { country: 'JP', chokepoint_id: 'suez' },

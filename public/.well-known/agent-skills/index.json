@@ -77,7 +77,7 @@
       "type": "skill-md",
       "description": "Retrieve real-time equity, index, and ETF quotes with price, change, and sparkline history. Use when the user asks for current market prices, how a ticker is doing, or a quick market snapshot.",
       "url": "https://worldmonitor.app/.well-known/agent-skills/get-market-quotes/SKILL.md",
-      "digest": "sha256:60a4f48c154f11f9b47ab65f70337e38c0289b7bc5f9811c5a22018cc2468224"
+      "digest": "sha256:9a43d5d4650d6e4e9bc54f9f6141328b74ad99dab0ee377f92ff5f32a053a2ff"
     },
     {
       "name": "get-prediction-markets",
@@ -105,7 +105,7 @@
       "type": "skill-md",
       "description": "Retrieve detected internet outages (Cloudflare Radar) with country, cause, severity, and time bounds. Use when the user asks whether a country's internet is down, throttled, or experiencing a shutdown.",
       "url": "https://worldmonitor.app/.well-known/agent-skills/monitor-internet-outages/SKILL.md",
-      "digest": "sha256:35b895ce41c9441ba7bb33f728c14ccaebb743b8757bd01ca238e78f88298b3f"
+      "digest": "sha256:ae6b10e17a23f3b8c5fa650a6cbbb2a192deee714960dea95d86acf58ecf3ab2"
     },
     {
       "name": "monitor-supply-chain-stress",

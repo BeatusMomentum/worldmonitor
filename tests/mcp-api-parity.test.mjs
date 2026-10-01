@@ -243,7 +243,7 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
   ["POST /api/economic/v1/get-fred-series-batch",
     "manual-mapping: parameterized cache key not statically resolvable — equivalent data covered by sibling cache tool at the prefix level"],
 
-  // === deferred-to-future-tool (61) ===
+  // === deferred-to-future-tool (58) ===
   ["GET /api/news/v1/list-country-headlines",
     "deferred-to-future-tool: country snapshot capture reads existing full RSS caches; a future country_headlines tool can expose this uncapped country pool"],
   ["GET /api/consumer-prices/v1/get-consumer-price-basket-series",
@@ -271,8 +271,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
   // anomalies, and military CII) is the implementer-hint for a future
   // expanded_risk_scores composite tool, but the structural
   // category is fetch-on-miss.
-  ["GET /api/market/v1/get-gold-intelligence",
-    "deferred-to-future-tool: handler reads 5 keys (commodities-bootstrap + COT + gold-extended + gold-ETF-flows + gold-CB-reserves); only commodities-bootstrap overlaps with get_market_data._cacheKeys — bundle into a future expanded_commodities tool that exposes COT, gold-extended, ETF flows, and CB reserves"],
   ["GET /api/aviation/v1/get-airport-ops-summary",
     "deferred-to-future-tool: pure-read but no MCP tool exposes aviation:delays:intl:v3 yet — bundle into a future expanded-domain tool"],
   ["GET /api/cyber/v1/list-cyber-threats",
@@ -307,10 +305,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
     "deferred-to-future-tool: pure-read but no MCP tool exposes forecast:simulation-outcome:latest yet — bundle into a future expanded-domain tool"],
   ["GET /api/forecast/v1/get-simulation-package",
     "deferred-to-future-tool: pure-read but no MCP tool exposes forecast:simulation-package:latest yet — bundle into a future expanded-domain tool"],
-  ["GET /api/infrastructure/v1/list-internet-ddos-attacks",
-    "deferred-to-future-tool: pure-read but no MCP tool exposes cf:radar:ddos:v1 yet — bundle into a future expanded-domain tool"],
-  ["GET /api/infrastructure/v1/list-internet-traffic-anomalies",
-    "deferred-to-future-tool: pure-read but no MCP tool exposes cf:radar:traffic-anomalies:v1 yet — bundle into a future expanded-domain tool"],
   ["GET /api/intelligence/v1/get-country-energy-profile",
     "deferred-to-future-tool: pure-read but no MCP tool exposes energy:spr-policies:v1 yet — bundle into a future expanded-domain tool"],
   ["GET /api/intelligence/v1/get-gdelt-topic-timeline",
