@@ -5,6 +5,7 @@ import { pluginNewsViewSchema, PLUGIN_NEWS_VIEW_INPUT_SCHEMA, PLUGIN_MAP_LAYERS,
 import { countryMentionTerms, mentionsCountry } from '../shared/country-mention.js';
 import { clusterNews } from '@/services/clustering';
 import { inferGeoHubsFromTitle } from '@/services/geo-hub-index';
+import { matchKeyword, tokenizeForMatch } from '@/utils/keyword-match';
 import './styles/plugin.css';
 import { SearchModal } from '@/components/SearchModal';
 import type { NewsItem } from '@/types';
@@ -117,7 +118,12 @@ function renderDigest(): void {
     if (items.length || !allItems.length) panel.renderNews(items);
     else panel.renderFilteredEmpty('No news matches these filters.');
     for (const item of view.category && view.category !== category ? [] : items) {
-      const hub = item.lat == null || item.lon == null ? inferGeoHubsFromTitle(item.title)[0]?.hub : undefined;
+      const matches = Number.isFinite(item.lat) && Number.isFinite(item.lon)
+        ? [] : inferGeoHubsFromTitle(item.title).filter(match => match.hub.type !== 'organization');
+      const tokens = tokenizeForMatch(item.title);
+      const places = matches.filter(match => matchKeyword(tokens, match.hub.name));
+      const candidates = places.length ? places : matches;
+      const hub = candidates.length === 1 ? candidates[0]?.hub : undefined;
       const lat = hub?.lat ?? item.lat;
       const lon = hub?.lon ?? item.lon;
       if (Number.isFinite(lat) && Number.isFinite(lon)) {

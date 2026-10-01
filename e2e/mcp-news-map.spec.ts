@@ -155,6 +155,19 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await expect(app.locator('.news-location-marker')).toHaveCount(4);
   await expect(app.locator('.news-location-marker').first()).toHaveAttribute('title', 'Ports review shipping schedules as trade routes shift in Berlin (approximate location: Berlin)');
   await expect(app.locator('.news-location-marker').nth(1)).toHaveAttribute('title', 'Science team announces new satellite research in Berlin');
+  const locationCases = [
+    { ...item('Fixture', 'NATO meets in Paris', 'https://example.com/paris'), location: undefined },
+    { ...item('Fixture', 'Paris and Berlin discuss trade', 'https://example.com/ambiguous'), location: undefined },
+    { ...item('Fixture', 'NATO announces its quarterly report', 'https://example.com/organization'), location: undefined },
+    { ...item('Fixture', 'Washington DC and Moscow discuss trade', 'https://example.com/two-capitals'), location: undefined },
+    { ...item('Fixture', 'Berlin hosts energy talks', 'https://example.com/invalid-coordinates'), location: { latitude: Infinity, longitude: 13.4 } },
+  ];
+  await page.evaluate(items => (window as any).sendResult({ structuredContent: { categories: { politics: { items } }, feedStatuses: {}, generatedAt: '' } }), locationCases);
+  await expect(app.locator('.news-location-marker[title="NATO meets in Paris (approximate location: Paris)"]')).toHaveCount(1);
+  await expect(app.locator('.news-location-marker[title="Berlin hosts energy talks (approximate location: Berlin)"]')).toHaveCount(1);
+  await expect(app.locator('.news-location-marker')).toHaveCount(2);
+  await page.evaluate(data => (window as any).sendResult({ structuredContent: data }), payload);
+  await expect(app.locator('.news-location-marker')).toHaveCount(4);
   await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-input', params: { arguments: { query: 'Energy', map_latitude: 52.5, map_longitude: 13.4, map_zoom: 4 } } }, '*'));
   await expect(app.locator('.search-input:visible')).toHaveValue('Energy');
   await expect.poll(() => page.evaluate(() => (window as any).calls.filter((call: any) => call.method === 'ui/update-model-context').at(-1)?.params?.content?.[0]?.text)).toContain('52.5');
