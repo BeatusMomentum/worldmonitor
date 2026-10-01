@@ -14,6 +14,7 @@ import { getNaturalEventIcon } from '@/services/eonet';
 import type { WeatherAlert } from '@/services/weather';
 import type { RadiationObservation } from '@/services/radiation';
 import { getSeverityColor } from '@/services/weather';
+import { getThreatColor } from '@/services/threat-classifier';
 import { startSmartPollLoop, type SmartPollLoopHandle } from '@/services/smart-poll-loop';
 import { scheduleAfterFirstPaint, yieldToMain } from '@/utils/after-paint';
 import { measure, mutate } from '@/utils/layout-batch';
@@ -192,6 +193,7 @@ export class MapComponent {
   private baseHeight = 0;
   private hotspots: HotspotWithBreaking[];
   private earthquakes: Earthquake[] = [];
+  private newsLocations: Array<{ lat: number; lon: number; title: string; threatLevel: string; timestamp?: Date }> = [];
   private weatherAlerts: WeatherAlert[] = [];
   private radiationObservations: RadiationObservation[] = [];
   private outages: InternetOutage[] = [];
@@ -1802,6 +1804,7 @@ export class MapComponent {
     protests: readonly SocialUnrestEvent[];
     conflictEvents: readonly AcledConflictEvent[];
     weather: readonly WeatherAlert[];
+    news: readonly MapComponent['newsLocations'][number][];
   } {
     const withinTimeRange = <T extends { occurredAt: number }>(items: readonly T[]): readonly T[] => (
       this.state.timeRange === 'all'
@@ -1839,6 +1842,12 @@ export class MapComponent {
       // per-marker data precondition; the `newsCount === 0` skips sit on exempt
       // groups, which are outside the budget entirely.
       weather: layers.weather ? this.weatherAlerts.filter((alert) => alert.centroid) : [],
+      news: this.state.timeRange === 'all'
+        ? this.newsLocations
+        : this.newsLocations.filter((item) => {
+          const timestamp = item.timestamp?.getTime();
+          return timestamp == null || !Number.isFinite(timestamp) || timestamp >= Date.now() - this.getTimeRangeMs();
+        }),
     };
   }
 
@@ -1856,6 +1865,7 @@ export class MapComponent {
     ): void => { if (markers.length) groups.push({ layer, markers, ...extra }); };
 
     const layers = this.state.layers;
+    add('news', slices.news);
     if (layers.waterways) add('waterways', STRATEGIC_WATERWAYS);
     if (layers.ais) {
       add('ais', this.aisDisruptions);
@@ -2048,6 +2058,7 @@ export class MapComponent {
     this.lastTruncationLabelKey = key;
     const { undisclosed } = renderLayerTruncationBadges(root, this.overlayMarkerTruncation, 'pan');
     this.overlayUndisclosedTruncation = undisclosed;
+    this.renderCompactTruncationSummary(this.overlayMarkerTruncation.news ? [this.overlayMarkerTruncation.news] : []);
   }
 
   /**
@@ -2065,13 +2076,8 @@ export class MapComponent {
    * embed opted out of — just the count and a `title` carrying the explanation.
    * Idempotent (one node, updated in place) and removed the moment nothing is
    * being withheld, so it cannot accumulate across renders or outlive the cut.
-   *
-   * Only for the no-rail case. A map that HAS a rail but whose trimmed layer has
-   * no row in that variant's picker is the separate problem tracked in #7144;
-   * fixing it with a second, parallel disclosure surface would be the wrong shape.
    */
-  private renderCompactTruncationSummary(): void {
-    const entries = Object.values(this.overlayMarkerTruncation);
+  private renderCompactTruncationSummary(entries = Object.values(this.overlayMarkerTruncation)): void {
     const existing = this.container.querySelector<HTMLElement>('.map-truncation-summary');
 
     if (entries.length === 0) {
@@ -2131,6 +2137,21 @@ export class MapComponent {
     this.overlayAppendTarget = fragment;
 
     try {
+    for (const item of slices.news) {
+      if (this.isOverlayMarkerCut(item)) continue;
+      const pos = projection([item.lon, item.lat]);
+      if (!pos) continue;
+      const marker = document.createElement('div');
+      marker.className = 'news-location-marker';
+      marker.style.cssText = 'position:absolute;width:8px;height:8px;border-radius:50%;transform:translate(-50%,-50%) scale(var(--marker-scale,1));transform-origin:center;z-index:53;pointer-events:auto';
+      marker.style.left = `${pos[0]}px`;
+      marker.style.top = `${pos[1]}px`;
+      marker.style.backgroundColor = getThreatColor(item.threatLevel);
+      marker.title = item.title;
+      marker.setAttribute('role', 'img');
+      marker.setAttribute('aria-label', item.title);
+      this.appendOverlay(marker);
+    }
     // Strategic waterways
     if (this.state.layers.waterways) {
       this.renderWaterways(projection);
@@ -4997,8 +5018,9 @@ export class MapComponent {
     this.render();
   }
 
-  public setNewsLocations(_data: Array<{ lat: number; lon: number; title: string; threatLevel: string; timestamp?: Date }>): void {
-    // SVG/mobile fallback intentionally skips news locations to stay lightweight.
+  public setNewsLocations(data: Array<{ lat: number; lon: number; title: string; threatLevel: string; timestamp?: Date }>): void {
+    this.newsLocations = data;
+    this.render();
   }
 
   public setTechActivity(activities: TechHubActivity[]): void {
