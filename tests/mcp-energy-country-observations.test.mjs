@@ -68,3 +68,10 @@ it('keeps missing observations unavailable instead of presenting an index as qua
   assert.equal(result.data['gas-storage'], null);
   assert.deepEqual(result.data._countries, ['DE', 'FR']);
 });
+
+it('returns no EU quantities when the requested country has no gas-storage coverage', async () => {
+  const tool = CACHE_TOOLS.find(row => row.name === 'get_energy_intelligence');
+  const result = await executeTool(tool, { dataset: ['gas-storage'], country: 'Japan' });
+  assert.deepEqual(result.data['gas-storage'], {});
+  assert.deepEqual(result.data._countries, []);
+});

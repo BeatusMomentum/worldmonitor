@@ -13,7 +13,7 @@ Audit date is October 1, 2026. The registry contains 84 tools, including 34 cach
 
 ## Confirmed findings
 
-Two ChatGPT tools have confirmed defects. There are six defects across those tools and their related producers.
+Six ChatGPT tools have confirmed defects. There are seven root defects across those tools and their related producers.
 
 | Finding | Evidence | Repair |
 |---|---|---|
@@ -23,6 +23,7 @@ Two ChatGPT tools have confirmed defects. There are six defects across those too
 | EIA unit labels omitted | The live petroleum bundle returned empty units for all four series. The API returns `units`; the parser read `unit`. | Read `units` and spell out MBBL, MBBL/D and $/BBL. Preserve numerical source units in this bundle. |
 | SPR scale is wrong | Direct EIA API returned 283767 thousand barrels for September 25. The parser passes the raw number to consumers that label it million barrels. | Divide the source value by 1,000. Compute changes from the converted values. |
 | Refinery scale is wrong | Direct EIA API returned 16257 thousand barrels per day for September 25. The parser passes the raw number to a million-barrels-per-day consumer. | Divide the source value by 1,000. |
+| Country without coverage returns all countries | Producer-shaped tool fixtures with Japan requested and only Germany seeded return Germany's values. The shared keyed-map selector returns its input when no key matches. This affects country macro, EU housing, EU government debt, EU industrial production, and energy intelligence. | Return an empty map for a valid country without records. Keep absent filters unchanged and reject unresolved country names. |
 
 ## Index audit
 
@@ -75,7 +76,7 @@ Regressions reproduce missing country observations and empty EIA units before re
 
 The aggregate and country keys share a seed pipeline and TTL. Upstash pipelines are not transactions. This change retains the existing publication mechanism. A failed seed extends existing content TTLs without refreshing its observation dates or freshness metadata.
 
-The PR must pass focused tests, API type checking, schema coverage, bootstrap parity, and the existing MCP suite. The proto change changes only a source comment and requires no generated interface changes.
+All 340 selected tests passed, including the five no-coverage regressions. API type checking, schema coverage, bootstrap parity, the existing MCP suite, and diff whitespace checks passed. The proto source comment change also updates generated OpenAPI descriptions. No generated interface changes are required.
 
 Production remains unchanged until an authorized deployment and successful producer runs. The gas aggregate is null until its first publication. Existing incorrect EIA snapshots remain until the corrected producer publishes. Seed scripts are not run against production in this task.
 
