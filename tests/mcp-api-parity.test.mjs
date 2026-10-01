@@ -92,8 +92,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
     "mutating: writes state via setCachedJson / runRedisPipeline / persistent DB"],
   ["GET /api/infrastructure/v1/reverse-geocode",
     "mutating: writes state via setCachedJson / runRedisPipeline / persistent DB"],
-  ["GET /api/intelligence/v1/compute-energy-shock",
-    "mutating: writes classification/derivation result to cache"],
   ["GET /api/resilience/v1/get-resilience-ranking",
     "mutating: writes state via setCachedJson / runRedisPipeline / persistent DB"],
   ["GET /api/supply-chain/v1/get-country-chokepoint-index",
@@ -134,8 +132,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
   // reservation; env-key (`wm_`) callers are bounded by the 60/min/key limiter
   // only (see docs/mcp-tools-reference.mdx). Do not restate this as "the daily
   // quota bounds it" without qualifying the env-key path.
-  ["GET /api/market/v1/analyze-stock",
-    "llm-passthrough: invokes callLlm — per-call LLM cost prohibits open MCP exposure"],
 
   // === fetch-on-miss (30) ===
   ["GET /api/intelligence/v1/get-risk-scores",
@@ -168,8 +164,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
     "fetch-on-miss: paid-upstream — external upstream fetch per cache miss"],
   ["GET /api/maritime/v1/list-navigational-warnings",
     "fetch-on-miss: paid-upstream — external feed fetch per request"],
-  ["GET /api/market/v1/backtest-stock",
-    "fetch-on-miss: high-cardinality-input — arbitrary query/symbol/identifier params, not enumerable"],
   ["GET /api/market/v1/get-country-stock-index",
     "fetch-on-miss: paid-upstream — external upstream fetch per cache miss"],
   ["GET /api/market/v1/get-insider-transactions",
@@ -179,8 +173,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
   ["GET /api/military/v1/get-wingbits-live-flight",
     "fetch-on-miss: paid-upstream — external API call per request"],
   ["GET /api/military/v1/list-military-bases",
-    "fetch-on-miss: paid-upstream — external upstream fetch per cache miss"],
-  ["GET /api/supply-chain/v1/get-country-cost-shock",
     "fetch-on-miss: paid-upstream — external upstream fetch per cache miss"],
   ["GET /api/supply-chain/v1/get-critical-minerals",
     "fetch-on-miss: paid-upstream — external upstream fetch per cache miss"],
@@ -228,10 +220,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
     "manual-mapping: parameterized cache key not statically resolvable — equivalent data covered by sibling cache tool at the prefix level"],
   ["GET /api/intelligence/v1/list-telegram-feed",
     "manual-mapping: handler uses inline Redis or Convex (not server/_shared/redis) — manual triage"],
-  ["GET /api/market/v1/get-stock-analysis-history",
-    "manual-mapping: handler uses inline Redis or Convex (not server/_shared/redis) — manual triage"],
-  ["GET /api/market/v1/list-stored-stock-backtests",
-    "manual-mapping: handler uses inline Redis or Convex (not server/_shared/redis) — manual triage"],
   ["GET /api/military/v1/get-wingbits-status",
     "manual-mapping: handler uses inline Redis or Convex (not server/_shared/redis) — manual triage"],
   ["GET /api/news/v1/summarize-article-cache",
@@ -248,8 +236,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
     "manual-mapping: handler uses inline Redis or Convex (not server/_shared/redis) — manual triage"],
   ["GET /api/supply-chain/v1/get-country-products",
     "manual-mapping: parameterized cache key not statically resolvable — equivalent data covered by sibling cache tool at the prefix level"],
-  ["GET /api/supply-chain/v1/get-multi-sector-cost-shock",
-    "manual-mapping: parameterized cache key not statically resolvable — equivalent data covered by sibling cache tool at the prefix level"],
   ["GET /api/trade/v1/get-tariff-trends",
     "manual-mapping: parameterized cache key not statically resolvable — equivalent data covered by sibling cache tool at the prefix level"],
   ["GET /api/trade/v1/list-comtrade-flows",
@@ -257,7 +243,7 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
   ["POST /api/economic/v1/get-fred-series-batch",
     "manual-mapping: parameterized cache key not statically resolvable — equivalent data covered by sibling cache tool at the prefix level"],
 
-  // === deferred-to-future-tool (61) ===
+  // === deferred-to-future-tool (58) ===
   ["GET /api/news/v1/list-country-headlines",
     "deferred-to-future-tool: country snapshot capture reads existing full RSS caches; a future country_headlines tool can expose this uncapped country pool"],
   ["GET /api/consumer-prices/v1/get-consumer-price-basket-series",
@@ -285,8 +271,6 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
   // anomalies, and military CII) is the implementer-hint for a future
   // expanded_risk_scores composite tool, but the structural
   // category is fetch-on-miss.
-  ["GET /api/market/v1/get-gold-intelligence",
-    "deferred-to-future-tool: handler reads 5 keys (commodities-bootstrap + COT + gold-extended + gold-ETF-flows + gold-CB-reserves); only commodities-bootstrap overlaps with get_market_data._cacheKeys — bundle into a future expanded_commodities tool that exposes COT, gold-extended, ETF flows, and CB reserves"],
   ["GET /api/aviation/v1/get-airport-ops-summary",
     "deferred-to-future-tool: pure-read but no MCP tool exposes aviation:delays:intl:v3 yet — bundle into a future expanded-domain tool"],
   ["GET /api/cyber/v1/list-cyber-threats",
@@ -315,26 +299,12 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
     "deferred-to-future-tool: pure-read but no MCP tool exposes economic:crude-inventories:v1 yet — bundle into a future expanded-domain tool"],
   ["GET /api/economic/v1/get-oil-stocks-analysis",
     "deferred-to-future-tool: pure-read but no MCP tool exposes energy:oil-stocks-analysis:v1 yet — bundle into a future expanded-domain tool"],
-  ["GET /api/economic/v1/get-us-cpi-monthly",
-    "deferred-to-future-tool: pure-read of the full CPI history is larger than the composite economic cache tool — bundle the latest print into a future macro-history tool"],
-  ["GET /api/economic/v1/get-us-treasury-par-yield-curve",
-    "deferred-to-future-tool: pure-read of the daily par curve since 1990 is larger than the composite economic cache tool — bundle the latest business day into a future macro-history tool"],
-  ["GET /api/economic/v1/get-us-interest-rates",
-    "deferred-to-future-tool: pure-read of daily Fed funds, Treasury yields, and SOFR since 1954 is larger than the composite economic cache tool — bundle the latest print into a future macro-history tool"],
-  ["GET /api/economic/v1/get-world-cpi-monthly",
-    "deferred-to-future-tool: pure-read of 190 countries across five sources is far larger than the composite economic cache tool — bundle a latest-print subset into a future macro-history tool"],
-  ["GET /api/economic/v1/get-government-yield-curve",
-    "deferred-to-future-tool: pure-read of per-country daily curves since 1974 is larger than the composite economic cache tool — bundle the latest business day per market into a future macro-history tool"],
   ["GET /api/economic/v1/list-grocery-basket-prices",
     "deferred-to-future-tool: pure-read but no MCP tool exposes economic:grocery-basket:v1 yet — bundle into a future expanded-domain tool"],
   ["GET /api/forecast/v1/get-simulation-outcome",
     "deferred-to-future-tool: pure-read but no MCP tool exposes forecast:simulation-outcome:latest yet — bundle into a future expanded-domain tool"],
   ["GET /api/forecast/v1/get-simulation-package",
     "deferred-to-future-tool: pure-read but no MCP tool exposes forecast:simulation-package:latest yet — bundle into a future expanded-domain tool"],
-  ["GET /api/infrastructure/v1/list-internet-ddos-attacks",
-    "deferred-to-future-tool: pure-read but no MCP tool exposes cf:radar:ddos:v1 yet — bundle into a future expanded-domain tool"],
-  ["GET /api/infrastructure/v1/list-internet-traffic-anomalies",
-    "deferred-to-future-tool: pure-read but no MCP tool exposes cf:radar:traffic-anomalies:v1 yet — bundle into a future expanded-domain tool"],
   ["GET /api/intelligence/v1/get-country-energy-profile",
     "deferred-to-future-tool: pure-read but no MCP tool exposes energy:spr-policies:v1 yet — bundle into a future expanded-domain tool"],
   ["GET /api/intelligence/v1/get-gdelt-topic-timeline",
