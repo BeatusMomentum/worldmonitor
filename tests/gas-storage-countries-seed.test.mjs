@@ -8,7 +8,44 @@ import {
   GAS_STORAGE_KEY_PREFIX,
   GAS_STORAGE_COUNTRIES_KEY,
   GAS_STORAGE_TTL_SECONDS,
+  GAS_STORAGE_ALL_KEY,
+  main,
 } from '../scripts/seed-gas-storage-countries.mjs';
+
+it('publishes the country observations and coverage index in the same seed pipeline', async (t) => {
+  const previousEnv = { ...process.env };
+  process.env.UPSTASH_REDIS_REST_URL = 'https://gas-publish.test';
+  process.env.UPSTASH_REDIS_REST_TOKEN = 'fixture';
+  process.env.GIE_API_KEY = 'fixture';
+  t.after(() => {
+    for (const key of Object.keys(process.env)) if (!(key in previousEnv)) delete process.env[key];
+    Object.assign(process.env, previousEnv);
+  });
+  let published;
+  t.mock.method(globalThis, 'fetch', async (input, options) => {
+    const url = new URL(String(input));
+    if (url.origin === 'https://agsi.gie.eu') {
+      return Response.json({ data: [{ full: '57.92', gasInStorage: '143.4', gasDayStart: '2026-09-29' }] });
+    }
+    assert.equal(url.origin, 'https://gas-publish.test');
+    const commands = JSON.parse(options.body);
+    if (url.pathname === '/pipeline') {
+      published = commands;
+      return Response.json(commands.map(() => ({ result: 'OK' })));
+    }
+    return Response.json({ result: commands[0] === 'SET' ? 'OK' : 1 });
+  });
+  await main();
+  const aggregate = published.find(command => command[1] === GAS_STORAGE_ALL_KEY);
+  const index = published.find(command => command[1] === GAS_STORAGE_COUNTRIES_KEY);
+  assert.ok(aggregate, 'the producer must publish the observations MCP reads');
+  const observations = JSON.parse(aggregate[2]);
+  assert.deepEqual(Object.keys(observations), JSON.parse(index[2]));
+  assert.equal(observations.DE.gasTwh, 143.4);
+  assert.equal(observations.DE.date, '2026-09-29');
+  assert.deepEqual(observations.DE, JSON.parse(published.find(command => command[1] === `${GAS_STORAGE_KEY_PREFIX}DE`)[2]));
+  assert.equal(aggregate[4], GAS_STORAGE_TTL_SECONDS);
+});
 
 // ---------------------------------------------------------------------------
 // parseFillEntry — envelope variant handling

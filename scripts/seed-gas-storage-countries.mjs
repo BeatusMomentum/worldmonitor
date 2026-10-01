@@ -16,6 +16,7 @@ loadEnvFile(import.meta.url);
 
 export const GAS_STORAGE_KEY_PREFIX = 'energy:gas-storage:v1:';
 export const GAS_STORAGE_COUNTRIES_KEY = 'energy:gas-storage:v1:_countries';
+export const GAS_STORAGE_ALL_KEY = 'energy:gas-storage:v1:all';
 export const GAS_STORAGE_META_KEY = 'seed-meta:energy:gas-storage-countries';
 export const GAS_STORAGE_TTL_SECONDS = 259200; // 3 days = 3× daily cron
 
@@ -167,7 +168,7 @@ async function preservePreviousSnapshot(errorMsg) {
     : [];
 
   await extendExistingTtl(
-    [...perCountryKeys, GAS_STORAGE_COUNTRIES_KEY],
+    [...perCountryKeys, GAS_STORAGE_COUNTRIES_KEY, GAS_STORAGE_ALL_KEY],
     GAS_STORAGE_TTL_SECONDS,
   );
 
@@ -254,6 +255,13 @@ export async function main() {
       'SET',
       GAS_STORAGE_COUNTRIES_KEY,
       JSON.stringify(seededIso2),
+      'EX',
+      GAS_STORAGE_TTL_SECONDS,
+    ]);
+    commands.push([
+      'SET',
+      GAS_STORAGE_ALL_KEY,
+      JSON.stringify(Object.fromEntries(countries.map((country) => [country.iso2, country]))),
       'EX',
       GAS_STORAGE_TTL_SECONDS,
     ]);
