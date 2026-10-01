@@ -3,7 +3,7 @@ import type { ChinaDecisionSignalSnapshot } from '../../shared/china-decision-si
 import type { ChinaCountrySummaryData, CountryBriefPanel, StockIndexData } from './CountryBriefPanel';
 import type { BriefSectionId } from '../../shared/country-brief-sections';
 import type { CountryBriefSource } from '@/services/country-brief-source';
-import { CountrySectionError } from '@/services/country-brief-host-transport';
+import { CountrySectionError } from '@/services/country-brief-error';
 import { combineAbortSignals } from '@/services/timeout-signal';
 import { getImfCountryBundle, buildImfEconomicIndicators, type ImfCountryBundle, type ImfMacroEntry, type ImfGrowthEntry, type ImfLaborEntry, type ImfExternalEntry } from '@/services/imf-country-data';
 import { getCountryDefenseIndustrialBase } from '@/services/defense-industrial';

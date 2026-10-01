@@ -41,7 +41,7 @@ import type { McpPromptArgument, McpPromptDef } from '../types';
 // `data.` prefix needed.
 export const PROMPT_REGISTRY: McpPromptDef[] = [
   {
-    name: 'country-briefing',
+    name: 'country-view',
     description:
       'Interactive country brief with assessment, resilience, energy, trade, security and source evidence. Text-only clients can use the existing data tools.',
     arguments: [
@@ -59,6 +59,40 @@ export const PROMPT_REGISTRY: McpPromptDef[] = [
     }],
     intro:
       'Open the WorldMonitor country brief for ${iso2} with the linked interactive view. Use its topic tabs and evidence rather than replacing the interface with paragraphs. If the user explicitly requests text only or the host cannot render apps, use get_country_risk, get_country_brief and get_country_macro for a labeled text assessment.',
+  },
+  {
+    name: 'country-briefing',
+    description:
+      'Multi-tool country brief: quantitative risk score + LLM-synthesised intelligence brief + macro indicators for a single ISO 3166-1 alpha-2 country.',
+    arguments: [
+      {
+        name: 'iso2',
+        description: 'Country designator, substituted into the tools\' country_code: an ISO 3166-1 alpha-2 code (e.g. "DE"), an alpha-3 code ("DEU"), or an English country name ("Germany"). Case-insensitive.',
+        required: true,
+      },
+    ],
+    steps: [
+      {
+        tool: 'get_country_risk',
+        args: { country_code: '${iso2}' },
+        jmespath: '{cii: cii.combinedScore, trend: cii.trend, components: cii.components, advisoryLevel: advisoryLevel, sanctionsActive: sanctionsActive, sanctionsCount: sanctionsCount, upstreamUnavailable: upstreamUnavailable}',
+        purpose: 'Quantitative Composite Instability Index (CII) + component breakdown + travel advisory + OFAC sanctions exposure. upstreamUnavailable is projected so an all-upstreams-down response is not read as a calm country.',
+      },
+      {
+        tool: 'get_country_brief',
+        args: { country_code: '${iso2}' },
+        jmespath: '{countryCode: countryCode, brief: brief}',
+        purpose: 'LLM-synthesised geopolitical + economic narrative grounded on the latest headlines.',
+      },
+      {
+        tool: 'get_country_macro',
+        args: { countries: ['${iso2}'] },
+        jmespath: '{macro: data.macro.countries, growth: data.growth.countries, labor: data.labor.countries}',
+        purpose: 'IMF WEO macro/growth/labor indicators (one-country slice; external excluded — broad WEO retraction 2026-04).',
+      },
+    ],
+    intro:
+      'Build a country briefing for ${iso2}. Execute the three steps below in order; combine the results into a single concise brief (CII score and components, travel/sanctions posture, the LLM brief, then the key macro indicators).',
   },
   {
     name: 'energy-shock-watch',

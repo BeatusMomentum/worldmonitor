@@ -33,7 +33,7 @@ import {
   getStalenessLabel,
   shouldRenderResilienceBaselineStress,
 } from './resilience-widget-utils';
-import { CountrySectionError } from '@/services/country-brief-host-transport';
+import { CountrySectionError } from '@/services/country-brief-error';
 import type { CountryEnergyProfileData } from './CountryBriefPanel';
 
 // LOCKED_PREVIEW lives in resilience-widget-utils.ts so tests and

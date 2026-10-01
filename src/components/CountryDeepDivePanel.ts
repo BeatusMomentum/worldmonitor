@@ -76,7 +76,7 @@ import { renderDefenseIndustrialSection } from './CountryDeepDivePanel-defense-i
 import { renderDemographicsCapabilitySection } from './CountryDeepDivePanel-demographics-capability';
 import { renderFiveFactorScorecardSection } from './CountryDeepDivePanel-five-factor-scorecard';
 import { combineAbortSignals } from '@/services/timeout-signal';
-import { CountrySectionError } from '@/services/country-brief-host-transport';
+import { CountrySectionError } from '@/services/country-brief-error';
 import { BRIEF_SECTIONS, CountryBriefPresentation, briefSectionState, summarizeCountryBrief, type BriefSection, type BriefSectionId } from './country-brief-presentation';
 
 const DEPENDENCY_FLAG_LABELS: Record<string, { text: string; cls: string }> = {
@@ -282,6 +282,10 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
   public setSectionFailure(id: BriefSectionId, state: 'locked' | 'unavailable', reason: string): void {
     const section = this.sections.find(section => section.id === id);
     if (!section) return;
+    if (state === 'locked') {
+      this.outputClose?.();
+      if (id === 'trade') { this.cachedTradeExposureData = null; this.cachedSectors = []; }
+    }
     const { card, body } = section;
     const notice = state === 'locked' ? this.makeProLocked(reason) : this.makeEmpty(reason);
     notice.dataset.briefState = state;
@@ -574,7 +578,8 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     if (this.costShockCalcDebounceTimer) clearTimeout(this.costShockCalcDebounceTimer);
     this.foodStocksRequestId++;
     this.demographicsCapabilityRequestId++;
-    for (const id of ['food', 'demographics', 'debt', 'sanctions', 'flows', 'tariffs', 'products', 'scenario', 'commodities'] as const) {
+    if (!hasAccess) { this.cachedTradeExposureData = null; this.cachedSectors = []; }
+    for (const id of ['trade', 'food', 'demographics', 'debt', 'sanctions', 'flows', 'tariffs', 'products', 'scenario', 'commodities'] as const) {
       const section = this.sections.find(section => section.id === id);
       if (section) section.body.replaceChildren(hasAccess
         ? this.makeLoading(`Loading ${section.title.toLowerCase()}…`)

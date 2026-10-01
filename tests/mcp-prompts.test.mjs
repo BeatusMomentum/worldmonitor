@@ -107,10 +107,10 @@ describe('api/mcp.ts — prompts capability + JMESPath-vs-schema parity', () => 
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.ok(Array.isArray(body.result?.prompts), 'result.prompts must be an array');
-    assert.equal(body.result.prompts.length, 6, `Expected 6 prompts, got ${body.result.prompts.length}`);
+    assert.equal(body.result.prompts.length, 7, `Expected 7 prompts, got ${body.result.prompts.length}`);
 
     const expectedNames = [
-      'country-briefing', 'energy-shock-watch', 'market-open-prep',
+      'country-view', 'country-briefing', 'energy-shock-watch', 'market-open-prep',
       'conflict-pulse', 'route-risk-check', 'freshness-audit',
     ];
     const actualNames = body.result.prompts.map((p) => p.name);

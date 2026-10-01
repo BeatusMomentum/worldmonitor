@@ -145,6 +145,7 @@ export class CountryIntelManager implements AppModule {
   private entitlementUnsubscribe: (() => void) | null = null;
   private lastHadPremium = false;
   private countryController: CountryBriefController | null = null;
+  private countryControllerPage: AppContext['countryBriefPage'] = null;
   private countryBriefPageLoading: Promise<boolean> | null = null;
   private currentCoverageEvents: CountryCoverageEvent[] = [];
   private coverageAbortController: AbortController | null = null;
@@ -204,7 +205,7 @@ export class CountryIntelManager implements AppModule {
     if (!page?.isVisible() || !openCode || openCode === '__loading__' || openCode === '__error__') return;
 
     page.syncCountryPremiumSectionsAccess?.(nowPremium);
-    this.countryController?.refreshPremium();
+    this.getCountryController(page).refreshPremium();
   }
 
   private handleCountryBriefOpenError(err: unknown): void {
@@ -293,6 +294,15 @@ export class CountryIntelManager implements AppModule {
     });
   }
 
+  private getCountryController(page: NonNullable<AppContext['countryBriefPage']>): CountryBriefController {
+    if (!this.countryController || this.countryControllerPage !== page) {
+      this.countryController?.dispose();
+      this.countryController = new CountryBriefController(createWebsiteCountryBriefSource(), page);
+      this.countryControllerPage = page;
+    }
+    return this.countryController;
+  }
+
   private async ensureCountryBriefPage(): Promise<boolean> {
     if (this.ctx.countryBriefPage) return true;
     if (!this.ctx.map || this.ctx.isDestroyed) return false;
@@ -310,7 +320,7 @@ export class CountryIntelManager implements AppModule {
     const { CountryDeepDivePanel } = await import('@/components/CountryDeepDivePanel');
     if (this.ctx.isDestroyed || !this.ctx.map) return false;
     this.ctx.countryBriefPage = new CountryDeepDivePanel(this.ctx.map);
-    this.countryController = new CountryBriefController(createWebsiteCountryBriefSource(), this.ctx.countryBriefPage);
+    this.getCountryController(this.ctx.countryBriefPage);
 
     this.ctx.countryBriefPage.onClose(() => {
       this.briefRequestToken++;
@@ -483,7 +493,7 @@ export class CountryIntelManager implements AppModule {
 
       let latestStock: CountryStockSnapshot | null = null;
       let latestImf: ImfCountryBundle | null = null;
-      const { stockPromise } = this.countryController!.hydrate(code, country, {
+      const { stockPromise } = this.getCountryController(page).hydrate(code, country, {
         stock: stock => {
           latestStock = stock;
           page.updateEconomicIndicators?.(this.buildEconomicIndicators(code, score, stock, latestImf));

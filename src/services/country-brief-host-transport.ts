@@ -1,8 +1,7 @@
 import { COUNTRY_READERS, countryReadResultSchema, type CountryReader } from '../../shared/country-brief-host';
 
-export class CountrySectionError extends Error {
-  constructor(public readonly state: 'locked' | 'unavailable', message: string) { super(message); }
-}
+import { CountrySectionError } from './country-brief-error';
+export { CountrySectionError } from './country-brief-error';
 
 export function createHostCountryFetch(call: (name: string, args: object, signal: AbortSignal) => Promise<unknown>) {
   let active = 0;

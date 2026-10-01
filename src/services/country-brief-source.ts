@@ -1,13 +1,10 @@
 import { IS_EMBEDDED_PREVIEW } from '@/utils/embedded-preview';
-import { createHostCountryFetch } from './country-brief-host-transport';
+import type { createHostCountryFetch } from './country-brief-host-transport';
 import { IntelligenceServiceClient, MarketServiceClient, MilitaryServiceClient, EconomicServiceClient, TradeServiceClient, SupplyChainServiceClient, ResilienceServiceClient, ScorecardServiceClient, PredictionServiceClient } from '@/services/generated-rpc-clients';
 import { getRpcBaseUrl } from '@/services/rpc-client';
 import { premiumFetch } from '@/services/premium-fetch';
 import { hasPremiumAccess } from '@/services/panel-gating';
-import { withScorecardDeadline } from '@/services/scorecard';
 import { fetchMultiSectorCostShock, fetchMultiSectorExposure, fetchBypassOptions, fetchChokepointStatus, HS2_SHORT_LABELS, SEEDED_HS2_CODES } from '@/services/supply-chain';
-import { getFoodStocks, getDemographicsCapability, getResilienceScore } from '@/services/resilience';
-import { getFiveFactorScorecard } from '@/services/scorecard';
 
 function createCountryBriefSource(fetcher: typeof fetch, mode: 'website' | 'host') {
   const base = mode === 'host' ? 'https://www.worldmonitor.app' : getRpcBaseUrl();
@@ -27,10 +24,10 @@ function createCountryBriefSource(fetcher: typeof fetch, mode: 'website' | 'host
     military: new MilitaryServiceClient(base, options),
     prediction: new PredictionServiceClient(base, options),
     supply,
-    food: (code: string, signal: AbortSignal) => mode === 'website' ? getFoodStocks({ countryCode: code, signal }) : resilience.getFoodStocks({ countryCode: code, commodity: '' }, { signal }),
-    demographics: (code: string, signal: AbortSignal) => mode === 'website' ? getDemographicsCapability({ countryCode: code, signal }) : resilience.getDemographicsCapability({ countryCode: code }, { signal }),
-    factors: (code: string, signal: AbortSignal) => mode === 'website' ? getFiveFactorScorecard(code, signal) : withScorecardDeadline(requestSignal => scorecard.getFiveFactorScorecard({ countryCode: code }, { signal: requestSignal }), signal),
-    resilience: (code: string, signal: AbortSignal) => mode === 'website' ? getResilienceScore(code) : resilience.getResilienceScore({ countryCode: code }, { signal }),
+    food: async (code: string, signal: AbortSignal) => mode === 'website' ? (await import('@/services/resilience')).getFoodStocks({ countryCode: code, signal }) : resilience.getFoodStocks({ countryCode: code, commodity: '' }, { signal }),
+    demographics: async (code: string, signal: AbortSignal) => mode === 'website' ? (await import('@/services/resilience')).getDemographicsCapability({ countryCode: code, signal }) : resilience.getDemographicsCapability({ countryCode: code }, { signal }),
+    factors: async (code: string, signal: AbortSignal) => mode === 'website' ? (await import('@/services/scorecard')).getFiveFactorScorecard(code, signal) : (await import('@/services/scorecard')).withScorecardDeadline(requestSignal => scorecard.getFiveFactorScorecard({ countryCode: code }, { signal: requestSignal }), signal),
+    resilience: async (code: string, signal: AbortSignal) => mode === 'website' ? (await import('@/services/resilience')).getResilienceScore(code) : resilience.getResilienceScore({ countryCode: code }, { signal }),
     cost: (code: string, chokepoint: string, days: number, signal: AbortSignal) => mode === 'website' ? fetchMultiSectorCostShock(code, chokepoint, days, { signal }) : supply.getMultiSectorCostShock({ iso2: code, chokepointId: chokepoint, closureDays: days }, { signal }),
     bypass: (chokepointId: string, signal: AbortSignal) => mode === 'website' ? fetchBypassOptions(chokepointId, 'container', 100) : supply.getBypassOptions({ chokepointId, cargoType: 'container', closurePct: 100 }, { signal }),
     chokepoints: (signal: AbortSignal) => mode === 'website' ? fetchChokepointStatus() : supply.getChokepointStatus({}, { signal }),
@@ -49,6 +46,7 @@ function createCountryBriefSource(fetcher: typeof fetch, mode: 'website' | 'host
 export type CountryBriefSource = ReturnType<typeof createCountryBriefSource>;
 export const createWebsiteCountryBriefSource = () => createCountryBriefSource(premiumFetch, 'website');
 
-export function createHostCountryBriefSource(call: Parameters<typeof createHostCountryFetch>[0]) {
+export async function createHostCountryBriefSource(call: Parameters<typeof createHostCountryFetch>[0]) {
+  const { createHostCountryFetch } = await import('./country-brief-host-transport');
   return createCountryBriefSource(createHostCountryFetch(call), 'host');
 }
