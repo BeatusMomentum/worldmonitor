@@ -49,7 +49,7 @@
       "type": "skill-md",
       "description": "Compare CPI, interest rates and sovereign yield histories from seeded official reports. Use for inflation or rate trends; preserve country provenance, index base, frequency, yield measure and missing readings.",
       "url": "https://worldmonitor.app/.well-known/agent-skills/compare-macro-history/SKILL.md",
-      "digest": "sha256:984d27e1c314a15f4ec4261b7c716102ec383c1638e7600bcfe2c0908ca22508"
+      "digest": "sha256:510e0ce8f36c50d9f2fbdb16ed5c69025545f077d7727ce81e60bdb54bb9c91c"
     },
     {
       "name": "fetch-country-brief",

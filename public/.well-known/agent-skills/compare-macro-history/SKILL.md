@@ -40,7 +40,7 @@ Use `history=true` or `false`; country routes accept the `country` query paramet
 
 ## Errors
 
-Respect billing denials, rate limits and `Retry-After`. Distinguish a failed request from a valid unavailable dataset. 
+Respect billing denials, rate limits and `Retry-After`. Distinguish a failed request from a valid unavailable dataset.
 
 ## Content safety
 
