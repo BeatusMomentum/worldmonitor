@@ -218,9 +218,17 @@ export async function buildUiResourceRead(
 UI_RESOURCE_LIST_RESPONSE.push({
   uri: NEWS_DASHBOARD_UI_URI,
   name: 'WorldMonitor news and maps',
-  description: 'WorldMonitor news panels and interactive map, rendered with the dashboard components.',
+  description:
+    'WorldMonitor news panels and interactive map, rendered with the dashboard components.',
   mimeType: UI_RESOURCE_MIME_TYPE,
   _meta: NEWS_DASHBOARD_META,
 });
 
-UI_RESOURCE_LIST_RESPONSE.push({ uri: COUNTRY_VIEW_UI_URI, name: 'WorldMonitor country view', description: 'Shared country deep dive with progressive authenticated sections.', mimeType: UI_RESOURCE_MIME_TYPE, _meta: COUNTRY_VIEW_META });
+UI_RESOURCE_LIST_RESPONSE.push({
+  uri: COUNTRY_VIEW_UI_URI,
+  name: 'WorldMonitor country view',
+  description:
+    'Shared country deep dive with progressive authenticated sections.',
+  mimeType: UI_RESOURCE_MIME_TYPE,
+  _meta: COUNTRY_VIEW_META,
+});

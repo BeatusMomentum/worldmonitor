@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { HMAC_SECRET, callBody, makeProDeps, proReq, PRO_USER_ID } from './helpers/mcp-pro-deps.mjs';
 
 const originalFetch = globalThis.fetch;
@@ -74,7 +75,15 @@ describe('country view MCP boundary', () => {
     assert.match(body.result.contents[0].text, /<base href="https:\/\/www.worldmonitor.app\/">/);
     assert.deepEqual(body.result.contents[0]._meta, COUNTRY_VIEW_META);
     assert.deepEqual(COUNTRY_VIEW_META.ui.csp.frameDomains, []);
-    assert.ok(COUNTRY_VIEW_META.ui.csp.resourceDomains.includes('https://upload.wikimedia.org'));
+    assert.ok(new Set(COUNTRY_VIEW_META.ui.csp.resourceDomains).has('https://upload.wikimedia.org'));
+  });
+  it('advertises each served app resource in the discovery card', async () => {
+    const { UI_RESOURCE_LIST_RESPONSE } = await import('../api/mcp/ui/registry.ts');
+    const card = JSON.parse(readFileSync(new URL('../public/.well-known/mcp/server-card.json', import.meta.url), 'utf8'));
+    assert.deepEqual([...card.metadata.mcpApps.uiResources].sort(), UI_RESOURCE_LIST_RESPONSE.map(resource => resource.uri).sort());
+    assert.match(card.metadata.mcpApps.note, /open_country_brief → country-view-v1\.html/);
+    const { parseMcpAppsInventory } = await import('../scripts/docs-stats.mjs');
+    assert.deepEqual(parseMcpAppsInventory().uiResources.sort(), UI_RESOURCE_LIST_RESPONSE.map(resource => resource.uri).sort());
   });
   it('preserves access denials and upstream failures instead of reporting empty successful measurements', async () => {
     status = 403;

@@ -130,6 +130,9 @@ test('refresh keeps prior observations and delayed country work cannot repaint a
   await expect(frame.locator('[data-brief-section=facts]')).toContainText('Previously loaded observations remain visible');
   await expect(frame.locator('[data-brief-section=facts]')).toContainText('Washington, D.C.');
   await expect.poll(() => host.calls.filter(call => call.arguments.section === 'factors').length).toBe(2);
+  expect(host.calls.filter(call => call.name === 'get_country_brief')).toHaveLength(1);
+  await frame.getByRole('button', { name: 'New AI assessment', exact: true }).click();
+  await expect.poll(() => host.calls.filter(call => call.name === 'get_country_brief').length).toBe(2);
   host.recover();
   host.delay();
   await frame.getByRole('button', { name: 'Refresh country', exact: true }).click();
@@ -140,6 +143,10 @@ test('refresh keeps prior observations and delayed country work cannot repaint a
   await expect(frame.locator('[data-brief-section=facts]')).toContainText('Kyiv');
   await expect(frame.locator('[data-brief-section=facts]')).not.toContainText('Washington, D.C.');
   await expect.poll(() => host.contexts.at(-1)?.countryCode).toBe('UA');
+  await frame.getByRole('textbox', { name: 'Country name or code' }).fill('United States');
+  await frame.getByRole('button', { name: 'Open country', exact: true }).click();
+  await expect(frame.locator('[data-brief-section=assessment]')).toContainText('Controlled US assessment');
+  expect(host.calls.filter(call => call.name === 'get_country_brief')).toHaveLength(3);
 });
 
 test('decision calculations and their JSON download use the authenticated host source', async ({ page }) => {

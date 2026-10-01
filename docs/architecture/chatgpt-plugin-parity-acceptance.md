@@ -45,7 +45,7 @@ Shared rendering does not prove complete data or action parity. A populated obse
 | A02 | Follow-up | “Show energy exposure” changes topic and keeps the same country/revision in assistant context | Topic/context bridge implemented and fixture verified; native follow-up open |
 | A03 | Country switch | US to JP with delayed US responses cannot repaint JP | Delayed US work cannot repaint UA in compiled iframe fixture |
 | A04 | Topics/reading modes | Overview, full brief, topics and keyboard section navigation reuse website behavior | Shared topic/reading presentation; desktop/mobile fixture checks |
-| A05 | Refresh/failure | One section failure preserves others and labels older successful data | Facts failure retains old observations and labels failure in fixture; lazy host refresh verified |
+| A05 | Refresh/failure | One section failure preserves others and labels older successful data | Facts failure retains old observations and labels failure in fixture; lazy host refresh verified; assessment quota reused unless explicitly regenerated |
 | A06 | Entitlement change | Server denies restricted reads; UI clears denied private data and shows a gate | Server denial and visible gate fixture verified; website revocation clears trade evidence and blocks cached reuse; live entitlement-change check open |
 | A07 | Source links | Open valid source links through supported host actions without losing view | Host source-link fixture verified; native handoff open |
 | A08 | Evidence export | Actual Markdown has matching evidence, sources and observation dates | Shared output mounted; actual evidence Markdown comparison open |
@@ -94,6 +94,6 @@ For each UI PR, attach inspected desktop/mobile screenshots at the tested commit
 
 ## Local verdict, 2026-10-01
 
-The compiled country-view suite passes all three tests. The existing website US evidence/report and limited-country/China tests pass. All 2,211 MCP tests pass, including the new transport checks. All 1,684 DOM tests pass, including country switching, entitlement revocation and existing-panel initialization. The website build passes the unchanged bundle budget. The original text-only country prompt retains its executable risk, assessment and macro steps; the interactive view has a separate prompt. Browser/API typechecks, architectural boundaries, product inventory and source-attribution checks pass. Biome reports no errors; its existing repository warnings are outside this change.
+The compiled country-view suite passes all three tests. The existing website US evidence/report and limited-country/China tests pass. All 2,213 MCP tests pass, including the new transport checks. All 1,684 DOM tests pass, including country switching, entitlement revocation and existing-panel initialization. The website build passes the unchanged bundle budget. The original text-only country prompt retains its executable risk, assessment and macro steps; the interactive view has a separate prompt. Browser/API typechecks, architectural boundaries, product inventory and source-attribution checks pass. Biome reports no errors; its existing repository warnings are outside this change.
 
 These checks do not establish live source freshness, ordinary ChatGPT prompt routing or full parity. The open rows above remain delivery gates for that broader objective.

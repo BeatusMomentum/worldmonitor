@@ -1608,7 +1608,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
         assetId: '',
         assetType: '',
         ongoingOnly: false,
-      });
+      }, { signal: abortSignal });
       if (!res || !Array.isArray(res.events) || this.currentCode !== iso2) return;
       const events = res.events.filter(e =>
         Array.isArray(e.countries) && e.countries.includes(iso2),
@@ -2259,7 +2259,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
       bypassContent.append(this.makeLoading('Loading bypass options\u2026'));
       this.sectorBypassAbort = new AbortController();
       const signal = this.sectorBypassAbort.signal;
-      void (this.source ? this.source.bypass(sector.primaryChokepointId, this.signal) : fetchBypassOptions(sector.primaryChokepointId, 'container', 100)).then(resp => {
+      void (this.source ? this.source.bypass(sector.primaryChokepointId, combineAbortSignals([signal, this.signal])) : fetchBypassOptions(sector.primaryChokepointId, 'container', 100)).then(resp => {
         if (signal.aborted) return;
         bypassContent.replaceChildren();
         const top3 = resp.options.slice(0, 3);

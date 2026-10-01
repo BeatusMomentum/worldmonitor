@@ -162,6 +162,17 @@ describe('api/mcp.ts — prompts capability + JMESPath-vs-schema parity', () => 
     }
   });
 
+  it('renders an executable country-view step for interactive clients', async () => {
+    const res = await handler(makeReq('POST', {
+      jsonrpc: '2.0', id: 3, method: 'prompts/get',
+      params: { name: 'country-view', arguments: { iso2: 'DE' } },
+    }));
+    const body = await res.json();
+    const text = body.result.messages[0].content.text;
+    assert.match(text, /Step 1 \u2014 open_country_brief/);
+    assert.match(text, /"country_code":"DE"/);
+  });
+
   it('prompts/get(energy-shock-watch, {}) renders the "global view" branch when the optional arg is omitted', async () => {
     const res = await handler(makeReq('POST', {
       jsonrpc: '2.0', id: 4, method: 'prompts/get',

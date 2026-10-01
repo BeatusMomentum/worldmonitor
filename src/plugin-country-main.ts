@@ -89,6 +89,21 @@ async function mountCountryView(): Promise<void> {
   }
 
   const assessmentSchema = z.object({ brief: z.string(), countryCode: z.string(), generatedAt: z.union([z.string(), z.number()]).optional(), sources: z.array(z.object({ title: z.string(), source: z.string(), url: z.string(), publishedAt: z.string().optional() })).optional(), evidence: z.array(z.object({ id: z.string(), kind: z.string(), label: z.string(), value: z.string(), source: z.string().optional(), asOf: z.string().optional() }).passthrough()).optional() });
+  const assessments = new Map<string, Promise<z.infer<typeof assessmentSchema>>>();
+  function getAssessment(code: string, signal: AbortSignal, force = false) {
+    const cached = assessments.get(code);
+    if (cached && !force) return cached;
+    const pendingAssessment = call('get_country_brief', { country_code: code }, signal).then(raw => {
+      const result = assessmentSchema.parse(raw);
+      if (result.countryCode !== code) throw new Error('Assessment country did not match.');
+      return result;
+    }).catch(error => {
+      if (assessments.get(code) === pendingAssessment) assessments.delete(code);
+      throw error;
+    });
+    assessments.set(code, pendingAssessment);
+    return pendingAssessment;
+  }
   const coverageSchema = z.object({
     countryCode: z.string(), countryName: z.string(), generatedAt: z.string(), degraded: z.boolean(),
     headlines: z.array(z.object({ title: z.string(), source: z.string(), url: z.string(), publishedAtMs: z.number().finite() })),
@@ -129,11 +144,11 @@ async function mountCountryView(): Promise<void> {
       const score = toCachedCII(risk.cii);
       panel.updateScore({ ...score, lastUpdated: score.lastUpdated ? new Date(score.lastUpdated) : null }, null);
     }).catch(() => { if (current()) panel.updateScore(null, null); });
-    void call('get_country_brief', { country_code: code }, signal).then(raw => {
-      const result = assessmentSchema.parse(raw);
-      if (!current() || result.countryCode !== code) return;
+    const assessment = getAssessment(code, signal);
+    void assessment.then(result => {
+      if (!current() || result.countryCode !== code || assessments.get(code) !== assessment) return;
       panel.updateBrief({ ...result, country: name, code } as CountryIntelData);
-    }).catch(() => { if (current()) panel.setSectionFailure('assessment', 'unavailable', 'The AI assessment could not be loaded. Other country sections remain available.'); });
+    }).catch(() => { if (current() && !assessments.has(code)) panel.setSectionFailure('assessment', 'unavailable', 'The AI assessment could not be loaded. Other country sections remain available.'); });
     void call('get_country_coverage', { country_code: code }, signal).then(raw => {
       const coverage = coverageSchema.parse(raw);
       if (!current() || coverage.countryCode !== code) return;
@@ -198,6 +213,21 @@ async function mountCountryView(): Promise<void> {
     if (!code) return;
     const topic = document.querySelector<HTMLElement>('.cdp-shell')?.dataset.briefTopic ?? 'overview';
     void open({ country_code: code, topic }, true).catch(error => { status.textContent = error.message; });
+  });
+  const assessmentButton = document.getElementById('refreshAssessment') as HTMLButtonElement;
+  assessmentButton.addEventListener('click', () => {
+    const code = panel.getCode();
+    if (!code) return;
+    const openedRevision = revision;
+    const signal = panel.signal;
+    assessmentButton.disabled = true;
+    void getAssessment(code, signal, true).then(result => {
+      if (!signal.aborted && panel.getCode() === code && revision === openedRevision) {
+        panel.updateBrief({ ...result, country: getCountryNameByCode(code) ?? code, code } as CountryIntelData);
+      }
+    }).catch(() => {
+      if (!signal.aborted && panel.getCode() === code && revision === openedRevision) panel.setSectionFailure('assessment', 'unavailable', 'The new AI assessment could not be loaded. Previously loaded observations remain visible.');
+    }).finally(() => { assessmentButton.disabled = false; });
   });
   document.addEventListener('click', event => {
     const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href]') : null;

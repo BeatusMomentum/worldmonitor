@@ -106,7 +106,10 @@ export class CountryBriefController {
   refreshPremium(): void {
     this.premiumRequest.abort();
     this.premiumRequest = new AbortController();
-    if (!this.source.canRequestPremium()) return;
+    if (!this.source.canRequestPremium()) {
+      this.panel.setSectionFailure?.('trade', 'locked', 'Upgrade to PRO for trade exposure');
+      return;
+    }
     const code = this.snapshot.countryCode;
     if (!code) return;
     void this.read('military', signal => getCountryDefenseIndustrialBase(code, this.source.military, signal), value => this.panel.updateDefenseIndustrialBase?.(value.available ? value : null), true);
