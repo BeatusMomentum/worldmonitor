@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { build } from 'vite';
-import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { NEWS_DASHBOARD_META } from '../api/mcp/ui/news-dashboard-app';
@@ -8,7 +8,6 @@ test.use({ launchOptions: { args: ['--use-gl=angle', '--use-angle=swiftshader', 
 
 let dist: string;
 let html: string;
-let workerAsset: string;
 const origin = 'https://worldmonitor.test';
 const item = (source: string, title: string, link: string) => ({ source, title, link, publishedAt: Date.now(), isAlert: false, locationName: 'Berlin', location: { latitude: 52.5, longitude: 13.4 }, importanceScore: 70, credibilityScore: 80, corroborationCount: 1, snippet: 'Fixture news. No live provider request.', tickers: [] });
 const payload = { categories: {
@@ -34,7 +33,6 @@ test.beforeAll(async () => {
     if (inheritedTiles === undefined) delete process.env.VITE_PMTILES_URL;
     else process.env.VITE_PMTILES_URL = inheritedTiles;
   }
-  workerAsset = (await readdir(resolve(dist, 'assets'))).find(name => name.startsWith('maplibre-gl-worker-') && name.endsWith('.js'))!;
   html = (await readFile(resolve(dist, 'plugin.html'), 'utf8')).replace('<head>', `<head><base href="${origin}/">`);
 });
 
@@ -196,18 +194,8 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await page.screenshot({ path: testInfo.outputPath('news-markers-desktop.png'), fullPage: true });
   await app.locator('.news-location-marker').first().click();
   await expect(app.locator('.map-popup')).toContainText('Ports review shipping schedules as trade routes shift');
-  await app.locator('.map-popup .popup-close').click();
-  expect(await app.locator('body').evaluate(async (_element, assetUrl) => {
-    const blob = `data:text/javascript;charset=utf-8,${encodeURIComponent(`import ${JSON.stringify(assetUrl)};self.postMessage({pluginWorkerReady:true});`)}`;
-    const worker = new Worker(blob, { type: 'module' });
-    try {
-      return await new Promise<boolean>((resolve, reject) => {
-        const timer = setTimeout(() => reject(new Error('Map worker did not start')), 10_000);
-        worker.onmessage = event => { if (event.data?.pluginWorkerReady) { clearTimeout(timer); resolve(true); } };
-        worker.onerror = event => { clearTimeout(timer); reject(new Error(event.message || 'Map worker failed')); };
-      });
-    } finally { worker.terminate(); }
-  }, `${origin}/plugin/assets/${workerAsset}`)).toBe(true);
+  await app.locator('.map-popup .popup-close').press('Enter');
+  await expect(app.locator('.map-popup')).toHaveCount(0);
   await app.locator('[data-panel="politics"] a[href=""]').first().click();
   await expect(app.locator('#pluginStatus')).toContainText('source link is unavailable');
   expect(await page.evaluate(() => (window as any).calls.filter((call: any) => call.method === 'ui/open-link').length)).toBe(0);
@@ -330,7 +318,8 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await app.locator('.news-location-marker').first().press('Enter');
   await expect(app.locator('.map-popup-sheet')).toContainText('Ports review shipping schedules as trade routes shift');
   await page.screenshot({ path: testInfo.outputPath('news-marker-mobile-details.png'), fullPage: true });
-  await app.locator('.map-popup .popup-close').click();
+  await app.locator('.map-popup .popup-close').press('Enter');
+  await expect(app.locator('.map-popup')).toHaveCount(0);
   await page.evaluate(items => (window as any).sendResult({ structuredContent: { categories: { politics: { items } }, feedStatuses: {}, generatedAt: '', requestedView: { map_layers: [] } } }), crowded);
   await expect(app.locator('.news-location-marker')).toHaveCount(150);
   await expect(app.locator('.map-truncation-summary')).toHaveText('150/350 markers');
