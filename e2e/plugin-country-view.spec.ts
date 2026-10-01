@@ -9,6 +9,11 @@ test.use({ serviceWorkers: 'block' });
 type HostCall = { name: string; arguments: Record<string, unknown> };
 async function installCountryHost(page: Page) {
   const calls: HostCall[] = [];
+  const requestNames = new Map<number, string>();
+  const cancelled: string[] = [];
+  let delayCoverage = false;
+  let releaseCoverage: () => void = () => {};
+  const coverageDelayed = new Promise<void>(resolve => { releaseCoverage = resolve; });
   const contexts: Array<{ countryCode: string; topic: string; sections: Array<{ section: string; state: string; renderedText: string }> }> = [];
   const links: string[] = [];
   let failFacts = false;
@@ -23,15 +28,18 @@ async function installCountryHost(page: Page) {
   });
   await page.route('**/data/*.geojson', async route => route.fulfill({ path: join(root, 'public/data', new URL(route.request().url()).pathname.split('/').at(-1)!), headers: { 'Access-Control-Allow-Origin': '*' } }));
   await page.route('**/country-host-test', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><title>Country plugin acceptance — controlled fixtures</title><h1>Country plugin acceptance — controlled fixtures</h1><p>Tests the built iframe and host transport. Does not test live OAuth or source freshness.</p><iframe title="WorldMonitor country view" sandbox="allow-scripts allow-downloads" style="width:100%;height:950px;border:0"></iframe>' }));
-  await page.exposeFunction('countryHost', async (method: string, params: HostCall & { content?: Array<{ text: string }>; url?: string }) => {
+  await page.exposeFunction('countryHost', async (method: string, params: HostCall & { content?: Array<{ text: string }>; url?: string; requestId?: number }, id?: number) => {
+    if (method === 'notifications/cancelled') { cancelled.push(requestNames.get(params.requestId!) ?? 'unknown'); return {}; }
     if (method === 'ui/initialize') return { hostCapabilities: { serverTools: {}, openLinks: {}, updateModelContext: {} }, hostContext: { theme: 'dark' } };
     if (method === 'ui/update-model-context') { contexts.push(JSON.parse(params.content![0].text)); return {}; }
     if (method === 'ui/open-link') { links.push(params.url!); return {}; }
     if (method !== 'tools/call') return {};
     calls.push(params);
+    if (id !== undefined) requestNames.set(id, params.name);
     const args = params.arguments;
     const code = String(args.country_code ?? (args.arguments as Record<string, unknown>)?.country_code ?? (args.arguments as Record<string, unknown>)?.countryCode ?? 'US');
     if (params.name === 'get_country_brief') return { structuredContent: { ...us.brief, countryCode: code, brief: `Controlled ${code} assessment. Source observations, not live acceptance.` } };
+    if (params.name === 'get_country_coverage' && delayCoverage) await coverageDelayed;
     if (params.name === 'get_country_coverage') return { structuredContent: { countryCode: code, countryName: code, generatedAt: '2026-10-01T15:00:00Z', degraded: false, headlines: [{ title: `Controlled ${code} source article`, source: 'Fixture publisher', url: 'https://example.com/evidence', publishedAtMs: 1790863200000 }], events: [], sources: [{ source: 'news', state: 'ready' }, { source: 'events', state: 'unavailable' }] } };
     const section = String(args.section);
     if (section === 'facts' && code === 'US' && delayUS) await delayed;
@@ -64,9 +72,10 @@ async function installCountryHost(page: Page) {
   await page.evaluate(html => {
     const frame = document.querySelector('iframe')!;
     window.addEventListener('message', async event => {
-      if (event.source !== frame.contentWindow || event.data?.jsonrpc !== '2.0' || !event.data.id) return;
+      if (event.source !== frame.contentWindow || event.data?.jsonrpc !== '2.0') return;
+      if (!event.data.id && event.data.method !== 'notifications/cancelled') return;
       try {
-        const result = await (window as unknown as { countryHost: (method: string, params: object) => Promise<object> }).countryHost(event.data.method, event.data.params);
+        const result = await (window as unknown as { countryHost: (method: string, params: object, id?: number) => Promise<object> }).countryHost(event.data.method, event.data.params, event.data.id);
         frame.contentWindow!.postMessage({ jsonrpc: '2.0', id: event.data.id, result }, '*');
         if (event.data.method === 'ui/initialize') frame.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-input', params: { country_code: 'US', topic: 'overview' } }, '*');
       } catch {
@@ -75,7 +84,7 @@ async function installCountryHost(page: Page) {
     });
     frame.srcdoc = html.replace('<head>', `<head><base href="${location.origin}/">`);
   }, html);
-  return { calls, contexts, links, unmanaged, fail: () => { failFacts = true; }, recover: () => { failFacts = false; }, delay: () => { delayUS = true; }, release: releaseUS };
+  return { calls, contexts, links, unmanaged, cancelled, delayCoverage: () => { delayCoverage = true; }, releaseCoverage, fail: () => { failFacts = true; }, recover: () => { failFacts = false; }, delay: () => { delayUS = true; }, release: releaseUS };
 }
 
 test('built opaque country view uses the shared sections, host reads, sources and actual report output', async ({ page }, info) => {
@@ -130,6 +139,12 @@ test('refresh keeps prior observations and delayed country work cannot repaint a
   await expect(frame.locator('[data-brief-section=facts]')).toContainText('Previously loaded observations remain visible');
   await expect(frame.locator('[data-brief-section=facts]')).toContainText('Washington, D.C.');
   await expect.poll(() => host.calls.filter(call => call.arguments.section === 'factors').length).toBe(2);
+  host.delayCoverage();
+  await frame.getByRole('button', { name: 'Refresh country', exact: true }).click();
+  await expect.poll(() => host.calls.filter(call => call.name === 'get_country_coverage').length).toBe(3);
+  await frame.getByRole('button', { name: 'Refresh country', exact: true }).click();
+  await expect.poll(() => host.cancelled).toContain('get_country_coverage');
+  host.releaseCoverage();
   expect(host.calls.filter(call => call.name === 'get_country_brief')).toHaveLength(1);
   await frame.getByRole('button', { name: 'New AI assessment', exact: true }).click();
   await expect.poll(() => host.calls.filter(call => call.name === 'get_country_brief').length).toBe(2);

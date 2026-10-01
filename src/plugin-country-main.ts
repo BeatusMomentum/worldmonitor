@@ -16,6 +16,7 @@ import { preloadInfrastructureTables } from '@/services/related-assets';
 import { getCountryNameByCode, preloadCountryGeometry } from '@/services/country-geometry';
 import { toCachedCII } from '@/services/cached-risk-scores';
 import { initI18n } from '@/services/i18n';
+import { combineAbortSignals } from '@/services/timeout-signal';
 import type { CountryIntelData } from '@/components/CountryBriefPanel';
 
 async function mountCountryView(): Promise<void> {
@@ -32,6 +33,7 @@ async function mountCountryView(): Promise<void> {
   let queuedView: unknown;
   let contextTimer: ReturnType<typeof setTimeout> | undefined;
   let timeline: CountryTimeline | undefined;
+  let openRequest: AbortController | undefined;
   const send = (message: object) => window.parent.postMessage({ jsonrpc: '2.0', ...message }, '*');
 
   function request(method: string, params: object, signal?: AbortSignal): Promise<unknown> {
@@ -132,7 +134,9 @@ async function mountCountryView(): Promise<void> {
     }
     panel.selectTopic(view.topic);
     input.value = name;
-    const signal = panel.signal;
+    openRequest?.abort();
+    openRequest = new AbortController();
+    const signal = combineAbortSignals([panel.signal, openRequest.signal]);
     const current = () => !signal.aborted && panel.getCode() === code && revision === openedRevision;
     controller.hydrate(code, name);
     if (refresh) panel.refreshHostedSections();
@@ -144,7 +148,7 @@ async function mountCountryView(): Promise<void> {
       const score = toCachedCII(risk.cii);
       panel.updateScore({ ...score, lastUpdated: score.lastUpdated ? new Date(score.lastUpdated) : null }, null);
     }).catch(() => { if (current()) panel.updateScore(null, null); });
-    const assessment = getAssessment(code, signal);
+    const assessment = getAssessment(code, panel.signal);
     void assessment.then(result => {
       if (!current() || result.countryCode !== code || assessments.get(code) !== assessment) return;
       panel.updateBrief({ ...result, country: name, code } as CountryIntelData);
@@ -240,7 +244,7 @@ async function mountCountryView(): Promise<void> {
   });
   const mutation = new MutationObserver(() => scheduleContext());
   mutation.observe(document.getElementById('country-deep-dive-panel')!, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'data-brief-topic', 'data-section-state'] });
-  panel.onClose(() => { revision++; controller.dispose(); timeline?.destroy(); timeline = undefined; scheduleContext(); });
+  panel.onClose(() => { revision++; openRequest?.abort(); controller.dispose(); timeline?.destroy(); timeline = undefined; scheduleContext(); });
   window.addEventListener('pagehide', () => {
     clearTimeout(contextTimer); mutation.disconnect(); panel.hide();
     for (const call of pending.values()) { call.cleanup(); call.reject(new Error('Country view closed')); }
