@@ -67,6 +67,17 @@ test.describe('2D basemap with enforced CSP', () => {
     const domains = NEWS_DASHBOARD_META.ui.csp;
     const csp = `default-src 'none'; script-src 'unsafe-inline' ${origin} data:; worker-src blob:; style-src 'unsafe-inline' ${origin}; font-src ${origin} data:; img-src ${origin} ${domains.resourceDomains.join(' ')}; connect-src ${origin} ${domains.connectDomains.join(' ')}; base-uri ${origin}`;
     const strictHtml = html.replace('<head>', `<head><meta http-equiv="Content-Security-Policy" content="${csp}"><script>(() => {
+      const createObjectURL = URL.createObjectURL;
+      URL.createObjectURL = function (blob) {
+        const url = createObjectURL.call(this, blob);
+        if (blob.type === 'text/javascript') document.documentElement.dataset.workerBlobUrl = url;
+        return url;
+      };
+      const revokeObjectURL = URL.revokeObjectURL;
+      URL.revokeObjectURL = function (url) {
+        if (url === document.documentElement.dataset.workerBlobUrl) document.documentElement.dataset.workerBlobRevoked = 'true';
+        return revokeObjectURL.call(this, url);
+      };
       const getExtension = WebGL2RenderingContext.prototype.getExtension;
       WebGL2RenderingContext.prototype.getExtension = function (name) {
         return name === 'WEBGL_debug_renderer_info' ? null : Reflect.apply(getExtension, this, [name]);
@@ -81,7 +92,7 @@ document.documentElement.dataset.cspViolations='0';document.addEventListener('se
     await page.goto(origin);
     await page.setContent(`<iframe title="WorldMonitor plugin" style="border:0;width:100%;height:1000px" sandbox="allow-scripts"></iframe><script>
       const frame=document.querySelector('iframe');window.calls=[];window.addEventListener('message',e=>{if(e.source!==frame.contentWindow)return;const m=e.data;window.calls.push(m);const send=o=>frame.contentWindow.postMessage({jsonrpc:'2.0',...o},'*');
-      if(m.method==='ui/initialize')send({id:m.id,result:{hostCapabilities:{},hostContext:{theme:'dark'}}});
+      if(m.method==='ui/initialize')send(window.rejectInit?{id:m.id,error:{code:-32000,message:'Fixture initialization failed'}}:{id:m.id,result:{hostCapabilities:{},hostContext:{theme:'dark'}}});
       if(m.method==='ui/notifications/initialized')send({method:'ui/notifications/tool-result',params:{structuredContent:${JSON.stringify(mapPayload)}}});});frame.srcdoc=${JSON.stringify(strictHtml).replace(/</g, '\\u003c')};</script>`);
     const app = page.frameLocator('iframe');
     await expect(app.locator('.panel')).toHaveCount(12);
@@ -120,6 +131,15 @@ document.documentElement.dataset.cspViolations='0';document.addEventListener('se
     await expect(app.locator('html')).toHaveAttribute('data-csp-violations', '0');
     expect(errors).toEqual([]);
     await page.screenshot({ path: testInfo.outputPath('domain-maps-globe.png'), fullPage: true });
+    await page.evaluate(() => {
+      (window as any).rejectInit = true;
+      const frame = document.querySelector('iframe')!;
+      frame.srcdoc = frame.srcdoc;
+    });
+    await expect(app.locator('#pluginStatus')).toContainText('Fixture initialization failed');
+    await expect(app.locator('html')).toHaveAttribute('data-worker-blob-url', /^blob:/);
+    await app.locator('html').evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide')));
+    await expect(app.locator('html')).toHaveAttribute('data-worker-blob-revoked', 'true');
   });
 });
 test.afterAll(async () => { if (dist) await rm(dist, { recursive: true, force: true }); });
