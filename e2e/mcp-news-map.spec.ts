@@ -61,7 +61,7 @@ test.describe('2D basemap with enforced CSP', () => {
       catch { return route.abort(); }
     });
     const domains = NEWS_DASHBOARD_META.ui.csp;
-    const csp = `default-src 'none'; script-src 'unsafe-inline' ${origin} data:; worker-src blob: data:; style-src 'unsafe-inline' ${origin}; font-src ${origin} data:; img-src ${origin} ${domains.resourceDomains.join(' ')}; connect-src ${origin} ${domains.connectDomains.join(' ')}; base-uri ${origin}`;
+    const csp = `default-src 'none'; script-src 'unsafe-inline' ${origin} data:; worker-src blob:; style-src 'unsafe-inline' ${origin}; font-src ${origin} data:; img-src ${origin} ${domains.resourceDomains.join(' ')}; connect-src ${origin} ${domains.connectDomains.join(' ')}; base-uri ${origin}`;
     const strictHtml = html.replace('<head>', `<head><meta http-equiv="Content-Security-Policy" content="${csp}"><script>(() => {
       const getExtension = WebGL2RenderingContext.prototype.getExtension;
       WebGL2RenderingContext.prototype.getExtension = function (name) {
