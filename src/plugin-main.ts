@@ -236,6 +236,7 @@ async function start(): Promise<void> {
   const workerResponse = await fetch(workerModuleUrl, { credentials: 'omit', signal: AbortSignal.timeout(15_000) });
   if (!workerResponse.ok) throw new Error(`Map worker could not load (${workerResponse.status})`);
   const workerBlobUrl = URL.createObjectURL(new Blob([await workerResponse.text()], { type: 'text/javascript' }));
+  window.addEventListener('pagehide', () => URL.revokeObjectURL(workerBlobUrl), { once: true });
   // MapLibre's .cjs suffix selects classic mode; ChatGPT permits blob workers only.
   const workerUrl = `${workerBlobUrl}#maplibre.cjs`;
   map = new MapContainer(document.getElementById('mapContainer')!, { zoom: 1, pan: { x: 0, y: 0 }, view: 'global', layers, timeRange: 'all' }, false, { mapLibreWorkerUrl: workerUrl });
@@ -372,7 +373,6 @@ async function start(): Promise<void> {
   const observer = new ResizeObserver(() => send({ method: 'ui/notifications/size-changed', params: { height: document.documentElement.scrollHeight } }));
   observer.observe(document.body);
   window.addEventListener('pagehide', () => {
-    URL.revokeObjectURL(workerBlobUrl);
     observer.disconnect();
     for (const call of pending.values()) { clearTimeout(call.timer); call.reject(new Error('WorldMonitor view closed.')); }
     pending.clear();
