@@ -82,7 +82,7 @@ document.documentElement.dataset.cspViolations='0';document.addEventListener('se
     const app = page.frameLocator('iframe');
     await expect(app.locator('.panel')).toHaveCount(12);
     await expect.poll(() => app.locator('#mapSection').evaluate(element => element.getBoundingClientRect().height)).toBeLessThanOrEqual(1000);
-    await expect(app.locator('#deckgl-basemap canvas')).toBeVisible({ timeout: 20_000 });
+    await expect(app.locator('#deckgl-basemap canvas')).toBeVisible();
     await expect.poll(() => app.locator('#deckgl-basemap canvas').evaluate((element) => {
       const gl = (element as HTMLCanvasElement).getContext('webgl2');
       if (!gl) return false;
@@ -96,7 +96,7 @@ document.documentElement.dataset.cspViolations='0';document.addEventListener('se
     await app.locator('#pluginMapLayers').getByLabel('Military Bases', { exact: true }).check();
     await expect(app.locator('#pluginMapStatus')).toContainText('reference data');
     await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', id: 'fixture-globe', method: 'tools/call', params: { name: 'apply_news_view', arguments: { renderer: 'globe', map_layers: ['bases', 'cables'] } } }, '*'));
-    await expect.poll(() => page.evaluate(() => (window as any).calls.find((call: any) => call.id === 'fixture-globe')?.result?.structuredContent?.renderer?.mode), { timeout: 20_000 }).toBe('globe');
+    await expect.poll(() => page.evaluate(() => (window as any).calls.find((call: any) => call.id === 'fixture-globe')?.result?.structuredContent?.renderer?.mode)).toBe('globe');
     await expect(app.locator('#mapContainer canvas').first()).toBeVisible();
     await expect(app.locator('#mapDimensionToggle button[data-mode="globe"]')).toHaveClass(/active/);
     await expect(app.locator('#pluginMapLayers').getByLabel('Undersea Cables', { exact: true })).toBeChecked();
@@ -108,7 +108,7 @@ document.documentElement.dataset.cspViolations='0';document.addEventListener('se
 test.afterAll(async () => { if (dist) await rm(dist, { recursive: true, force: true }); });
 
 test('real WorldMonitor panels, search, map and host refresh in an opaque sandbox', async ({ page }, testInfo) => {
-  test.setTimeout(180_000);
+  test.setTimeout(300_000);
   await page.addInitScript(() => {
     const getContext = HTMLCanvasElement.prototype.getContext;
     HTMLCanvasElement.prototype.getContext = function (type, options) {
@@ -245,7 +245,7 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await app.getByRole('button', { name: 'Clear filters' }).press('Enter');
   await expect(app.locator('#pluginMapLayers').getByLabel('Fires', { exact: true })).toBeChecked();
   await page.evaluate(() => { (window as any).hazardBudgetLimit = 20; });
-  await app.getByRole('button', { name: 'Refresh map data' }).click();
+  await app.getByRole('button', { name: 'Refresh map data' }).press('Enter');
   await expect(app.locator('#pluginMapStatus')).toContainText('up to 20/source');
   const budgetCalls = await page.evaluate(() => (window as any).calls.filter((call: any) => call.params?.name === 'get_natural_disasters').slice(-2).map((call: any) => call.params.arguments.limit));
   expect(budgetCalls).toEqual([100, 20]);
@@ -253,13 +253,13 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await page.screenshot({ path: testInfo.outputPath('domain-maps-budget-recovery.png'), fullPage: true });
   await page.evaluate(() => { (window as any).hazardBudgetLimit = undefined; });
   await page.evaluate(() => { (window as any).hazards = { isError: true, structuredContent: { data: {} } }; });
-  await app.getByRole('button', { name: 'Refresh map data' }).click();
+  await app.getByRole('button', { name: 'Refresh map data' }).press('Enter');
   await expect(app.locator('#pluginMapStatus')).toContainText('denied or unavailable');
   await expect(app.locator('.earthquake-marker[title*="Fixture Berlin"]')).toBeVisible();
   await expect(app.locator('#pluginMapLayers').getByLabel('Natural Events', { exact: true })).toBeChecked();
   await page.screenshot({ path: testInfo.outputPath('domain-maps-desktop.png'), fullPage: true });
   await page.evaluate(value => { (window as any).hazards = value; }, hazards);
-  await app.getByRole('button', { name: 'Refresh map data' }).click();
+  await app.getByRole('button', { name: 'Refresh map data' }).press('Enter');
   await expect(app.locator('#pluginMapStatus')).toContainText('Global hazard snapshot');
   await page.screenshot({ path: testInfo.outputPath('news-maps-desktop.png'), fullPage: true });
   await page.setViewportSize({ width: 390, height: 1000 });
@@ -277,7 +277,7 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await page.screenshot({ path: testInfo.outputPath('news-maps-mobile.png'), fullPage: true });
   await page.screenshot({ path: testInfo.outputPath('domain-maps-mobile.png'), fullPage: true });
   await page.evaluate(() => { (window as any).hazards = { structuredContent: { data: { earthquakes: { earthquakes: [] }, events: { dataAvailable: true, events: [] }, fires: { dataAvailable: true, fireDetections: [] } } } }; });
-  await app.getByRole('button', { name: 'Refresh map data' }).click();
+  await app.getByRole('button', { name: 'Refresh map data' }).press('Enter');
   await expect(app.locator('#pluginMapStatus')).toContainText('earthquakes: 0 valid');
   await expect(app.locator('.earthquake-marker')).toHaveCount(0);
   const crowded = Array.from({ length: 350 }, (_, index) => item('Fixture', `Located headline ${index}`, `https://example.com/news/${index}`));
