@@ -1842,12 +1842,12 @@ export class MapComponent {
       // per-marker data precondition; the `newsCount === 0` skips sit on exempt
       // groups, which are outside the budget entirely.
       weather: layers.weather ? this.weatherAlerts.filter((alert) => alert.centroid) : [],
-      news: this.state.timeRange === 'all'
-        ? this.newsLocations
-        : this.newsLocations.filter((item) => {
-          const timestamp = item.timestamp?.getTime();
-          return timestamp == null || !Number.isFinite(timestamp) || timestamp >= Date.now() - this.getTimeRangeMs();
-        }),
+      news: this.newsLocations.filter((item) => {
+        if (!Number.isFinite(item.lat) || !Number.isFinite(item.lon)) return false;
+        if (this.state.timeRange === 'all') return true;
+        const timestamp = item.timestamp?.getTime();
+        return timestamp == null || !Number.isFinite(timestamp) || timestamp >= Date.now() - this.getTimeRangeMs();
+      }),
     };
   }
 
@@ -2141,15 +2141,20 @@ export class MapComponent {
       if (this.isOverlayMarkerCut(item)) continue;
       const pos = projection([item.lon, item.lat]);
       if (!pos) continue;
-      const marker = document.createElement('div');
+      const marker = document.createElement('button');
+      marker.type = 'button';
       marker.className = 'news-location-marker';
-      marker.style.cssText = 'position:absolute;width:8px;height:8px;border-radius:50%;transform:translate(-50%,-50%) scale(var(--marker-scale,1));transform-origin:center;z-index:53;pointer-events:auto';
+      marker.style.cssText = 'position:absolute;width:24px;height:24px;border:0;padding:0;border-radius:50%;transform:translate(-50%,-50%) scale(var(--marker-scale,1));transform-origin:center;z-index:53;pointer-events:auto;cursor:pointer';
       marker.style.left = `${pos[0]}px`;
       marker.style.top = `${pos[1]}px`;
-      marker.style.backgroundColor = getThreatColor(item.threatLevel);
+      marker.style.background = `radial-gradient(circle, ${getThreatColor(item.threatLevel)} 4px, transparent 4px)`;
       marker.title = item.title;
-      marker.setAttribute('role', 'img');
       marker.setAttribute('aria-label', item.title);
+      marker.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const rect = this.container.getBoundingClientRect();
+        this.popup.show({ type: 'news', data: item, x: event.clientX - rect.left, y: event.clientY - rect.top });
+      });
       this.appendOverlay(marker);
     }
     // Strategic waterways
