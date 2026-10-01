@@ -30,8 +30,8 @@
       "manifestSha256": "f8bdb5c1ba55aea079d021ec730d76a5ce69357f587a61336266eef044db6614"
     },
     "1.24.0": {
-      "tools": 80,
-      "manifestSha256": "af9b0003ae92d54ea429f6529bcab80685c7a3f37a81d45a35a9404a4d696c95"
+      "tools": 82,
+      "manifestSha256": "b9a06f28e7d69febe5fd6c873436cf96693dcde70cadad5012404e049573caf2"
     }
   }
 }

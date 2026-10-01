@@ -178,6 +178,20 @@
       "removal_issue": null
     },
     {
+      "path": "api/mcp/registry/stock-tools.ts",
+      "category": "external-protocol",
+      "reason": "MCP stock-research tool definition and fixed MarketService dispatch. Exports no standalone JSON data route.",
+      "owner": "@SebastienMelki",
+      "removal_issue": null
+    },
+    {
+      "path": "api/mcp/registry/cost-shock-tools.ts",
+      "category": "external-protocol",
+      "reason": "MCP cost-shock tool definition and fixed SupplyChainService dispatch. Exports no standalone JSON data route.",
+      "owner": "@SebastienMelki",
+      "removal_issue": null
+    },
+    {
       "path": "api/mcp/registry/index.ts",
       "category": "external-protocol",
       "reason": "MCP TOOL_REGISTRY merge + buildPublicTool + SUMMARY_SCHEMA + TOOL_LIST_RESPONSE precompute + collision guard. Extracted from api/mcp.ts during the structural split; same external-protocol constraint as the parent shim.",

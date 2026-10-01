@@ -125,4 +125,18 @@ describe('stock research MCP workflow', () => {
     assert.deepEqual(result.structuredContent, { operation: 'analysis', data: analysis });
     assert.equal((await handler(request())).status, 401);
   });
+  it('returns a budget envelope for oversized saved history rather than claiming complete results', async () => {
+    process.env.WORLDMONITOR_VALID_KEYS = 'wm_stock_fixture';
+    globalThis.fetch = async () => Response.json({ items: [{ symbol: 'AAPL', snapshots: [{ ...analysis, summary: 'x'.repeat(600000) }] }] });
+    const request = new Request('https://worldmonitor.app/mcp', { method: 'POST', headers: {
+      'Content-Type': 'application/json', 'X-WorldMonitor-Key': 'wm_stock_fixture',
+    }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'get_stock_research', arguments: { operation: 'history', symbols: ['AAPL'] } } }) });
+    const response = await handler(request);
+    const result = (await response.json()).result;
+    assert.equal(result.structuredContent._budget_exceeded, true);
+    assert.equal(result.structuredContent.budget_bytes, 524288);
+    assert.match(result.structuredContent.hint, /jmespath/);
+    assert.equal(result.structuredContent.data, undefined);
+  });
+
 });
