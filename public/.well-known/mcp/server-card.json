@@ -166,6 +166,13 @@
       }
     },
     {
+      "name": "get_energy_storage",
+      "description": "EU gas storage and US gas/crude inventories with dated history. Seeded GIE AGSI+ and EIA data, not live quotes. Gas is in TWh or billion cubic feet; crude is in million barrels. Null datasets or weekly changes mean unavailable, not zero. Freshness covers all three sources, including when selecting a subset.",
+      "_meta": {
+        "worldmonitor/access": "free-account"
+      }
+    },
+    {
       "name": "get_climate_data",
       "description": "Climate intelligence: temperature/precipitation anomalies (vs 30-year WMO normals), climate-relevant disaster alerts (ReliefWeb/GDACS/FIRMS), atmospheric CO2 trend (NOAA Mauna Loa), air quality (OpenAQ/WAQI PM2.5 stations), Arctic sea ice extent and ocean heat indicators (NSIDC/NOAA), weather alerts, and climate news.",
       "_meta": {

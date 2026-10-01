@@ -887,6 +887,23 @@ curl -s https://worldmonitor.app/mcp \
 
 </CodeGroup>
 
+### `get_energy_storage`
+
+EU aggregate gas storage and US natural-gas storage and commercial crude inventories from seeded GIE AGSI+ and EIA observations. These are dated reports, not live quotes.
+
+| Name | Type | Description |
+|------|------|-------------|
+| `dataset` | `array<string: eu-gas-storage / nat-gas-storage / crude-inventories>` | Select datasets. Omit or pass an empty array for all three. |
+| `limit` | integer | Maximum observations per dataset, newest first. Default 30. Pass 0 for all available seeded observations. |
+
+The response uses the standard `cached_at`, `stale`, and `data` envelope. EU storage includes fill percentage, daily change, a consumption-days heuristic, and history in TWh. US gas history uses billion cubic feet. US crude history uses million barrels. Each history retains its observation date. A null dataset or weekly change means unavailable, not zero.
+
+- **API endpoints:** `GET /api/economic/v1/get-eu-gas-storage`, `GET /api/economic/v1/get-nat-gas-storage`, `GET /api/economic/v1/get-crude-inventories`
+- **Access:** `free-account`. Authentication and the existing daily allowance apply. Pro calls spend the daily quota. This tool only reads seeded caches and accepts the universal `summary` and `jmespath` arguments.
+- **Freshness budget:** 48 hours for daily EU storage and 14 days for weekly US observations. The envelope checks all three sources even when selecting a subset. A missing timestamp makes `cached_at` null and `stale` true. A missing source remains null; if all three sources are missing the call returns a tool error.
+
+For example, call `get_energy_storage` with `{"dataset":["eu-gas-storage","nat-gas-storage"],"limit":5}` to compare the latest available gas-storage reports.
+
 ## Geopolitical & security
 
 ### `get_conflict_events`
