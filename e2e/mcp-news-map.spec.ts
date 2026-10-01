@@ -41,6 +41,7 @@ test.beforeAll(async () => {
 test.describe('2D basemap with enforced CSP', () => {
   test('paints public basemap assets without inheriting private PMTiles configuration', async ({ page }, testInfo) => {
     const errors: string[] = [];
+    const textureReferrers: string[] = [];
     const mapPayload = { ...payload, categories: Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`region-${index}`, payload.categories.politics])) };
     page.on('pageerror', error => errors.push(error.message));
     await page.context().route('**/*', async route => {
@@ -57,7 +58,12 @@ test.describe('2D basemap with enforced CSP', () => {
       if (url.pathname === '/') return route.fulfill({ contentType: 'text/html', body: '<html><body></body></html>' });
       const path = url.pathname.startsWith('/plugin/') ? resolve(dist, url.pathname.slice('/plugin/'.length)) : resolve('public', url.pathname.slice(1));
       if (!path.startsWith(dist + '/') && !path.startsWith(resolve('public') + '/')) return route.abort();
-      try { return route.fulfill({ body: await readFile(path), contentType: path.endsWith('.js') ? 'text/javascript' : path.endsWith('.css') ? 'text/css' : 'application/json', headers: { 'Access-Control-Allow-Origin': '*' } }); }
+      if (url.pathname.startsWith('/textures/')) {
+        const referrer = route.request().headers().referer ?? '';
+        textureReferrers.push(referrer);
+        if (referrer) return route.fulfill({ status: 403, body: 'Hotlink protection' });
+      }
+      try { return route.fulfill({ body: await readFile(path), contentType: path.endsWith('.js') ? 'text/javascript' : path.endsWith('.css') ? 'text/css' : path.endsWith('.jpg') ? 'image/jpeg' : 'application/json', headers: { 'Access-Control-Allow-Origin': '*' } }); }
       catch { return route.abort(); }
     });
     const domains = NEWS_DASHBOARD_META.ui.csp;
@@ -92,12 +98,25 @@ document.documentElement.dataset.cspViolations='0';document.addEventListener('se
     }), { timeout: 20_000 }).toBe(true);
     await expect(app.locator('html')).toHaveAttribute('data-csp-violations', '0');
     expect(errors).toEqual([]);
+    await app.getByRole('combobox', { name: 'News category' }).selectOption('region-0');
+    await expect(app.locator('.panel:visible')).toHaveCount(1);
+    await app.getByRole('button', { name: 'Clear filters' }).press('Enter');
+    await expect(app.locator('.panel:visible')).toHaveCount(12);
     await page.screenshot({ path: testInfo.outputPath('news-map-2d-csp.png'), fullPage: true });
     await app.locator('#pluginMapLayers').getByLabel('Military Bases', { exact: true }).check();
     await expect(app.locator('#pluginMapStatus')).toContainText('reference data');
     await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', id: 'fixture-globe', method: 'tools/call', params: { name: 'apply_news_view', arguments: { renderer: 'globe', map_layers: ['bases', 'cables'] } } }, '*'));
     await expect.poll(() => page.evaluate(() => (window as any).calls.find((call: any) => call.id === 'fixture-globe')?.result?.structuredContent?.renderer?.mode)).toBe('globe');
     await expect(app.locator('#mapContainer canvas').first()).toBeVisible();
+    await expect.poll(() => textureReferrers.length).toBeGreaterThan(0);
+    expect(textureReferrers).toEqual(['']);
+    await expect.poll(() => app.locator('#mapContainer canvas').first().evaluate(element => {
+      const gl = (element as HTMLCanvasElement).getContext('webgl2');
+      if (!gl) return false;
+      const pixel = new Uint8Array(4);
+      gl.readPixels(gl.drawingBufferWidth / 2, gl.drawingBufferHeight / 2, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
+      return pixel[0]! + pixel[1]! + pixel[2]! > 40 && pixel[3]! > 0;
+    })).toBe(true);
     await expect(app.locator('#mapDimensionToggle button[data-mode="globe"]')).toHaveClass(/active/);
     await expect(app.locator('#pluginMapLayers').getByLabel('Undersea Cables', { exact: true })).toBeChecked();
     await expect(app.locator('html')).toHaveAttribute('data-csp-violations', '0');
