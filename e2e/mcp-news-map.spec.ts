@@ -286,7 +286,7 @@ test('real WorldMonitor panels, search, map and host refresh in an opaque sandbo
   await page.evaluate(() => {
     (window as any).calls = [];
     const frame = document.querySelector('iframe')!;
-    frame.srcdoc = frame.srcdoc;
+    frame.replaceWith(frame.cloneNode(true));
   });
   await expect(app.locator('[data-panel="politics"]')).toContainText('Ports review shipping');
   await page.evaluate(() => document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', id: 'fixture-mobile-news', method: 'tools/call', params: { name: 'apply_news_view', arguments: { map_layers: [], map_latitude: 52.5, map_longitude: 13.4, map_zoom: 3 } } }, '*'));
