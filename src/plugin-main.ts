@@ -235,7 +235,10 @@ async function start(): Promise<void> {
   const workerModuleUrl = new URL(mapLibreWorkerAsset, import.meta.url).href;
   const workerResponse = await fetch(workerModuleUrl, { credentials: 'omit', signal: AbortSignal.timeout(15_000) });
   if (!workerResponse.ok) throw new Error(`Map worker could not load (${workerResponse.status})`);
-  const workerUrl = `data:text/javascript;charset=utf-8,${encodeURIComponent(await workerResponse.text())}`;
+  const workerBlobUrl = URL.createObjectURL(new Blob([await workerResponse.text()], { type: 'text/javascript' }));
+  window.addEventListener('pagehide', () => URL.revokeObjectURL(workerBlobUrl), { once: true });
+  // MapLibre's .cjs suffix selects classic mode; ChatGPT permits blob workers only.
+  const workerUrl = `${workerBlobUrl}#maplibre.cjs`;
   map = new MapContainer(document.getElementById('mapContainer')!, { zoom: 1, pan: { x: 0, y: 0 }, view: 'global', layers, timeRange: 'all' }, false, { mapLibreWorkerUrl: workerUrl });
   const layerControls = document.createElement('fieldset');
   layerControls.id = 'pluginMapLayers';

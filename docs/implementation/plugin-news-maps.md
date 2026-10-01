@@ -46,7 +46,9 @@ Reference layers show existing landmarks, not live activity. Live military aircr
 
 `ui://worldmonitor/news-dashboard.html` reads the static build from the canonical origin, or the trusted Vercel deployment hostname for previews. Reads reject redirects, non-HTML/error pages, oversized documents, and missing plugin roots. Resource metadata declares the asset/base-map origins and base URI. Static plugin assets and public map data allow cross-origin reads. No nested website iframe or arbitrary request proxy is used.
 
-MapLibre receives its fetched worker bundle as a plugin-only module-worker data URL because Chromium blocks module workers created from opaque-origin blob URLs. The CSP declaration includes this requirement. News clustering reuses the existing synchronous algorithm over the endpoint's bounded category buckets; the website keeps its worker path.
+MapLibre receives its fetched, self-contained worker bundle as a plugin-only blob URL ending in `#maplibre.cjs`. MapLibre's `.cjs` dispatch selects a classic worker, which starts in Chromium's opaque sandbox and meets ChatGPT's `worker-src blob:` policy. The blob is revoked when the view closes. The browser regression enforces that blob-only policy. News clustering reuses the existing synchronous algorithm over the endpoint's bounded category buckets; the website keeps its worker path.
+
+The plugin document withholds the host referrer when it loads public visual assets. Cloudflare rejects globe textures requested with ChatGPT's external referrer; requests without that referrer retain the public CORS headers. Category filtering also enforces `display: none` for hidden plugin panels, overriding the shared flex layout.
 
 ## Verification and remaining acceptance
 
