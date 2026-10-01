@@ -1001,10 +1001,11 @@ describe('policy wiring', () => {
     // The bound is a RATCHET against bulk-copying, not a budget to spend: it
     // moves by one, in the same commit as the entry that needs the slot, and
     // only once that entry carries its own licence scan and suppression tests
-    // (WORLDMONITOR-127 took it from 19 to 20). Raising it by more than one, or
-    // ahead of an entry, defeats the deliberation this red is here to force.
+    // (WORLDMONITOR-127 took it from 19 to 20, WORLDMONITOR-11B from 20 to 21).
+    // Raising it by more than one, or ahead of an entry, defeats the
+    // deliberation this red is here to force.
     assert.ok(
-      MARKETING_IGNORE_ERRORS.length < 21,
+      MARKETING_IGNORE_ERRORS.length < 22,
       `marketing array must stay a vetted subset, got ${MARKETING_IGNORE_ERRORS.length}`,
     );
   });
@@ -1473,6 +1474,44 @@ describe('marketing ignoreErrors — injected-script classes (2026-09-02 triage)
       isIgnored('Error', 'Error: NotSupportedError: Error connecting to Web Authentication service.'),
       true,
     );
+  });
+
+  it('drops the WebAuthn credential-manager rejection (WORLDMONITOR-11B)', () => {
+    // Verbatim production value: Chrome 149 / Linux and Chrome Mobile 150 /
+    // Android 10 on `/pro`, zero frames, `onunhandledrejection`, breadcrumbs
+    // ending at Clerk's `POST /v1/client/sign_ins`. Chromium's CredMan bridge
+    // raises it when the OS credential service is unavailable, from the same
+    // Clerk passkey sign-in as WORLDMONITOR-11Q.
+    assert.equal(
+      isIgnored('Error', 'NotReadableError: An unknown error occurred while talking to the credential manager.'),
+      true,
+    );
+    assert.equal(
+      isIgnored('Error', 'Error: NotReadableError: An unknown error occurred while talking to the credential manager.'),
+      true,
+    );
+  });
+
+  it('keeps other NotReadableError messages so a real one still reports', () => {
+    // NotReadableError is also what a failed file or media read raises, so only
+    // the CredMan sentence is suppressed.
+    assert.equal(isIgnored('Error', 'NotReadableError: Could not start video source'), false);
+    assert.equal(
+      isIgnored('Error', 'NotReadableError: An unknown error occurred while talking to the credential manager. Retrying'),
+      false,
+    );
+  });
+
+  it('pins the marketing surface as credential-manager-free, the 11B rule\'s own licence', () => {
+    // The WebAuthn-free scan below already rules out a caller. This one also
+    // rules out first-party code minting the sentence itself, so the
+    // frame-blind entry can only ever match the browser's CredMan rejection.
+    const offenders = marketingFirstPartySources()
+      .filter((f) => !f.rel.includes('sentry-filter-policy'))
+      .filter((f) => /NotReadableError|talking to the credential manager/.test(f.code))
+      .map((f) => f.rel);
+    assert.deepEqual(offenders, [],
+      'the marketing surface now mentions NotReadableError — re-derive the WORLDMONITOR-11B rule');
   });
 
   it('keeps other NotSupportedError messages so a real one still reports', () => {
