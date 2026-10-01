@@ -134,7 +134,7 @@ document.documentElement.dataset.cspViolations='0';document.addEventListener('se
     await page.evaluate(() => {
       (window as any).rejectInit = true;
       const frame = document.querySelector('iframe')!;
-      frame.srcdoc = frame.srcdoc;
+      frame.setAttribute('srcdoc', frame.srcdoc);
     });
     await expect(app.locator('#pluginStatus')).toContainText('Fixture initialization failed');
     await expect(app.locator('html')).toHaveAttribute('data-worker-blob-url', /^blob:/);
