@@ -166,6 +166,8 @@ const EXCLUDED_FROM_MCP_PARITY = new Map([
     "fetch-on-miss: paid-upstream — external feed fetch per request"],
   ["GET /api/market/v1/get-country-stock-index",
     "fetch-on-miss: paid-upstream — external upstream fetch per cache miss"],
+  ["GET /api/market/v1/get-price-history",
+    "fetch-on-miss: paid-upstream — external upstream fetch per cache miss"],
   ["GET /api/market/v1/get-insider-transactions",
     "fetch-on-miss: paid-upstream — external upstream fetch per cache miss"],
   ["GET /api/military/v1/get-aircraft-details",
