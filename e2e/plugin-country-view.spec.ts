@@ -19,6 +19,7 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
   let failFacts = false;
   let failActivity = false;
   let atlasDenied = false;
+  let atlasUnavailable = false;
   let disruptionsFailed = false;
   let energyFailed = atlasOutages.energy ?? false;
   let releaseDisruptions: () => void = () => {};
@@ -75,6 +76,7 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
     if (atlasOutages.timeline && section === 'disruptions') await delayedDisruptions;
     if (energyFailed && section === 'energy') return { structuredContent: { section, state: 'unavailable', reason: 'Controlled energy outage' } };
     if (disruptionsFailed && section === 'disruptions') return { structuredContent: { section, state: 'unavailable', reason: 'Controlled timeline outage' } };
+    if (atlasUnavailable && section === 'facilities') return { structuredContent: { section, state: 'unavailable', reason: 'Controlled storage outage' } };
     if (atlasDenied && ['facilityDetail', 'facilities'].includes(section)) return { structuredContent: { section, state: 'locked', reason: 'Controlled Atlas connection lacks access' } };
     const pipeline = { id: 'us-pipeline', name: 'Controlled US Pipeline', operator: 'Fixture operator', commodityType: 'gas', fromCountry: 'US', toCountry: 'CA', transitCountries: [], capacityBcmYr: 12, capacityMbd: 0, lengthKm: 100, inService: 2025, publicBadge: 'flowing', startPoint: { lat: 38, lon: -77 }, endPoint: { lat: 43, lon: -79 }, waypoints: [], evidence: { physicalState: 'flowing', physicalStateSource: 'operator', commercialState: 'active', sanctionRefs: [], operatorStatement: { text: 'Controlled operator statement', url: 'https://example.com/pipeline-source', date: '2026-10-01' }, classifierVersion: 'fixture', classifierConfidence: 0.9 } };
     const facility = { id: 'us-storage', name: 'Controlled US Storage', operator: 'Fixture storage operator', country: 'US', facilityType: 'spr', capacityMb: 12, capacityTwh: 0, capacityMtpa: 0, workingCapacityUnit: 'Mb', inService: 2025, location: { lat: 38, lon: -77 }, publicBadge: 'operational', evidence: { physicalState: 'operational', physicalStateSource: 'operator', commercialState: 'active', operatorStatement: { text: 'Controlled storage statement', url: 'https://example.com/storage-source', date: '2026-10-01' }, sanctionRefs: [] } };
@@ -157,7 +159,7 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
     window.addEventListener('message', receive);
     frame.contentWindow!.postMessage({ jsonrpc: '2.0', id, method: 'tools/call', params: { name, arguments: args } }, '*');
   }), { name, args });
-  return { calls, contexts, links, unmanaged, cancelled, action, releaseDisruptions, delayAtlasDetail: () => { delayAtlasDetail = true; }, releaseAtlasDetail, failDisruptions: () => { disruptionsFailed = true; }, failEnergy: () => { energyFailed = true; }, partialAtlas: () => { atlasPartial = true; }, denyAtlas: () => { atlasDenied = true; }, activityOutage: () => { failActivity = true; }, activityRecover: () => { failActivity = false; }, partial: () => { partialBootstrap = true; }, complete: () => { partialBootstrap = false; }, quota: () => { quotaExceeded = true; }, get admissions() { return admissions; }, delayAdmission: () => { delayAdmission = true; }, releaseAdmission, delayCoverage: () => { delayCoverage = true; }, releaseCoverage, fail: () => { failFacts = true; }, recover: () => { failFacts = false; }, delay: () => { delayUS = true; }, release: releaseUS };
+  return { calls, contexts, links, unmanaged, cancelled, action, releaseDisruptions, failAtlas: () => { atlasUnavailable = true; }, recoverAtlas: () => { atlasUnavailable = false; }, delayAtlasDetail: () => { delayAtlasDetail = true; }, releaseAtlasDetail, failDisruptions: () => { disruptionsFailed = true; }, failEnergy: () => { energyFailed = true; }, partialAtlas: () => { atlasPartial = true; }, denyAtlas: () => { atlasDenied = true; }, activityOutage: () => { failActivity = true; }, activityRecover: () => { failActivity = false; }, partial: () => { partialBootstrap = true; }, complete: () => { partialBootstrap = false; }, quota: () => { quotaExceeded = true; }, get admissions() { return admissions; }, delayAdmission: () => { delayAdmission = true; }, releaseAdmission, delayCoverage: () => { delayCoverage = true; }, releaseCoverage, fail: () => { failFacts = true; }, recover: () => { failFacts = false; }, delay: () => { delayUS = true; }, release: releaseUS };
 }
 
 test('country military observations render under one allocation and survive an AIS outage', async ({ page }, info) => {
@@ -512,4 +514,26 @@ test('initial energy failure does not block Atlas and delayed timelines do not b
   host.releaseDisruptions();
   await expect(output).toContainText('Controlled pipeline maintenance');
   expect(host.admissions).toBe(1);
+});
+
+
+test('transient Atlas failure preserves same-country rows and detail actions while denial clears them', async ({ page }, info) => {
+  const host = await installCountryHost(page, false, undefined, true);
+  const frame = page.frameLocator('iframe');
+  await frame.getByRole('button', { name: 'Resources & infrastructure', exact: true }).click();
+  const energy = frame.locator('[data-brief-section=energy]');
+  await expect(energy).toContainText('Controlled US Storage');
+  host.failAtlas();
+  await frame.getByRole('button', { name: 'Refresh country', exact: true }).click();
+  await expect(energy).toContainText('Storage Atlas data unavailable. Previously loaded Atlas observations remain visible.');
+  await energy.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('atlas-retained-desktop.png'), fullPage: true });
+  await energy.getByRole('button', { name: 'Controlled US Storage', exact: true }).click();
+  await expect(frame.locator('[data-country-atlas-detail]')).toContainText('12 Mb');
+  await frame.getByRole('button', { name: 'Back to country', exact: true }).click();
+  host.recoverAtlas(); host.denyAtlas();
+  await frame.getByRole('button', { name: 'Refresh country', exact: true }).click();
+  await expect(energy).toContainText('Storage Atlas data is not authorized');
+  await expect(energy.getByRole('button', { name: 'Controlled US Storage', exact: true })).toHaveCount(0);
+  expect(host.admissions).toBe(3);
 });

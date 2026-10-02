@@ -1653,10 +1653,12 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     if (signal.aborted || this.signal !== signal || this.currentCode !== code || this.atlasRevision !== revision) return;
     this.hostedAtlasBody?.replaceChildren();
     const [pipelines, facilities, shortages] = results;
+    const previous = this.hostedAtlas?.code === code && this.hostedAtlas.signal === signal ? this.hostedAtlas : null;
+    const canRetain = (result: PromiseSettledResult<unknown>) => !(result.status === 'rejected' && result.reason instanceof CountrySectionError && result.reason.state === 'locked');
     const data = this.hostedAtlas = { code, signal,
-      pipelines: pipelines.status === 'fulfilled' && Array.isArray(pipelines.value.pipelines) ? pipelines.value : undefined,
-      facilities: facilities.status === 'fulfilled' && Array.isArray(facilities.value.facilities) ? facilities.value : undefined,
-      shortages: shortages.status === 'fulfilled' && Array.isArray(shortages.value.shortages) ? shortages.value : undefined,
+      pipelines: pipelines.status === 'fulfilled' && Array.isArray(pipelines.value.pipelines) && (!pipelines.value.upstreamUnavailable || pipelines.value.pipelines.length) ? pipelines.value : canRetain(pipelines) ? previous?.pipelines : undefined,
+      facilities: facilities.status === 'fulfilled' && Array.isArray(facilities.value.facilities) && (!facilities.value.upstreamUnavailable || facilities.value.facilities.length) ? facilities.value : canRetain(facilities) ? previous?.facilities : undefined,
+      shortages: shortages.status === 'fulfilled' && Array.isArray(shortages.value.shortages) && (!shortages.value.upstreamUnavailable || shortages.value.shortages.length) ? shortages.value : canRetain(shortages) ? previous?.shortages : undefined,
     };
     const pipes = data.pipelines?.pipelines.filter(p => p.fromCountry === code || p.toCountry === code || p.transitCountries.includes(code)) ?? [];
     const stores = data.facilities?.facilities.filter(f => f.country === code) ?? [];
@@ -1667,9 +1669,9 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     this.appendAtlasRow(`Fuel shortages in ${code}`, confirmed ? `${confirmed} confirmed · ${crises.length - confirmed} watch` : `${crises.length} watch`, crises.map(s => ({ id: s.id, label: `${s.product} — ${s.shortDescription}`, event: 'energy:open-fuel-shortage-detail', detail: { shortageId: s.id } })));
     for (const [label, available, result] of [['Pipeline', data.pipelines, pipelines], ['Storage', data.facilities, facilities], ['Fuel shortage', data.shortages, shortages]] as const) {
       if (available?.upstreamUnavailable) this.hostedAtlasBody?.append(this.makeEmpty(`${label} Atlas coverage is partial. Counts include only loaded observations.`));
-      if (!available) this.hostedAtlasBody?.append(this.makeEmpty(`${label} Atlas ${result.status === 'rejected' && result.reason instanceof CountrySectionError && result.reason.state === 'locked' ? 'data is not authorized by this connection' : 'data unavailable'}. Other loaded observations remain visible.`));
+      if (!available || result.status === 'rejected' || (result.status === 'fulfilled' && result.value.upstreamUnavailable && !available.upstreamUnavailable)) this.hostedAtlasBody?.append(this.makeEmpty(`${label} Atlas ${result.status === 'rejected' && result.reason instanceof CountrySectionError && result.reason.state === 'locked' ? 'data is not authorized by this connection' : 'data unavailable'}. ${available ? 'Previously loaded Atlas observations remain visible.' : 'Other loaded observations remain visible.'}`));
     }
-    await this.loadDisruptionsForCountry(code);
+    await this.loadDisruptionsForCountry(code, revision);
   }
 
   public getAtlasSelection() {
@@ -1727,7 +1729,8 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     await show();
   }
 
-  private async loadDisruptionsForCountry(iso2: string): Promise<void> {
+  private async loadDisruptionsForCountry(iso2: string, revision = this.atlasRevision): Promise<void> {
+    const abortSignal = this.signal;
     try {
       const { SupplyChainServiceClient } = await import(
         '@/generated/client/worldmonitor/supply_chain/v1/service_client'
@@ -1737,7 +1740,6 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
       // switch or panel close cancels the in-flight request, not just
       // discards the result via the `this.currentCode !== iso2` guard
       // below. Codex P2 on PR #3377.
-      const abortSignal = this.signal;
       const client = this.source?.supply ?? new SupplyChainServiceClient(getRpcBaseUrl(), {
         fetch: (input, init) => globalThis.fetch(input, { ...(init ?? {}), signal: abortSignal }),
       });
@@ -1746,7 +1748,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
         assetType: '',
         ongoingOnly: false,
       }, { signal: abortSignal });
-      if (!res || !Array.isArray(res.events) || this.currentCode !== iso2) return;
+      if (!res || !Array.isArray(res.events) || abortSignal.aborted || this.signal !== abortSignal || this.currentCode !== iso2 || this.atlasRevision !== revision) return;
       const events = res.events.filter(e =>
         Array.isArray(e.countries) && e.countries.includes(iso2),
       );
