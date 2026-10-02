@@ -70,7 +70,9 @@ test('question-headed welcome passages state their own measured figures', { skip
   const whatIs = passageAfter('What is World Monitor?');
   assert.match(whatIs, new RegExp(`${facts.feeds} news and OSINT feeds from ${facts.providers} attributed providers`));
   assert.match(whatIs, new RegExp(`${facts.mapLayers} map layer types`));
-  assert.match(passageAfter('How do I start watching the world map?'), new RegExp(`free, no account, ${facts.mapLayers} map layer types ready to switch on`));
+  // Resilience is Pro-locked, so the free-start answer must not promise every counted layer.
+  assert.match(passageAfter('How do I start watching the world map?'), new RegExp(`${facts.mapLayers} map layer types, every one except Resilience free to switch on`));
+  assert.match(passageAfter('How do I build on World Monitor from my own stack?'), new RegExp(`${facts.mcpTools} live tools`));
   assert.match(content, new RegExp(`${facts.mcpTools} MCP tools`));
 });
 

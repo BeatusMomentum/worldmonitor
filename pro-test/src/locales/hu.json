@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Építőknek és AI ágenseknek",
       "title": "Hogyan építhetek rá a World Monitor-ra a saját stack-ből?",
-      "sub": "A térkép minden eleme API is. Kösd össze Claudeval MCP-n keresztül, hívd meg a REST végpontokat bárhonnan, vagy telepítsen natív klienst Pythonhoz, Rubyhoz, Gohoz vagy JavaScripthez — a kódod élő adatokkal kutat az edzésadatok helyett.",
+      "sub": "A térképen lévő minden eszköz API-ként is elérhető. Kapcsold be a Claude-ba MCP-n keresztül {{mcpTools}} élő eszközzel, hívd meg a REST végpontokat bárhonnan, vagy telepítsd a natív klienst Python, Ruby, Go vagy JavaScript számára — a kódod élő adatokkal kutat ahelyett, hogy betanítási adatok memóriáját használná.",
       "b1": "{{mcpTools}} MCP-eszköz — kockázati pontszámok, szűk keresztmetszetek, konfliktusok, piacok, rövid helyzet­jelentések",
       "b2": "Dokumentált REST API — egy OpenAPI 3.1 specifikáció, egy kulcs",
       "b3": "Hivatalos SDK-k az npm-en, PyPI-n, RubyGemsen és Go-n — zéró függőség, MCP-első",
@@ -675,11 +675,11 @@
       "q3": "Honnan származnak az adatok?",
       "a3": "{{providers}} szerzett szolgáltatótól. Közöttük az ACLED és UCDP konfliktusokra, az AISStream az élő hajók­ra, az OpenSky a repülőgépekre, a NASA FIRMS a tüzekre, az USGS a földrengésekre, az IMF, BIS, FRED és Finnhub piacok és makrogazdaságra — plusz kurátori hírcsa­tornák. Minden panel citálja forrásait és időbélyegét beágyazottan.",
       "q4": "Valós időben tudom követni a szűk keresztmetszetek, például Hormuz vagy Bab el-Mandeb?",
-      "a4": "Igen. {{chokepoints}} szűkületi pont, köztük Hormuz és Bab el-Mandeb, élő AIS-hajóval való követéssel, heti változással és zavarási pontszámmal nyomon követett – és a sűrűségi anomáliák minden szűkületi pont gördülő alapértékéhez képest jeleznek.",
+      "a4": "Igen. {{chokepoints}} szűk keresztmetszet – szorosok és csatornák egyaránt, a Hormúztól és Bab el-Mandébtől a Szuezcsatornáig – élő AIS hajleletszámmal nyomon követett, hétről hétre mért tranzitváltozással és zavarási pontszámozással — és a sűrűségi anomáliák minden szűk keresztmetszet gördülő alapértékéhez képest jelzésre kerülnek.",
       "q5": "Miben különbözik ez egy konfliktustérképtől, mint a Liveuamap?",
       "a5": "A konfliktus csak egy térképréteg. A World Monitor összeolvasztja a konfliktusokat a hajózással, a katonai repülésekkel, az infrastruktúrával, a piacokkal és a kibernetikai működésekkel — majd az AI kiértékeli az összefolyást: instabilitási indexek, felkavarási foltok, megerősített breaking riportok és napi briefek. Hasonlítsa össze a World Monitort a Liveuamap-tal és más konfliktustérképekkel: worldmonitor.app/compare/liveuamap-alternatives. További monitorozási lehetőségekhez lásd a worldmonitor.app/compare/best-geopolitical-risk-dashboards oldalt.",
       "q6": "Miért bízzak egy riasztásban?",
-      "a6": "Mert minden riasztásnak rögzített kapukon kell átmennie, mielőtt elérne téged. A riasztások {{alertOrigins}} független forrásból érkeznek: nagyobb fenyegetéskockázatú hírek, kulcsszó-csúcsok, hotspot-eszkalációk, katonai csökkentés detektálás és polgári védelmi szirénák. Minden forrás azonos szűrőkön halad át: a 15 percnél régebbi elemek eldobódnak, ugyanaz az esemény ismétlése 30 percre elnyomódik, és minden riasztás után 60 másodperces hűtési idő következik. Az alacsonyabb szintű forrásoknak AI-megerősített besorolásra is szükségük van ahhoz, hogy kiváltson egyet.",
+      "a6": "Mert egy szalagnak rögzített kapukon kell áthaladnia. A rendszer akkor riaszt, amikor a hírek kritikus vagy magas veszélyfokozatúnak vannak besorolva, vagy ha hivatalos polgári védelmi szirénák szólnak. A hírigazolásnak 15 percnél nem lehet régebbi, az azonos hírt 30 percre visszatartják, és bármelyik riasztás után 60 másodperces szünet következik, hacsak az új nem súlyosabb. Az alsóbb szintű források csak kulcsszavas találatai AI-megerősítést igényelnek. A szirénák kihagyják az életkor- és szünetkapukat, mert időkritikusak.",
       "q7": "Használhatják azt AI-ügynökök, mint a Claude vagy a GPT?",
       "a7": "Igen. A World Monitor MCP-kiszolgálója {{mcpTools}} élő eszközt tesz elérhetővé, így Claude, GPT vagy bármely MCP-kompatibilis ügynök lekérdezheti a kockázati pontszámokat, szűk keresztmetszetek állapotát, konfliktusokat, piacokat és rövid helyzet­jelentéseket — JMESPath-vetítéssel, hogy az ügynök pontosan azt kapja meg, amire szüksége van.",
       "q8": "Szükségem van fiókra?",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Hogyan kezdhetek a világtérkép figyelésbe?",
-      "subtitle": "Nyisd meg a worldmonitor.app/dashboard oldalt bármely böngészőben: ingyenes, nincs fiók, {{mapLayers}} térképréteg-típus azonnal kapcsolható az első betöltéskor. Kattints bármelyik országra az ő rövidítéséhez, vagy nyomj ⌘K / Ctrl-K billentyűt a parancskatalógushoz. A térkép frissítést tartott az oldal olvasása közben.",
+      "subtitle": "Nyisd meg a worldmonitor.app/dashboard oldalt bármilyen böngészőben, regisztráció nélkül: {{mapLayers}} térképréteg-típus, a Rugalmasság kivételével minden ingyenes. Kattints bármely országra, hogy megkapd az összefoglalóját, vagy nyomj ⌘K / Ctrl-K billentyűkombinációt a parancspalettához. A térkép folyamatosan frissül, amíg ezt az oldalt olvasod.",
       "button": "Találd meg először",
       "note": "Ingyenes · Nincs regisztráció · Másodpercekben betöltődik",
       "secondary": "Vagy tekintsd meg a Pro csomagokat →"

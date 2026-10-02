@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Pour les créateurs et agents IA",
       "title": "Comment construire sur World Monitor à partir de ma propre pile technologique ?",
-      "sub": "Tout ce qui est sur la carte est aussi une API. Intégrez-la à Claude via MCP, appelez les endpoints REST depuis n'importe où, ou installez un client natif pour Python, Ruby, Go ou JavaScript — votre code recherche avec des données en direct au lieu de souvenirs de données d'entraînement.",
+      "sub": "Tout ce qui figure sur la carte est également une API. Intégrez-la à Claude via MCP avec {{mcpTools}} outils actifs, appelez les points de terminaison REST de n'importe où, ou installez un client natif pour Python, Ruby, Go ou JavaScript — votre code fait de la recherche avec des données en direct au lieu de s'appuyer sur des souvenirs de données d'entraînement.",
       "b1": "{{mcpTools}} outils MCP — scores de risque, points d'étranglement, conflits, marchés, briefs",
       "b2": "API REST documentée — une spec OpenAPI 3.1, une clé",
       "b3": "SDK officiels sur npm, PyPI, RubyGems et Go — zéro dépendance, MCP-first",
@@ -675,11 +675,11 @@
       "q3": "D'où viennent les données ?",
       "a3": "D'{{providers}} fournisseurs attribués. Les nommés incluent ACLED et UCDP pour les conflits, AISStream pour les navires en direct, OpenSky pour les aéronefs, NASA FIRMS pour les incendies, USGS pour les tremblements de terre, IMF, BIS, FRED et Finnhub pour les marchés et la macro-économie — plus des flux d'actualités curés. Chaque panneau cite ses sources et ses horodatages en ligne.",
       "q4": "Puis-je surveiller les points d'étranglement comme Hormuz ou Bab el-Mandeb en temps réel ?",
-      "a4": "Oui. {{chokepoints}} points d'étranglement, dont le Détroit d'Hormuz et Bab el-Mandeb, sont suivis avec des comptages de navires AIS en direct, l'évolution des transits semaine après semaine et la notation des perturbations — et les anomalies de densité sont signalées par rapport à la ligne de base roulante de chaque point d'étranglement.",
+      "a4": "Oui. {{chokepoints}} points d'étranglement, détroits et canaux, du Hormuz et de Bab el-Mandeb à Suez, sont suivis avec des comptages de navires AIS en direct, le changement de transit semaine après semaine et le scoring de perturbation — et les anomalies de densité sont signalées par rapport à la référence roulante de chaque point d'étranglement.",
       "q5": "En quoi cela diffère-t-il d'une carte de conflits comme Liveuamap ?",
       "a5": "Le conflit est une couche de carte. World Monitor fusionne les conflits avec le transport maritime, les vols militaires, les infrastructures, les marchés et la cyber — puis l'IA évalue la convergence : indices d'instabilité, escalade des points chauds, alertes de rupture corroborées et briefs quotidiens. Comparez World Monitor avec Liveuamap et d'autres cartes de conflit : worldmonitor.app/compare/liveuamap-alternatives. Pour des options de monitoring plus larges, consultez worldmonitor.app/compare/best-geopolitical-risk-dashboards.",
       "q6": "Pourquoi devrais-je faire confiance à une alerte ?",
-      "a6": "Parce que chaque alerte doit passer par des filtres fixes avant de vous parvenir. Les alertes proviennent de {{alertOrigins}} origines indépendantes : articles d'actualité à haut risque, pics de mots-clés, escalade de points chauds, détection de surge militaire et sirènes de défense civile. Chaque origine passe les mêmes filtres : les articles de plus de 15 minutes sont supprimés, la répétition du même événement est supprimée pendant 30 minutes, et un délai de 60 secondes suit toute alerte. Les sources de niveau inférieur ont également besoin d'une classification confirmée par l'IA avant de pouvoir déclencher une alerte.",
+      "a6": "Car une bannière doit franchir des portiques fixes. Elle se déclenche pour les histoires classées comme une menace critique ou élevée, et pour les sirènes officielles de protection civile. Une alerte d'information doit avoir moins de 15 minutes, la même histoire est retenue pendant 30 minutes, et un délai de 60 secondes suit une alerte sauf si la nouvelle est plus grave. Les correspondances par mot-clé seul des sources de niveau inférieur nécessitent également une confirmation de l'IA. Les sirènes contournent les portiques d'âge et de refroidissement car elles sont critiques en termes de temps.",
       "q7": "Les agents IA comme Claude ou GPT peuvent-ils l'utiliser ?",
       "a7": "Oui. Le serveur MCP de World Monitor expose {{mcpTools}} outils en direct, de sorte que Claude, GPT ou tout agent compatible MCP peuvent interroger les scores de risque, le statut des points d'étranglement, les conflits, les marchés et les briefs — avec projection JMESPath pour que les agents extraient exactement ce dont ils ont besoin.",
       "q8": "Ai-je besoin d'un compte ?",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Comment commencer à surveiller la carte mondiale ?",
-      "subtitle": "Ouvrez worldmonitor.app/dashboard dans n'importe quel navigateur : gratuit, sans compte, {{mapLayers}} types de couches cartographiques prêts à activer dès le premier chargement. Cliquez sur n'importe quel pays pour son briefing, ou appuyez sur ⌘K / Ctrl-K pour la palette de commandes. La carte a continué à se mettre à jour pendant que vous lisiez cette page.",
+      "subtitle": "Ouvrez worldmonitor.app/dashboard dans n'importe quel navigateur, sans compte : {{mapLayers}} types de couches cartographiques, tous gratuits sauf Résilience pour basculer. Cliquez sur un pays pour son briefing, ou appuyez sur ⌘K / Ctrl-K pour la palette de commandes. La carte n'a cessé de se mettre à jour pendant que vous lisiez cette page.",
       "button": "Trouvez-le en premier",
       "note": "Gratuit · Pas d'inscription · Se charge en secondes",
       "secondary": "Ou voir les forfaits Pro →"

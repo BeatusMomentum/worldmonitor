@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor nie jest open-source'owym Palantir",
       "asOf": "Stan na {{date}}",
       "whatIsTitle": "Czym jest World Monitor?",
-      "whatIsBody": "World Monitor to darmowy, otwartoźródłowy (AGPL-3.0) dashboard używany przez 2M+ użytkowników. Przesyła {{feeds}} strumieni wiadomości i OSINT z {{providers}} przypisanych dostawców na jedną żywą mapę świata z {{mapLayers}} typami warstw mapy, obejmującą geopolitykę, rynki, transport morski, lotnictwo i cyberbezpieczeństwo. Koreluje je tak, że zbiegające się wydarzenia wyskakują przed nagłówkami. Każda liczba jest źródłem i każda metoda udokumentowana."
+      "whatIsBody": "World Monitor to darmowy, otwartoźródłowy (AGPL-3.0) dashboard używany przez 2M+ użytkowników. Przesyła {{feeds}} strumieni wiadomości i OSINT z {{providers}} przypisanych dostawców na jedną żywą mapę świata z {{mapLayers}} typami warstw mapy, obejmującą geopolitykę, rynki, transport morski, lotnictwo i cyberbezpieczeństwo. Koreluje je tak, że zbiegające się wydarzenia wyskakują przed nagłówkami. Każda liczba ma źródło, a każda metoda jest udokumentowana."
     },
     "live": {
       "eyebrow": "Na żywo teraz",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Dla twórców i agentów AI",
       "title": "Jak budować World Monitor z mojego własnego stosu?",
-      "sub": "Wszystko na mapie to także API. Integruj to z Claude'em poprzez MCP, wywoływaj punkty końcowe REST skąd chcesz, lub zainstaluj natywnego klienta dla Pythona, Ruby'ego, Go lub JavaScriptu — twój kod prowadzi badania na żywych danych zamiast na wspomnieniach danych treningowych.",
+      "sub": "Wszystko na mapie to także API. Podłącz do Claude'a za pośrednictwem MCP z {{mcpTools}} narzędziami na żywo, wywoływaj punkty końcowe REST z dowolnego miejsca lub zainstaluj natywnego klienta dla Pythona, Ruby'ego, Go lub JavaScriptu — Twój kod prowadzi badania na żywych danych zamiast wspomnień z danych treningowych.",
       "b1": "{{mcpTools}} narzędzi MCP — wyniki ryzyka, wąskie gardła, konflikty, rynki, briefingi",
       "b2": "Udokumentowany REST API — jedna specyfikacja OpenAPI 3.1, jeden klucz",
       "b3": "Oficjalne SDK na npm, PyPI, RubyGems i Go — bez zależności, MCP-first",
@@ -675,11 +675,11 @@
       "q3": "Skąd pochodzą dane?",
       "a3": "Z {{providers}} przypisanych źródeł. Wymieniane to ACLED i UCDP dla konfliktów, AISStream dla statków na żywo, OpenSky dla samolotów, NASA FIRMS dla pożarów, USGS dla trzęsień ziemi, IMF, BIS, FRED i Finnhub dla rynków i makroekonomii — plus wyselekcjonowane kanały informacyjne. Każdy panel cytuje źródła i znaczniki czasowe w tekście.",
       "q4": "Czy mogę obserwować gardła handlowe takie jak Hormuz lub Bab el-Mandeb w czasie rzeczywistym?",
-      "a4": "Tak. {{chokepoints}} punktów krytycznych, w tym Hormuz i Bab el-Mandeb, monitorowane są z liczeniami statków AIS na żywo, zmianą tranzytu tydzień do tygodnia i oceną zaburzeń — a anomalie gęstości są flagowane względem bazowej linii każdego punktu krytycznego.",
+      "a4": "Tak. {{chokepoints}} punktów krytycznych, zarówno cieśnin, jak i kanałów, od Ormuzału i Bab el-Mandeb do Kanału Sueskiego, są monitorowane za pomocą liczby statków AIS na żywo, zmian tranzytu z tygodnia na tydzień i oceny zaburzeń — a anomalie gęstości są flagowane względem linii bazowej każdego punktu krytycznego.",
       "q5": "Czym to różni się od mapy konfliktów takie jak Liveuamap?",
       "a5": "Konflikt to jedna warstwa mapy. World Monitor łączy konflikty z transportem morskim, lotami wojskowymi, infrastrukturą, rynkami i cyberbezpieczeństwem — następnie AI ocenia konwergencję: indeksy niestabilności, eskalację hotspotów, potwierdzone alarmy łamiące aktualności i codzienne briefingi. Porównaj World Monitor z Liveuamap i innymi mapami konfliktów: worldmonitor.app/compare/liveuamap-alternatives. Aby zapoznać się z szerszymi opcjami monitorowania, zobacz worldmonitor.app/compare/best-geopolitical-risk-dashboards.",
       "q6": "Dlaczego powinienem ufać alertowi?",
-      "a6": "Ponieważ każdy alert musi przejść stałe bramy, zanim dotrze do Ciebie. Alerty pochodzą z {{alertOrigins}} niezależnych źródeł: krytyczne elementy wiadomości, skoki słów kluczowych, eskalacja punktów zapalnych, wykrycie wzrostu wojskowego i syreny obrony cywilnej. Każde źródło przechodzi te same filtry: elementy starsze niż 15 minut są odrzucane, powtórzenie tego samego zdarzenia jest tłumione przez 30 minut, a po każdym alercie następuje 60-sekundowa przerwa. Źródła niższego poziomu muszą również mieć potwierdzenie klasyfikacji przez AI, zanim będą mogły wyzwolić alert.",
+      "a6": "Ponieważ baner musi przejść przez stałe bramy. Uruchamia się dla wiadomości zaklasyfikowanych jako zagrożenie krytyczne lub wysokie oraz dla oficjalnych syren obrony cywilnej. Alert wiadomości musi być młodszy niż 15 minut, ta sama wiadomość jest wstrzymywana na 30 minut, a 60-sekundowe opóźnienie następuje po każdym alercie, chyba że nowy jest bardziej poważny. Dopasowania tylko według słów kluczowych z punktów nižej rangi również wymagają potwierdzenia AI. Syreny omijają bramy wieku i opóźnienia, ponieważ są czasowo krytyczne.",
       "q7": "Czy agenci AI takie jak Claude lub GPT mogą go używać?",
       "a7": "Tak. Serwer MCP World Monitor udostępnia {{mcpTools}} narzędzi na żywo, więc Claude, GPT lub dowolny agent kompatybilny z MCP mogą wysyłać zapytania o wyniki ryzyka, status wąskich gardeł, konflikty, rynki i briefingi — z projekcją JMESPath, aby agenci pobierali dokładnie to, czego potrzebują.",
       "q8": "Czy potrzebuję konta?",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Jak zacząć obserwować mapę świata?",
-      "subtitle": "Otwórz worldmonitor.app/dashboard w dowolnej przeglądarce: darmowe, bez konta, {{mapLayers}} typów warstw mapy gotowych do włączenia od pierwszego załadowania. Kliknij dowolny kraj, aby wyświetlić jego raport sytuacyjny, lub naciśnij ⌘K / Ctrl-K, aby otworzyć paletę poleceń. Mapa ciągle się aktualizuje, podczas gdy czytasz tę stronę.",
+      "subtitle": "Otwórz worldmonitor.app/dashboard w dowolnej przeglądarce bez konta: {{mapLayers}} typy warstw mapy, każda oprócz Odporności dostępna bezpłatnie do włączenia. Kliknij dowolny kraj, aby zobaczyć jego briefing, lub naciśnij ⌘K / Ctrl-K, aby otworzyć paletę poleceń. Mapa była aktualizowana w trakcie czytania tej strony.",
       "button": "Znajdź go pierwszy",
       "note": "Bezpłatne · Bez rejestracji · Ładuje się w sekundy",
       "secondary": "Lub zobacz plany Pro →"

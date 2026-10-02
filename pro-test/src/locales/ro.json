@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Pentru constructori și agenți AI",
       "title": "Cum construiesc pe World Monitor din propriul meu stack?",
-      "sub": "Totul pe hartă este și o API. Conectează-l la Claude prin MCP, apelează endpoint-urile REST de oriunde, sau instalează un client nativ pentru Python, Ruby, Go sau JavaScript — codul tău cercetează cu date live în loc să se bazeze pe memoriile datelor de antrenament.",
+      "sub": "Tot ce este pe hartă este și o API. Conectează-o la Claude prin MCP cu {{mcpTools}} instrumente live, apelează endpoint-urile REST de oriunde, sau instalează un client nativ pentru Python, Ruby, Go sau JavaScript — codul tău face cercetare cu date live în loc de memorii din datele de antrenament.",
       "b1": "{{mcpTools}} instrumente MCP — scoruri de risc, puncte vulnerabile, conflicte, piețe, scurte rapoarte",
       "b2": "REST API documentat — o specificație OpenAPI 3.1, o cheie",
       "b3": "SDK-uri oficiale pe npm, PyPI, RubyGems și Go — fără dependințe, MCP-first",
@@ -675,11 +675,11 @@
       "q3": "De unde provin datele?",
       "a3": "De la {{providers}} furnizori atribuiți. Cei numiți includ ACLED și UCDP pentru conflict, AISStream pentru nave live, OpenSky pentru aeronave, NASA FIRMS pentru incendii, USGS pentru cutremure, IMF, BIS, FRED și Finnhub pentru piețe și macroeconomie — plus fluxuri de știri curate. Fiecare panou citează sursele și marcajele temporale inline.",
       "q4": "Pot să monitorizez puncte de strângulare precum Hormuz sau Bab el-Mandeb în timp real?",
-      "a4": "Da. {{chokepoints}} gâturi (cu Hormuz și Bab el-Mandeb printre ele) sunt monitorizate cu numărări live de vase AIS, schimbare săptămânală de tranzit și punctuare a perturbării — iar anomaliile de densitate sunt semnalate în raport cu linia de bază progresivă a fiecărui gâtur.",
+      "a4": "Da. {{chokepoints}} puncte de îngustare, atât strâmtori cât și canale, de la Hormuz și Bab el-Mandeb la Suez, sunt monitorizate cu numărări live AIS de vase, schimbare săptămână la săptămână a tranzitelor și scor de perturbații — iar anomaliile de densitate sunt marcate în raport cu linia de bază alunecătoare a fiecărui punct de îngustare.",
       "q5": "Care este diferența față de o hartă de conflict ca Liveuamap?",
       "a5": "Conflictul este un singur strat de hartă. World Monitor fuzionează conflictele cu transportul maritim, zborurile militare, infrastructura, piețele și domeniul cibernetic — apoi AI evaluează convergența: indici de instabilitate, escaladare în punctele fierbinți, alerte de breaking corroborate și rapoarte zilnice. Comparați World Monitor cu Liveuamap și alte hărți de conflicte: worldmonitor.app/compare/liveuamap-alternatives. Pentru opțiuni mai ample de monitorizare, consultați worldmonitor.app/compare/best-geopolitical-risk-dashboards.",
       "q6": "De ce ar trebui să am încredere într-o alertă?",
-      "a6": "Pentru că fiecare alertă trebuie să treacă por porți fixe înainte să te ajungă. Alertele provin din {{alertOrigins}} origini independente: articole de știri cu risc ridicat, creșteri de cuvinte-cheie, escaladare a punctelor fierbinți, detecție de surge militar și sirene de apărare civilă. Fiecare origine trece aceleași filtre: articolele mai vechi de 15 minute sunt eliminate, repetarea aceluiași eveniment este suprimată timp de 30 de minute, și o răgaz de 60 de secunde urmează oricărei alerte. Sursele de nivel inferior au nevoie și de o clasificare confirmată de AI înainte să poată declanșa una.",
+      "a6": "Pentru că un banner trebuie să treacă porți fixe. Se declanșează pentru articole de știri clasificate ca amenințare critică sau ridicată, și pentru sirene oficiale de apărare civilă. O alertă de știri trebuie să aibă mai puțin de 15 minute, aceeași știre este reținută timp de 30 de minute, și o perioadă de răgaz de 60 de secunde urmează oricărei alerte dacă cea nouă nu este mai severă. Potrivirile doar cu cuvinte cheie din canalele de nivel inferior au nevoie și de confirmare AI. Sirenele sar peste porțile de vârstă și răgaz pentru că sunt critice din punct de vedere al timpului.",
       "q7": "Pot agenți AI precum Claude sau GPT să-l folosească?",
       "a7": "Da. Serverul MCP al World Monitor expune {{mcpTools}} instrumente live, astfel Claude, GPT sau orice agent compatibil MCP poate interoga scoruri de risc, stare puncte vulnerabile, conflicte, piețe și scurte rapoarte — cu proiecție JMESPath pentru ca agenții să prelueze exact ceea ce au nevoie.",
       "q8": "Am nevoie de un cont?",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Cum încep să monitorizez harta lumii?",
-      "subtitle": "Deschide worldmonitor.app/dashboard în orice browser: gratuit, fără cont, {{mapLayers}} tipuri de straturi de hartă gata să te comute din prima încărcare. Dă clic pe orice țară pentru raportul ei scurt, sau apasă ⌘K / Ctrl-K pentru paleta de comenzi. Harta a continuat să se actualizeze în timp ce citești această pagină.",
+      "subtitle": "Deschide worldmonitor.app/dashboard în orice browser, fără cont: {{mapLayers}} tipuri de straturi pe hartă, fiecare dintre ele, cu excepția Resilience, poate fi activat gratuit. Dă clic pe orice țară pentru brieful ei, sau apasă ⌘K / Ctrl-K pentru paleta de comenzi. Harta a continuat să se actualizeze în timp ce ai citit această pagină.",
       "button": "Găsește-l primul",
       "note": "Gratuit · Fără înregistrare · Se încarcă în secunde",
       "secondary": "Sau vezi planuri Pro →"

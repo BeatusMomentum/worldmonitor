@@ -637,7 +637,7 @@
     "agents": {
       "eyebrow": "For builders & AI agents",
       "title": "How do I build on World Monitor from my own stack?",
-      "sub": "Everything on the map is also an API. Wire it into Claude over MCP, call the REST endpoints from anywhere, or install a native client for Python, Ruby, Go, or JavaScript — your code researches with live data instead of training-data memories.",
+      "sub": "Everything on the map is also an API. Wire it into Claude over MCP with {{mcpTools}} live tools, call the REST endpoints from anywhere, or install a native client for Python, Ruby, Go, or JavaScript — your code researches with live data instead of training-data memories.",
       "b1": "{{mcpTools}} MCP tools — risk scores, chokepoints, conflicts, markets, briefs",
       "b2": "Documented REST API — one OpenAPI 3.1 spec, one key",
       "b3": "Official SDKs on npm, PyPI, RubyGems, and Go — zero-dependency, MCP-first",
@@ -687,11 +687,11 @@
       "q3": "Where does the data come from?",
       "a3": "From {{providers}} attributed providers. Named ones include ACLED and UCDP for conflict, AISStream for live vessels, OpenSky for aircraft, NASA FIRMS for fires, USGS for earthquakes, IMF, BIS, FRED and Finnhub for markets and macro — plus curated news feeds. Every panel cites its sources and timestamps inline.",
       "q4": "Can I watch chokepoints like Hormuz or Bab el-Mandeb in real time?",
-      "a4": "Yes. {{chokepoints}} chokepoints, Hormuz and Bab el-Mandeb among them, are tracked with live AIS vessel counts, week-over-week transit change and disruption scoring — and density anomalies are flagged against each chokepoint's rolling baseline.",
+      "a4": "Yes. {{chokepoints}} chokepoints, both straits and canals, from Hormuz and Bab el-Mandeb to Suez, are tracked with live AIS vessel counts, week-over-week transit change and disruption scoring — and density anomalies are flagged against each chokepoint's rolling baseline.",
       "q5": "How is this different from a conflict map like Liveuamap?",
       "a5": "Conflict is one map layer. World Monitor fuses conflicts with shipping, military flights, infrastructure, markets and cyber — then AI scores the convergence: instability indices, hotspot escalation, corroborated breaking alerts and daily briefs. Compare World Monitor with Liveuamap and other conflict maps: worldmonitor.app/compare/liveuamap-alternatives. For broader monitoring options, see worldmonitor.app/compare/best-geopolitical-risk-dashboards.",
       "q6": "Why should I trust an alert?",
-      "a6": "Because every alert must pass fixed gates before it reaches you. Alerts come from {{alertOrigins}} independent origins: high-threat news items, keyword spikes, hotspot escalation, military surge detection and civil-defense sirens. Each origin passes the same filters: items older than 15 minutes are dropped, a repeat of the same event is suppressed for 30 minutes, and a 60-second cooldown follows any alert. Lower-tier sources also need an AI-confirmed classification before they can trigger one.",
+      "a6": "Because a banner has to clear fixed gates. It fires for news items classified as a critical or high threat, and for official civil-defense sirens. A news alert must be under 15 minutes old, the same story is held back for 30 minutes, and a 60-second cooldown follows any alert unless the new one is more severe. Keyword-only matches from lower-tier outlets also need AI confirmation. Sirens skip the age and cooldown gates because they are time-critical.",
       "q7": "Can AI agents like Claude or GPT use it?",
       "a7": "Yes. World Monitor's MCP server exposes {{mcpTools}} live tools, so Claude, GPT or any MCP-compatible agent can query risk scores, chokepoint status, conflicts, markets and briefs — with JMESPath projection so agents fetch exactly what they need.",
       "q8": "Do I need an account?",
@@ -705,7 +705,7 @@
     },
     "cta": {
       "title": "How do I start watching the world map?",
-      "subtitle": "Open worldmonitor.app/dashboard in any browser: free, no account, {{mapLayers}} map layer types ready to switch on from first load. Click any country for its brief, or press ⌘K / Ctrl-K for the command palette. The map has kept updating while you read this page.",
+      "subtitle": "Open worldmonitor.app/dashboard in any browser, with no account: {{mapLayers}} map layer types, every one except Resilience free to switch on. Click any country for its brief, or press ⌘K / Ctrl-K for the command palette. The map has kept updating while you read this page.",
       "button": "Find it first",
       "note": "Free · No signup · Loads in seconds",
       "secondary": "Or see Pro plans →"
