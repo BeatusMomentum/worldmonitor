@@ -28,13 +28,13 @@ function userId(context: McpAuthContext): string {
   return context.userId;
 }
 function panelKey(owner: string, scope: PanelScope): string {
-  return `${dailyCounterKey(owner, new Date(scope.expires - 1))}:panel:${scope.panel}:${scope.window}`;
+  return `${dailyCounterKey(owner, new Date(scope.expires - 1))}:${scope.panel === 'news' ? 'news' : 'country'}:${scope.panel}:${scope.window}`;
 }
 async function signature(owner: string, scope: PanelScope): Promise<string> {
   const secret = process.env.MCP_INTERNAL_HMAC_SECRET;
   if (!secret) throw new PanelRequestError('Panel authentication is unavailable.', 'backend');
   const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-  const bytes = await crypto.subtle.sign('HMAC', key, encoder.encode(`panel:${envPrefix()}:${owner}:${scope.panel}:${scope.window}:${scope.expires}`));
+  const bytes = await crypto.subtle.sign('HMAC', key, encoder.encode(`${scope.panel === 'news' ? 'news' : 'country'}-panel:${envPrefix()}:${owner}:${scope.panel}:${scope.window}:${scope.expires}`));
   return Array.from(new Uint8Array(bytes), value => value.toString(16).padStart(2, '0')).join('');
 }
 async function tuple(pipeline: PipelineFn, command: Array<string | number>): Promise<[number, number, number?]> {

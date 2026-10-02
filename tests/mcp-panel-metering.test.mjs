@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { HMAC_SECRET, callBody, makeProDeps, proReq } from './helpers/mcp-pro-deps.mjs';
 import { admitCountryPanel, authorizePanelRead, PANEL_READ_LIMIT } from '../api/mcp/panel-requests.ts';
+import { envPrefix } from '../server/_shared/pro-mcp-token.ts';
 
 const originalFetch = globalThis.fetch;
 const originalEnv = { ...process.env };
@@ -46,6 +47,20 @@ describe('paid country workflow through the MCP handler', () => {
     assert.equal(refreshed.body.result.structuredContent.panelRequest.usage.remaining, 48);
     await invoke(deps, 'get_country_brief_section', { ...energy, panel_request: refreshed.body.result.structuredContent.panelRequest.token });
     assert.equal(fetched.length, 2);
+  });
+  it('preserves the deployed country token and paid marker namespace across the news extension', async () => {
+    const { pipe } = makeProDeps();
+    const now = Date.UTC(2026, 9, 2, 12);
+    const grant = await admitCountryPanel(context, budget, pipe.pipeline, { country_code: 'US' }, now);
+    const [country, window, expiry] = grant.token.split('.');
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey('raw', encoder.encode(HMAC_SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    const bytes = await crypto.subtle.sign('HMAC', key, encoder.encode(`country-panel:${envPrefix()}:${context.userId}:${country}:${window}:${expiry}`));
+    const signature = Array.from(new Uint8Array(bytes), value => value.toString(16).padStart(2, '0')).join('');
+    assert.equal(grant.token, `${country}.${window}.${expiry}.${signature}`);
+    assert.ok(pipe.ops.flat().some(command => command[0] === 'EVAL' && String(command[5]).includes(`:country:US:${window}`)));
+    await authorizePanelRead(context, pipe.pipeline, 'get_country_brief_section', energy, grant.token, now);
+    assert.equal(pipe.count, 1);
   });
   it('includes a full country reader graph and ten exposure/dependency sectors in one charge', async () => {
     const { deps, pipe } = makeProDeps();
