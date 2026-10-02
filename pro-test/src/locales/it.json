@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Dashboard di intelligence globale gratuita in tempo reale",
-      "description": "Quando diventa notizia, tu lo sai già. Conflitti, strozzature della navigazione, voli militari, mercati e cyber su una mappa live gratuita, con analisi AI. Nessuna registrazione.",
+      "description": "Prima che diventi notizia, tu l'avevi già saputo. Conflitti, strozzature, voli militari, mercati e cyber su una mappa mondiale live gratuita, con analisi AI. Nessuna registrazione.",
       "ogTitle": "World Monitor — Quando diventa notizia, tu lo sai già.",
       "ogDescription": "I segnali grezzi del mondo — navi, jet, sirene, cavi, mercati — su una mappa di intelligence live gratuita, con AI che segnala quando convergono. Gratuito, nessuna registrazione."
     },
@@ -466,7 +466,8 @@
       "launch": "Avvia dashboard",
       "blog": "Blog",
       "menu": "Menu",
-      "agents": "Per agenti AI"
+      "agents": "Per agenti AI",
+      "skipToContent": "Salta al contenuto"
     },
     "hero": {
       "eyebrow": "Dashboard di intelligence globale gratuita · live adesso",
@@ -484,7 +485,7 @@
       "positioningLink": "WorldMonitor non è un Palantir open-source",
       "asOf": "A partire dal {{date}}",
       "whatIsTitle": "Cos'è World Monitor?",
-      "whatIsBody": "World Monitor è una dashboard gratuita e open-source che trasmette segnali di geopolitica, mercati, shipping, aviazione, infrastrutture e cyber su un'unica mappa mondiale in tempo reale. Correla i feed separati in un'unica situazione operativa e segnala le convergenze prima dei titoli di giornale, con ogni dato documentato e ogni metodologia tracciabile."
+      "whatIsBody": "World Monitor è un dashboard gratuito e open-source che trasmette segnali di geopolitica, mercati, shipping, aviazione, infrastrutture e cyber su una mappa mondiale live. Correla {{feeds}} feed separati in un'unica situazione operativa e segnala convergenze prima dei titoli, con ogni dato tracciato e ogni metodo documentato."
     },
     "live": {
       "eyebrow": "Live in questo momento",
@@ -518,7 +519,7 @@
         "kicker": "Geopolitica + mercati + macro",
         "title1": "La mossa di mercato",
         "title2": "ha una mappa.",
-        "s1": "Il rischio paese, le sanzioni, l'escalation dei punti critici, gli avvisi ufficiali e la velocità delle notizie mostrano dove la pressione geopolitica sta aumentando.",
+        "s1": "Rischio paese, sanzioni, escalation in {{hotspots}} zone critiche monitorate, gli avvisi ufficiali e la velocità delle notizie mostrano dove la pressione geopolitica sta aumentando.",
         "s2": "Le navi, gli stretti, i voli, i cavi e la prossimità infrastrutturale mostrano se quella pressione può colpire le rotte di approvvigionamento, commercio o capitale.",
         "s3": "I tassi, il forex, le azioni, le criptovalute, l'energia e gli asset rifugio mostrano quale regime di mercato si sta rivalutando.",
         "s4": "Il vantaggio sta nel vedere la pressione geopolitica, il percorso di trasmissione e l'azione dei prezzi insieme prima che diventi una nota di consenso.",
@@ -532,7 +533,7 @@
         "kicker": "Commodity + stretti + meteo",
         "title1": "Le mosse di commodity iniziano",
         "title2": "nel mondo fisico.",
-        "s1": "AIS, porti, oleodotti, GNL, raffinerie, vie navigabili e stretti mostrano quando l'offerta sta rallentando, cambiando percorso o concentrandosi.",
+        "s1": "AIS, porti, oleodotti, GNL, raffinerie, vie navigabili e {{chokepoints}} strozzature mostrano quando l'offerta sta rallentando, si sta reindirizzando o si sta concentrando.",
         "s2": "Il meteo, i fuochi, i terremoti, le interruzioni e i layer di conflitto mostrano gli eventi fisici che possono colpire la produzione o il trasporto.",
         "s3": "Petrolio, gas, oro, cereali, produttori minerari, nomi di shipping e valute collegate alle commodity mostrano come lo shock si riversa nel prezzo.",
         "s4": "L'intelligence sulle commodity funziona solo quando il flusso fisico, il segnale di disruption e lo spread di mercato sono visibili insieme.",
@@ -546,7 +547,7 @@
         "kicker": "Infrastrutture AI + energia + clima",
         "title1": "Il boom dell'AI ha",
         "title2": "un bilancio fisico.",
-        "s1": "I datacenter AI si trovano accanto alle reti elettriche, oleodotti, GNL, strutture nucleari, regioni cloud e all'esposizione del mercato dell'energia.",
+        "s1": "{{aiDatacenters}} datacenter AI si trovano accanto a griglie, oleodotti, GNL, impianti nucleari, regioni cloud e esposizione del mercato dell'energia.",
         "s2": "Lo stress della rete, le interruzioni, il caldo, gli incendi e i layer meteo mostrano quali corridoi di calcolo sono sotto pressione oggi.",
         "s3": "I panel aziendali, di borsa e macro mostrano chi è esposto quando l'energia, il calcolo e il capitale collidono.",
         "s4": "Il rischio infrastrutturale AI emerge solo quando gli asset fisici, i segnali climatici e i mercati condividono uno schermo.",
@@ -559,7 +560,7 @@
       "m4": {
         "kicker": "Cavi + interruzioni + commercio",
         "title": "Il danno al cavo diventa una cascata",
-        "s1": "I cavi sottomarini, le stazioni di sbarco, i porti, gli oleodotti e i punti critici sono mappati insieme.",
+        "s1": "{{submarineCables}} cavi sottomarini, stazioni di sbarco, porti, oleodotti e strozzature sono mappati insieme.",
         "s2": "I feed di anomalie Internet e BGP mostrano se un guasto fisico sta diventando un'interruzione digitale.",
         "s3": "I corridoi commerciali, la resilienza nazionale e i dati di ridondanza mostrano chi perde per primo le rotte alternative.",
         "s4": "Il danno ai cavi conta quando la ridondanza delle telecomunicazioni, i corridoi commerciali e l'esposizione nazionale si allineano.",
@@ -579,9 +580,9 @@
       "f2Title": "Clicca un qualsiasi paese",
       "f2Desc": "Si apre un dossier completo: punteggio di instabilità con i suoi componenti, un brief AI con headline citate, segnali attivi, una timeline di 7 giorni.",
       "f3Title": "Premi ⌘K / Ctrl-K",
-      "f3Desc": "Comandi. Salta a qualsiasi layer, panel o paese senza imparare prima l'interfaccia.",
+      "f3Desc": "{{commands}} comandi. Salta a qualsiasi livello, pannello o paese senza imparare l'interfaccia.",
       "f4Title": "Scegli il tuo filtro",
-      "f4Desc": "World, Tech, Finance, Commodity, Energy o Happy — stesso motore, monitor sintonizzati, a un clic di distanza.",
+      "f4Desc": "Mondo, Tech, Finance, Commodity, Energy o Happy — lo stesso motore, sei monitor specializzati, a un clic di distanza.",
       "f5Title": "Hai visto forse un decimo",
       "f5Desc": "Il resto emerge mentre il mondo si muove — passaggi satellitari, jamming GPS, navi fantasma, cluster di proteste, avvisi di sirena.",
       "cta": "Avvia il contatore"
@@ -612,9 +613,9 @@
       "n3Title": "Intelligence su transiti strategici",
       "n3Desc": "Conteggio navi attraverso lo Stretto di Hormuz, Suez, Bab el-Mandeb e 10 altri stretti — con punteggi di disruzione.",
       "n4Title": "Mappa datacenter AI",
-      "n4Desc": "Datacenter AI mappati con metadati di potenza e operatore — lo strato fisico della corsa all'IA.",
+      "n4Desc": "{{aiDatacenters}} datacenter AI mappati con metadati di energia e operatore — lo strato fisico della corsa all'AI.",
       "n5Title": "Cavi sottomarini",
-      "n5Desc": "Cavi sottomarini che trasportano Internet, sovrapposti con segnali di interruzione e minaccia.",
+      "n5Desc": "{{submarineCables}} cavi sottomarini che trasportano internet, sovrapposti con segnali di interruzione e minaccia.",
       "n6Title": "Tracciamento proteste",
       "n6Desc": "Rilevamento proteste a doppia fonte con deduplicazione cross-source — segnale, non voce.",
       "faith": "Non fidarti dei numeri ciecamente —",
@@ -625,7 +626,7 @@
       "eyebrow": "Per creatori e agenti AI",
       "title": "Come creo su World Monitor dal mio stack?",
       "sub": "Tutto sulla mappa è anche un'API. Integrala in Claude tramite MCP, chiama gli endpoint REST da qualsiasi luogo, o installa un client nativo per Python, Ruby, Go o JavaScript — il tuo codice ricerca con dati in tempo reale invece di memorie di dati di training.",
-      "b1": "Strumenti MCP — punteggi di rischio, colli di bottiglia, conflitti, mercati, brief",
+      "b1": "{{mcpTools}} strumenti MCP — score di rischio, strozzature, conflitti, mercati, briefing",
       "b2": "REST API documentata — una spec OpenAPI 3.1, una chiave",
       "b3": "SDK ufficiali su npm, PyPI, RubyGems e Go — zero dipendenze, MCP-first",
       "b4": "Proiezione JMESPath su ogni chiamata — recupera esattamente i campi di cui hai bisogno",
@@ -649,7 +650,7 @@
       "title2": "Pro è la sala operativa.",
       "sub": "La dashboard è gratuita — ogni livello di mappa eccetto Resilience, ogni feed, nessuna registrazione. Pro aggiunge il livello decisionale.",
       "freeTitle": "Free",
-      "freeDesc": "Il tier gratuito è un prodotto completo, non una prova. Ogni livello di mappa eccetto Resilience, ogni feed, ogni monitor — nessuna registrazione, nessun timer di prova.",
+      "freeDesc": "Il tier gratuito è un prodotto completo, non una prova. Ogni livello della mappa tranne Resilience, tutti {{feeds}} feed, tutti e sei i monitor — nessuna registrazione, nessun timer di prova.",
       "freeF1": "Tutti i layer mappe tranne Resilience e feed curati",
       "freeF2": "Brief nazionali, hotspot, punteggi di instabilità",
       "freeF3": "Chokepoint, cavi, analisi a cascata",
@@ -692,7 +693,7 @@
     },
     "cta": {
       "title": "Come inizio a monitorare la mappa mondiale?",
-      "subtitle": "Mentre leggi questa pagina continuava a muoversi — stretti, hotspot, mercati, feed curati. Uno di loro sarà la prima pagina di domani. Scoprilo per primo — gratuito, senza account.",
+      "subtitle": "Mentre leggi questa pagina ha continuato a muoversi — {{chokepoints}} strozzature, {{hotspots}} zone critiche, {{stockExchanges}} borse, {{feeds}} feed curati. Una di loro è la prima pagina di domani. Trovala per primo — gratuito, senza account.",
       "button": "Scoprilo per primo",
       "note": "Gratuito · Senza iscrizione · Si carica in secondi",
       "secondary": "Oppure visualizza i piani Pro →"
@@ -704,9 +705,9 @@
       "verifyTitle": "Verifica un evento in corso",
       "verifyDesc": "Verifica gli attuali monitoraggi delle crisi, le metriche datate e il contesto citato prima di dare credito a un'affermazione di rottura.",
       "chokepointTitle": "Controlla un punto critico",
-      "chokepointDesc": "Ispeziona lo stato dei disagi, i flussi di navi e i rischi attraverso i passaggi marittimi critici.",
+      "chokepointDesc": "Ispeziona lo stato dei disagi, i flussi di navi e i rischi attraverso {{chokepoints}} passaggi marittimi critici.",
       "countryRiskTitle": "Spiega una mossa di rischio paese",
-      "countryRiskDesc": "Traccia i segnali politici, di sicurezza, economici e di resilienza dietro il cambio di un paese.",
+      "countryRiskDesc": "Traccia i segnali politici, di sicurezza, economici e di resilienza dietro i cambiamenti di un paese, con resilienza valutata per {{resilienceRanked}} paesi.",
       "open": "Apri prove"
     }
   },

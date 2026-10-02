@@ -197,7 +197,7 @@ export const Hero = () => (
       </motion.div>
       <div className="mx-auto mt-10 max-w-2xl text-center">
         <h2 className="font-display text-xl font-bold text-wm-text">{t('welcome.hero.whatIsTitle')}</h2>
-        <p className="mt-3 text-sm leading-relaxed text-wm-muted">{t('welcome.hero.whatIsBody')}</p>
+        <p className="mt-3 text-sm leading-relaxed text-wm-muted">{t('welcome.hero.whatIsBody', heroProofStats)}</p>
       </div>
       <motion.div
         initial={false}

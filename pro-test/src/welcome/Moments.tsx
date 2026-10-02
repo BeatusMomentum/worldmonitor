@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { t } from '../i18n';
+import depthProofStats from '../generated/depth-stats.json';
 import { DASHBOARD_PATH } from '../routes';
 import { SectionHeading } from './SectionHeading';
 
@@ -70,7 +71,7 @@ export const Moments = () => (
                         {signal}
                       </span>
                       <p className="text-sm text-wm-muted leading-relaxed">
-                        {t(`welcome.moments.${key}.s${si + 1}`)}
+                        {t(`welcome.moments.${key}.s${si + 1}`, depthProofStats)}
                       </p>
                     </div>
                   ))}

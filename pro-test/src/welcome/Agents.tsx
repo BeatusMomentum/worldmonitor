@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { Check } from 'lucide-react';
 import { CardLinkArrow, cardLinkFocusRing } from './CardLink';
 import { t } from '../i18n';
+import depthProofStats from '../generated/depth-stats.json';
 
 // Registry install commands are product identifiers, not prose — they stay
 // untranslated on purpose (same reason the tool names below do).
@@ -41,7 +42,7 @@ export const Agents = () => (
           {[1, 2, 3, 4].map(n => (
             <li key={n} className="flex items-start gap-2.5">
               <Check className="w-4 h-4 text-wm-green shrink-0 mt-0.5" aria-hidden="true" />
-              <span className="text-wm-muted">{t(`welcome.agents.b${n}`)}</span>
+              <span className="text-wm-muted">{t(`welcome.agents.b${n}`, depthProofStats)}</span>
             </li>
           ))}
         </ul>
