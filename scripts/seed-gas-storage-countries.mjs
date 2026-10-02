@@ -195,6 +195,7 @@ async function preservePreviousSnapshot(errorMsg) {
     fetchedAt: existingMeta?.fetchedAt ?? 0,
     recordCount: existingMeta?.recordCount ?? 0,
     sourceVersion: 'gie-agsi-plus-countries-v1',
+    ...(Array.isArray(existingMeta?.noStorageCountries) ? { noStorageCountries: existingMeta.noStorageCountries } : {}),
     status: 'error',
     error: errorMsg,
   };

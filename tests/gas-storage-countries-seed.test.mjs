@@ -118,7 +118,7 @@ it('preserves the previous coverage and observations when the transaction fails'
   const previous = { DE: { fillPct: 42, gasTwh: 100, date: '2026-09-28' } };
   const cache = new Map([
     [GAS_STORAGE_ALL_KEY, previous], [GAS_STORAGE_COUNTRIES_KEY, ['DE']],
-    [metaKey, { fetchedAt: 123, recordCount: 1 }],
+    [metaKey, { fetchedAt: 123, recordCount: 1, noStorageCountries: ['EE'] }],
   ]);
   t.mock.method(globalThis, 'fetch', async (input, options) => {
     const url = new URL(String(input));
@@ -142,6 +142,7 @@ it('preserves the previous coverage and observations when the transaction fails'
   assert.deepEqual(cache.get(GAS_STORAGE_ALL_KEY), previous);
   assert.equal(cache.get(metaKey).fetchedAt, 123);
   assert.equal(cache.get(metaKey).status, 'error');
+  assert.deepEqual(cache.get(metaKey).noStorageCountries, ['EE'], 'a failed run keeps the preserved snapshot\'s accounting');
 });
 
 // ---------------------------------------------------------------------------
