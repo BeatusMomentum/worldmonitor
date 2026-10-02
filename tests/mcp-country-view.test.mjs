@@ -80,7 +80,7 @@ describe('country view MCP boundary', () => {
     process.env.UPSTASH_REDIS_REST_URL = 'https://country-bootstrap-redis.test';
     process.env.UPSTASH_REDIS_REST_TOKEN = 'controlled-bootstrap-token';
     globalThis.fetch = async (url, init) => {
-      if (String(url).startsWith('https://country-bootstrap-redis.test')) {
+      if (new URL(url).origin === 'https://country-bootstrap-redis.test') {
         const commands = JSON.parse(init.body);
         return Response.json(commands.map(([, key]) => ({ result: JSON.stringify(datasets[Object.keys(datasets).find(name => BOOTSTRAP_CACHE_KEYS[name] === key)]) })));
       }
@@ -148,6 +148,30 @@ describe('country view MCP boundary', () => {
       assert.ok(failed.body.error);
       assert.equal(failed.body.result, undefined);
     }
+  });
+  it('retains successful siblings when one bootstrap dataset fails', async () => {
+    for (const failure of [() => new Response('unavailable', { status: 503 }), () => { throw new DOMException('Timed out', 'TimeoutError'); }, () => Response.json({})]) {
+      globalThis.fetch = async url => new URL(url).searchParams.get('keys') === 'imfGrowth'
+        ? failure() : Response.json({ data: { [new URL(url).searchParams.get('keys')]: { countries: { US: { year: 2026 } } } }, missing: [] });
+      const { body } = await invoke('get_country_brief_section', { section: 'imf', arguments: { keys: 'imfMacro,imfGrowth,imfLabor,imfExternal' } });
+      assert.equal(body.result.structuredContent.state, 'ready');
+      assert.deepEqual(body.result.structuredContent.value.missing, ['imfGrowth']);
+      assert.equal(body.result.structuredContent.value.data.imfMacro.countries.US.year, 2026);
+      assert.equal(body.result.structuredContent.value.data.imfGrowth, undefined);
+    }
+  });
+  it('bounds the assembled bootstrap result while keeping fitting datasets visible', async () => {
+    globalThis.fetch = async url => {
+      const key = new URL(url).searchParams.get('keys');
+      return Response.json({ data: { [key]: { countries: { US: { year: 2026 } }, padding: '測'.repeat(60000) } }, missing: [] });
+    };
+    const { body } = await invoke('get_country_brief_section', { section: 'imf', arguments: { keys: 'imfMacro,imfGrowth,imfLabor,imfExternal' } });
+    const result = body.result.structuredContent;
+    assert.equal(result.state, 'ready');
+    assert.equal(result._budget_exceeded, undefined);
+    assert.deepEqual(Object.keys(result.value.data), ['imfMacro', 'imfGrowth']);
+    assert.deepEqual(result.value.missing, ['imfLabor', 'imfExternal']);
+    assert.ok(Buffer.byteLength(JSON.stringify(result)) <= 524288);
   });
   it('serves only the fixed country build with no credentials and a separate CSP', async () => {
     const { readCountryView, COUNTRY_VIEW_META } = await import('../api/mcp/ui/news-dashboard-app.ts');

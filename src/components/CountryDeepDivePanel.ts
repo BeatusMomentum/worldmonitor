@@ -283,6 +283,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     const section = this.sections.find(section => section.id === id);
     if (!section) return;
     if (state === 'locked') {
+      this.setSectionCoverage(id, []);
       this.outputClose?.();
       if (id === 'trade') { this.cachedTradeExposureData = null; this.cachedSectors = []; }
     }
@@ -300,6 +301,23 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
 
   public setMap(map: MapContainer | null): void {
     this.map = map;
+  }
+
+  public setSectionCoverage(id: BriefSectionId, missing: string[]): void {
+    const section = this.sections.find(section => section.id === id);
+    if (!section) return;
+    section.card.querySelector('.cdp-section-coverage')?.remove();
+    section.card.dataset.briefCoverage = missing.length ? 'partial' : 'complete';
+    if (!missing.length) return;
+    const labels: Record<string, string> = {
+      imfMacro: 'inflation and fiscal indicators', imfGrowth: 'growth and GDP',
+      imfLabor: 'employment', imfExternal: 'external trade',
+      bisDsr: 'household debt service', bisPropertyResidential: 'residential property',
+      bisPropertyCommercial: 'commercial property',
+    };
+    const notice = this.el('div', 'cdp-empty cdp-section-coverage', `Partial coverage. Unavailable data: ${missing.map(key => labels[key] ?? 'additional measurements').join(', ')}. Available measurements remain visible.`);
+    notice.setAttribute('role', 'status');
+    section.card.append(notice);
   }
 
   public get signal(): AbortSignal {
