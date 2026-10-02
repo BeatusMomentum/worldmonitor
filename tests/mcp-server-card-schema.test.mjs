@@ -18,10 +18,13 @@ function readJson(path) {
 }
 
 const schema = readJson('./fixtures/mcp-server-card.schema.json');
-// The schema's only format is `uri`; ajv-formats is not a dependency, so
-// register it with the WHATWG URL parser.
+// The schema's only format is `uri`; ajv-formats is not a dependency. WHATWG
+// URL parsing alone accepts strings RFC 3986 forbids (it percent-encodes a
+// space), so also require a scheme and only RFC 3986 characters.
+const RFC3986_URI = /^[A-Za-z][A-Za-z0-9+.-]*:(?:[A-Za-z0-9\-._~:/?#[\]@!$&'()*+,;=]|%[0-9A-Fa-f]{2})*$/;
+const isUri = (value) => RFC3986_URI.test(value) && URL.canParse(value);
 const ajv = new Ajv2020({ strict: false, allErrors: true });
-ajv.addFormat('uri', (value) => URL.canParse(value));
+ajv.addFormat('uri', isUri);
 const validate = ajv.compile({ ...schema, $ref: '#/$defs/ServerCard' });
 
 describe('MCP server card schema conformance', () => {
@@ -32,6 +35,15 @@ describe('MCP server card schema conformance', () => {
       assert.ok(validate(card), `${file}: ${ajv.errorsText(validate.errors)}`);
     });
   }
+
+  it('the uri format rejects values RFC 3986 forbids', () => {
+    for (const bad of ['https://example.com/a b', 'not a uri', '/relative/path', 'https://example.com/%zz', 'https://exa<mple.com']) {
+      assert.equal(isUri(bad), false, bad);
+    }
+    for (const good of ['https://www.worldmonitor.app/favico/apple-touch-icon.png', 'https://example.com/a%20b?q=1#x', 'mailto:ops@example.com']) {
+      assert.equal(isUri(good), true, good);
+    }
+  });
 
   it('the product card name matches the MCP Registry server.json name', () => {
     assert.equal(readJson('../public/.well-known/mcp/server-card.json').name, readJson('../server.json').name);
