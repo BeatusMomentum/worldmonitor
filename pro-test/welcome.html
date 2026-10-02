@@ -372,7 +372,7 @@
         {
           "@type": "Question",
           "name": "Is World Monitor really free?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The live map — every layer except Resilience, curated feeds, country briefs, breaking alerts, and monitoring surfaces — is free with no signup and no trial clock. Pro pays for the feeds: it adds WM Analyst, the scenario engine, Route Explorer, scheduled digests, MCP access for AI clients and the Resilience map layer. No ads, and no account means there's no user data to sell." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The live map costs $0 with no signup and no trial clock: {{mapLayers}} map layer types, every one but Resilience, plus curated feeds, country briefs, breaking alerts and monitoring surfaces. Pro pays for the feeds: it adds WM Analyst, the scenario engine, Route Explorer, scheduled digests, MCP access for AI clients and the Resilience map layer. No ads, and no account means there's no user data to sell." }
         },
         {
           "@type": "Question",
@@ -387,7 +387,7 @@
         {
           "@type": "Question",
           "name": "Can I watch chokepoints like Hormuz or Bab el-Mandeb in real time?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. {{chokepoints}} chokepoints, Hormuz and Bab el-Mandeb among them, are tracked with live AIS vessel counts, week-over-week transit change and disruption scoring — and density anomalies are flagged against each chokepoint's rolling baseline." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. {{chokepoints}} chokepoints, both straits and canals, from Hormuz and Bab el-Mandeb to Suez, are tracked with live AIS vessel counts, week-over-week transit change and disruption scoring — and density anomalies are flagged against each chokepoint's rolling baseline." }
         },
         {
           "@type": "Question",
@@ -397,7 +397,7 @@
         {
           "@type": "Question",
           "name": "Why should I trust an alert?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Because every alert must pass fixed gates before it reaches you. Alerts come from {{alertOrigins}} independent origins: high-threat news items, keyword spikes, hotspot escalation, military surge detection and civil-defense sirens. Each origin passes the same filters: items older than 15 minutes are dropped, a repeat of the same event is suppressed for 30 minutes, and a 60-second cooldown follows any alert. Lower-tier sources also need an AI-confirmed classification before they can trigger one." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Because a banner has to clear fixed gates. It fires for news items classified as a critical or high threat, and for official civil-defense sirens. A news alert must be under 15 minutes old, the same story is held back for 30 minutes, and a 60-second cooldown follows any alert unless the new one is more severe. Keyword-only matches from lower-tier outlets also need AI confirmation. Sirens skip the age and cooldown gates because they are time-critical." }
         },
         {
           "@type": "Question",
@@ -471,7 +471,7 @@
     <noscript>
       <div style="max-width:800px;margin:0 auto;padding:40px 20px;font-family:system-ui,sans-serif;color:#e5e5e5;background:#0a0a0a;">
         <h2>World Monitor — By the time it's news, you already knew.</h2>
-        <p>Headlines are the lag. World Monitor is a free, real-time global intelligence dashboard that streams the world's raw signals — ships, jets, sirens, cables, markets — onto one live map, with AI that flags when they converge into something that matters. Free, no signup required.</p>
+        <p>Headlines are the lag. World Monitor is a free, real-time global intelligence dashboard that streams the world's raw signals — ships, jets, sirens, cables, markets and {{feeds}} news and OSINT feeds — onto one live map with {{mapLayers}} map layer types, with AI that flags when they converge into something that matters. Free, no signup required.</p>
         <p><a href="https://www.worldmonitor.app/dashboard" style="color:#4ade80;">Launch the dashboard</a> or explore the specialized variants: <a href="https://tech.worldmonitor.app/dashboard" style="color:#4ade80;">Tech Monitor</a>, <a href="https://finance.worldmonitor.app/dashboard" style="color:#4ade80;">Finance Monitor</a>, <a href="https://commodity.worldmonitor.app/dashboard" style="color:#4ade80;">Commodity Monitor</a>, <a href="https://energy.worldmonitor.app/dashboard" style="color:#4ade80;">Energy Monitor</a>, and <a href="https://happy.worldmonitor.app/dashboard" style="color:#4ade80;">Happy Monitor</a>.</p>
         <p>Named providers include <a href="https://acleddata.com/" style="color:#4ade80;" rel="noopener noreferrer">ACLED</a>, <a href="https://ucdp.uu.se/" style="color:#4ade80;" rel="noopener noreferrer">UCDP</a>, <a href="https://firms.modaps.eosdis.nasa.gov/" style="color:#4ade80;" rel="noopener noreferrer">NASA FIRMS</a>, <a href="https://finnhub.io/" style="color:#4ade80;" rel="noopener noreferrer">Finnhub</a>, <a href="https://fred.stlouisfed.org/" style="color:#4ade80;" rel="noopener noreferrer">FRED</a>, <a href="https://aisstream.io/" style="color:#4ade80;" rel="noopener noreferrer">AISStream</a>, and <a href="https://opensky-network.org/" style="color:#4ade80;" rel="noopener noreferrer">OpenSky</a>. Full source on <a href="https://github.com/koala73/worldmonitor" style="color:#4ade80;" rel="noopener noreferrer">GitHub (AGPL-3.0)</a>.</p>
         <h3>What you can do</h3>

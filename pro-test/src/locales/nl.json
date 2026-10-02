@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor is geen open-source Palantir",
       "asOf": "Per {{date}}",
       "whatIsTitle": "Wat is World Monitor?",
-      "whatIsBody": "World Monitor is een gratis, open-source (AGPL-3.0) dashboard dat door 2M+ mensen wordt gebruikt. Het streamt {{feeds}} nieuws- en OSINT-feeds van {{providers}} geattribueerde providers op één live wereldkaart met {{mapLayers}} kaartlaagtypen, over geopolitiek, markten, scheepvaart, luchtvaart en cyberbeveiliging. Het correleert ze zodat convergerende gebeurtenissen naar voren komen voordat de koppelingen ze melden. Elk gegeven is gesourceerd en elke methode gedocumenteerd."
+      "whatIsBody": "World Monitor is een gratis, open-source (AGPL-3.0) dashboard dat door 2M+ mensen wordt gebruikt. Het streamt {{feeds}} nieuws- en OSINT-feeds van {{providers}} geattribueerde providers op één live wereldkaart met {{mapLayers}} kaartlaagtypen, over geopolitiek, markten, scheepvaart, luchtvaart en cyberbeveiliging. Het correleert ze zodat convergerende gebeurtenissen naar voren komen voordat de krantenkoppen ze melden. Elk gegeven is gesourceerd en elke methode gedocumenteerd."
     },
     "live": {
       "eyebrow": "Nu live",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Voor makers & AI-agents",
       "title": "Hoe bouw ik voort op World Monitor vanuit mijn eigen stack?",
-      "sub": "Alles op de kaart is ook een API. Verbind het met Claude via MCP, roep de REST-endpoints overal aan, of installeer een native client voor Python, Ruby, Go of JavaScript — je code onderzoekt met live data in plaats van training-datamemories.",
+      "sub": "Alles op de kaart is ook een API. Integreer het in Claude via MCP met {{mcpTools}} live tools, call de REST endpoints van overal, of installeer een native client voor Python, Ruby, Go of JavaScript — je code doet onderzoek met live data in plaats van trainingsgegevens.",
       "b1": "{{mcpTools}} MCP-tools — risicocijfers, knelpunten, conflicten, markten, briefings",
       "b2": "Gedocumenteerde REST API — één OpenAPI 3.1-spec, één sleutel",
       "b3": "Officiële SDK's op npm, PyPI, RubyGems en Go — nul afhankelijkheden, MCP-first",
@@ -669,17 +669,17 @@
       "eyebrow": "Geen addertje onder het gras",
       "title": "Wat zijn veelgestelde vragen over World Monitor?",
       "q1": "Is World Monitor echt gratis?",
-      "a1": "Ja. De live kaart — elke laag behalve Resilience, samengestelde feeds, country briefs, breaking alerts en monitoring-oppervlakken — is gratis zonder inschrijving en geen trial-klok. Pro betaalt voor de feeds: het voegt WM Analyst, de scenario-engine, Route Explorer, geplande digests, MCP-toegang voor AI-clients en de Resilience-kaartlaag toe. Geen advertenties, en geen account betekent dat er geen gebruikersgegevens te verkopen zijn.",
+      "a1": "Ja. De live kaart kost $0 zonder aanmelding en zonder proefperiode: {{mapLayers}} kaartlaagtypen, allemaal behalve Resilience, plus geselecteerde feeds, landenrapporten, breaking-meldingen en monitoringoppervlakken. Pro betaalt voor de feeds: het voegt WM Analyst toe, de scenariomotor, Route Explorer, geplande digests, MCP-toegang voor AI-clients en de Resilience-kaartlaag. Geen advertenties en geen account betekent dat er geen gebruikersgegevens zijn om te verkopen.",
       "q2": "Wat is een global intelligence dashboard?",
       "a2": "Een enkele live weergave die signalen samenvoegt die de meeste tools gescheiden houden: conflictgebeurtenissen, schip- en vliegtuigtracking, scheepvaartknelpunten, satellieten, onderzeese kabels, pijpleidingen, markten en cyberbedreigingen — op één realtime wereldkaart, met AI-scoring en samenvattingen erbovenop. World Monitor is een gratis versie.",
       "q3": "Waar komen de gegevens vandaan?",
       "a3": "Van {{providers}} geattribueerde bronnen. Benoemde bronnen zijn onder meer ACLED en UCDP voor conflicten, AISStream voor live schepen, OpenSky voor vliegtuigen, NASA FIRMS voor branden, USGS voor aardbevingen, IMF, BIS, FRED en Finnhub voor markten en macro — plus gecureerde nieuwsfeeds. Elk paneel vermeldt zijn bronnen en timestamps inline.",
       "q4": "Kan ik knelpunten zoals Hormuz of Bab el-Mandeb in real time volgen?",
-      "a4": "Ja. {{chokepoints}} chokepunten, waaronder Hormuz en Bab el-Mandeb, worden gemonitord met live AIS-scheepstellingen, week-op-weekverandering van doorvoer en verstoringsscoring — en dichtheidsafwijkingen worden gemarkeerd tegen de rolling baseline van elk chokepunt.",
+      "a4": "Ja. {{chokepoints}} chokepunten, zowel zeestraten als kanalen, van Hormuz en Bab el-Mandeb tot Suez, worden gemonitord met live AIS-scheepstellingen, week-over-week verandering in doorvoer en verstoringsscores — en dichtheidsafwijkingen worden gemarkeerd tegen de rolling baseline van elk chokepunt.",
       "q5": "Hoe verschilt dit van een conflictkaart zoals Liveuamap?",
       "a5": "Conflict is één kaartlaag. World Monitor combineert conflicten met scheepvaart, militaire vluchten, infrastructuur, markten en cyber — vervolgens beoordeelt AI de convergentie: instabiliteitsindices, escalatie van hotspots, bevestigde breaking alerts en dagelijkse briefs. Vergelijk World Monitor met Liveuamap en andere conflictkaarten: worldmonitor.app/compare/liveuamap-alternatives. Voor bredere monitoringopties, zie worldmonitor.app/compare/best-geopolitical-risk-dashboards.",
       "q6": "Waarom moet ik een waarschuwing vertrouwen?",
-      "a6": "Omdat elk waarschuwing vaste poorten moet passeren voordat het jou bereikt. Waarschuwingen komen van {{alertOrigins}} onafhankelijke bronnen: berichten met hoog bedreigingsniveau, zoekwoordpieken, hotspot-escalatie, detectie van militaire toename en sirenes voor civiele bescherming. Elke bron ondergaat dezelfde filters: items ouder dan 15 minuten worden verwijderd, herhaling van dezelfde gebeurtenis wordt 30 minuten onderdrukt, en elke waarschuwing volgt een afkoelperiode van 60 seconden. Bronnen van lager niveau hebben ook een AI-bevestigde classificatie nodig voordat ze een waarschuwing kunnen activeren.",
+      "a6": "Omdat een banner vaste controleposten moet passeren. Het triggert op nieuwsitems geclassificeerd als kritieke of hoge dreiging, en op officiële burgerluchtbeschermingssirenes. Een nieuwsmelding moet minder dan 15 minuten oud zijn, dezelfde nieuwsitem wordt 30 minuten ingehouden, en een cooldown van 60 seconden volgt elke melding tenzij de nieuwe ernstiger is. Matches op alleen trefwoorden van lagere outlets hebben ook AI-bevestiging nodig. Sirenes slaan de leeftijds- en cooldown-controles over omdat ze tijdskritiek zijn.",
       "q7": "Kunnen AI-agenten zoals Claude of GPT het gebruiken?",
       "a7": "Ja. World Monitor's MCP-server stelt {{mcpTools}} live tools beschikbaar, zodat Claude, GPT of elke MCP-compatibele agent risicocijfers, knelpuntstatus, conflicten, markten en briefings kan opvragen — met JMESPath-projectie zodat agents precies krijgen wat ze nodig hebben.",
       "q8": "Heb ik een account nodig?",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Hoe begin ik met het wereldwijde kaartvolgen?",
-      "subtitle": "Open worldmonitor.app/dashboard in elke browser: gratis, geen account nodig, {{mapLayers}} kaartlaagtypen klaar om van eerste load uit in te schakelen. Klik op een land voor het situatierapport, of druk op ⌘K / Ctrl-K voor het opdrachtenpalet. De kaart is blijven bijwerken terwijl je deze pagina las.",
+      "subtitle": "Open worldmonitor.app/dashboard in elke browser, zonder account: {{mapLayers}} kaartlaagtypen, alle behalve Resilience gratis om in te schakelen. Klik op een land voor zijn briefing, of druk ⌘K / Ctrl-K voor het opdrachtpalet. De kaart is blijven bijwerken terwijl je deze pagina las.",
       "button": "Vind het eerst",
       "note": "Gratis · Geen registratie · Laadt in seconden",
       "secondary": "Of bekijk Pro-plannen →"

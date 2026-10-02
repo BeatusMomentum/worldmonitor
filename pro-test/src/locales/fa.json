@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "For builders & AI agents",
       "title": "چگونه روی World Monitor از استک خود بسازم؟",
-      "sub": "Everything on the map is also an API. Wire it into Claude over MCP, call the REST endpoints from anywhere, or install a native client for Python, Ruby, Go, or JavaScript — your code researches with live data instead of training-data memories.",
+      "sub": "همه چیز روی نقشه نیز یک API است. آن را با Claude از طریق MCP با {{mcpTools}} ابزار زنده وصل کنید، نقاط پایانی REST را از هر جایی فراخوانی کنید، یا یک کلاینت بومی برای Python، Ruby، Go یا JavaScript نصب کنید — کد شما با داده‌های زنده تحقیق می‌کند نه با حافظه‌های داده‌های آموزشی.",
       "b1": "{{mcpTools}} ابزار MCP — امتیازات ریسک، نقاط تنگناء، تنازعات، بازارها، گزارش‌های وضعیت",
       "b2": "REST API مستند‌شده — یک مشخصه OpenAPI 3.1، یک کلید",
       "b3": "Official SDKs on npm, PyPI, RubyGems, and Go — zero-dependency, MCP-first",
@@ -663,23 +663,23 @@
       "proF4": "MCP، REST API و SDKهای رسمی — ابزارهای زنده تحت یک کلید",
       "proF5": "Custom widget builder for your own panels",
       "cta": "See plans & pricing",
-      "note": "From $39.99/mo · 3 months free when billed annually"
+      "note": "از $39.99 در ماه · ۳ ماه رایگان با پرداخت سالانه"
     },
     "faq": {
       "eyebrow": "No catch",
       "title": "سؤالات متداول درباره World Monitor چیست؟",
       "q1": "Is World Monitor really free?",
-      "a1": "بله. نقشه زنده — هر لایه به جز Resilience، خوراک‌های منتخب، خلاصه‌های کشوری، هشدارهای شکاف، و سطح نظارت — بدون ثبت‌نام و بدون ساعت آزمایشی رایگان است. Pro برای خوراک‌ها پرداخت می‌کند: WM Analyst، موتور سناریو، Route Explorer، خلاصه‌های برنامه‌ریزی‌شده، دسترسی MCP برای کلاینت‌های هوشمند مصنوعی و لایه نقشه Resilience را اضافه می‌کند. بدون تبلیغات، و بدون حساب به این معنی است که هیچ داده کاربری برای فروش نیست.",
+      "a1": "بله. نقشه زنده بدون هزینه و بدون نیاز به ثبت‌نام یا دوره آزمایشی است: {{mapLayers}} نوع لایه نقشه، تمام آن‌ها به جز Resilience، به علاوه خوراک‌های منتخب، خلاصه‌های کشوری، هشدارهای فوری و سطوح نظارتی. Pro برای خوراک‌ها هزینه دارد: WM Analyst، موتور سناریو، Route Explorer، خلاصه‌های برنامه‌ریزی‌شده، دسترسی MCP برای کلاینت‌های AI و لایه نقشه Resilience را اضافه می‌کند. بدون تبلیغ، و بدون حساب به معنای عدم وجود داده‌های کاربری برای فروش است.",
       "q2": "What is a global intelligence dashboard?",
       "a2": "A single live view that fuses signals most tools keep separate: conflict events, ship and aircraft tracking, shipping chokepoints, satellites, subsea cables, pipelines, markets and cyber threats — on one real-time world map, with AI scoring and briefs on top. World Monitor is a free one.",
       "q3": "Where does the data come from?",
       "a3": "از {{providers}} منبع معتبر. منابع نام‌برده شامل ACLED و UCDP برای تنازعات، AISStream برای کشتی‌های زندهٔ، OpenSky برای هواپیما، NASA FIRMS برای آتش‌سوزی‌ها، USGS برای زمین‌لرزه‌ها، IMF، BIS، FRED و Finnhub برای بازارها و اقتصاد کلان — به‌علاوهٔ خوراک‌های اخباری منتخب. هر پنل منابع و تمبرهای زمانی خود را درون متن نقل می‌کند.",
       "q4": "Can I watch chokepoints like Hormuz or Bab el-Mandeb in real time?",
-      "a4": "بله. {{chokepoints}} گلوگاه، ازجمله هرمز و باب‌المندب، با شمار زنده کشتی‌های AIS، تغییر ترانزیت هفته‌به‌هفته و امتیاز اختلال پایش می‌شوند — و ناهنجاری‌های تراکم برابر خط‌مبنای متحرک هر گلوگاه پرچم‌گذاری می‌شوند.",
+      "a4": "بله. {{chokepoints}} گلوگاه، هم تنگه‌ها و هم کانال‌ها، از هرمز و باب‌المندب تا سوئز، با تعداد کشتی AIS زنده، تغییر ترانزیت هفته‌ای و امتیاز اختلال تحت نظارت هستند — و ناهنجاری‌های تراکم نسبت به خط مبنای غلتان هر گلوگاه پرچم‌گذاری می‌شوند.",
       "q5": "How is this different from a conflict map like Liveuamap?",
       "a5": "تنازع یک لایه نقشه است. World Monitor درگیری‌ها را با حمل‌ونقل دریایی، پروازهای نظامی، زیرساخت‌ها، بازارها و فعالیت‌های سایبری ادغام می‌کند — سپس هوش مصنوعی همگرایی را امتیاز‌دهی می‌کند: شاخص‌های عدم‌ثبات، تشدید نقاط داغ، هشدارهای شکست‌خوردگی تأیید‌شده و خلاصه‌های روزانه. World Monitor را با Liveuamap و دیگر نقشه‌های تنازع مقایسه کنید: worldmonitor.app/compare/liveuamap-alternatives. برای گزینه‌های نظارتی گسترده‌تر، به worldmonitor.app/compare/best-geopolitical-risk-dashboards مراجعه کنید.",
       "q6": "Why should I trust an alert?",
-      "a6": "زیرا هر هشدار باید قبل از رسیدن به شما از دروازه‌های ثابتی عبور کند. هشدارها از {{alertOrigins}} منبع مستقل می‌آیند: اخبار تهدید بالا، پیک‌های کلیدی، تشدید نقطه حساس، شناسایی افزایش نظامی و سیرن‌های دفاع مدنی. هر منبع از همان فیلترها عبور می‌کند: اخبار قدیمی‌تر از ۱۵ دقیقه حذف می‌شوند، تکرار همان رویداد برای ۳۰ دقیقه سرکوب می‌شود، و ۶۰ ثانیه استراحت بعد از هر هشدار اعمال می‌شود. منابع درجه پایین‌تر نیز قبل از فعال‌سازی یک هشدار نیاز به تصدیق طبقه‌بندی AI دارند.",
+      "a6": "چون یک بنر باید از دروازه‌های ثابت عبور کند. برای مواد خبری طبقه‌بندی‌شده به عنوان تهدید بحرانی یا بالا، و برای سیرن‌های رسمی دفاع مدنی فعال می‌شود. یک هشدار خبری باید کمتر از 15 دقیقه قدیمی باشد، همان مطلب برای 30 دقیقه نگاه داشته می‌شود، و پس از هر هشدار 60 ثانیه توقف وجود دارد مگر اینکه هشدار جدید شدیدتر باشد. تطابق‌های تنها کلیدواژه از منابع پایین‌تر نیز نیاز به تایید AI دارند. سیرن‌ها دروازه‌های سن و توقف را دور می‌زنند زیرا حساس به زمان هستند.",
       "q7": "Can AI agents like Claude or GPT use it?",
       "a7": "بلی. سرور MCP برای World Monitor {{mcpTools}} ابزار زندهٔ برای Claude، GPT یا هر نماینده‌ای سازگار با MCP تعریض می‌کند تا بتوانند امتیازات ریسک، وضعیت نقاط تنگناء، تنازعات، بازارها و گزارش‌های وضعیت را پرسوجو کنند — با پروژکشن JMESPath تا نمایندگان دقیقاً آنچه را که نیاز دارند واکشی کنند.",
       "q8": "Do I need an account?",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "چگونه شروع به رصد نقشه جهانی کنم؟",
-      "subtitle": "worldmonitor.app/dashboard را در هر مرورگری باز کنید: رایگان، بدون حساب، {{mapLayers}} نوع لایه نقشه‌ای آماده تا از بار اول روشن شوند. برای گزارش کوتاه کشوری روی هر کشور کلیک کنید یا برای پالت فرمان ⌘K / Ctrl-K را فشار دهید. نقشه در حین خواندن این صفحه همچنان به‌روزرسانی شده است.",
+      "subtitle": "worldmonitor.app/dashboard را در هر مرورگری باز کنید، بدون حساب: {{mapLayers}} نوع لایه نقشه، هر یک به جز Resilience برای تبدیل آزاد است. برای دریافت خلاصه هر کشور بر آن کلیک کنید، یا ⌘K / Ctrl-K را برای پالت دستورات فشار دهید. نقشه در حین خواندن این صفحه به‌روز شد.",
       "button": "Find it first",
       "note": "Free · No signup · Loads in seconds",
       "secondary": "Or see Pro plans →"
