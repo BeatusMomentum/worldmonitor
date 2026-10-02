@@ -1,10 +1,14 @@
+---
+noindex: true
+---
+
 # Intelligence buying guides
 
 The twenty guides serve readers choosing a monitoring tool. Five compare World Monitor with a named provider. Five describe alternatives to those providers. Ten select tools for distinct audiences.
 
 ## Selection method
 
-The five providers were selected for overlap with World Monitor's core jobs, not measured market share. Liveuamap overlaps with regional mapped reporting. ACLED overlaps with conflict research and also supplies data used by monitoring tools. Dataminr overlaps with corporate event awareness. Recorded Future overlaps with geopolitical and security intelligence. Crisis24 overlaps with people and travel risk.
+The competitors were selected for overlap with World Monitor's core jobs, not measured market share. Liveuamap overlaps with regional mapped reporting. ACLED overlaps with conflict research and also supplies data used by monitoring tools. Dataminr overlaps with corporate event awareness. Recorded Future overlaps with geopolitical and security intelligence. Crisis24 overlaps with people and travel risk.
 
 These products are not interchangeable. ACLED is often a complementary source rather than a direct dashboard replacement. Bloomberg and Palantir are not in this set because financial execution and internal operational-data integration are less direct substitutes for a public-source monitoring dashboard. This does not establish which companies generate the most lost deals. No account analytics, keyword-volume data, or customer interviews were supplied.
 
