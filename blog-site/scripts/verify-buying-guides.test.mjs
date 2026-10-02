@@ -14,6 +14,17 @@ const hub = readFileSync(new URL('guides/index.html', dist), 'utf8');
 const llms = readFileSync(new URL('llms.txt', dist), 'utf8');
 const sitemap = readFileSync(new URL('sitemap-0.xml', dist), 'utf8');
 
+test('guide index structured data matches the displayed card order', () => {
+  const cards = [...hub.matchAll(/<a\b[^>]*class="post-card"[^>]*href="([^"]+)"/g)]
+    .map(match => `${site}${match[1]}`);
+  const nodes = [...hub.matchAll(/<script type="application\/ld\+json"[^>]*>(.*?)<\/script>/gs)]
+    .map(match => JSON.parse(match[1]));
+  const items = nodes.find(node => node['@type'] === 'CollectionPage').mainEntity.itemListElement;
+  assert.equal(cards.length, 20);
+  assert.deepEqual(items.map(item => item.url), cards);
+  assert.deepEqual(items.map(item => item.position), cards.map((_, index) => index + 1));
+});
+
 test('guide updates date the guide and hub without redating the author archive', async () => {
   const fixture = await mkdtemp(join(tmpdir(), 'guide-dates-'));
   const root = join(fixture, 'blog-site');

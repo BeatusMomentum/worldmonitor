@@ -7,7 +7,11 @@ const sections = [
   { category: 'vs', title: 'Head-to-head comparisons' },
   { category: 'alternatives', title: 'Alternatives by task' },
   { category: 'best', title: 'Best tools for your work' },
-];
+].map(section => ({
+  ...section,
+  guides: guides.filter(guide => guide.id.startsWith(`${section.category}/`)),
+}));
+const orderedGuides = sections.flatMap(section => section.guides);
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
@@ -15,7 +19,7 @@ const jsonLd = {
   url: 'https://www.worldmonitor.app/blog/guides/',
   mainEntity: {
     '@type': 'ItemList',
-    itemListElement: guides.map((guide, index) => ({
+    itemListElement: orderedGuides.map((guide, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       name: guide.data.title,
@@ -36,7 +40,7 @@ const jsonLd = {
       <section aria-labelledby={section.category}>
         <h2 id={section.category}>{section.title}</h2>
         <div class="post-grid">
-          {guides.filter(guide => guide.id.startsWith(`${section.category}/`)).map(guide => (
+          {section.guides.map(guide => (
             <a class="post-card" href={`/blog/${guide.id}/`}>
               <h3>{guide.data.title}</h3>
               <p>{guide.data.description}</p>
