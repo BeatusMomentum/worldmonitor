@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { HMAC_SECRET, callBody, makeProDeps, proReq } from './helpers/mcp-pro-deps.mjs';
 import { admitCountryPanel, authorizePanelRead, PANEL_READ_LIMIT } from '../api/mcp/panel-requests.ts';
+import { countryActivityQueries } from '../shared/country-activity-query.ts';
 import { envPrefix } from '../server/_shared/pro-mcp-token.ts';
 
 const originalFetch = globalThis.fetch;
@@ -95,6 +96,49 @@ describe('paid country workflow through the MCP handler', () => {
       await read.save({ countryCode: 'US', brief: 'Controlled assessment', headlines: [] });
       assert.equal((await authorizePanelRead(context, pipe.pipeline, name, { country_code: 'US' }, token)).cached.countryCode, 'US');
     }
+    assert.equal(pipe.count, 1);
+  });
+  it('includes country flight, AIS and roster reads in one allocation and denies a different viewport', async () => {
+    globalThis.fetch = async url => {
+      fetched.push(String(url));
+      const path = new URL(url).pathname;
+      return Response.json(path.endsWith('list-military-flights') ? { flights: [{ id: 'controlled' }] }
+        : path.endsWith('get-vessel-snapshot') ? { dataAvailable: true, snapshot: { snapshotAt: Date.now(), status: { connected: true } } }
+          : { report: { vessels: [] } });
+    };
+    const { deps, pipe } = makeProDeps();
+    const opened = await invoke(deps, 'open_country_brief', { country_code: 'US' });
+    const panel_request = opened.body.result.structuredContent.panelRequest.token;
+    const bounds = countryActivityQueries('US')[0];
+    for (const section of ['flights', 'vessels', 'fleet']) {
+      const args = section === 'fleet' ? {} : bounds;
+      const read = await invoke(deps, 'get_country_brief_section', { section, arguments: args, panel_request });
+      assert.equal(read.body.result?.structuredContent?.state, 'ready', section);
+      assert.equal(pipe.count, 1);
+    }
+    const fetchedBefore = fetched.length;
+    const denied = await invoke(deps, 'get_country_brief_section', { section: 'flights', arguments: countryActivityQueries('CN')[0], panel_request });
+    assert.equal(denied.body.error?.code, -32602);
+    assert.equal(fetched.length, fetchedBefore);
+    assert.equal(pipe.count, 1);
+    for (const argumentsValue of [{ ...bounds, page_size: 1000 }, { ...bounds, operator: 'MILITARY_OPERATOR_USAF' }, { ...bounds, include_tankers: 'true' }]) {
+      const rejected = await invoke(deps, 'get_country_brief_section', { section: 'flights', arguments: argumentsValue, panel_request });
+      assert.equal(rejected.body.error?.code, -32602);
+    }
+  });
+  it('does not cache unavailable military observations within a paid country request', async () => {
+    const { deps, pipe } = makeProDeps();
+    const opened = await invoke(deps, 'open_country_brief', { country_code: 'US' });
+    const panel_request = opened.body.result.structuredContent.panelRequest.token;
+    globalThis.fetch = async url => { fetched.push(String(url)); return Response.json({ flights: [], dataAvailable: false }); };
+    for (const section of ['flights', 'vessels', 'fleet']) {
+      const argumentsValue = section === 'fleet' ? {} : countryActivityQueries('US')[0];
+      for (let i = 0; i < 2; i++) {
+        const read = await invoke(deps, 'get_country_brief_section', { section, arguments: argumentsValue, panel_request });
+        assert.equal(read.body.result?.structuredContent?.state, 'unavailable');
+      }
+    }
+    assert.equal(fetched.length, 6);
     assert.equal(pipe.count, 1);
   });
   it('returns HTTP 429 with Retry-After at the read ceiling and does not fetch or charge again', async () => {

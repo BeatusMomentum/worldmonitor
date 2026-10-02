@@ -60,11 +60,13 @@ export interface CountryDeepDiveBaseSummary {
 }
 
 export interface CountryDeepDiveMilitarySummary {
-  ownFlights: number;
-  foreignFlights: number;
-  nearbyVessels: number;
+  ownFlights: number | null;
+  foreignFlights: number | null;
+  nearbyVessels: number | null;
   nearestBases: CountryDeepDiveBaseSummary[];
-  foreignPresence: boolean;
+  foreignPresence: boolean | null;
+  coverageNotes?: string[];
+  coverage?: 'complete' | 'partial';
 }
 
 export interface CountryDeepDiveEconomicIndicator {
@@ -222,7 +224,7 @@ export interface CountryBriefPanel {
   updateScore?(score: CountryScore | null, signals: CountryBriefSignals): void;
   isFallbackBrief?(): boolean;
   updateSignalDetails?(details: CountryDeepDiveSignalDetails): void;
-  updateMilitaryActivity?(summary: CountryDeepDiveMilitarySummary): void;
+  updateMilitaryActivity?(summary: CountryDeepDiveMilitarySummary | null): void;
   updateDefenseIndustrialBase?(data: GetDefenseIndustrialBaseResponse | null): void;
   syncCountryPremiumSectionsAccess?(hasAccess: boolean): void;
   updateEconomicIndicators?(indicators: CountryDeepDiveEconomicIndicator[]): void;

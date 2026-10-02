@@ -1,4 +1,5 @@
 import './bootstrap/zod-csp';
+import { loadHostCountryMilitaryActivity } from '@/services/country-military-activity';
 import './styles/base-layer.css';
 import './styles/plugin-country.css';
 import { z } from 'zod';
@@ -209,6 +210,9 @@ async function mountCountryView(): Promise<void> {
     const current = () => !signal.aborted && panel.getCode() === code && revision === openedRevision;
     hydratedAt = Date.now();
     controller.hydrate(code, name);
+    void preloadCountryGeometry().then(() => loadHostCountryMilitaryActivity(source, code, name, signal)).then(summary => {
+      if (current()) panel.updateMilitaryActivity(summary);
+    }).catch(() => { if (current()) panel.updateMilitaryActivity(null); });
     if (refresh) panel.refreshHostedSections();
     void Promise.all([preloadCountryGeometry(), preloadInfrastructureTables()]).then(() => { if (current()) panel.updateInfrastructure(code); }).catch(() => { if (current()) panel.setSectionFailure('infrastructure', 'unavailable', 'Country infrastructure locations could not be loaded.'); });
     status.textContent = `${name} country brief. Sections load independently. Use the topic tabs to explore.`;
