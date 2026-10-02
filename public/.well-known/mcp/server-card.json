@@ -1,7 +1,9 @@
 {
-  "name": "worldmonitor",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json",
+  "name": "app.worldmonitor/mcp",
+  "title": "WorldMonitor",
+  "description": "Live markets, conflicts, country risk, chokepoints, energy, and China decision signals.",
   "kind": "product",
-  "description": "WorldMonitor's live global-intelligence stack as an MCP server: real-time markets, conflict events, aviation, maritime, energy, climate, health, displacement, supply chain, and AI-generated regional briefs.",
   "icon": "https://www.worldmonitor.app/favico/apple-touch-icon.png",
   "version": "1.26.0",
   "url": "https://worldmonitor.app/mcp",
