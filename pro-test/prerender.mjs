@@ -74,6 +74,11 @@ const CRITICAL_CSS = [
   // from the built sheet, so a Tailwind upgrade that adds another geometry
   // reset fails there instead of silently reintroducing the shift.
   '@layer base{*,::before,::after{box-sizing:border-box;border:0 solid #222;margin:0;padding:0}html{background:#050505;color:#f3f4f6;-webkit-text-size-adjust:100%;tab-size:4}body{margin:0;background:#050505;color:#f3f4f6;font-family:var(--font-sans);line-height:1.5;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}img,svg{display:block;vertical-align:middle}img{max-width:100%;height:auto}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}ol,ul,menu{list-style:none}table{text-indent:0;border-color:inherit;border-collapse:collapse}}',
+  // The welcome skip link sits outside every region, before the fixed nav, so
+  // until the deferred sheet supplies `sr-only` it paints as an inline line
+  // that pushes <main> down, then vanishes (0.0375 CLS on /). `:not(:focus)`
+  // leaves the focused state to Tailwind's layered `focus:not-sr-only`.
+  'a[href="#main-content"]:not(:focus){position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border-width:0}',
   '#root,#root>div{min-height:100vh}.glass-panel{background:rgba(17,17,17,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid #222}.text-glow{text-shadow:0 0 20px rgba(74,222,128,.3)}.border-glow{box-shadow:0 0 20px rgba(74,222,128,.1)}',
   // Every rule here is scoped to `nav[data-wm-nav]` — the sticky header — and
   // never to the bare `nav` element. This CSS is unlayered, so a bare type
