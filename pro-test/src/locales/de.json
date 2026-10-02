@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Kostenloses Live-Dashboard für globale Informationen in Echtzeit",
-      "description": "Bis es Nachrichten sind, wusstest du es bereits. Konflikte, Engpässe, Militärflüge, Märkte und Cyber auf einer kostenlosen Live-Weltkarte, mit KI-Analyse. Keine Anmeldung.",
+      "description": "Bis es Nachrichten sind, wissen Sie bereits Bescheid. Konflikte, Engpässe, Militärflugverkehr, Märkte, Cyber: eine kostenlose Live-Karte mit KI-Analyse. Keine Registrierung erforderlich.",
       "ogTitle": "World Monitor — Bevor es Nachrichten sind, wussten Sie es bereits.",
       "ogDescription": "Die Rohsignale der Welt — Schiffe, Jets, Sirenen, Kabel, Märkte — auf einer kostenlosen Live-Intelligenz-Karte mit KI, die kennzeichnet, wenn sie zusammenlaufen. Kostenlos, keine Anmeldung."
     },
@@ -574,7 +574,7 @@
     "firstFive": {
       "eyebrow": "Vom ersten Moment an orientiert",
       "title": "Was passiert in deinen ersten fünf Minuten auf der Karte?",
-      "sub": "Keine Tour, keine leeren Zustände, keine Registrierungsbarriere. Das ist, was wirklich passiert.",
+      "sub": "Keine Einführung, keine leeren Zustände, keine Registrierungssperre. Das ist, was in den ersten 5 Minuten tatsächlich passiert.",
       "f1Title": "Die Karte bewegt sich bereits",
       "f1Desc": "Konflikte, Schiffe, Flüge, Brände und Ausfälle werden beim Laden der Seite dargestellt. Vorher nichts zu konfigurieren.",
       "f2Title": "Klicke auf ein beliebiges Land",
@@ -584,7 +584,7 @@
       "f4Title": "Wähle deine Perspektive",
       "f4Desc": "Welt, Tech, Finanzen, Rohstoffe, Energie oder Happy – dasselbe System, sechs abgestimmte Monitore, einen Klick entfernt.",
       "f5Title": "Du hast vielleicht ein Zehntel gesehen",
-      "f5Desc": "Der Rest erscheint, wenn sich die Welt bewegt — Satellitenpässe, GPS-Jamming, dunkle Schiffe, Protestcluster, Sirenenwarnungen.",
+      "f5Desc": "Die meisten {{mapLayers}} Kartenebenen-Typen aktualisieren sich, während sich die Welt bewegt — Satellitenpässe, GPS-Störungen, dunkle Schiffe, Protestcluster, Sirenenalarme.",
       "cta": "Starten"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Sprachen · RTL enthalten",
       "s15l": "Unabhängige Alarmquellen",
       "n1Title": "Satellitentracking",
-      "n1Desc": "Live-Umlaufbahnen berechnet im Browser mit SGP4 — überwachen Sie ISS, Starlink und Militärsatelliten über Ihrem Standort.",
+      "n1Desc": "Live-Orbitalposition, im Browser mit SGP4 berechnet und alle 3 Sekunden aktualisiert — Militär- und Erdbeobachtungssatelliten von CelesTrak, alle 2 Stunden aktualisiert.",
       "n2Title": "GPS-Störzonen",
-      "n2Desc": "Live-HF-Interferenzkarte zeigt, wo GPS gerade beeinträchtigt oder gefälscht wird.",
+      "n2Desc": "Tägliche HF-Störungskarte aus Flugzeugmeldungen: Zellen, in denen mindestens 2 % der Flugzeuge beeinträchtigtes GPS feststellen, werden gekennzeichnet, über 10 % als hoch markiert.",
       "n3Title": "Engpass-Transitintelligenz",
       "n3Desc": "Schiffszählungen durch Hormus, Suez, Bab el-Mandeb und 10 weitere Meerengen — mit Störungsbewertung.",
       "n4Title": "KI-Rechenzentren-Karte",
@@ -617,7 +617,7 @@
       "n5Title": "Unterseekabel",
       "n5Desc": "{{submarineCables}} Unterseekabel, die das Internet transportieren, überlagert mit Ausfalls- und Bedrohungssignalen.",
       "n6Title": "Protestverfolgung",
-      "n6Desc": "Dual-Source-Protestvarfolgung mit quellenübergreifender Deduplizierung — Signal, nicht Gerücht.",
+      "n6Desc": "Protesterfassung aus ACLED und GDELT; Meldungen aus einer Quelle in derselben 0,1°-Zelle am selben Tag werden zu einem Ereignis zusammengefasst – Signal, keine Gerüchte.",
       "faith": "Verlassen Sie sich nicht blind auf die Zahlen —",
       "faithCta": "öffnen Sie die App und zählen Sie selbst.",
       "faithNote": "Quellen sind auf jedem Panel angegeben."
@@ -648,9 +648,9 @@
       "eyebrow": "Zugriff",
       "title1": "Kostenlos ist das Observatorium.",
       "title2": "Pro ist der Operationsraum.",
-      "sub": "Das Dashboard ist kostenlos — jede Kartenschicht außer Resilience, jeden Feed, keine Anmeldung. Pro fügt die Entscheidungsebene hinzu.",
+      "sub": "Das Dashboard ist kostenlos für 0 $ — jede Kartenebene außer Resilience, keine Anmeldung. Pro fügt die Entscheidungsebene hinzu.",
       "freeTitle": "Kostenlos",
-      "freeDesc": "Der kostenlose Plan ist ein vollständiges Produkt, kein Test. Jede Kartenschicht außer Resilience, jeden Feed von {{feeds}} Quellen, alle sechs Monitore — keine Anmeldung, keine Testzeit.",
+      "freeDesc": "Die kostenlose Version ist ein vollständiges Produkt, keine Testversion. Jede Kartenebene außer Resilience, alle sechs Monitore — ohne Anmeldung, ohne Zeitlimit.",
       "freeF1": "Alle Kartenebenen außer Resilience & kuratierte Feeds",
       "freeF2": "Länderübersichten, Hotspots, Instabilitätsbewertungen",
       "freeF3": "Engpässe, Kabel, Kaskadenanalyse",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Beginnen Sie mit der Frage",
       "title": "Was möchten Sie herausfinden?",
-      "sub": "Wählen Sie die Nachweiskette, die zu Ihrer Aufgabe passt. Jede Route öffnet eine quellengestützte Ansicht, nicht ein leeres Dashboard.",
+      "sub": "Wählen Sie einen der {{routes}} Evidenzpfade, der zur anstehenden Aufgabe passt. Jeder Pfad öffnet eine quellengestützte Ansicht, nicht ein leeres Dashboard.",
       "verifyTitle": "Ein Breaking Event verifizieren",
       "verifyDesc": "Überprüfen Sie aktuelle Krisen-Tracker, datierte Metriken und zitierte Kontexte, bevor Sie einen Breaking-Bericht vertrauen.",
       "chokepointTitle": "Einen Engpass überprüfen",

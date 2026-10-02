@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Bezplatný dashboard globální zpravodajské služby v reálném čase",
-      "description": "Když se to stane zprávou, už jste o tom věděli. Konflikty, kritické průsmyky, vojenské lety, trhy a kybernetika na jedné živé světové mapě s AI analýzou. Bez registrace.",
+      "description": "Než se stane zprávou, už to víš. Konflikty, kritické průchody, vojenské lety, trhy, kybernetika: jedna bezplatná živá mapa s AI analýzou. Bez registrace.",
       "ogTitle": "World Monitor — Když se to stane zprávou, už jste to věděli.",
       "ogDescription": "Nezpracované signály světa — lodě, letadla, sirény, kabely, trhy — na jedné bezplatné živé zpravodajské mapě s AI, která upozorní, když se convergují. Zdarma, bez registrace."
     },
@@ -574,7 +574,7 @@
     "firstFive": {
       "eyebrow": "Od nuly k orientaci",
       "title": "Co se stane během prvních pěti minut na mapě?",
-      "sub": "Bez průvodce, bez prázdných stavů, bez zdi přihlášení. Toto se skutečně děje.",
+      "sub": "Žádný průvodce, žádné prázdné stavy, žádná registrační bariéra. Toto se stane během prvních 5 minut.",
       "f1Title": "Mapa se již pohybuje",
       "f1Desc": "Konflikty, plavidla, lety, požáry a výpadky se vykreslují při načítání stránky. Nic se nejdříve nekonfiguruje.",
       "f2Title": "Klikněte na jakoukoli zemi",
@@ -584,7 +584,7 @@
       "f4Title": "Zvolte si svoji perspektivu",
       "f4Desc": "Svět, Tech, Finance, Komodity, Energie nebo Happy — stejný základ, šest vyladěných monitorů, jeden klik od sebe.",
       "f5Title": "Viděli jste snad desetinu",
-      "f5Desc": "Zbytek se objevuje, když se svět pohybuje — průlety satelitů, GPS jamming, tmavé lodě, shluky protestů, upozornění na sirény.",
+      "f5Desc": "Během vývoje světa vyplouvá většina typů vrstev mapy {{mapLayers}} — průlety satelitů, rušení GPS, temné lodě, shluky protestů, výstrahy sirén.",
       "cta": "Spustit časomíru"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Jazyky · včetně RTL",
       "s15l": "Nezávislé zdroje výstrah",
       "n1Title": "Sledování satelitů",
-      "n1Desc": "Živé orbitální pozice počítané v prohlížeči pomocí SGP4 — sledujte ISS, Starlink a vojenské družice nad vámi.",
+      "n1Desc": "Živé orbitální pozice počítané v prohlížeči pomocí SGP4 a aktualizované každé 3 sekundy — vojenské a pozorovací satelity Země z CelesTrak, aktualizované každé 2 hodiny.",
       "n2Title": "Zóny rušení GPS",
-      "n2Desc": "Živá mapa RF rušení ukazující, kde je GPS v tuto chvíli zhoršeno nebo zfalšováno.",
+      "n2Desc": "Denní mapa radiofrekvenčního rušení z hlášení letadel: buňky, kde nejméně 2 % letadel zaznamenávají zhoršené GPS, jsou označeny, nad 10 % značeny jako vysoké.",
       "n3Title": "Intel o kritických průchodech",
       "n3Desc": "Počty lodí procházejících Hormuzem, Suezem, Bab el-Mandebem a 10 dalšími průlivy — s vyhodnocením přerušení.",
       "n4Title": "Mapa AI datových center",
@@ -617,7 +617,7 @@
       "n5Title": "Podmořské kabely",
       "n5Desc": "{{submarineCables}} podvodních kabelů, které přenášejí internet, překryté signály výpadků a hrozeb.",
       "n6Title": "Sledování protestů",
-      "n6Desc": "Detekce protestů ze dvou zdrojů s odstraňováním duplikátů — signál, ne zvěst.",
+      "n6Desc": "Detekce protestů z ACLED a GDELT; zprávy z jednoho zdroje ve stejné 0,1° buňce ve stejný den se sloučí do jedné události — signál, nikoli zvěst.",
       "faith": "Nevěřte číslům na slovo —",
       "faithCta": "otevřete aplikaci a počítejte sami.",
       "faithNote": "Zdroje jsou citovány na každém panelu."
@@ -648,9 +648,9 @@
       "eyebrow": "Přístup",
       "title1": "Zdarma je observatoř.",
       "title2": "Pro je operační místnost.",
-      "sub": "Dashboard je zdarma — všechny mapové vrstvy kromě Resilience, všechny zdroje, bez registrace. Pro přidává vrstvu rozhodování.",
+      "sub": "Dashboard je zdarma za $0 — každá vrstva mapy kromě Resilience, bez registrace. Pro přidává vrstvu rozhodování.",
       "freeTitle": "Zdarma",
-      "freeDesc": "Bezplatná úroveň je plný produkt, ne zkušební verze. Každá vrstva mapy kromě Resilience, každý feed ze {{feeds}} zdrojů, všech šest monitorů – bez registrace, bez zkušební doby.",
+      "freeDesc": "Bezplatná úroveň je plný produkt, nikoli zkušební verze. Každá vrstva mapy kromě Resilience, všech šest monitorů — bez registrace, bez časového limitu zkušební verze.",
       "freeF1": "Všechny mapové vrstvy kromě Resilience & kurovaných kanálů",
       "freeF2": "Zemské briefy, hotspoty, skóry instability",
       "freeF3": "Kritické průchody, kabely, analýza kaskád",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Začněte s otázkou",
       "title": "Co se snažíte zjistit?",
-      "sub": "Vyberte stopu důkazů, která odpovídá vaší úloze. Každá cesta otevře pohled podporovaný zdroji, nikoli prázdný dashboard.",
+      "sub": "Vyber kteroukoliv z {{routes}} stopů důkazů, který odpovídá tvému úkolu. Každá stopa otevře pohled podporovaný zdroji, ne prázdný dashboard.",
       "verifyTitle": "Ověřit prvotní zprávu",
       "verifyDesc": "Před důvěřením tvrzení o krizovém vývoji si ověřte aktuální sledování krizí, časově datované metriky a citované podklady.",
       "chokepointTitle": "Zkontrolovat kritické místo",

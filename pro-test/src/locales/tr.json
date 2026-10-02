@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Ücretsiz Gerçek Zamanlı Global İstihbarat Panosu",
-      "description": "Haber haline gelmeden sen çoktan bilirsin. Çatışmalar, dar geçitler, askeri uçuşlar, piyasalar ve siber olaylar — tek bir canlı dünya haritasında, yapay zeka analiziyle. Kayıt gerektirmez.",
+      "description": "Haber olduğunda zaten biliyorsun. Çatışmalar, boğazlar, askeri uçuşlar, piyasalar, siber: AI analiziyle tek bir ücretsiz canlı harita. Kayıt yok.",
       "ogTitle": "World Monitor — Haber olduğunda zaten biliyordun.",
       "ogDescription": "Dünyanın ham sinyalleri — gemiler, jetler, sirenler, kablolar, piyasalar — AI ile birlikte tek bir ücretsiz canlı istihbarat haritasında ve bunlar bir şeye dönüştüğünde flaglenir. Ücretsiz, kayıt yok."
     },
@@ -574,7 +574,7 @@
     "firstFive": {
       "eyebrow": "Sıfırdan oryantasyon",
       "title": "Harita üzerindeki ilk beş dakikanızda ne olur?",
-      "sub": "Tur yok, boş durumlar yok, kayıt duvarı yok. Gerçekte neler oluyor.",
+      "sub": "Tur yok, boş ekranlar yok, kayıt duvarı yok. İlk 5 dakikada gerçekten olan budur.",
       "f1Title": "Harita zaten hareket ediyor",
       "f1Desc": "Çatışmalar, gemiler, uçaklar, yangınlar ve kesintiler sayfa yüklenirken render edilir. Önce yapılandırılacak bir şey yok.",
       "f2Title": "Herhangi bir ülkeyi tıkla",
@@ -584,7 +584,7 @@
       "f4Title": "Lensini seç",
       "f4Desc": "Dünya, Teknoloji, Finans, Emtia, Enerji veya Happy — aynı motor, altı ayarlanmış monitor, bir tık uzakta.",
       "f5Title": "Belki onda birini gördün",
-      "f5Desc": "Geri kalanı dünya hareket ettikçe ortaya çıkıyor — uydu geçişleri, GPS sıkışması, karanlık gemiler, protesto kümeleri, siren uyarıları.",
+      "f5Desc": "{{mapLayers}} harita katmanı türünün çoğu dünya hareket ettikçe ortaya çıkar — uydu geçişleri, GPS karıştırması, karanlık gemiler, protesto kümeleri, siren uyarıları.",
       "cta": "Kronometreyi başlat"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Diller · RTL dahil",
       "s15l": "Bağımsız uyarı kaynakları",
       "n1Title": "Uydu izleme",
-      "n1Desc": "Tarayıcıda SGP4 ile hesaplanan canlı yörünge konumları — ISS, Starlink ve askeri uyduları başınızın üstünde izleyin.",
+      "n1Desc": "SGP4 ile tarayıcıda hesaplanan canlı yörünge konumları her 3 saniyede güncelleniyor — CelesTrak'tan askeri ve Yer gözlem uyduları, 2 saatte bir yenileniyor.",
       "n2Title": "GPS müdahale bölgeleri",
-      "n2Desc": "GPS'in degradasyona uğradığı veya sahte sinyal gönderildiği yerleri gösteren canlı RF-girişim haritası.",
+      "n2Desc": "Uçak raporlarından günlük RF-parazit haritası: uçakların en az %2'sinin bozulmuş GPS gördüğü hücreler işaretlenir, %10'un üzerindekiler yüksek olarak işaretlenir.",
       "n3Title": "Boğaz geçiş istihbaratı",
       "n3Desc": "Hormuz, Süveyş, Bab el-Mendeb ve 10 kanaldan daha fazlasından geçen gemi sayıları — kesinti puanlaması ile.",
       "n4Title": "AI veri merkezi haritası",
@@ -617,7 +617,7 @@
       "n5Title": "Denizaltı kabloları",
       "n5Desc": "{{submarineCables}} interneti taşıyan denizaltı kablosu, kesinti ve tehdit sinyalleriyle üst üste.",
       "n6Title": "Protesto izleme",
-      "n6Desc": "Çift kaynaklı protesto tespiti çapraz kaynak deduplasiyon ile — sinyal, söylenti değil.",
+      "n6Desc": "ACLED ve GDELT'ten protesto tespiti; aynı gün içinde aynı 0,1° hücrede bir kaynaktan gelen raporlar tek bir olaya birleştirilir — sinyal, söylenti değil.",
       "faith": "Sayılara körü körüne inanmayın —",
       "faithCta": "uygulamayı açın ve sayın.",
       "faithNote": "Kaynaklar her panelde gösterilmiştir."
@@ -648,9 +648,9 @@
       "eyebrow": "Erişim",
       "title1": "Ücretsiz gözlemcilik istasyonudur.",
       "title2": "Pro operasyon odasıdır.",
-      "sub": "Pano ücretsiz — Resilience hariç her harita katmanı, her feed, kayıt gerekmiyor. Pro karar katmanını ekler.",
+      "sub": "Dashboard 0$ ile ücretsizdir — Resilience dışında her harita katmanı, kaydolmaya gerek yok. Pro, karar katmanını ekler.",
       "freeTitle": "Ücretsiz",
-      "freeDesc": "Ücretsiz katman tam bir üründür, deneme sürümü değildir. Resilience dışındaki her harita katmanı, {{feeds}} kaynaktan gelen her besleme, tüm altı monitör — kayıt yok, deneme saati yok.",
+      "freeDesc": "Ücretsiz katman tam bir üründür, deneme sürümü değil. Resilience dışında her harita katmanı, altı monitörün tamamı — kaydolmaya gerek yok, deneme saati yok.",
       "freeF1": "Resilience hariç tüm harita katmanları ve seçilmiş beslemeler",
       "freeF2": "Ülke brifler, sıcak noktalar, istikrarsızlık puanları",
       "freeF3": "Boğazlar, kablolar, kaskad analizi",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Soruyla başlayın",
       "title": "Neyi öğrenmek istiyorsunuz?",
-      "sub": "İş başınızla eşleşen kanıt izini seçin. Her rota boş bir panelden değil, kaynakça destekli bir görünüm açar.",
+      "sub": "{{routes}} kanıt izinden hangisi işinin başında seni destekleyecekse onu seç. Her rota kaynak destekli bir görünüm açar, boş dashboard değil.",
       "verifyTitle": "Kırılan bir olayı doğrulayın",
       "verifyDesc": "Bir haber niteliğindeki iddiaya güvenmeden önce mevcut kriz takip araçlarını, güncel metrikleri ve referans alınan bağlamı kontrol edin.",
       "chokepointTitle": "Bir boğazı kontrol edin",
