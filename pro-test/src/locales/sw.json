@@ -467,7 +467,7 @@
       "docs": "Hati",
       "launch": "Anzisha Dashibodi",
       "agents": "Kwa ajili ya mawakala wa AI",
-      "skipToContent": "Ruka kwa maudhimisho"
+      "skipToContent": "Ruka hadi maudhui"
     },
     "hero": {
       "eyebrow": "Dashibodi ya akili za kimataifa · sasa moja kwa moja",
@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor si Palantir ya chanzo wazi",
       "asOf": "Kufikia {{date}}",
       "whatIsTitle": "World Monitor ni nini?",
-      "whatIsBody": "World Monitor ni dashibodi huru inayopendekezwa kwa wazi ambayo inakamatia alama za simu za kisiasa, soko, usafirishaji wa bahari, anga, miundombinu, na cyber kwenye ramani moja ya dunia inayoishi. Inaunganisha {{feeds}} mlio tofauti na kuonya muunganano kabla ya manukuu, na kila takwimu inayotokana na vyanzo na kila njia iliyoandaliwa."
+      "whatIsBody": "World Monitor ni dashboard ya bure na chanzo huria inayopigia mtiririko signals za siasa za kimataifa, soko, usafiri wa bahari, aviation, miundombinu, na cyber kwenye ramani moja hai ya dunia. Inaunganisha mtiririko tofauti kutoka {{feeds}} vyanzo kuwa picha moja ya uendeshaji na kuashiria muambukizo kabla ya habari, na kila takwimu ina chanzo na kila mbinu imedokezwa."
     },
     "live": {
       "eyebrow": "Moja kwa moja sasa sasa",
@@ -650,7 +650,7 @@
       "title2": "Pro ni chumba cha uendeshaji.",
       "sub": "Dashboard ni bure — kila safu ya ramani isipokuwa Resilience, kila zuia, hakuna usajili. Pro inaongeza safu ya uamuzi.",
       "freeTitle": "Bure",
-      "freeDesc": "Safu huru ni bidhaa kamili, si sinema. Kila safu ya ramani isipokuwa Upinzani, {{feeds}} mlio yote, walijibizaji sita wote — bila usajili, bila saa ya sinema.",
+      "freeDesc": "Safu ya bure ni bidhaa kamili, si jaribio. Kila tabaka la ramani isipokuwa Resilience, kila mtiririko kutoka {{feeds}} vyanzo, waangalizi wote sita — hakuna usajili, hakuna saa ya jaribio.",
       "freeF1": "Tabaka zote za ramani isipokuwa Endurance & milo iliyoteuliwa",
       "freeF2": "Briefing za nchi, vituo vya hatari, alama za haba na amani",
       "freeF3": "Vituo vikuu, nyuzinyuzi, uchambuzi wa mlipuko",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Ninaanzia vipi kuangalia ramani ya dunia?",
-      "subtitle": "Unaposoma ukurasa huu iliendelea kusonga — {{chokepoints}} njia muhimu, {{hotspots}} maeneo yenye hatari, {{stockExchanges}} uborsani, {{feeds}} mlio iliyokusanya. Mmoja wao ndio ukurasa wa mbele wa kesho. Utafute kwanza — bure, bila akaunti.",
+      "subtitle": "Wakati unasoma ukurasa huu iliendelea kuhamia — {{chokepoints}} mambo ya kuzuia, {{hotspots}} mahali ya haraka, {{stockExchanges}} soko za hisa, {{feeds}} vyanzo vya mtiririko vilivyochaguliwa. Mmoja wao ni ukurasa wa kwanza wa bukas. Utampata kwanza — bure, bila akaunti.",
       "button": "Itafuta kwanza",
       "note": "Bure · Hakuna kuweka akaunti · Inapakia kwa sekunde",
       "secondary": "Au ona mipango ya Pro →"

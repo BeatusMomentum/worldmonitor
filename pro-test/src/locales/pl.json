@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor nie jest open-source'owym Palantir",
       "asOf": "Stan na {{date}}",
       "whatIsTitle": "Czym jest World Monitor?",
-      "whatIsBody": "World Monitor to bezpłatny, otwartoźródłowy dashboard, który transmituje sygnały geopolityczne, rynkowe, żeglugowe, lotnicze, infrastrukturalne i cyberprzestrzenne na jedną żywą mapę świata. Łączy {{feeds}} oddzielnych źródeł danych w jeden obraz operacyjny i flaguje zbieżności przed artykułami prasowymi — każda liczba ma źródło, każda metoda jest udokumentowana."
+      "whatIsBody": "World Monitor to bezpłatny dashboard o otwartym kodzie źródłowym, który transmituje sygnały z zakresu geopolityki, rynków, transportu morskiego, lotnictwa, infrastruktury i cyberbezpieczeństwa na jedną interaktywną mapę świata. Koreluje osobne kanały z {{feeds}} źródeł w jeden obraz operacyjny i wskazuje zbieżności przed pojawieniem się artykułów, z każdą liczbą popartą źródłami i każdą metodą udokumentowaną."
     },
     "live": {
       "eyebrow": "Na żywo teraz",
@@ -650,7 +650,7 @@
       "title2": "Pro to pokój operacyjny.",
       "sub": "Panel jest bezpłatny — każda warstwa mapy oprócz Resilience, każdy kanał, bez rejestracji. Pro dodaje warstwę decyzji.",
       "freeTitle": "Bezpłatny",
-      "freeDesc": "Bezpłatna wersja to pełny produkt, a nie wersja testowa. Wszystkie warstwy mapy poza Odpornością, wszystkie {{feeds}} źródeł danych, wszystkie sześć monitorów — bez rejestracji, bez licznika czasu.",
+      "freeDesc": "Bezpłatny plan to pełny produkt, a nie wersja próbna. Każda warstwa mapy oprócz Resilience, każdy kanał z {{feeds}} źródeł, wszystkie sześć monitorów — bez rejestracji, bez licznika próbnego.",
       "freeF1": "Wszystkie warstwy map poza Resilience i kluczowanymi kanałami",
       "freeF2": "Briefingi krajów, punkty hotspot, wyniki niestabilności",
       "freeF3": "Punkty krytyczne, kable, analiza kaskadowa",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Jak zacząć obserwować mapę świata?",
-      "subtitle": "Podczas gdy czytasz tę stronę, mapa się zmienia — {{chokepoints}} punktów krytycznych, {{hotspots}} punktów napięcia, {{stockExchanges}} giełd, {{feeds}} źródeł danych. Jeden z nich pojawi się jutro na pierwszej stronie. Znajdź go pierwszy — bezpłatnie, bez konta.",
+      "subtitle": "Podczas gdy czytasz tę stronę, sytuacja się zmieniała — {{chokepoints}} gardła, {{hotspots}} ogniska zapalające, {{stockExchanges}} giełdy, {{feeds}} źródła kuratowanych kanałów. Jedno z nich będzie jutrzejszą pierwszą stroną. Znajdź je pierwsze — bezpłatnie, bez konta.",
       "button": "Znajdź go pierwszy",
       "note": "Bezpłatne · Bez rejestracji · Ładuje się w sekundy",
       "secondary": "Lub zobacz plany Pro →"

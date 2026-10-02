@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor is geen open-source Palantir",
       "asOf": "Per {{date}}",
       "whatIsTitle": "Wat is World Monitor?",
-      "whatIsBody": "World Monitor is een gratis, open-source dashboard dat geopolitiek, markten, scheepvaart, luchtvaart, infrastructuur en cyber-signalen op één live wereldkaart streamt. Het combineert {{feeds}} afzonderlijke feeds tot één operationeel beeld en signaleert convergentie vóór koppelingen, met elke gegevens bronnen en elke methode gedocumenteerd."
+      "whatIsBody": "World Monitor is een gratis, open-source dashboard dat geopolitieke, markt-, scheepvaart-, luchtvaart-, infrastructuur- en cybersignalen op één live wereldkaart streamt. Het correleert afzonderlijke feeds van {{feeds}} bronnen in één gemeenschappelijk beeld en vlaggt convergentie vóór koppen, met elk getal brongebaseerd en elke methode gedocumenteerd."
     },
     "live": {
       "eyebrow": "Nu live",
@@ -650,7 +650,7 @@
       "title2": "Pro is de operationele kamer.",
       "sub": "Het dashboard is gratis — elke kaartlaag behalve Resilience, elke feed, geen registratie. Pro voegt de beslissingslaag toe.",
       "freeTitle": "Gratis",
-      "freeDesc": "De gratis versie is een volwaardig product, geen proefversie. Elke kaartlaag behalve Veerkracht, alle {{feeds}} feeds, alle zes monitoren — geen registratie, geen proefperiode.",
+      "freeDesc": "De gratis versie is een volwaardig product, geen proefperiode. Elke kaartlaag behalve Resilience, elke feed van {{feeds}} bronnen, alle zes monitors — geen inschrijving, geen klok.",
       "freeF1": "Alle kaartlagen behalve Resilience & samengestelde feeds",
       "freeF2": "Landensamenvattingen, hotspots, instabiliteitsscores",
       "freeF3": "Chokepoints, kabels, cascadeanalyse",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Hoe begin ik met het wereldwijde kaartvolgen?",
-      "subtitle": "Terwijl je deze pagina leest, bleef het bewegen — {{chokepoints}} knelpunten, {{hotspots}} hotspots, {{stockExchanges}} beurzen, {{feeds}} samengestelde feeds. Één daarvan is morgen voorpagina. Vind het eerst — gratis, geen account.",
+      "subtitle": "Terwijl je deze pagina leest, bleef het bewegen — {{chokepoints}} knelpunten, {{hotspots}} hotspots, {{stockExchanges}} beurzen, {{feeds}} curated feedbronnen. Één ervan is morgens frontpagina. Vind het eerst — gratis, geen account.",
       "button": "Vind het eerst",
       "note": "Gratis · Geen registratie · Laadt in seconden",
       "secondary": "Of bekijk Pro-plannen →"

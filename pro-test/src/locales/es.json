@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor no es un Palantir de código abierto",
       "asOf": "A partir del {{date}}",
       "whatIsTitle": "¿Qué es World Monitor?",
-      "whatIsBody": "World Monitor es un dashboard gratuito y de código abierto que transmite señales de geopolítica, mercados, transporte marítimo, aviación, infraestructura y ciberseguridad a un mapa mundial en vivo. Correlaciona {{feeds}} fuentes diferentes en una imagen operativa única y detecta convergencias antes de los titulares, con cada cifra documentada y cada método transparente."
+      "whatIsBody": "World Monitor es un dashboard gratuito y de código abierto que transmite señales de geopolítica, mercados, transporte marítimo, aviación, infraestructura y ciberseguridad a un mapa mundial en vivo. Correlaciona feeds separados de {{feeds}} fuentes en una única imagen operativa e identifica convergencias antes de los titulares, con cada dato documentado y cada metodología verificada."
     },
     "live": {
       "eyebrow": "En vivo ahora mismo",
@@ -650,7 +650,7 @@
       "title2": "Pro es la sala de operaciones.",
       "sub": "El panel de control es gratuito: cada capa de mapa excepto Resilience, cada feed, sin registro. Pro añade la capa de decisión.",
       "freeTitle": "Gratis",
-      "freeDesc": "El nivel gratuito es un producto completo, no una prueba. Todas las capas del mapa excepto Resiliencia, todas las {{feeds}} fuentes, los seis monitores — sin registro, sin límite de prueba.",
+      "freeDesc": "El plan gratuito es un producto completo, no una prueba. Todas las capas del mapa excepto Resilience, todos los feeds de {{feeds}} fuentes, los seis monitores — sin registro, sin límite de tiempo.",
       "freeF1": "Todas las capas de mapa excepto Resilience y feeds curados",
       "freeF2": "Resúmenes de países, puntos de acceso, puntuaciones de inestabilidad",
       "freeF3": "Cuellos de botella, cables, análisis en cascada",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "¿Cómo empiezo a monitorear el mapa mundial?",
-      "subtitle": "Mientras leías esta página siguió moviéndose — {{chokepoints}} puntos de estrangulamiento, {{hotspots}} puntos críticos, {{stockExchanges}} bolsas, {{feeds}} fuentes curadas. Uno de ellos es la noticia de mañana. Encuéntralo primero — gratis, sin cuenta.",
+      "subtitle": "Mientras lees esta página siguió moviéndose — {{chokepoints}} puntos de estrangulamiento, {{hotspots}} puntos críticos, {{stockExchanges}} bolsas, {{feeds}} fuentes de feeds curadas. Una de ellas será la portada de mañana. Encuéntrala primero — gratuito, sin cuenta.",
       "button": "Encuéntralo primero",
       "note": "Gratis · Sin registro · Se carga en segundos",
       "secondary": "O ve los planes Pro →"

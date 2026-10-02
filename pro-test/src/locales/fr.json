@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor n'est pas un Palantir open-source",
       "asOf": "Au {{date}}",
       "whatIsTitle": "Qu'est-ce que World Monitor ?",
-      "whatIsBody": "World Monitor est un tableau de bord gratuit et open-source qui diffuse les signaux de géopolitique, marchés, transport maritime, aviation, infrastructure et cyber sur une carte mondiale en direct. Il corrèle {{feeds}} flux distincts en une seule image opérationnelle et signale les convergences avant les gros titres, chaque chiffre étant sourcé et chaque méthode documentée."
+      "whatIsBody": "World Monitor est un tableau de bord gratuit et open-source qui diffuse les signaux géopolitiques, des marchés, du transport maritime, de l'aviation, des infrastructures et de la cybersécurité sur une carte mondiale en direct. Il agrège les flux séparés de {{feeds}} sources en une seule vue d'ensemble opérationnelle et signale les convergences avant les gros titres, chaque chiffre étant sourcé et chaque méthode documentée."
     },
     "live": {
       "eyebrow": "En direct maintenant",
@@ -650,7 +650,7 @@
       "title2": "Pro est la salle des opérations.",
       "sub": "Le tableau de bord est gratuit — chaque couche de carte sauf Resilience, chaque flux, aucune inscription. Pro ajoute la couche décisionnelle.",
       "freeTitle": "Free",
-      "freeDesc": "Le tier gratuit est un produit complet, pas un essai. Chaque couche de carte sauf Résilience, tous les {{feeds}} flux, tous les six moniteurs — pas d'inscription, pas de minuteur d'essai.",
+      "freeDesc": "L'offre gratuite est un produit complet, pas un essai. Chaque couche de la carte sauf Resilience, chaque flux de {{feeds}} sources, les six moniteurs — sans inscription, sans limite d'essai.",
       "freeF1": "Toutes les couches cartographiques sauf Résilience et flux organisés",
       "freeF2": "Brefs pays, points chauds, scores d'instabilité",
       "freeF3": "Points d'étranglement, câbles, analyse en cascade",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Comment commencer à surveiller la carte mondiale ?",
-      "subtitle": "Pendant que vous lisez cette page, elle continuait d'évoluer — {{chokepoints}} points d'étranglement, {{hotspots}} points chauds, {{stockExchanges}} bourses, {{feeds}} flux sélectionnés. L'un d'eux est la première page de demain. Trouvez-le en premier — gratuit, sans compte.",
+      "subtitle": "Pendant que vous lisiez cette page, elle continuait à se mettre à jour — {{chokepoints}} points d'étranglement, {{hotspots}} zones critiques, {{stockExchanges}} bourses, {{feeds}} sources de flux curées. L'une d'elles sera la première page de demain. Trouvez-la en premier — gratuit, sans compte.",
       "button": "Trouvez-le en premier",
       "note": "Gratuit · Pas d'inscription · Se charge en secondes",
       "secondary": "Ou voir les forfaits Pro →"

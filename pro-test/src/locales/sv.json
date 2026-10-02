@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor är inte en öppen källkod Palantir",
       "asOf": "Per {{date}}",
       "whatIsTitle": "Vad är World Monitor?",
-      "whatIsBody": "World Monitor är en gratis, öppen källkods-dashboard som streamar geopolitik, marknader, sjöfart, luftfart, infrastruktur och cyber-signaler på en live-världskarta. Den korrelerar {{feeds}} separata flöden till en samlad operativ bild och flaggar konvergens före rubriker, med varje siffra källhänvisad och varje metod dokumenterad."
+      "whatIsBody": "World Monitor är en gratis, öppen instrumentpanel som streamar geopolitik, marknader, sjöfart, luftfart, infrastruktur och cybersignaler på en live världskarta. Den korrelerar separata flöden från {{feeds}} källor till en gemensam lägesbild och flaggar konvergens före rubrikerna, med varje siffra källhänvisad och varje metod dokumenterad."
     },
     "live": {
       "eyebrow": "Live just nu",
@@ -650,7 +650,7 @@
       "title2": "Pro är operationsrummet.",
       "sub": "Instrumentpanelen är gratis — varje kartlager utom Resilience, alla flöden, ingen registrering. Pro lägger till beslutlagret.",
       "freeTitle": "Gratis",
-      "freeDesc": "Den gratis nivån är en fullständig produkt, inte en testversion. Alla kartlager förutom Resilience, alla {{feeds}} flöden, alla sex övervakningar — ingen registrering, ingen provklocka.",
+      "freeDesc": "Den kostnadsfria nivån är en fullständig produkt, inte en provversion. Varje kartlager utom Resilience, varje flöde från {{feeds}} källor, alla sex monitorer — ingen registrering, ingen tidsgräns.",
       "freeF1": "Alla kartlager utom Resilience & kurerade flöden",
       "freeF2": "Landsbeskrivningar, hotspots, instabilitetsscore",
       "freeF3": "Flaskhalsar, kablar, kaskadanalys",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Hur kommer jag igång med att övervaka världskartan?",
-      "subtitle": "Medan du läser den här sidan fortsatte den att röra sig — {{chokepoints}} flaskhalsar, {{hotspots}} spänningsområden, {{stockExchanges}} börser, {{feeds}} kurerade flöden. En av dem är imorgons försättsida. Hitta den först — gratis, ingen konto.",
+      "subtitle": "Medan du läste denna sida fortsatte det att förändras — {{chokepoints}} flaskhalsar, {{hotspots}} kritiska områden, {{stockExchanges}} börser, {{feeds}} kurerade feedkällor. En av dem är imorgons frontpage. Hitta den först — gratis, utan konto.",
       "button": "Hitta den först",
       "note": "Gratis · Ingen registrering · Laddar på sekunder",
       "secondary": "Eller se Pro-planer →"

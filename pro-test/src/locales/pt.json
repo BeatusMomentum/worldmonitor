@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor não é um Palantir de código aberto",
       "asOf": "Em {{date}}",
       "whatIsTitle": "O que é World Monitor?",
-      "whatIsBody": "World Monitor é um dashboard gratuito e de código aberto que transmite sinais de geopolítica, mercados, transporte marítimo, aviação, infraestrutura e cibersegurança em um único mapa-múndi ao vivo. Correlaciona {{feeds}} feeds distintos em uma visão operacional unificada e sinaliza convergências antes dos títulos, com cada dado rastreado e cada método documentado."
+      "whatIsBody": "World Monitor é um dashboard gratuito e de código aberto que transmite sinais de geopolítica, mercados, navegação marítima, aviação, infraestrutura e cibernética em um único mapa ao vivo. Ele correlaciona feeds separados de {{feeds}} fontes em uma única imagem operacional e sinaliza convergências antes dos headlines, com cada número rastreado e cada método documentado."
     },
     "live": {
       "eyebrow": "Ao vivo agora",
@@ -650,7 +650,7 @@
       "title2": "Pro é a sala de operações.",
       "sub": "O dashboard é gratuito — todas as camadas de mapa exceto Resilience, todos os feeds, sem cadastro. Pro adiciona a camada de decisão.",
       "freeTitle": "Grátis",
-      "freeDesc": "O nível gratuito é um produto completo, não um trial. Toda camada do mapa exceto Resiliência, todos os {{feeds}} feeds, todos os seis monitores — sem cadastro, sem relógio de trial.",
+      "freeDesc": "O plano gratuito é um produto completo, não uma avaliação. Todas as camadas de mapa exceto Resilience, todos os feeds de {{feeds}} fontes, todos os seis monitores — sem cadastro, sem limite de tempo.",
       "freeF1": "Todas as camadas de mapa exceto Resilience e feeds curados",
       "freeF2": "Resumos de país, pontos de acesso, pontuações de instabilidade",
       "freeF3": "Pontos críticos, cabos, análise em cascata",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Como começo a monitorar o mapa do mundo?",
-      "subtitle": "Enquanto você lê esta página, ela seguiu evoluindo — {{chokepoints}} pontos críticos, {{hotspots}} pontos de tensão, {{stockExchanges}} bolsas, {{feeds}} feeds curados. Um deles é a manchete de amanhã. Encontre primeiro — gratuito, sem conta.",
+      "subtitle": "Enquanto você lê esta página, ela continuou se movimentando — {{chokepoints}} pontos de estrangulamento, {{hotspots}} pontos críticos, {{stockExchanges}} bolsas, {{feeds}} fontes de feed curadas. Uma delas será a primeira página de amanhã. Encontre primeiro — gratuito, sem conta.",
       "button": "Encontre primeiro",
       "note": "Gratuito · Sem inscrição · Carrega em segundos",
       "secondary": "Ou veja planos Pro →"

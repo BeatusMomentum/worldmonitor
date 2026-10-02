@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor non è un Palantir open-source",
       "asOf": "A partire dal {{date}}",
       "whatIsTitle": "Cos'è World Monitor?",
-      "whatIsBody": "World Monitor è un dashboard gratuito e open-source che trasmette segnali di geopolitica, mercati, shipping, aviazione, infrastrutture e cyber su una mappa mondiale live. Correla {{feeds}} feed separati in un'unica situazione operativa e segnala convergenze prima dei titoli, con ogni dato tracciato e ogni metodo documentato."
+      "whatIsBody": "World Monitor è una dashboard gratuita e open-source che trasmette segnali di geopolitica, mercati, spedizioni marittime, aviazione, infrastrutture e cyber su un'unica mappa mondiale in tempo reale. Correla i feed separati da {{feeds}} fonti in un'unica visione operativa e segnala le convergenze prima dei titoli di stampa, con ogni dato verificato e ogni metodo documentato."
     },
     "live": {
       "eyebrow": "Live in questo momento",
@@ -650,7 +650,7 @@
       "title2": "Pro è la sala operativa.",
       "sub": "La dashboard è gratuita — ogni livello di mappa eccetto Resilience, ogni feed, nessuna registrazione. Pro aggiunge il livello decisionale.",
       "freeTitle": "Free",
-      "freeDesc": "Il tier gratuito è un prodotto completo, non una prova. Ogni livello della mappa tranne Resilience, tutti {{feeds}} feed, tutti e sei i monitor — nessuna registrazione, nessun timer di prova.",
+      "freeDesc": "Il tier gratuito è un prodotto completo, non una prova. Ogni livello della mappa tranne Resilience, ogni feed da {{feeds}} fonti, tutti e sei i monitor — senza registrazione, senza scadenza di prova.",
       "freeF1": "Tutti i layer mappe tranne Resilience e feed curati",
       "freeF2": "Brief nazionali, hotspot, punteggi di instabilità",
       "freeF3": "Chokepoint, cavi, analisi a cascata",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Come inizio a monitorare la mappa mondiale?",
-      "subtitle": "Mentre leggi questa pagina ha continuato a muoversi — {{chokepoints}} strozzature, {{hotspots}} zone critiche, {{stockExchanges}} borse, {{feeds}} feed curati. Una di loro è la prima pagina di domani. Trovala per primo — gratuito, senza account.",
+      "subtitle": "Mentre leggi questa pagina continua a muoversi — {{chokepoints}} strozzature, {{hotspots}} zone calde, {{stockExchanges}} borse, {{feeds}} fonti di feed curate. Una di esse sarà la prima pagina di domani. Trovalas per primo — gratuito, senza account.",
       "button": "Scoprilo per primo",
       "note": "Gratuito · Senza iscrizione · Si carica in secondi",
       "secondary": "Oppure visualizza i piani Pro →"

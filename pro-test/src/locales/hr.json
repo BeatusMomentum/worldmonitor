@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor nije otvoreni kod Palantira",
       "asOf": "Stanje od {{date}}",
       "whatIsTitle": "Što je World Monitor?",
-      "whatIsBody": "World Monitor je besplatna, open-source nadzorna ploča koja u realnom vremenu prikazuje geopolitiku, tržišta, brodski promet, zrakoplovstvo, infrastrukturu i cyber signale na jednoj svjetskoj karti. Koordinira {{feeds}} odvojenih izvora u jedinstvenu operativnu sliku i označava konvergencije prije nego što postanu vijesti, sa svakim podatkom verificiranim i svakom metodom dokumentiranom."
+      "whatIsBody": "World Monitor je besplatan, otvorenog koda dashboard koji prikazuje geopolitiku, trzište, pomorski promet, zrakoplovstvo, infrastrukturu i cyber signale na jednoj živoj svjetskoj karti. Ujedinjuje odvojene streamove iz {{feeds}} izvora u jednu operativnu sliku i označava konvergenciju prije nego što se pojavi u medijima, sa svakom cifrom dokumentiranom i svakom metodom objašnjenom."
     },
     "live": {
       "eyebrow": "Uživo sada",
@@ -650,7 +650,7 @@
       "title2": "Pro je operacijska soba.",
       "sub": "Nadzorna ploča je besplatna — svi slojevi mapa osim Resilience, svi feedovi, bez prijave. Pro dodaje sloj odlučivanja.",
       "freeTitle": "Besplatno",
-      "freeDesc": "Besplatna razina je potpuni proizvod, ne pokušaj. Svaki sloj karte osim Otpornosti, svih {{feeds}} izvora, svi šest monitora — bez registracije, bez vremenskog ograničenja.",
+      "freeDesc": "Besplatna razina je kompletan proizvod, nije trial verzija. Svaki sloj karte osim Resilience, svaki stream iz {{feeds}} izvora, svih šest monitora — bez registracije, bez vremenskog ograničenja.",
       "freeF1": "Svi slojevi karte osim Resilience & kurirani feedovi",
       "freeF2": "Tehnološki pregledi država, hotspoti, bodovi nestabilnosti",
       "freeF3": "Uska grla, kabeli, analiza kaskade",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Kako početi pratiti mapu svijeta?",
-      "subtitle": "Dok ste čitali ovu stranicu, ona se nastavila mijenjati — {{chokepoints}} kritičnih točaka, {{hotspots}} točaka napetosti, {{stockExchanges}} burzi, {{feeds}} kurizirani izvori. Jedan od njih je sutrašnja naslovnica. Pronađite ga prvi — besplatno, bez računa.",
+      "subtitle": "Dok čitate ovu stranicu, situacija se mijenja — {{chokepoints}} ključnih točaka, {{hotspots}} žarišta, {{stockExchanges}} burzi, {{feeds}} kurirane izvore streamova. Jedan od njih bit će sutrašnja glavna vijest. Pronađite ga prvi — besplatno, bez računa.",
       "button": "Pronađi ga prvi",
       "note": "Besplatno · Bez prijave · Učitava se u sekundama",
       "secondary": "Ili pogledaj Pro planove →"

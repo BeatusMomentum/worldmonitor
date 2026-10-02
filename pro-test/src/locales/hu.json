@@ -485,7 +485,7 @@
       "positioningLink": "A WorldMonitor nem nyílt forráskódú Palantir",
       "asOf": "Állapot: {{date}}",
       "whatIsTitle": "Mi az a World Monitor?",
-      "whatIsBody": "A World Monitor egy ingyenes, nyílt forráskódú műszerfaloldal, amely geopolitikai, piaci, hajózási, légi közlekedési, infrastruktúra- és kiberjeleket közvetít egy élő világtérképre. {{feeds}} különálló forrást egy operatív képpé kapcsol össze, és az összefüggéseket a hírek előtt jelzi meg, minden adat forrásozott és minden módszer dokumentált."
+      "whatIsBody": "A World Monitor egy ingyenes, nyílt forráskódú dashboard, amely geopolitikai, piaci, hajózási, légiközlekedési, infrastruktúrális és kibertérben lezajló jeleket streamel egy élő világtérképre. {{feeds}} forrásból származó különálló feed-eket egyetlen operatív képpé korrelál és a címsorok előtt jelzi a konvergenciákat – minden adat forrásokkal alátámasztott és minden módszer dokumentált."
     },
     "live": {
       "eyebrow": "Most élő",
@@ -650,7 +650,7 @@
       "title2": "A Pro az operatív központ.",
       "sub": "Az irányítópult ingyenes — minden térképréteg kivéve a Resilience, minden adatforrás, regisztráció nélkül. A Pro verzió hozzáadja a döntésmeghozatali réteget.",
       "freeTitle": "Ingyenes",
-      "freeDesc": "Az ingyenes verzió teljes termék, nem próbaidőszak. Minden térkép réteg a Rugalmassági réteg kivételével, mind {{feeds}} forrás, mind hat monitor — nincs regisztráció, nincs próbaidőszak számláló.",
+      "freeDesc": "Az ingyenes csomag egy teljes termék, nem próbaverzió. Az összes térképréteg kivéve a Resilience funkciót, {{feeds}} forrásból származó összes feed, mind a hat monitor — nincs regisztrációs kötelezettség, nincs próbaidő.",
       "freeF1": "Összes térképréteg kivéve a Resilience & válogatott feedek",
       "freeF2": "Országösszefoglalók, hotspotok, instabilitási pontok",
       "freeF3": "Szoros keresztmetszetek, kábelek, kaszkád-analízis",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Hogyan kezdhetek a világtérkép figyelésbe?",
-      "subtitle": "Amíg ezt az oldalt olvasod, mozgott — {{chokepoints}} szűk keresztmetszet, {{hotspots}} kritikus pont, {{stockExchanges}} tőzsde, {{feeds}} kurátorált forrás. Az egyike holnap első oldala. Találd meg először — ingyenes, nincs fiók.",
+      "subtitle": "Amíg ezt az oldalt olvasod, továbbra is változott — {{chokepoints}} szoros pont, {{hotspots}} gócpont, {{stockExchanges}} tőzsde, {{feeds}} kurátorált feed-forrás. Az egyik közülük holnap az első oldal. Találd meg először — ingyenes, nincs fiók szükséges.",
       "button": "Találd meg először",
       "note": "Ingyenes · Nincs regisztráció · Másodpercekben betöltődik",
       "secondary": "Vagy tekintsd meg a Pro csomagokat →"

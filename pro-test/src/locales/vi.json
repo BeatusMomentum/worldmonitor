@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor không phải là Palantir mã nguồn mở",
       "asOf": "Tính đến {{date}}",
       "whatIsTitle": "World Monitor là gì?",
-      "whatIsBody": "World Monitor là một dashboard mã nguồn mở miễn phí giúp truyền phát các tín hiệu địa chính trị, thị trường, vận tải hàng hải, hàng không, cơ sở hạ tầng và mạng lên một bản đồ thế giới trực tiếp. Nó kết hợp {{feeds}} nguồn cấp dữ liệu riêng biệt thành một bức tranh hoạt động duy nhất và cảnh báo sự hội tụ trước khi có tiêu đề, với mọi con số được lấy từ nguồn và mọi phương pháp được ghi chép."
+      "whatIsBody": "World Monitor là một bảng điều khiển miễn phí, mã nguồn mở lấy dữ liệu địa chính trị, thị trường, vận tải biển, hàng không, cơ sở hạ tầng và tín hiệu an ninh mạng rồi ghép vào một bản đồ thế giới trực tiếp. Nó tương quan các nguồn cấp dữ liệu riêng biệt từ {{feeds}} nguồn thành một bức tranh toàn cảnh duy nhất và phát hiện sự hội tụ trước khi có tiêu đề, với mọi con số đều có nguồn và mọi phương pháp đều được ghi chép."
     },
     "live": {
       "eyebrow": "Trực tiếp ngay bây giờ",
@@ -650,7 +650,7 @@
       "title2": "Pro là phòng hoạt động.",
       "sub": "Bảng điều khiển là miễn phí — mọi lớp bản đồ ngoại trừ Resilience, mọi nguồn cấp dữ liệu, không cần đăng ký. Pro thêm lớp quyết định.",
       "freeTitle": "Miễn phí",
-      "freeDesc": "Gói miễn phí là một sản phẩm đầy đủ, không phải bản dùng thử. Mọi lớp bản đồ ngoại trừ Khả năng phục hồi, tất cả {{feeds}} nguồn cấp dữ liệu, tất cả sáu màn hình — không cần đăng ký, không có đồng hồ dùng thử.",
+      "freeDesc": "Phiên bản miễn phí là sản phẩm đầy đủ, không phải bản dùng thử. Mọi lớp bản đồ ngoại trừ Resilience, mọi nguồn cấp từ {{feeds}} nguồn, cả sáu màn hình giám sát — không cần đăng ký, không có thời gian dùng thử.",
       "freeF1": "Tất cả các lớp bản đồ ngoại trừ Resilience & các nguồn cấp được chọn lọc",
       "freeF2": "Tóm tắt quốc gia, điểm nóng, chỉ số bất ổn định",
       "freeF3": "Điểm nghẽn, cáp, phân tích tầng vòng",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Làm cách nào tôi bắt đầu theo dõi bản đồ thế giới?",
-      "subtitle": "Trong khi bạn đọc trang này, nó vẫn tiếp tục chuyển động — {{chokepoints}} điểm nghẽn, {{hotspots}} điểm nóng, {{stockExchanges}} sàn giao dịch, {{feeds}} nguồn cấp dữ liệu được quản tuyển. Một trong số chúng là trang đầu tiên ngày mai. Tìm nó trước — miễn phí, không cần tài khoản.",
+      "subtitle": "Trong lúc bạn đọc trang này, nó vẫn tiếp tục thay đổi — {{chokepoints}} chốt bị cổ chai, {{hotspots}} điểm nóng, {{stockExchanges}} sàn giao dịch, {{feeds}} nguồn cấp dữ liệu được lọc. Một trong số đó sẽ là tin chính trong ngày mai. Tìm thấy nó trước — miễn phí, không cần tài khoản.",
       "button": "Tìm thấy nó trước",
       "note": "Miễn phí · Không đăng ký · Tải trong vài giây",
       "secondary": "Hoặc xem các gói Pro →"

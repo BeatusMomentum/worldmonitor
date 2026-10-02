@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor není open-source Palantir",
       "asOf": "K {{date}}",
       "whatIsTitle": "Co je World Monitor?",
-      "whatIsBody": "World Monitor je bezplatný open-source dashboard, který streamuje geopolitické signály, trhy, námořní dopravu, letectví, infrastrukturu a kybernetiku na jednu živou světovou mapu. Koreluje {{feeds}} samostatných zdrojů do jednoho operačního přehledu a upozorňuje na konvergenci před titulky, přičemž každá data jsou zdrojována a každá metoda zdokumentována."
+      "whatIsBody": "World Monitor je bezplatný open-source dashboard, který streamuje geopolitiku, trhy, námořní dopravu, letectví, infrastrukturu a kybernetické signály na jednu živou mapu světa. Koreluje samostatné zdroje od {{feeds}} zdrojů do jednoho provozního obrazu a upozorňuje na konvergenci před titulky – každá číslice je zdrojovaná a každá metoda dokumentovaná."
     },
     "live": {
       "eyebrow": "Live právě teď",
@@ -650,7 +650,7 @@
       "title2": "Pro je operační místnost.",
       "sub": "Dashboard je zdarma — všechny mapové vrstvy kromě Resilience, všechny zdroje, bez registrace. Pro přidává vrstvu rozhodování.",
       "freeTitle": "Zdarma",
-      "freeDesc": "Bezplatná úroveň je plný produkt, ne zkušební verze. Všechny vrstvy mapy kromě Odolnosti, všechny {{feeds}} zdroje, všech šest monitorů — bez registrace, bez časového omezení.",
+      "freeDesc": "Bezplatná úroveň je plný produkt, ne zkušební verze. Každá vrstva mapy kromě Resilience, každý feed ze {{feeds}} zdrojů, všech šest monitorů – bez registrace, bez zkušební doby.",
       "freeF1": "Všechny mapové vrstvy kromě Resilience & kurovaných kanálů",
       "freeF2": "Zemské briefy, hotspoty, skóry instability",
       "freeF3": "Kritické průchody, kabely, analýza kaskád",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Jak začít sledovat mapu světa?",
-      "subtitle": "Zatímco jste četli tuto stránku, pokračovalo to dál — {{chokepoints}} průsmyků, {{hotspots}} ohnisek, {{stockExchanges}} burz, {{feeds}} kurátu zdrojů. Jeden z nich je zítřejší titulní strana. Najděte jej první — zdarma, bez účtu.",
+      "subtitle": "Zatímco čtete tuto stránku, pokračoval – {{chokepoints}} uzavřených míst, {{hotspots}} ohnisek, {{stockExchanges}} burz, {{feeds}} kurátorských zdrojů. Jeden z nich bude zítřejší titulní strana. Objevte jej první – bezplatně, bez účtu.",
       "button": "Najdi jej první",
       "note": "Zdarma · Bez registrace · Načte se za sekundy",
       "secondary": "Nebo podívej se na Pro plány →"

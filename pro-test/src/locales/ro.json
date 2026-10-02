@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor nu este un Palantir open-source",
       "asOf": "Din {{date}}",
       "whatIsTitle": "Ce este World Monitor?",
-      "whatIsBody": "World Monitor este un dashboard gratuit și open-source care transmite semnale de geopolitică, piețe, transport maritim, aviație, infrastructură și cyber pe o hartă vie a lumii. Corelează {{feeds}} fluxuri separate într-o imagine operațională unificată și semnalează convergențe înainte de titluri, cu fiecare cifră documentată și fiecare metodă explicită."
+      "whatIsBody": "World Monitor este un tablou de bord gratuit și open-source care transmite semnale de geopolitică, piețe, transport maritim, aviație, infrastructură și securitate cibernetică pe o hartă mondială live. Corelează fluxuri separate din {{feeds}} surse într-o singură imagine operațională și semnalează convergența înainte de titluri, cu fiecare cifră documentată și fiecare metodă explicită."
     },
     "live": {
       "eyebrow": "Live chiar acum",
@@ -650,7 +650,7 @@
       "title2": "Pro este sala operațiilor.",
       "sub": "Tabloul de bord este gratuit — fiecare strat de hartă în afară de Resilience, fiecare flux, fără înregistrare. Pro adaugă stratul de decizie.",
       "freeTitle": "Free",
-      "freeDesc": "Nivelul gratuit este un produs complet, nu o versiune de probă. Fiecare strat de hartă cu excepția Rezilienței, toate {{feeds}} fluxurile, toate șase monitoarele — fără înregistrare, fără ceas de probă.",
+      "freeDesc": "Nivelul gratuit este un produs complet, nu o versiune de probă. Fiecare strat de hartă cu excepția Resilience, fiecare flux din {{feeds}} surse, toți șase monitorul — fără înregistrare, fără ceas de probă.",
       "freeF1": "Toate straturile de hartă, cu excepția Resilience și fluxuri curate",
       "freeF2": "Rezumate țări, puncte fierbinți, scoruri de instabilitate",
       "freeF3": "Puncte critice, cabluri, analiză în cascadă",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Cum încep să monitorizez harta lumii?",
-      "subtitle": "În timp ce citești această pagină, aceasta a continuat să se miște — {{chokepoints}} puncte critice, {{hotspots}} zone fierbinți, {{stockExchanges}} burse, {{feeds}} fluxuri curate. Unul dintre ele este prima pagină de mâine. Găsește-l mai întâi — gratuit, fără cont.",
+      "subtitle": "În timp ce citești această pagină, aceasta a continuat să se schimbe — {{chokepoints}} puncte de strangulare, {{hotspots}} focare, {{stockExchanges}} bănci, {{feeds}} surse de flux curate. Una dintre ele este prima pagină de mâine. Găsește-o mai întâi — gratuit, fără cont.",
       "button": "Găsește-l primul",
       "note": "Gratuit · Fără înregistrare · Se încarcă în secunde",
       "secondary": "Sau vezi planuri Pro →"

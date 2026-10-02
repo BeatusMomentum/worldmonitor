@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor açık kaynaklı bir Palantir değil",
       "asOf": "{{date}} itibarıyla",
       "whatIsTitle": "World Monitor Nedir?",
-      "whatIsBody": "World Monitor, jeopolitik, piyasalar, denizcilik, havacılık, altyapı ve siber sinyalleri tek bir canlı dünya haritasına aktaran ücretsiz, açık kaynak bir paneldir. {{feeds}} ayrı akışı tek bir operasyonel görüntüde birleştirir ve haberler çıkmadan önce yakınsamaları işaretler; her rakam kaynak gösterir, her yöntem belgelidir."
+      "whatIsBody": "World Monitor, jeopolitik, pazar, denizcilik, havacılık, altyapı ve siber istihbarat sinyallerini tek bir canlı dünya haritasına akan ücretsiz, açık kaynaklı bir paneldir. {{feeds}} kaynaktan gelen ayrı beslemeleri tek bir operasyon resminde birleştirir ve haberlerden önce yakınsamaları flagler; her rakam kaynaklı ve her yöntem belgelenir."
     },
     "live": {
       "eyebrow": "Şu anda canlı",
@@ -650,7 +650,7 @@
       "title2": "Pro operasyon odasıdır.",
       "sub": "Pano ücretsiz — Resilience hariç her harita katmanı, her feed, kayıt gerekmiyor. Pro karar katmanını ekler.",
       "freeTitle": "Ücretsiz",
-      "freeDesc": "Ücretsiz seviye tam bir üründür, deneme değil. Dayanıklılık hariç tüm harita katmanları, tüm {{feeds}} akışı, altı monitorun tamamı — kayıt yok, deneme saati yok.",
+      "freeDesc": "Ücretsiz katman tam bir üründür, deneme sürümü değildir. Resilience dışındaki her harita katmanı, {{feeds}} kaynaktan gelen her besleme, tüm altı monitör — kayıt yok, deneme saati yok.",
       "freeF1": "Resilience hariç tüm harita katmanları ve seçilmiş beslemeler",
       "freeF2": "Ülke brifler, sıcak noktalar, istikrarsızlık puanları",
       "freeF3": "Boğazlar, kablolar, kaskad analizi",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Dünya haritasını izlemeye nasıl başlarım?",
-      "subtitle": "Bu sayfayı okurken hareket etmeye devam etti — {{chokepoints}} dar geçit, {{hotspots}} sıcak nokta, {{stockExchanges}} borsa, {{feeds}} seçkin akış. Bunlardan biri yarının manşeti. Önce bulun — ücretsiz, hesap yok.",
+      "subtitle": "Bu sayfayı okurken harita güncellendi — {{chokepoints}} darboğaz, {{hotspots}} kriz bölgesi, {{stockExchanges}} borsa, {{feeds}} seçkin besleme kaynağı. Bunlardan biri yarının manşet haberi olacak. Önce bulun — ücretsiz, hesap gerektirmez.",
       "button": "İlk olarak bul",
       "note": "Ücretsiz · Kaydolmaya gerek yok · Saniyeler içinde yüklenir",
       "secondary": "Veya Pro planlarını görmek →"

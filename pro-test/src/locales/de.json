@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor ist kein Open-Source-Palantir",
       "asOf": "Stand: {{date}}",
       "whatIsTitle": "Was ist World Monitor?",
-      "whatIsBody": "World Monitor ist ein kostenloses, Open-Source-Dashboard, das geopolitische Signale, Märkte, Schiffe, Luftfahrt, Infrastruktur und Cyber auf eine Live-Weltkarte streamt. Es korreliert {{feeds}} separate Datenquellen in ein einheitliches Lagebild und flaggt Konvergenz vor den Schlagzeilen – jede Zahl ist belegt und jede Methode dokumentiert."
+      "whatIsBody": "World Monitor ist ein kostenloses Open-Source-Dashboard, das geopolitische Signale, Märkte, Schifffahrt, Luftfahrt, Infrastruktur und Cyber-Daten auf eine Live-Weltkarte streamt. Es korreliert separate Feeds von {{feeds}} Quellen in ein einziges Lagebild und kennzeichnet Konvergenzen vor Schlagzeilen, wobei jede Zahl belegt und jede Methode dokumentiert ist."
     },
     "live": {
       "eyebrow": "Live jetzt",
@@ -650,7 +650,7 @@
       "title2": "Pro ist der Operationsraum.",
       "sub": "Das Dashboard ist kostenlos — jede Kartenschicht außer Resilience, jeden Feed, keine Anmeldung. Pro fügt die Entscheidungsebene hinzu.",
       "freeTitle": "Kostenlos",
-      "freeDesc": "Die kostenlose Stufe ist ein vollständiges Produkt, keine Testversion. Jede Kartenschicht außer Resilienz, alle {{feeds}} Datenquellen, alle sechs Monitore – keine Anmeldung, keine Testphase.",
+      "freeDesc": "Der kostenlose Plan ist ein vollständiges Produkt, kein Test. Jede Kartenschicht außer Resilience, jeden Feed von {{feeds}} Quellen, alle sechs Monitore — keine Anmeldung, keine Testzeit.",
       "freeF1": "Alle Kartenebenen außer Resilience & kuratierte Feeds",
       "freeF2": "Länderübersichten, Hotspots, Instabilitätsbewertungen",
       "freeF3": "Engpässe, Kabel, Kaskadenanalyse",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Wie starte ich die Überwachung der Weltkarte?",
-      "subtitle": "Während du diese Seite liest, hat sich alles weiterbewegt – {{chokepoints}} Engpässe, {{hotspots}} Brennpunkte, {{stockExchanges}} Börsen, {{feeds}} kuratierte Datenquellen. Eine davon ist morgens Schlagzeile. Finde sie zuerst – kostenlos, ohne Konto.",
+      "subtitle": "Während Sie diese Seite lesen, ändert sich die Situation weiter — {{chokepoints}} Engpässe, {{hotspots}} Brennpunkte, {{stockExchanges}} Börsen, {{feeds}} kuratierte Feed-Quellen. Eine davon ist morgen die Schlagzeile. Finden Sie sie zuerst — kostenlos, ohne Konto.",
       "button": "Finden Sie ihn zuerst",
       "note": "Kostenlos · Keine Anmeldung · Lädt in Sekunden",
       "secondary": "Oder siehe Pro-Pläne →"
