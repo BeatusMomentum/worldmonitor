@@ -112,7 +112,6 @@ notices. Local handler/browser proof does not establish deployment, live data
 freshness or store readiness. The change requires no data migration; rollback
 must revert both the server admission behavior and the panel receipt/cache UI.
 
-
 ## All-panel audit and news/dashboard extension
 
 The rule applies to all twelve embedded views. The billing matrix exercises
