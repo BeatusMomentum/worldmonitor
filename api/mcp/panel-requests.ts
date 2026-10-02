@@ -15,7 +15,10 @@ const encoder = new TextEncoder();
 type PanelScope = { country: string; window: string; expires: number };
 export type { PanelAdmission } from '../../shared/country-brief-host';
 export class PanelRequestError extends Error {
-  constructor(message: string, public code: 'invalid' | 'quota' | 'reads' | 'backend', public limit?: number, public retryAfter?: number) { super(message); }
+  constructor(message: string, public code: 'invalid' | 'quota' | 'reads' | 'backend', public limit?: number, public retryAfter?: number) {
+    super(message);
+    this.name = 'PanelRequestError';
+  }
 }
 
 function userId(context: McpAuthContext): string {
