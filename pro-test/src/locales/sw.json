@@ -582,7 +582,7 @@
       "f3Title": "Bonyeza ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} amri. Ruka kwa safu yoyote, paneli au nchi bila kujifunza UI kwanza.",
       "f4Title": "Chagua mtazamo wako",
-      "f4Desc": "Dunia, Teknolojia, Fedha, Bidhaa, Nishati au Happy — injini ileile, wachunguzi sita waliopangwa, kwa mbofyo mmoja.",
+      "f4Desc": "Dunia, Teknolojia, Fedha, Bidhaa, Nishati au Happy — injini ileile, mitazamo sita iliyopangwa, kwa mbofyo mmoja.",
       "f5Title": "Umeoona huenda kama sehemu ya kumi tu",
       "f5Desc": "Aina nyingi za tabaka za ramani za {{mapLayers}} hujitokeza kadiri dunia inavyosonga — mipito ya satelaiti, uvurugaji wa GPS, meli zisizotangaza utambulisho, makundi ya maandamano, arifa za ving'ora.",
       "cta": "Anza saa"
@@ -650,7 +650,7 @@
       "title2": "Pro ni chumba cha uendeshaji.",
       "sub": "Dashboard ni bure kwa $0 — kila tabaka la ramani isipokuwa Resilience, hakuna usajili. Pro inaongeza tabaka la maamuzi.",
       "freeTitle": "Bure",
-      "freeDesc": "Kiwango cha bure ni bidhaa kamili, si jaribio. Kila tabaka la ramani isipokuwa Resilience, waangalizi wote sita — hakuna usajili, hakuna saa ya jaribio.",
+      "freeDesc": "Kiwango cha bure ni bidhaa kamili, si jaribio. Kila tabaka la ramani isipokuwa Resilience, mitazamo yote sita — hakuna usajili, hakuna saa ya jaribio.",
       "freeF1": "Tabaka zote za ramani isipokuwa Endurance & milo iliyoteuliwa",
       "freeF2": "Briefing za nchi, vituo vya hatari, alama za haba na amani",
       "freeF3": "Vituo vikuu, nyuzinyuzi, uchambuzi wa mlipuko",
