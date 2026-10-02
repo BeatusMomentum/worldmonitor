@@ -7,15 +7,15 @@
   "totalTolerancePct": 0.25,
   "totalToleranceBytes": 16384,
   "total": {
-    "raw": 5027239
+    "raw": 5045289
   },
   "chunks": {
     "ar": {
-      "raw": 57812,
+      "raw": 58733,
       "files": 1
     },
     "bg": {
-      "raw": 66913,
+      "raw": 67409,
       "files": 1
     },
     "clerk": {
@@ -23,75 +23,75 @@
       "files": 1
     },
     "cs": {
-      "raw": 42899,
+      "raw": 43350,
       "files": 1
     },
     "de": {
-      "raw": 42658,
+      "raw": 43279,
       "files": 1
     },
     "el": {
-      "raw": 68234,
+      "raw": 69151,
       "files": 1
     },
     "es": {
-      "raw": 44901,
+      "raw": 45374,
       "files": 1
     },
     "fa": {
-      "raw": 48388,
+      "raw": 49689,
       "files": 1
     },
     "fr": {
-      "raw": 46633,
+      "raw": 47233,
       "files": 1
     },
     "hi": {
-      "raw": 73990,
+      "raw": 75116,
       "files": 1
     },
     "hr": {
-      "raw": 42273,
+      "raw": 42805,
       "files": 1
     },
     "hu": {
-      "raw": 46582,
+      "raw": 47190,
       "files": 1
     },
     "index": {
-      "raw": 534689,
+      "raw": 535116,
       "files": 2
     },
     "it": {
-      "raw": 42788,
+      "raw": 43212,
       "files": 1
     },
     "ja": {
-      "raw": 50790,
+      "raw": 51243,
       "files": 1
     },
     "ko": {
-      "raw": 44664,
+      "raw": 45185,
       "files": 1
     },
     "nl": {
-      "raw": 41526,
+      "raw": 41982,
       "files": 1
     },
     "pl": {
-      "raw": 43650,
+      "raw": 44184,
       "files": 1
     },
     "pt": {
-      "raw": 44040,
+      "raw": 44504,
       "files": 1
     },
     "ro": {
-      "raw": 44423,
+      "raw": 45024,
       "files": 1
     },
     "ru": {
-      "raw": 67283,
+      "raw": 67879,
       "files": 1
     },
     "sentry": {
@@ -99,39 +99,39 @@
       "files": 1
     },
     "sv": {
-      "raw": 41481,
+      "raw": 41987,
       "files": 1
     },
     "sw": {
-      "raw": 43476,
+      "raw": 44243,
       "files": 1
     },
     "th": {
-      "raw": 84553,
+      "raw": 85575,
       "files": 1
     },
     "tr": {
-      "raw": 44142,
+      "raw": 44663,
       "files": 1
     },
     "uk": {
-      "raw": 49278,
+      "raw": 50564,
       "files": 1
     },
     "vi": {
-      "raw": 52854,
+      "raw": 53230,
       "files": 1
     },
     "welcome": {
-      "raw": 55623,
+      "raw": 55692,
       "files": 1
     },
     "zh": {
-      "raw": 37922,
+      "raw": 38411,
       "files": 1
     },
     "zh-TW": {
-      "raw": 37973,
+      "raw": 38465,
       "files": 1
     }
   }
