@@ -92,7 +92,9 @@ export const COUNTRY_VIEW_TOOLS: ToolDef[] = [{
       await assertToolFetchOk(response, section, { preserveBackoff: true });
       return bootstrapKeys
         ? z.object({ data: z.record(z.string(), z.unknown()), missing: z.array(z.string()) }).parse(JSON.parse(new TextDecoder().decode(await readBoundedResponseBody(response, COUNTRY_SECTION_BUDGET_BYTES))))
-        : response.json();
+        : ['pipelines', 'facilities', 'shortages', 'pipelineDetail', 'facilityDetail', 'shortageDetail'].includes(section)
+          ? JSON.parse(new TextDecoder().decode(await readBoundedResponseBody(response, COUNTRY_SECTION_BUDGET_BYTES)))
+          : response.json();
     }));
     const denial = results.find(result => result.status === 'rejected' && result.reason instanceof BillingDenialError);
     if (denial?.status === 'rejected') throw denial.reason;

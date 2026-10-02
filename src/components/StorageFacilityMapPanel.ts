@@ -170,7 +170,7 @@ export class StorageFacilityMapPanel extends Panel {
   private detail: GetStorageFacilityDetailResponse | null = null;
   private detailLoading = false;
   private detailError: string | null = null;
-  private detailEvents: EnergyDisruptionEntry[] | undefined = undefined;
+  private detailEvents: EnergyDisruptionEntry[] | null | undefined = undefined;
   private usedHydrationPaint = false;
   private openDetailHandler = (ev: Event): void => {
     const id = (ev as CustomEvent<{ facilityId?: string }>).detail?.facilityId;
@@ -301,16 +301,17 @@ export class StorageFacilityMapPanel extends Panel {
     this.detailEvents = undefined;
     this.render();
     try {
-      const [d, events] = await Promise.allSettled([
-        (this.detailSource ?? getSupplyChainClient()).getStorageFacilityDetail({ facilityId }),
-        (this.detailSource ?? getSupplyChainClient()).listEnergyDisruptions({ assetId: facilityId, assetType: 'storage', ongoingOnly: false }),
-      ]);
+      const timeline = (this.detailSource ?? getSupplyChainClient()).listEnergyDisruptions({ assetId: facilityId, assetType: 'storage', ongoingOnly: false }).catch(() => undefined);
+      const d = await (this.detailSource ?? getSupplyChainClient()).getStorageFacilityDetail({ facilityId });
       if (!this.element?.isConnected || this.selectedId !== facilityId) return;
-      if (d.status === 'rejected') throw d.reason;
-      this.detail = d.value;
-      this.detailEvents = events.status === 'fulfilled' && !events.value.upstreamUnavailable ? events.value.events : undefined;
+      this.detail = d;
       this.detailLoading = false;
       this.render();
+      void timeline.then(events => {
+        if (!this.element?.isConnected || this.selectedId !== facilityId) return;
+        this.detailEvents = events && !events.upstreamUnavailable ? events.events : null;
+        this.render();
+      });
     } catch (error) {
       if (!this.element?.isConnected) return;
       // Mirror the stale-response guard on the failure path: if the user
@@ -332,7 +333,8 @@ export class StorageFacilityMapPanel extends Panel {
   }
 
   private renderDisruptionTimeline(): string {
-    if (this.detailEvents === undefined) return this.detailLoading ? '' : '<div class="sf-evidence"><div class="sf-sub">Disruption timeline unavailable. Asset details remain visible.</div></div>';
+    if (this.detailEvents === undefined) return this.detailLoading ? '' : '<div class="sf-evidence"><div class="sf-sub">Loading disruption timeline…</div></div>';
+    if (this.detailEvents === null) return '<div class="sf-evidence"><div class="sf-sub">Disruption timeline unavailable. Asset details remain visible.</div></div>';
     if (this.detailEvents.length === 0) {
       return `<div class="sf-evidence">
         <div class="sf-sub" style="margin-bottom:6px">Disruption timeline</div>

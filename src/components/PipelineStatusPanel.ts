@@ -181,7 +181,7 @@ export class PipelineStatusPanel extends Panel {
   // Disruption events for the currently-open pipeline. Fetched lazily
   // alongside getPipelineDetail. undefined = not yet fetched;
   // empty array = fetched and no events on file.
-  private detailEvents: EnergyDisruptionEntry[] | undefined = undefined;
+  private detailEvents: EnergyDisruptionEntry[] | null | undefined = undefined;
   private usedHydrationPaint = false;
   private openDetailHandler = (ev: Event): void => {
     const id = (ev as CustomEvent<{ pipelineId?: string }>).detail?.pipelineId;
@@ -319,16 +319,17 @@ export class PipelineStatusPanel extends Panel {
     this.detailEvents = undefined;
     this.render();
     try {
-      const [d, events] = await Promise.allSettled([
-        (this.detailSource ?? getSupplyChainClient()).getPipelineDetail({ pipelineId }),
-        (this.detailSource ?? getSupplyChainClient()).listEnergyDisruptions({ assetId: pipelineId, assetType: 'pipeline', ongoingOnly: false }),
-      ]);
+      const timeline = (this.detailSource ?? getSupplyChainClient()).listEnergyDisruptions({ assetId: pipelineId, assetType: 'pipeline', ongoingOnly: false }).catch(() => undefined);
+      const d = await (this.detailSource ?? getSupplyChainClient()).getPipelineDetail({ pipelineId });
       if (!this.element?.isConnected || this.selectedId !== pipelineId) return;
-      if (d.status === 'rejected') throw d.reason;
-      this.detail = d.value;
-      this.detailEvents = events.status === 'fulfilled' && !events.value.upstreamUnavailable ? events.value.events : undefined;
+      this.detail = d;
       this.detailLoading = false;
       this.render();
+      void timeline.then(events => {
+        if (!this.element?.isConnected || this.selectedId !== pipelineId) return;
+        this.detailEvents = events && !events.upstreamUnavailable ? events.events : null;
+        this.render();
+      });
     } catch (error) {
       if (!this.element?.isConnected) return;
       // Mirror the same stale-response guard the success path uses: if the
@@ -352,7 +353,8 @@ export class PipelineStatusPanel extends Panel {
   }
 
   private renderDisruptionTimeline(): string {
-    if (this.detailEvents === undefined) return this.detailLoading ? '' : '<div class="pp-evidence"><div class="pp-sub">Disruption timeline unavailable. Asset details remain visible.</div></div>';
+    if (this.detailEvents === undefined) return this.detailLoading ? '' : '<div class="pp-evidence"><div class="pp-sub">Loading disruption timeline…</div></div>';
+    if (this.detailEvents === null) return '<div class="pp-evidence"><div class="pp-sub">Disruption timeline unavailable. Asset details remain visible.</div></div>';
     if (this.detailEvents.length === 0) {
       return `<div class="pp-evidence">
         <div class="pp-sub" style="margin-bottom:6px">Disruption timeline</div>

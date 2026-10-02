@@ -155,6 +155,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
   private sections: BriefSection[] = [];
   private outputClose: (() => void) | null = null;
   private atlasRevision = 0;
+  private hostedAtlasBody: HTMLElement | null = null;
   private hostedAtlas: { code: string; signal: AbortSignal; pipelines?: ListPipelinesResponse; facilities?: ListStorageFacilitiesResponse; shortages?: ListFuelShortagesResponse } | null = null;
   private atlasSelection: { type: 'pipeline' | 'storage' | 'shortage'; id: string } | null = null;
   private outputRequestSignal: AbortSignal | null = null;
@@ -298,7 +299,8 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
       this.outputClose?.();
       if (id === 'trade') { this.cachedTradeExposureData = null; this.cachedSectors = []; }
     }
-    const { card, body } = section;
+    const { card } = section;
+    const body = id === 'energy' && this.hostedAtlasBody ? this.energyBody! : section.body;
     const notice = state === 'locked' ? this.makeProLocked(reason) : this.makeEmpty(reason);
     notice.dataset.briefState = state;
     const previous = briefSectionState({ id, title: '', card, body });
@@ -384,6 +386,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     this.economicIndicators = [];
     this.infrastructureByType.clear();
     this.renderSkeleton(country, code, score, signals);
+    if (this.source?.mode === 'host') this.renderAtlasExposure(true);
     this.content.scrollTop = 0;
     this.open();
   }
@@ -593,6 +596,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
   public refreshHostedSections(): void {
     if (this.source?.mode !== 'host' || !this.currentCode) return;
     const code = this.currentCode;
+    this.renderAtlasExposure(true);
     if (this.foodStocksBody) void this.renderFoodStocks(code, this.foodStocksBody);
     if (this.demographicsBody) void this.renderDemographicsCapability(code, this.demographicsBody);
     if (this.fiveFactorScorecardBody) {
@@ -1229,7 +1233,6 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
 
     if (!hasAny) {
       this.energyBody.append(this.makeEmpty('Energy data unavailable for this country.'));
-      if (this.source?.mode === 'host') this.renderAtlasExposure();
       return;
     }
 
@@ -1540,12 +1543,12 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     this.renderAtlasExposure();
   }
 
-  private renderAtlasExposure(): void {
+  private renderAtlasExposure(hostRefresh = false): void {
     if (!this.energyBody) return;
     const iso2 = this.currentCode;
     if (!iso2 || iso2.length !== 2) return;
     if (this.source?.mode === 'host') {
-      void this.loadHostedAtlas(iso2, ++this.atlasRevision, this.signal);
+      if (hostRefresh) void this.loadHostedAtlas(iso2, ++this.atlasRevision, this.signal);
       return;
     }
     const signal = this.signal;
@@ -1648,6 +1651,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
       source.supply.listFuelShortages({ country: '', product: '', severity: '' }, { signal }),
     ]);
     if (signal.aborted || this.signal !== signal || this.currentCode !== code || this.atlasRevision !== revision) return;
+    this.hostedAtlasBody?.replaceChildren();
     const [pipelines, facilities, shortages] = results;
     const data = this.hostedAtlas = { code, signal,
       pipelines: pipelines.status === 'fulfilled' && Array.isArray(pipelines.value.pipelines) ? pipelines.value : undefined,
@@ -1662,8 +1666,8 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     this.appendAtlasRow(`Storage in ${code}`, `${stores.length} facilit${stores.length === 1 ? 'y' : 'ies'}`, stores.map(f => ({ id: f.id, label: f.name, event: 'energy:open-storage-facility-detail', detail: { facilityId: f.id } })));
     this.appendAtlasRow(`Fuel shortages in ${code}`, confirmed ? `${confirmed} confirmed · ${crises.length - confirmed} watch` : `${crises.length} watch`, crises.map(s => ({ id: s.id, label: `${s.product} — ${s.shortDescription}`, event: 'energy:open-fuel-shortage-detail', detail: { shortageId: s.id } })));
     for (const [label, available, result] of [['Pipeline', data.pipelines, pipelines], ['Storage', data.facilities, facilities], ['Fuel shortage', data.shortages, shortages]] as const) {
-      if (available?.upstreamUnavailable) this.energyBody?.append(this.makeEmpty(`${label} Atlas coverage is partial. Counts include only loaded observations.`));
-      if (!available) this.energyBody?.append(this.makeEmpty(`${label} Atlas ${result.status === 'rejected' && result.reason instanceof CountrySectionError && result.reason.state === 'locked' ? 'data is not authorized by this connection' : 'data unavailable'}. Other loaded observations remain visible.`));
+      if (available?.upstreamUnavailable) this.hostedAtlasBody?.append(this.makeEmpty(`${label} Atlas coverage is partial. Counts include only loaded observations.`));
+      if (!available) this.hostedAtlasBody?.append(this.makeEmpty(`${label} Atlas ${result.status === 'rejected' && result.reason instanceof CountrySectionError && result.reason.state === 'locked' ? 'data is not authorized by this connection' : 'data unavailable'}. Other loaded observations remain visible.`));
     }
     await this.loadDisruptionsForCountry(code);
   }
@@ -1792,7 +1796,8 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     summary: string,
     items: Array<{ id: string; label: string; event: string; detail: Record<string, string | undefined> }>,
   ): void {
-    if (!this.energyBody || items.length === 0) return;
+    const body = this.hostedAtlasBody ?? this.energyBody;
+    if (!body || items.length === 0) return;
     const section = this.el('div', '');
     section.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06)';
     const header = this.el('div', '');
@@ -1822,7 +1827,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
       const more = this.el('div', 'cdp-economic-source', `+${items.length - 5} more`);
       section.append(more);
     }
-    this.energyBody.append(section);
+    body.append(section);
   }
 
   private buildDonutSvg(
@@ -3134,8 +3139,12 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     factsBody.append(this.makeLoading(t('countryBrief.loadingFacts')));
 
     const [energyCard, energyBody] = this.sectionCard('energy', 'Energy Profile', 'Oil import dependency, chokepoint exposure, and energy shock data from JODI, IEA, and PortWatch.');
-    this.energyBody = energyBody;
-    energyBody.append(this.makeLoading('Loading energy data\u2026'));
+    this.energyBody = this.source?.mode === 'host' ? this.el('div', 'cdp-energy-metrics') : energyBody;
+    if (this.source?.mode === 'host') {
+      this.hostedAtlasBody = this.el('div', 'cdp-country-atlas');
+      energyBody.append(this.energyBody, this.hostedAtlasBody);
+    }
+    this.energyBody.append(this.makeLoading('Loading energy data\u2026'));
 
     const [foodStocksCard, foodStocksBody] = this.sectionCard(
       'food',
@@ -3641,6 +3650,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     this.currentDefenseIndustrial = null;
     this.defenseIndustrialBody = null;
     this.energyBody = null;
+    this.hostedAtlasBody = null;
     this.maritimeBody = null;
     this.tradeExposureBody = null;
     this.chinaSummaryBody = null;
