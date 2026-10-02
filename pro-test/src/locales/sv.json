@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Gratis instrumentpanel för global underrättelse i realtid",
-      "description": "Innan det blir nyheter, visste du redan. Konflikter, sjöfartsflaskhalsar, militära flygningar, marknader och cybersäkerhet på en gratis live-världskarta, med AI-analys. Ingen registrering.",
+      "description": "Innan det blir nyheter vet du redan. Konflikter, flaskhalsar, militärflyg, marknader och cyber på en gratis live-världskarta, med AI-analys. Ingen registrering.",
       "ogTitle": "World Monitor — Innan det blir nyheter, visste du redan.",
       "ogDescription": "Världens råa signaler — fartyg, jetplan, sirener, kablar, marknader — på en gratis live-underrättelsekarta, med AI som flaggar när de konvergerar. Gratis, ingen registrering."
     },
@@ -466,7 +466,8 @@
       "launch": "Starta instrumentpanel",
       "blog": "Blogg",
       "menu": "Meny",
-      "agents": "För AI-agenter"
+      "agents": "För AI-agenter",
+      "skipToContent": "Hoppa till innehåll"
     },
     "hero": {
       "eyebrow": "Gratis global underrättelseinstrumentpanel · live nu",
@@ -518,7 +519,7 @@
         "kicker": "Geopolitik + marknader + makro",
         "title1": "Marknadsrörelsen",
         "title2": "har en karta.",
-        "s1": "Landsrisk, sanktioner, hotspotupptrappning, officiella varningar och nyhetshastighet visar var geopolitiska påtryckningar stiger.",
+        "s1": "Landsrisk, sanktioner, eskalering över {{hotspots}} bedömda spänningsområden, officiella varningar och nyhetshastighet visar var geopolitisk press ökar.",
         "s2": "Fartyg, flaskhalsar, flygningar, kablar och infrastrukturproximitet visar om det påtryckningen kan träffa leveransvägar, handelsvägar eller kapitalvägar.",
         "s3": "Räntor, valuta, aktier, krypto, energi och säkra tillflyktsortsmöjligheter visar vilken marknadsregim som omkostnaderas.",
         "s4": "Fördelen är att se geopolitiska påtryckningar, överföringsväg och prisåtgärd tillsammans innan det blir en konsensusnota.",
@@ -532,7 +533,7 @@
         "kicker": "Råvaror + flaskhalsar + väder",
         "title1": "Råvarorörelser börjar",
         "title2": "i den fysiska världen.",
-        "s1": "AIS, hamnar, pipelines, LNG, raffinaderier, vattenvägar och flaskhalsar visar när leveransen saktar ner, omdirigeras eller koncentreras.",
+        "s1": "AIS, hamnar, rörledningar, LNG, raffinaderier, vattenvagar och {{chokepoints}} flaskhalsar visar när tillgången bromsar in, omdirigeras eller koncentreras.",
         "s2": "Väder, bränder, jordbävningar, avbrott och konfliktnivåer visar de fysiska händelser som kan träffa produktion eller transport.",
         "s3": "Olja, gas, guld, säd, gruvbolag, sjöfartsnamn och råvaruländade valutor visar hur chocken prissätts genom.",
         "s4": "Råvarukring fungerar bara när fysiskt flöde, disruptionssignal och marknadspreads är synliga tillsammans.",
@@ -546,7 +547,7 @@
         "kicker": "AI-infrastruktur + energi + klimat",
         "title1": "AI-boomen har",
         "title2": "en fysisk balansräkning.",
-        "s1": "AI-datacentra sitter intill elnät, pipelines, LNG, kärnkraftanläggningar, molnregioner och kraftmarknadsexponering.",
+        "s1": "{{aiDatacenters}} AI-datacenter ligger vid elnät, rörledningar, LNG, kärnkraftanläggningar, molnregioner och kraftmarknadsexponering.",
         "s2": "Elnätsstress, avbrott, värme, brand och väderlagrar visar vilka beräkningskorridorer som är under påtryckning idag.",
         "s3": "Företags-, börs- och makropaneler visar vem som är exponerad när energi, beräkning och kapital kolliderar.",
         "s4": "Risk för AI-infrastruktur visas bara när fysiska tillgångar, klimatsignaler och marknader delar en skärm.",
@@ -559,7 +560,7 @@
       "m4": {
         "kicker": "Kablar + avbrott + handel",
         "title": "Kabelbrott blir en kedjereaktion",
-        "s1": "Undersjöiska kablar, landningsplatser, hamnar, pipelines och flaskhalsar är kartlagda tillsammans.",
+        "s1": "{{submarineCables}} undersjöiska kablar, landningsstationer, hamnar, rörledningar och flaskhalsar är kartlagda tillsammans.",
         "s2": "Internet- och BGP-anomaliflöden visar om ett fysiskt fel blir ett digitalt avbrott.",
         "s3": "Handelskorridorer, landsresiliens och redundansdata visar vem som förlorar reservvägar först.",
         "s4": "Kabelskador är viktiga när telekommunikationsredundans, handelskorridorer och landsexponering överensstämmer.",
@@ -579,9 +580,9 @@
       "f2Title": "Klicka på ett land",
       "f2Desc": "En fullständig rapport öppnas: instabilitetspoäng med dess komponenter, ett AI-sammanfattning med citerade rubriker, aktiva signaler, en 7-dagars tidslinje.",
       "f3Title": "Tryck på ⌘K / Ctrl-K",
-      "f3Desc": "Kommandon. Hoppa till vilket lager, panel eller land som helst utan att först lära dig användargränssnittet.",
+      "f3Desc": "{{commands}} kommandon. Hoppa till vilket lager, panel eller land som helst utan att först lära dig användarflödet.",
       "f4Title": "Välj ditt perspektiv",
-      "f4Desc": "World, Tech, Finance, Commodity, Energy eller Happy — samma motor, justerade övervakningar, ett klick bort.",
+      "f4Desc": "World, Tech, Finance, Commodity, Energy eller Happy — samma motor, sex justerade övervakningar, ett klick från varandra.",
       "f5Title": "Du har sett kanske en tiondel av det",
       "f5Desc": "Resten dyker upp när världen rör sig — satellitpass, GPS-störning, mörka fartyg, protestkluster, sirenvarningar.",
       "cta": "Starta klockan"
@@ -612,9 +613,9 @@
       "n3Title": "Flaskhalstransitintelligens",
       "n3Desc": "Fartygsantal genom Hormuz, Suez, Bab el-Mandeb och 10 fler sund — med avbrottsbedömning.",
       "n4Title": "AI-datacenterkarta",
-      "n4Desc": "313 AI-datacenter kartlagda med kraft- och operatörsmetadata — det fysiska lagret i AI-kapplöpningen.",
+      "n4Desc": "{{aiDatacenters}} AI-datacenter kartlagda med ström- och operatörsmetadata — det fysiska lagret i AI-loppet.",
       "n5Title": "Undersjökablar",
-      "n5Desc": "Undersjökablar som bär internet, överlagrade med avbrott och hotsignaler.",
+      "n5Desc": "{{submarineCables}} undersjöiska kablar som bär internet, överlagrat med avbrott- och hotsignaler.",
       "n6Title": "Protestspårning",
       "n6Desc": "Dubbelkällsprotestdetektering med tvärkällsdeduplikering — signal, inte rykte.",
       "faith": "Lita inte på siffrorna blint —",
@@ -649,7 +650,7 @@
       "title2": "Pro är operationsrummet.",
       "sub": "Instrumentpanelen är gratis — varje kartlager utom Resilience, alla flöden, ingen registrering. Pro lägger till beslutlagret.",
       "freeTitle": "Gratis",
-      "freeDesc": "Den kostnadsfria nivån är en fullständig produkt, inte en provversion. Varje kartlager utom Resilience, alla flöden, alla övervakningar — ingen registrering, ingen provklocka.",
+      "freeDesc": "Den kostnadsfria nivån är en fullständig produkt, inte en provversion. Varje kartlager utom Resilience, varje flöde från {{feeds}} källor, alla sex monitorer — ingen registrering, ingen tidsgräns.",
       "freeF1": "Alla kartlager utom Resilience & kurerade flöden",
       "freeF2": "Landsbeskrivningar, hotspots, instabilitetsscore",
       "freeF3": "Flaskhalsar, kablar, kaskadanalys",
@@ -704,9 +705,9 @@
       "verifyTitle": "Verifiera en breaking-händelse",
       "verifyDesc": "Kontrollera aktuella krishanterare, uppdaterade mätvärden och citerad kontext innan du litar på ett breaking-claim.",
       "chokepointTitle": "Kontrollera en flaskhal",
-      "chokepointDesc": "Inspektera avbrottsstatus, fartygsflöden och risk över kritiska sjövägspassager.",
+      "chokepointDesc": "Inspektera störningsstatus, fartygsflöden och risk över {{chokepoints}} kritiska sjövägspassager.",
       "countryRiskTitle": "Förklara ett landrisksteg",
-      "countryRiskDesc": "Spåra de politiska, säkerhetsmässiga, ekonomiska och motståndskraftssignaler bakom ett lands förändring.",
+      "countryRiskDesc": "Spåra politiska, säkerhets-, ekonomiska och motståndskraftssignaler bakom ett lands förändring, med motståndskraft rankad för {{resilienceRanked}} länder.",
       "open": "Öppna bevis"
     }
   },

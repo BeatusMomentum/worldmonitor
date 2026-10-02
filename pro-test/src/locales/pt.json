@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Painel Gratuito de Inteligência Global em Tempo Real",
-      "description": "Quando vira notícia, você já sabia. Conflitos, gargalos de navegação, voos militares, mercados e cibernética em um mapa ao vivo gratuito, com análise por IA. Sem cadastro.",
+      "description": "Quando vira notícia, você já sabe. Conflitos, pontos críticos, voos militares, mercados e ciberataques em um único mapa-múndi ao vivo e gratuito, com análise por IA. Sem cadastro.",
       "ogTitle": "World Monitor — Quando vira notícia, você já sabia.",
       "ogDescription": "Os sinais brutos do mundo — navios, jatos, sirenes, cabos, mercados — em um mapa de inteligência ao vivo gratuito, com IA que sinaliza quando convergem. Grátis, sem cadastro."
     },
@@ -466,7 +466,8 @@
       "launch": "Abrir Painel",
       "blog": "Blog",
       "menu": "Menu",
-      "agents": "Para agentes de IA"
+      "agents": "Para agentes de IA",
+      "skipToContent": "Pular para o conteúdo"
     },
     "hero": {
       "eyebrow": "Painel de inteligência global gratuito · agora ao vivo",
@@ -518,7 +519,7 @@
         "kicker": "Geopolítica + mercados + macro",
         "title1": "O movimento de mercado",
         "title2": "tem um mapa.",
-        "s1": "Risco país, sanções, escalação de pontos quentes, alertas oficiais e velocidade de notícias mostram onde a pressão geopolítica está aumentando.",
+        "s1": "Risco de país, sanções, escalação em {{hotspots}} pontos críticos pontuados, alertas oficiais e velocidade de notícias mostram onde a pressão geopolítica está crescendo.",
         "s2": "Navios, pontos de estrangulamento, voos, cabos e proximidade de infraestrutura mostram se essa pressão pode impactar oferta, rotas comerciais ou de capital.",
         "s3": "Taxas, câmbio, ações, criptografia e ativos refúgio mostram qual regime de mercado está sendo reprificado.",
         "s4": "A vantagem está vendo pressão geopolítica, caminho de transmissão e ação de preço juntos antes que se torne um consenso.",
@@ -532,7 +533,7 @@
         "kicker": "Commodities + pontos de estrangulamento + clima",
         "title1": "Movimentos de commodities começam",
         "title2": "no mundo físico.",
-        "s1": "AIS, portos, dutos, GNL, refinarias, hidrovias e pontos de estrangulamento mostram quando a oferta está desacelerando, se redirecionando ou se concentrando.",
+        "s1": "AIS, portos, oleodutos, GNL, refinarias, hidrovias e {{chokepoints}} pontos críticos mostram quando o suprimento está desacelerando, se rerouting ou se concentrando.",
         "s2": "Clima, incêndios, terremotos, apagões e camadas de conflito mostram os eventos físicos que podem impactar produção ou transporte.",
         "s3": "Petróleo, gás, ouro, grãos, mineradoras, armadores e moedas vinculadas a commodities mostram como o choque é precificado.",
         "s4": "Inteligência de commodities só funciona quando fluxo físico, sinal de disrupção e spread de mercado são visíveis juntos.",
@@ -546,7 +547,7 @@
         "kicker": "Infraestrutura de IA + energia + clima",
         "title1": "O boom de IA tem",
         "title2": "um balanço físico.",
-        "s1": "Datacenters de IA ficam ao lado de redes, dutos, GNL, instalações nucleares, regiões de nuvem e exposição do mercado de energia.",
+        "s1": "{{aiDatacenters}} datacenters de IA ficam ao lado de redes, oleodutos, GNL, instalações nucleares, regiões de nuvem e exposição em mercados de energia.",
         "s2": "Estresse da rede, apagões, calor, incêndio e camadas climáticas mostram quais corredores de computação estão sob pressão hoje.",
         "s3": "Painéis de empresa, câmbio e macro mostram quem está exposto quando energia, computação e capital colidem.",
         "s4": "Risco de infraestrutura de IA só aparece quando ativos físicos, sinais climáticos e mercados compartilham uma tela.",
@@ -559,7 +560,7 @@
       "m4": {
         "kicker": "Cabos + interrupções + comércio",
         "title": "O rompimento de cabo em cascata",
-        "s1": "Cabos submarinos, estações de desembarque, portos, dutos e pontos de estrangulamento estão mapeados juntos.",
+        "s1": "{{submarineCables}} cabos submarinos, estações de desembarque, portos, oleodutos e pontos críticos são mapeados juntos.",
         "s2": "Feeds de anomalias de Internet e BGP mostram se uma falha física está se tornando uma interrupção digital.",
         "s3": "Corredores comerciais, resiliência de países e dados de redundância mostram quem perde rotas de contingência primeiro.",
         "s4": "Danos a cabos importam quando redundância de telecomunicações, corredores comerciais e exposição do país se alinham.",
@@ -579,9 +580,9 @@
       "f2Title": "Clique em qualquer país",
       "f2Desc": "Um dossiê completo abre: pontuação de instabilidade com seus componentes, resumo de IA com manchetes citadas, sinais ativos, cronograma de 7 dias.",
       "f3Title": "Pressione ⌘K / Ctrl-K",
-      "f3Desc": "Comandos. Pule para qualquer camada, painel ou país sem aprender a interface primeiro.",
+      "f3Desc": "{{commands}} comandos. Acesse qualquer camada, painel ou país sem aprender a UI primeiro.",
       "f4Title": "Escolha sua lente",
-      "f4Desc": "World, Tech, Finance, Commodity, Energy ou Happy — mesmo engine, monitores ajustados, um clique de distância.",
+      "f4Desc": "Mundo, Tech, Finanças, Commodities, Energia ou Happy — mesmo motor, seis monitores ajustados, um clique de distância.",
       "f5Title": "Você viu talvez um décimo disso",
       "f5Desc": "O resto aparece conforme o mundo se move — passagens de satélites, jammers GPS, navios fantasmas, aglomerações de protestos, alertas de sirene.",
       "cta": "Comece a contagem"
@@ -612,9 +613,9 @@
       "n3Title": "Inteligência de trânsito em pontos críticos",
       "n3Desc": "Contagem de embarcações através de Hormuz, Suez, Bab el-Mandeb e 10 outros estreitos — com pontuação de disrupção.",
       "n4Title": "Mapa de datacenters de IA",
-      "n4Desc": "Datacenters de IA mapeados com metadados de energia e operador — a camada física da corrida da IA.",
+      "n4Desc": "{{aiDatacenters}} datacenters de IA mapeados com metadados de energia e operador — a camada física da corrida de IA.",
       "n5Title": "Cabos submarinos",
-      "n5Desc": "Cabos submarinos que transportam a internet, sobrepostos com sinais de interrupção e ameaça.",
+      "n5Desc": "{{submarineCables}} cabos submarinos que transportam a internet, sobrepostos com sinais de interrupção e ameaça.",
       "n6Title": "Rastreamento de protestos",
       "n6Desc": "Detecção de protestos de dupla fonte com desduplicação entre fontes — sinal, não boato.",
       "faith": "Não confie apenas nos números —",
@@ -649,7 +650,7 @@
       "title2": "Pro é a sala de operações.",
       "sub": "O dashboard é gratuito — todas as camadas de mapa exceto Resilience, todos os feeds, sem cadastro. Pro adiciona a camada de decisão.",
       "freeTitle": "Grátis",
-      "freeDesc": "O nível gratuito é um produto completo, não uma avaliação. Todas as camadas de mapa exceto Resilience, todos os feeds, todos os monitores — sem cadastro, sem contador de avaliação.",
+      "freeDesc": "O plano gratuito é um produto completo, não uma avaliação. Todas as camadas de mapa exceto Resilience, todos os feeds de {{feeds}} fontes, todos os seis monitores — sem cadastro, sem limite de tempo.",
       "freeF1": "Todas as camadas de mapa exceto Resilience e feeds curados",
       "freeF2": "Resumos de país, pontos de acesso, pontuações de instabilidade",
       "freeF3": "Pontos críticos, cabos, análise em cascata",
@@ -704,9 +705,9 @@
       "verifyTitle": "Verificar um evento de última hora",
       "verifyDesc": "Verifique os rastreadores de crise atuais, métricas datadas e contexto citado antes de confiar em uma notícia de última hora.",
       "chokepointTitle": "Verificar um ponto de estrangulamento",
-      "chokepointDesc": "Inspecione o status de interrupção, fluxos de navios e risco em passagens marítimas críticas.",
+      "chokepointDesc": "Inspecione o status de interrupções, fluxos de navios e riscos em {{chokepoints}} passagens marítimas críticas.",
       "countryRiskTitle": "Explicar uma mudança de risco país",
-      "countryRiskDesc": "Rastreie os sinais políticos, de segurança, econômicos e de resiliência por trás da mudança de um país.",
+      "countryRiskDesc": "Rastreie sinais políticos, de segurança, econômicos e de resiliência por trás da mudança em um país, com resiliência classificada para {{resilienceRanked}} países.",
       "open": "Abrir evidências"
     }
   },

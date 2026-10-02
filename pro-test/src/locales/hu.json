@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Ingyenes valós idejű globális hírszerzési irányítópult",
-      "description": "Amíg hír lesz, már tudtad. Konfliktusok, szállítási szűk keresztmetszetek, katonai járatok, piacok és kiberbiztonsági fenyegetések egy ingyenes élő világtérképen, AI-elemzéssel. Nincs regisztráció szükséges.",
+      "description": "Amíg hír lesz, már tudod. Konfliktusok, szűk keresztmetszetek, katonai járatok, piacok és kibertámadások egy ingyenes élő világtérképen, mesterséges intelligencia elemzéssel. Nincs regisztráció.",
       "ogTitle": "World Monitor — Amíg hír lesz, már tudtad.",
       "ogDescription": "A világ nyers jelei — hajók, repülőgépek, szirénák, kábelek, piacok — egy ingyenes élő hírszerzési térképen, AI-val, amely akkor jelöl meg, amikor összefolynak. Ingyenes, nincs regisztráció."
     },
@@ -466,7 +466,8 @@
       "launch": "Irányítópult indítása",
       "blog": "Blog",
       "menu": "Menü",
-      "agents": "AI ágensekhez"
+      "agents": "AI ágensekhez",
+      "skipToContent": "Ugrás a tartalomra"
     },
     "hero": {
       "eyebrow": "Ingyenes globális hírszerzési irányítópult · most élő",
@@ -518,7 +519,7 @@
         "kicker": "Geopolitika + piacok + makró",
         "title1": "A piaci mozgás",
         "title2": "térképpel rendelkezik.",
-        "s1": "Az országkockázat, a szankciók, a konfliktusok eszkalációja, a hivatalos figyelmeztetések és a hírek sebessége azt mutatja, hol erősödik a geopolitikai nyomás.",
+        "s1": "Országkockázat, szankciók, eszkaláció {{hotspots}} értékelt kritikus ponton, hivatalos értesítések és hírek sebessége mutatja, hol nő a geopolitikai nyomás.",
         "s2": "A hajók, a szűk passszusok, a járatok, a kábelek és az infrastruktúra közelsége azt mutatja, hogy ez a nyomás képes-e érni az ellátást, a kereskedelmet vagy a tőke útvonalait.",
         "s3": "Az árfolyamok, a devizák, a részvények, a kriptovaluták, az energia és a biztos menedék eszközei azt mutatják, melyik piaci rezsim árazódik újra.",
         "s4": "Az él a geopolitikai nyomást, az átadási útvonalat és az árnyomást együtt látja, mielőtt konszenzusos note lenne belőle.",
@@ -532,7 +533,7 @@
         "kicker": "Árucikkek + szűk passszusok + időjárás",
         "title1": "Az árucikk mozgások",
         "title2": "a fizikai világban kezdődnek.",
-        "s1": "Az AIS, kikötők, vezetékek, LNG, finomítók, víziutak és szűk passszusok azt mutatják, mikor lassul, áttér vagy koncentrálódik az ellátás.",
+        "s1": "AIS, kikötők, csatornák, LNG, finomítók, vízutak és {{chokepoints}} szűk keresztmetszet mutatják, mikor lassul, irányít át vagy koncentrálódik az ellátás.",
         "s2": "Az időjárás, tüzek, földrengések, meghibásodások és konfliktus rétegek azt mutatják, mely fizikai események érhetik a termelést vagy a szállítást.",
         "s3": "Az olaj, gáz, arany, gabona, bányák, hajózási nevek és árucikk-povezetett valuták azt mutatják, hogyan árazódik a sokk végig.",
         "s4": "Az árucikk intelligencia csak akkor működik, ha a fizikai folyam, a zavar jel és a piaci spread látható együtt.",
@@ -546,7 +547,7 @@
         "kicker": "AI infrastruktúra + energia + klíma",
         "title1": "Az AI boom-nak",
         "title2": "fizikai mérlege van.",
-        "s1": "Az AI adatközpontok a hálózatok, vezetékek, LNG, atomerőművek, felhő régiók és villamos energia piaci exponáltsága mellett helyezkednek el.",
+        "s1": "{{aiDatacenters}} mesterséges intelligencia adatközpont mellett vannak hálózatok, csatornák, LNG, atomerőművek, felhőrégiók és árampiaci kitettségek.",
         "s2": "A hálózati terhelés, meghibásodások, hőség, tüz és időjárás rétegek azt mutatják, mely számítási folyosók alatt van nyomás.",
         "s3": "A vállalat, csere és makró panelek azt mutatják, ki van exponálva, amikor az energia, a számítás és a tőke ütközik.",
         "s4": "Az AI infrastruktúra kockázat csak akkor jelenik meg, ha a fizikai eszközök, az éghajlati jelek és a piacok egy képernyőn vannak.",
@@ -559,7 +560,7 @@
       "m4": {
         "kicker": "Kábelek + üzemszünetek + kereskedelem",
         "title": "A kábeltörés kaszkádhatásává válik",
-        "s1": "A tengeralatti kábelek, partraszállási állomások, kikötők, vezetékek és szűk keresztmetszetek együtt vannak feltérképezve.",
+        "s1": "{{submarineCables}} tengeralatti kábelek, kikötői végpontok, kikötők, csatornák és szűk keresztmetszetek együtt vannak leképezve.",
         "s2": "Az internetes és BGP anomáliaforrások mutatják, hogy egy fizikai hiba digitális üzemszünetté alakul-e.",
         "s3": "A kereskedelmi folyosók, az ország rezilienciája és redundancia adatok azt mutatják, ki veszíti el először a tartalék útvonalakat.",
         "s4": "A kábel sérülése akkor számít, amikor a telekommunikációs redundancia, a kereskedelmi folyosók és az ország kitettségei egy vonalba kerülnek.",
@@ -579,9 +580,9 @@
       "f2Title": "Kattintson bármely országra",
       "f2Desc": "Megnyílik egy teljes dosszié: instabilitási pontszám összetevőivel, AI-bejegyzés idézett címsorokkal, aktív jelzések, 7 napos idővonal.",
       "f3Title": "Nyomja meg a ⌘K / Ctrl-K",
-      "f3Desc": "Parancsok. Ugrás bármely rétegre, panelre vagy országra a felhasználói felület megtanulása nélkül.",
+      "f3Desc": "{{commands}} parancs. Ugorjon bármely rétegre, panelre vagy országra a felhasználói felület megtanulása nélkül.",
       "f4Title": "Válassza ki az ön lencséjét",
-      "f4Desc": "World, Tech, Finance, Commodity, Energy vagy Happy — ugyanaz a motor, hangolt monitorok, egy kattintás távolságra.",
+      "f4Desc": "Világméretű, Tech, Pénzügyi, Árupiaci, Energetikai vagy Vidám — ugyanaz a motor, hat finomhangolt monitor, egy kattintás távolságra.",
       "f5Title": "Talán a tizedét látta",
       "f5Desc": "A többi akkor jelenik meg, amikor a világ mozdul — műholdas átmenetek, GPS jamming, sötét hajók, tüntetéscsoportok, siren figyelmeztetések.",
       "cta": "Indítsa el az órát"
@@ -612,9 +613,9 @@
       "n3Title": "Szűk keresztmetszeti szállítási információ",
       "n3Desc": "Hajók száma a Hormuz, Szuez, Bab el-Mandeb és további 10 szoros között — zavarzási pontokkal.",
       "n4Title": "AI adatközpont térkép",
-      "n4Desc": "313 AI adatközpont feltérképezve teljesítmény- és üzemeltetői metaadatokkal — az AI verseny fizikai rétege.",
+      "n4Desc": "{{aiDatacenters}} mesterséges intelligencia adatközpontok leképezve teljesítmény- és operátor metaadatokkal — a mesterséges intelligencia verseny fizikai rétege.",
       "n5Title": "Tengeralattjáró kábelek",
-      "n5Desc": "Az internetet hordozó tengeri kábelek, kimaradási és fenyegetési jelzésekkel átfedve.",
+      "n5Desc": "{{submarineCables}} tengeralatti kábelek, amelyek az internetet szállítják, kitöltve a leállások és fenyegetési jelekkel.",
       "n6Title": "Tüntetéskövetés",
       "n6Desc": "Kettős forrásból származó tüntetésdetektálás keresztforrás-deduplikációval — jel, nem pletyka.",
       "faith": "Ne higgy csak a számoknak —",
@@ -649,7 +650,7 @@
       "title2": "A Pro az operatív központ.",
       "sub": "Az irányítópult ingyenes — minden térképréteg kivéve a Resilience, minden adatforrás, regisztráció nélkül. A Pro verzió hozzáadja a döntésmeghozatali réteget.",
       "freeTitle": "Ingyenes",
-      "freeDesc": "Az ingyenes verzió egy teljes termék, nem egy próbaverzió. Minden térképréteg kivéve a Resilience, minden adatforrás, minden monitor — regisztráció nélkül, próbaperiódus nélkül.",
+      "freeDesc": "Az ingyenes csomag egy teljes termék, nem próbaverzió. Az összes térképréteg kivéve a Resilience funkciót, {{feeds}} forrásból származó összes feed, mind a hat monitor — nincs regisztrációs kötelezettség, nincs próbaidő.",
       "freeF1": "Összes térképréteg kivéve a Resilience & válogatott feedek",
       "freeF2": "Országösszefoglalók, hotspotok, instabilitási pontok",
       "freeF3": "Szoros keresztmetszetek, kábelek, kaszkád-analízis",
@@ -704,9 +705,9 @@
       "verifyTitle": "Friss esemény ellenőrzése",
       "verifyDesc": "Az aktuális kríziskövetők, dátumozott metrikák és idézett kontextus ellenőrzésével biztosíthatod egy újdonság megbízhatóságát.",
       "chokepointTitle": "Szoros pont ellenőrzése",
-      "chokepointDesc": "Vizsgálja meg a zavarok állapotát, a hajóáramlásokat és a kockázatokat a kritikus tengeri átjárókon.",
+      "chokepointDesc": "Ellenőrizze a zavarok állapotát, a hajóáramlásokat és a kockázatokat {{chokepoints}} kritikus tengeri passzuson.",
       "countryRiskTitle": "Országkockázati lépés magyarázata",
-      "countryRiskDesc": "Kövesse nyomon az országváltozás mögött meghúzódó politikai, biztonsági, gazdasági és ellenálló képesség jeleket.",
+      "countryRiskDesc": "Nyomon követheti az országok politikai, biztonsági, gazdasági és rugalmassági jeleit, {{resilienceRanked}} ország rugalmassági besorolásával.",
       "open": "Bizonyítékok megnyitása"
     }
   },

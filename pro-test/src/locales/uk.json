@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Безкоштовна панель глобальної розвідки в реальному часі",
-      "description": "Коли це вже новини — ви вже знали. Конфлікти, морські вузли, військові рейси, ринки та кібер на одній безкоштовній живій мапі світу з AI-аналізом. Без реєстрації.",
+      "description": "Поки це стане новиною, ви вже знатимете. Конфлікти, вузькі місця, військові рейси, ринки та кібератаки — на одній живій карті світу з аналізом на основі штучного інтелекту. Без реєстрації.",
       "ogTitle": "World Monitor — Коли це вже новини, ви вже знали.",
       "ogDescription": "Сирі сигнали світу — кораблі, літаки, сирени, кабелі, ринки — на одній безкоштовній живій мапі розвідки, з AI, що помічає, коли вони сходяться. Безкоштовно, без реєстрації."
     },
@@ -466,7 +466,8 @@
       "menu": "Меню",
       "docs": "Документація",
       "launch": "Відкрити панель",
-      "agents": "Для AI агентів"
+      "agents": "Для AI агентів",
+      "skipToContent": "Перейти до змісту"
     },
     "hero": {
       "eyebrow": "Безкоштовна панель глобальної розвідки · онлайн зараз",
@@ -518,7 +519,7 @@
         "kicker": "Geopolitics + markets + macro",
         "title1": "The market move",
         "title2": "has a map.",
-        "s1": "Country risk, sanctions, hotspot escalation, official alerts and news velocity show where geopolitical pressure is rising.",
+        "s1": "Ризик країни, санкції, ескалація в {{hotspots}} критичних зонах, офіційні сповіщення та швидкість новин показують, де зростає геополітичний тиск.",
         "s2": "Ships, chokepoints, flights, cables and infrastructure proximity show whether that pressure can hit supply, trade or capital routes.",
         "s3": "Rates, FX, equities, crypto, energy and safe-haven assets show which market regime is repricing.",
         "s4": "The edge is seeing geopolitical pressure, transmission path and price action together before it becomes a consensus note.",
@@ -532,7 +533,7 @@
         "kicker": "Commodities + chokepoints + weather",
         "title1": "Commodity moves start",
         "title2": "in the physical world.",
-        "s1": "AIS, ports, pipelines, LNG, refineries, waterways and chokepoints show when supply is slowing, rerouting or concentrating.",
+        "s1": "AIS, порти, трубопроводи, СПГ, нафторафінерії, водні шляхи та {{chokepoints}} вузьких місць показують, коли пропозиція сповільнюється, змінює маршрут або концентрується.",
         "s2": "Weather, fires, earthquakes, outages and conflict layers show the physical events that can hit production or transport.",
         "s3": "Oil, gas, gold, grains, miners, shipping names and commodity-linked currencies show how the shock prices through.",
         "s4": "Commodity intelligence only works when physical flow, disruption signal and market spread are visible together.",
@@ -546,7 +547,7 @@
         "kicker": "AI infrastructure + energy + climate",
         "title1": "The AI boom has",
         "title2": "a physical balance sheet.",
-        "s1": "AI datacenters sit beside grids, pipelines, LNG, nuclear facilities, cloud regions and power-market exposure.",
+        "s1": "{{aiDatacenters}} центрів даних штучного інтелекту розташовано біля електромереж, трубопроводів, СПГ, ядерних об'єктів, хмарних регіонів та експозицій на ринку електроенергії.",
         "s2": "Grid stress, outages, heat, fire and weather layers show which compute corridors are under pressure today.",
         "s3": "Company, exchange and macro panels show who is exposed when energy, compute and capital collide.",
         "s4": "AI infrastructure risk only appears when physical assets, climate signals and markets share one screen.",
@@ -559,7 +560,7 @@
       "m4": {
         "kicker": "Cables + outages + trade",
         "title": "The cable break becomes a cascade",
-        "s1": "Subsea cables, landing stations, ports, pipelines and chokepoints are mapped together.",
+        "s1": "{{submarineCables}} підводних кабелів, береглінійних станцій, портів, трубопроводів та вузьких місць відображено разом.",
         "s2": "Internet and BGP anomaly feeds show whether a physical fault is becoming a digital outage.",
         "s3": "Trade corridors, country resilience and redundancy data show who loses fallback routes first.",
         "s4": "Cable damage matters when telecom redundancy, trade corridors and country exposure line up.",
@@ -579,9 +580,9 @@
       "f2Title": "Click any country",
       "f2Desc": "A full dossier opens: instability score with its components, an AI brief with cited headlines, active signals, a 7-day timeline.",
       "f3Title": "Hit ⌘K / Ctrl-K",
-      "f3Desc": "Команди. Переходь до будь-якого шару, панелі чи країни без вивчення UI.",
+      "f3Desc": "{{commands}} команд. Перейдіть до будь-якого шару, панелі або країни без попереднього вивчення інтерфейсу.",
       "f4Title": "Pick your lens",
-      "f4Desc": "World, Tech, Finance, Commodity, Energy чи Happy — один двигун, налаштовані монітори, один клік.",
+      "f4Desc": "World, Tech, Finance, Commodity, Energy або Happy — один механізм, шість спеціалізованих моніторів, один клік розділяє їх.",
       "f5Title": "You've seen maybe a tenth of it",
       "f5Desc": "The rest surfaces as the world moves — satellite passes, GPS jamming, dark ships, protest clusters, siren alerts.",
       "cta": "Start the clock"
@@ -612,9 +613,9 @@
       "n3Title": "Chokepoint transit intel",
       "n3Desc": "Vessel counts through Hormuz, Suez, Bab el-Mandeb and 10 more straits — with disruption scoring.",
       "n4Title": "AI datacenter map",
-      "n4Desc": "AI datacenters mapped with power and operator metadata — the physical layer of the AI race.",
+      "n4Desc": "{{aiDatacenters}} центрів даних штучного інтелекту з метаданими про електроживлення та операторів — фізичний шар гонки AI.",
       "n5Title": "Submarine cables",
-      "n5Desc": "Підводні кабелі, що несуть інтернет, накладені з сигналами збоїв і загроз.",
+      "n5Desc": "{{submarineCables}} підводних кабелів, які несуть інтернет, з наложеними сигналами про збої та загрози.",
       "n6Title": "Protest tracking",
       "n6Desc": "Dual-source protest detection with cross-source deduplication — signal, not rumor.",
       "faith": "Don't take the numbers on faith —",
@@ -649,7 +650,7 @@
       "title2": "Pro is the operations room.",
       "sub": "The dashboard is free — every map layer except Resilience, every feed, no signup. Pro adds the decision layer.",
       "freeTitle": "Free",
-      "freeDesc": "The free tier is a full product, not a trial. Every map layer except Resilience, every feed, every monitor — no signup, no trial clock.",
+      "freeDesc": "Безкоштовний рівень — це повноцінний продукт, не пробна версія. Кожен шар карти крім Resilience, кожен потік від {{feeds}} джерел, всі шість моніторів — без реєстрації, без часового ліміту.",
       "freeF1": "Усі шари карт крім Resilience та куровані стрічки",
       "freeF2": "Country briefs, hotspots, instability scores",
       "freeF3": "Chokepoints, cables, cascade analysis",
@@ -704,9 +705,9 @@
       "verifyTitle": "Перевірити критичну подію",
       "verifyDesc": "Перевірте поточні відстеження криз, датовані показники та наведені контексти перед тим, як довіритися спеціальному повідомленню.",
       "chokepointTitle": "Перевірити вузьке місце",
-      "chokepointDesc": "Інспектуйте статус порушень, потоки суден та ризик у критичних морських проходах.",
+      "chokepointDesc": "Перевірте стан перебоїв, потоки суден та ризики в {{chokepoints}} критичних морських проходах.",
       "countryRiskTitle": "Пояснити рух ризику країни",
-      "countryRiskDesc": "Відстежте політичні, безпекові, економічні та стійкісні сигнали, що стоять за змінами в країні.",
+      "countryRiskDesc": "Проаналізуйте політичні, безпекові, економічні та сигнали стійкості, що стоять за змінами в країні, з рейтингом стійкості для {{resilienceRanked}} країн.",
       "open": "Відкрити докази"
     }
   },

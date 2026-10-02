@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Ücretsiz Gerçek Zamanlı Global İstihbarat Panosu",
-      "description": "Haber olduğunda zaten biliyordun. Çatışmalar, nakliye darboğazları, askeri uçuşlar, piyasalar ve siber olaylar AI analizi ile tek bir ücretsiz canlı dünya haritasında. Kayıt yok.",
+      "description": "Haber haline gelmeden sen çoktan bilirsin. Çatışmalar, dar geçitler, askeri uçuşlar, piyasalar ve siber olaylar — tek bir canlı dünya haritasında, yapay zeka analiziyle. Kayıt gerektirmez.",
       "ogTitle": "World Monitor — Haber olduğunda zaten biliyordun.",
       "ogDescription": "Dünyanın ham sinyalleri — gemiler, jetler, sirenler, kablolar, piyasalar — AI ile birlikte tek bir ücretsiz canlı istihbarat haritasında ve bunlar bir şeye dönüştüğünde flaglenir. Ücretsiz, kayıt yok."
     },
@@ -466,7 +466,8 @@
       "launch": "Panoyu Başlat",
       "blog": "Blog",
       "menu": "Menü",
-      "agents": "Yapay zeka ajanları için"
+      "agents": "Yapay zeka ajanları için",
+      "skipToContent": "İçeriğe geç"
     },
     "hero": {
       "eyebrow": "Ücretsiz global istihbarat panosu · şimdi canlı",
@@ -518,7 +519,7 @@
         "kicker": "Jeopolitik + pazarlar + makro",
         "title1": "Pazar hareketi",
         "title2": "haritası vardır.",
-        "s1": "Ülke riski, yaptırımlar, sıcak nokta tırmanışları, resmi uyarılar ve haber hızı, jeopolitik baskının nerede yükseldiğini gösterir.",
+        "s1": "{{hotspots}} puanlanmış sıcak noktada ülke riski, yaptırımlar, tırmanış; resmi uyarılar ve haber hızı jeopolitik basıncın arttığı yeri gösterir.",
         "s2": "Gemiler, darboğazlar, uçuşlar, kablolar ve altyapı yakınlığı, bu baskının arz, ticaret veya sermaye rotalarına çarpıp çarpmayacağını gösterir.",
         "s3": "Oranlar, döviz, öz kaynaklar, kripto, enerji ve güvenli liman varlıkları, hangi pazar rejiminin yeniden fiyatlandırıldığını gösterir.",
         "s4": "Kenar, jeopolitik baskıyı, iletim yolunu ve fiyat hareketini fikir birliği notu haline gelmeden önce görüyor.",
@@ -532,7 +533,7 @@
         "kicker": "Emtialar + darboğazlar + hava durumu",
         "title1": "Emtia hareketleri",
         "title2": "fiziksel dünyada başlar.",
-        "s1": "AIS, limanlar, boru hatları, LNG, rafineriler, su yolları ve darboğazlar, arzın ne zaman yavaşladığını, yeniden yönlendirildiğini veya yoğunlaştığını gösterir.",
+        "s1": "AIS, limanlar, boru hatları, LNG, rafineriler, su yolları ve {{chokepoints}} dar geçit arz yavaşladığında, yeniden yönlendirildiğinde veya yoğunlaştığında gösterir.",
         "s2": "Hava durumu, yangınlar, depremler, kesintiler ve çatışma katmanları, üretimi veya taşımayı etkileyebilecek fiziksel olayları gösterir.",
         "s3": "Petrol, gaz, altın, tahıllar, madencilik şirketleri, gemi isimleri ve emtia bağlantılı para birimleri, şokun nasıl fiyatlandırıldığını gösterir.",
         "s4": "Emtia istihbaratı ancak fiziksel akış, kesinti sinyali ve pazar spreadı birlikte görüldüğünde işe yarar.",
@@ -546,7 +547,7 @@
         "kicker": "AI altyapısı + enerji + iklim",
         "title1": "AI patlamasının",
         "title2": "fiziksel bilançosu vardır.",
-        "s1": "AI veri merkezleri şebekeler, boru hatları, LNG, nükleer tesisler, bulut bölgeleri ve güç pazar maruziyeti yanında yer alır.",
+        "s1": "{{aiDatacenters}} yapay zeka veri merkezi şebekeler, boru hatları, LNG, nükleer tesisler, bulut bölgeleri ve enerji piyasası riski yanında yer alır.",
         "s2": "Şebeke stresi, kesintiler, sıcak, yangın ve hava durumu katmanları, hangi işlem koridorlarının bugün baskı altında olduğunu gösterir.",
         "s3": "Şirket, borsa ve makro paneller, enerji, işlem gücü ve sermaye çarpıştığında kimin risk altında olduğunu gösterir.",
         "s4": "AI altyapı riski ancak fiziksel varlıklar, iklim sinyalleri ve pazarlar aynı ekranda olduğunda görünür.",
@@ -559,7 +560,7 @@
       "m4": {
         "kicker": "Kablolar + kesintiler + ticaret",
         "title": "Kablo arızası kademeli bir kriz haline dönüşüyor",
-        "s1": "Denizaltı kabloları, iniş istasyonları, limanlar, boru hatları ve darboğazlar birlikte haritalanmıştır.",
+        "s1": "{{submarineCables}} denizaltı kabloları, iniş istasyonları, limanlar, boru hatları ve dar geçitler birlikte eşlenir.",
         "s2": "İnternet ve BGP anomali beslemeleri fiziksel bir arızanın dijital bir kesintiye dönüşüp dönüşmediğini gösterir.",
         "s3": "Ticaret koridorları, ülke esnekliği ve yedeklilik verileri hangi ülkelerin ilk olarak yedek rotalarını kaybettiğini gösterir.",
         "s4": "Kablo hasarı, telekomünikasyon yedekliliği, ticaret koridorları ve ülke maruziyeti bir araya geldiğinde önemli hale gelir.",
@@ -579,9 +580,9 @@
       "f2Title": "Herhangi bir ülkeyi tıkla",
       "f2Desc": "Tam bir dosya açılır: bileşenleriyle istikrarsızlık puanı, alıntılanan başlıkları içeren AI özeti, aktif sinyaller, 7 günlük zaman çizelgesi.",
       "f3Title": "⌘K / Ctrl-K tuşuna bas",
-      "f3Desc": "Komutlar. Kullanıcı arayüzünü öğrenmeden herhangi bir katmana, panoya veya ülkeye atlayabilirsin.",
+      "f3Desc": "{{commands}} komut. Arayüzü öğrenmeden herhangi bir katmana, panele veya ülkeye atlayın.",
       "f4Title": "Lensini seç",
-      "f4Desc": "Dünya, Tech, Finans, Emtia, Enerji veya Happy — aynı motor, ayarlanmış monitörler, bir tıkla ulaşabilirsin.",
+      "f4Desc": "Dünya, Teknoloji, Finans, Emtia, Enerji veya Happy — aynı motor, altı ayarlanmış monitor, bir tık uzakta.",
       "f5Title": "Belki onda birini gördün",
       "f5Desc": "Geri kalanı dünya hareket ettikçe ortaya çıkıyor — uydu geçişleri, GPS sıkışması, karanlık gemiler, protesto kümeleri, siren uyarıları.",
       "cta": "Kronometreyi başlat"
@@ -612,9 +613,9 @@
       "n3Title": "Boğaz geçiş istihbaratı",
       "n3Desc": "Hormuz, Süveyş, Bab el-Mendeb ve 10 kanaldan daha fazlasından geçen gemi sayıları — kesinti puanlaması ile.",
       "n4Title": "AI veri merkezi haritası",
-      "n4Desc": "313 AI veri merkezi güç ve operatör meta verileri ile haritalanmış — AI yarışının fiziksel katmanı.",
+      "n4Desc": "{{aiDatacenters}} yapay zeka veri merkezi güç ve operatör metaveri ile eşlendi — yapay zeka yarışının fiziksel katmanı.",
       "n5Title": "Denizaltı kabloları",
-      "n5Desc": "İnterneti taşıyan deniz altı kabloları, kesinti ve tehdit sinyalleriyle birlikte gösterilmiş.",
+      "n5Desc": "{{submarineCables}} interneti taşıyan denizaltı kablosu, kesinti ve tehdit sinyalleriyle üst üste.",
       "n6Title": "Protesto izleme",
       "n6Desc": "Çift kaynaklı protesto tespiti çapraz kaynak deduplasiyon ile — sinyal, söylenti değil.",
       "faith": "Sayılara körü körüne inanmayın —",
@@ -649,7 +650,7 @@
       "title2": "Pro operasyon odasıdır.",
       "sub": "Pano ücretsiz — Resilience hariç her harita katmanı, her feed, kayıt gerekmiyor. Pro karar katmanını ekler.",
       "freeTitle": "Ücretsiz",
-      "freeDesc": "Ücretsiz sürüm tam bir üründür, deneme değildir. Resilience hariç her harita katmanı, her feed, her monitor — kayıt yok, deneme süresi yok.",
+      "freeDesc": "Ücretsiz katman tam bir üründür, deneme sürümü değildir. Resilience dışındaki her harita katmanı, {{feeds}} kaynaktan gelen her besleme, tüm altı monitör — kayıt yok, deneme saati yok.",
       "freeF1": "Resilience hariç tüm harita katmanları ve seçilmiş beslemeler",
       "freeF2": "Ülke brifler, sıcak noktalar, istikrarsızlık puanları",
       "freeF3": "Boğazlar, kablolar, kaskad analizi",
@@ -704,9 +705,9 @@
       "verifyTitle": "Kırılan bir olayı doğrulayın",
       "verifyDesc": "Bir haber niteliğindeki iddiaya güvenmeden önce mevcut kriz takip araçlarını, güncel metrikleri ve referans alınan bağlamı kontrol edin.",
       "chokepointTitle": "Bir boğazı kontrol edin",
-      "chokepointDesc": "Kritik deniz boğazları boyunca kesinti durumunu, gemi akışlarını ve riski inceleyin.",
+      "chokepointDesc": "{{chokepoints}} kritik deniz dar geçidinde kesinti durumunu, gemi akışlarını ve riski inceleyin.",
       "countryRiskTitle": "Bir ülke riski hareketini açıklayın",
-      "countryRiskDesc": "Bir ülkenin değişiminin arkasındaki siyasi, güvenlik, ekonomik ve dayanıklılık sinyallerini izleyin.",
+      "countryRiskDesc": "Bir ülkenin değişiminin ardındaki siyasi, güvenlik, ekonomik ve dayanıklılık sinyallerini izleyin; dayanıklılık {{resilienceRanked}} ülke için sıralandı.",
       "open": "Kanıt görüntüle"
     }
   },

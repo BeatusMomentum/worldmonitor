@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Free Real-Time Global Intelligence Dashboard",
-      "description": "By the time it's news, you already knew. Conflicts, shipping chokepoints, military flights, markets and cyber on one free live world map, with AI analysis. No signup.",
+      "description": "By the time it's news, you already knew. Conflicts, chokepoints, military flights, markets and cyber on one free live world map, with AI analysis. No signup.",
       "ogTitle": "World Monitor — By the time it's news, you already knew.",
       "ogDescription": "The world's raw signals — ships, jets, sirens, cables, markets — on one free live intelligence map, with AI that flags when they converge. Free, no signup."
     },
@@ -466,7 +466,8 @@
       "blog": "Blog",
       "menu": "Menu",
       "docs": "Docs",
-      "launch": "Launch Dashboard"
+      "launch": "Launch Dashboard",
+      "skipToContent": "Skip to content"
     },
     "hero": {
       "eyebrow": "Free global intelligence dashboard · live now",
@@ -493,9 +494,9 @@
       "verifyTitle": "Verify a breaking event",
       "verifyDesc": "Check current crisis trackers, dated metrics, and cited context before trusting a breaking claim.",
       "chokepointTitle": "Check a chokepoint",
-      "chokepointDesc": "Inspect disruption status, vessel flows, and risk across critical maritime passages.",
+      "chokepointDesc": "Inspect disruption status, vessel flows, and risk across {{chokepoints}} critical maritime passages.",
       "countryRiskTitle": "Explain a country-risk move",
-      "countryRiskDesc": "Trace the political, security, economic, and resilience signals behind a country's change.",
+      "countryRiskDesc": "Trace the political, security, economic, and resilience signals behind a country's change, with resilience ranked for {{resilienceRanked}} countries.",
       "open": "Open evidence"
     },
     "live": {
@@ -530,7 +531,7 @@
         "kicker": "Geopolitics + markets + macro",
         "title1": "The market move",
         "title2": "has a map.",
-        "s1": "Country risk, sanctions, hotspot escalation, official alerts and news velocity show where geopolitical pressure is rising.",
+        "s1": "Country risk, sanctions, escalation across {{hotspots}} scored hotspots, official alerts and news velocity show where geopolitical pressure is rising.",
         "s2": "Ships, chokepoints, flights, cables and infrastructure proximity show whether that pressure can hit supply, trade or capital routes.",
         "s3": "Rates, FX, equities, crypto, energy and safe-haven assets show which market regime is repricing.",
         "s4": "The edge is seeing geopolitical pressure, transmission path and price action together before it becomes a consensus note.",
@@ -544,7 +545,7 @@
         "kicker": "Commodities + chokepoints + weather",
         "title1": "Commodity moves start",
         "title2": "in the physical world.",
-        "s1": "AIS, ports, pipelines, LNG, refineries, waterways and chokepoints show when supply is slowing, rerouting or concentrating.",
+        "s1": "AIS, ports, pipelines, LNG, refineries, waterways and {{chokepoints}} chokepoints show when supply is slowing, rerouting or concentrating.",
         "s2": "Weather, fires, earthquakes, outages and conflict layers show the physical events that can hit production or transport.",
         "s3": "Oil, gas, gold, grains, miners, shipping names and commodity-linked currencies show how the shock prices through.",
         "s4": "Commodity intelligence only works when physical flow, disruption signal and market spread are visible together.",
@@ -558,7 +559,7 @@
         "kicker": "AI infrastructure + energy + climate",
         "title1": "The AI boom has",
         "title2": "a physical balance sheet.",
-        "s1": "AI datacenters sit beside grids, pipelines, LNG, nuclear facilities, cloud regions and power-market exposure.",
+        "s1": "{{aiDatacenters}} AI datacenters sit beside grids, pipelines, LNG, nuclear facilities, cloud regions and power-market exposure.",
         "s2": "Grid stress, outages, heat, fire and weather layers show which compute corridors are under pressure today.",
         "s3": "Company, exchange and macro panels show who is exposed when energy, compute and capital collide.",
         "s4": "AI infrastructure risk only appears when physical assets, climate signals and markets share one screen.",
@@ -571,7 +572,7 @@
       "m4": {
         "kicker": "Cables + outages + trade",
         "title": "The cable break becomes a cascade",
-        "s1": "Subsea cables, landing stations, ports, pipelines and chokepoints are mapped together.",
+        "s1": "{{submarineCables}} subsea cables, landing stations, ports, pipelines and chokepoints are mapped together.",
         "s2": "Internet and BGP anomaly feeds show whether a physical fault is becoming a digital outage.",
         "s3": "Trade corridors, country resilience and redundancy data show who loses fallback routes first.",
         "s4": "Cable damage matters when telecom redundancy, trade corridors and country exposure line up.",
@@ -591,9 +592,9 @@
       "f2Title": "Click any country",
       "f2Desc": "A full dossier opens: instability score with its components, an AI brief with cited headlines, active signals, a 7-day timeline.",
       "f3Title": "Hit ⌘K / Ctrl-K",
-      "f3Desc": "Commands. Jump to any layer, panel or country without learning the UI first.",
+      "f3Desc": "{{commands}} commands. Jump to any layer, panel or country without learning the UI first.",
       "f4Title": "Pick your lens",
-      "f4Desc": "World, Tech, Finance, Commodity, Energy or Happy — same engine, tuned monitors, one click apart.",
+      "f4Desc": "World, Tech, Finance, Commodity, Energy or Happy — same engine, six tuned monitors, one click apart.",
       "f5Title": "You've seen maybe a tenth of it",
       "f5Desc": "The rest surfaces as the world moves — satellite passes, GPS jamming, dark ships, protest clusters, siren alerts.",
       "cta": "Start the clock"
@@ -624,9 +625,9 @@
       "n3Title": "Chokepoint transit intel",
       "n3Desc": "Vessel counts through Hormuz, Suez, Bab el-Mandeb and 10 more straits — with disruption scoring.",
       "n4Title": "AI datacenter map",
-      "n4Desc": "AI datacenters mapped with power and operator metadata — the physical layer of the AI race.",
+      "n4Desc": "{{aiDatacenters}} AI datacenters mapped with power and operator metadata — the physical layer of the AI race.",
       "n5Title": "Submarine cables",
-      "n5Desc": "Undersea cables that carry the internet, overlaid with outage and threat signals.",
+      "n5Desc": "{{submarineCables}} undersea cables that carry the internet, overlaid with outage and threat signals.",
       "n6Title": "Protest tracking",
       "n6Desc": "Dual-source protest detection with cross-source deduplication — signal, not rumor.",
       "faith": "Don't take the numbers on faith —",
@@ -661,7 +662,7 @@
       "title2": "Pro is the operations room.",
       "sub": "The dashboard is free — every map layer except Resilience, every feed, no signup. Pro adds the decision layer.",
       "freeTitle": "Free",
-      "freeDesc": "The free tier is a full product, not a trial. Every map layer except Resilience, every feed, every monitor — no signup, no trial clock.",
+      "freeDesc": "The free tier is a full product, not a trial. Every map layer except Resilience, every feed from {{feeds}} sources, all six monitors — no signup, no trial clock.",
       "freeF1": "All map layers except Resilience & curated feeds",
       "freeF2": "Country briefs, hotspots, instability scores",
       "freeF3": "Chokepoints, cables, cascade analysis",

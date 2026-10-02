@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Gratis realtime dashboard voor wereldwijd inlichtingen",
-      "description": "Tegen de tijd dat het nieuws is, wist je het al. Conflicten, scheepvaartknelpunten, militaire vluchten, markten en cyber op één gratis live wereldkaart, met AI-analyse. Geen registratie.",
+      "description": "Tegen de tijd dat het nieuws is, wist je het al. Conflicten, knelpunten, militaire vluchten, markten en cyber op één gratis live wereldkaart, met AI-analyse. Geen registratie nodig.",
       "ogTitle": "World Monitor — Tegen de tijd dat het nieuws is, wist je het al.",
       "ogDescription": "De onbewerkte signalen van de wereld — schepen, vliegtuigen, sirenes, kabels, markten — op één gratis live inlichtingenkaart, met AI die aangeeft wanneer ze samenkomen. Gratis, geen registratie."
     },
@@ -466,7 +466,8 @@
       "launch": "Dashboard starten",
       "blog": "Blog",
       "menu": "Menu",
-      "agents": "Voor AI-agenten"
+      "agents": "Voor AI-agenten",
+      "skipToContent": "Naar inhoud gaan"
     },
     "hero": {
       "eyebrow": "Gratis dashboard voor wereldwijd inlichtingen · nu live",
@@ -518,7 +519,7 @@
         "kicker": "Geopolitiek + markten + macro",
         "title1": "De marktbeweging",
         "title2": "heeft een kaart.",
-        "s1": "Landrisico, sancties, escalatie van brandhaarden, officiële waarschuwingen en nieuwssnelheid tonen waar geopolitieke druk toeneemt.",
+        "s1": "Landrisico, sancties, escalatie over {{hotspots}} gescoorde hotspots; officiële waarschuwingen en nieuwstempo tonen waar geopolitieke druk toeneemt.",
         "s2": "Schepen, knelpunten, vluchten, kabels en nabijheid van infrastructuur tonen of die druk toeleveranciers-, handel- of kapitaalroutes kan raken.",
         "s3": "Rentetarief, valuta, aandelen, crypto, energie en veilige-havenactiva tonen welk marktregime opnieuw wordt gewaardeerd.",
         "s4": "De voorkant ziet geopolitieke druk, transmissieroute en prijsactie samen voordat het een consensus-notitie wordt.",
@@ -532,7 +533,7 @@
         "kicker": "Grondstoffen + knelpunten + weer",
         "title1": "Grondstoffenbewegingen beginnen",
         "title2": "in de fysieke wereld.",
-        "s1": "AIS, havens, pijpleidingen, LNG, raffinaderijen, waterwegen en knelpunten tonen wanneer het aanbod afneemt, wordt omgeleid of concentreert.",
+        "s1": "AIS, havens, pijpleidingen, LNG, raffinaderijen, waterwegen en {{chokepoints}} knelpunten tonen wanneer aanbod vertraagt, omgeleid of geconcentreerd wordt.",
         "s2": "Weer, branden, aardbevingen, uitval en conflictlagen tonen de fysieke gebeurtenissen die productie of transport kunnen treffen.",
         "s3": "Olie, gas, goud, granen, mijnbouwbedrijven, scheepvaartnamen en aan grondstoffen gerelateerde valuta tonen hoe de schok doorprijst.",
         "s4": "Grondstoffenintelligentie werkt alleen wanneer fysieke stroom, verstoringssignaal en marktspread samen zichtbaar zijn.",
@@ -546,7 +547,7 @@
         "kicker": "AI-infrastructuur + energie + klimaat",
         "title1": "De AI-boom heeft",
         "title2": "een fysieke balans.",
-        "s1": "AI-datacenters bevinden zich naast stroornetten, pijpleidingen, LNG, kernfaciliteiten, cloudregio's en blootstelling aan energiemerkten.",
+        "s1": "{{aiDatacenters}} AI-datacenters naast stroomnetten, pijpleidingen, LNG, nucleaire installaties, cloudregio's en stroommarktblootstelling.",
         "s2": "Netstress, uitval, hitte, brand en weerlagen tonen welke computercorridors vandaag onder druk staan.",
         "s3": "Bedrijfs-, beurs- en macropanels tonen wie blootgesteld is wanneer energie, compute en kapitaal samenkomen.",
         "s4": "AI-infrastructuurrisico verschijnt alleen wanneer fysieke activa, klimaatsignalen en markten één scherm delen.",
@@ -559,7 +560,7 @@
       "m4": {
         "kicker": "Kabels + storingen + handel",
         "title": "De kabelbreuk wordt een cascade",
-        "s1": "Onderzeese kabels, landingsstations, havens, pijpleidingen en knelpunten zijn samen in kaart gebracht.",
+        "s1": "{{submarineCables}} onderzeeëse kabels, landingsstations, havens, pijpleidingen en knelpunten in kaart gebracht samen.",
         "s2": "Internet- en BGP-anomaliefeeds tonen of een fysieke fout een digitale storing wordt.",
         "s3": "Handelscorridors, nationale veerkracht en redundantiegegevens tonen wie eerst terugvalroutes kwijtraken.",
         "s4": "Kabelschade is van belang wanneer telecom-redundantie, handelscorridors en landblootstelling op één lijn liggen.",
@@ -579,9 +580,9 @@
       "f2Title": "Klik op een willekeurig land",
       "f2Desc": "Een volledig dossier opent: instabiliteitsscore met componenten, AI-samenvatting met geciteerde koppen, actieve signalen, een 7-daags tijdlijn.",
       "f3Title": "Druk ⌘K / Ctrl-K",
-      "f3Desc": "Commando's. Spring naar elke laag, panel of land zonder eerst de UI te leren.",
+      "f3Desc": "{{commands}} commando's. Spring naar een willekeurige laag, panel of land zonder eerst de UI te leren.",
       "f4Title": "Kies uw perspectief",
-      "f4Desc": "World, Tech, Finance, Commodity, Energy of Happy — dezelfde engine, aangepaste monitoren, één klik verderop.",
+      "f4Desc": "Wereld, Tech, Financiën, Grondstof, Energie of Goed — dezelfde engine, zes afgestemd monitoren, één klik uit elkaar.",
       "f5Title": "U heeft misschien een tiende gezien",
       "f5Desc": "De rest komt naar voren als de wereld verandert — satellietpassages, GPS-jamming, donkere schepen, protestclusters, sirenesignalen.",
       "cta": "Start de klok"
@@ -612,9 +613,9 @@
       "n3Title": "Chokepoint-transitinformatie",
       "n3Desc": "Scheepsaantallen door Hormuz, Suez, Bab el-Mandeb en 10 meer straten — met verstoringsscore.",
       "n4Title": "AI-datacentrumkaart",
-      "n4Desc": "313 AI-datacentra in kaart gebracht met stroom- en bedrijfsmetagegevens — de fysieke laag van de AI-race.",
+      "n4Desc": "{{aiDatacenters}} AI-datacenters in kaart gebracht met stroom- en exploitantmetagegevens — de fysieke laag van de AI-race.",
       "n5Title": "Onderzeese kabels",
-      "n5Desc": "Onderzeese kabels die het internet dragen, gericht met uitval- en dreigingssignalen.",
+      "n5Desc": "{{submarineCables}} onderzeeëse kabels die het internet dragen, met storingen en dreigingssignalen.",
       "n6Title": "Protesttracking",
       "n6Desc": "Tweeledige protestdetectie met cross-source deduplicatie — signaal, geen gerucht.",
       "faith": "Vertrouw de getallen niet zomaar op hun woord —",
@@ -649,7 +650,7 @@
       "title2": "Pro is de operationele kamer.",
       "sub": "Het dashboard is gratis — elke kaartlaag behalve Resilience, elke feed, geen registratie. Pro voegt de beslissingslaag toe.",
       "freeTitle": "Gratis",
-      "freeDesc": "De gratis versie is een volledig product, geen proefperiode. Elke kaartlaag behalve Resilience, elke feed, elke monitor — geen registratie, geen proefklok.",
+      "freeDesc": "De gratis versie is een volwaardig product, geen proefperiode. Elke kaartlaag behalve Resilience, elke feed van {{feeds}} bronnen, alle zes monitors — geen inschrijving, geen klok.",
       "freeF1": "Alle kaartlagen behalve Resilience & samengestelde feeds",
       "freeF2": "Landensamenvattingen, hotspots, instabiliteitsscores",
       "freeF3": "Chokepoints, kabels, cascadeanalyse",
@@ -704,9 +705,9 @@
       "verifyTitle": "Verifieer een breaking event",
       "verifyDesc": "Controleer huidige crisisbewakers, actuele metrische gegevens en geciteerde context voordat u een breaking claim vertrouwt.",
       "chokepointTitle": "Controleer een kritiek passage",
-      "chokepointDesc": "Inspecteer verstoringsstatus, scheepsbewegingen en risico's in kritieke zeepassages.",
+      "chokepointDesc": "Controleer verstoringstatus, scheepsstromen en risico's over {{chokepoints}} kritieke zeepassages.",
       "countryRiskTitle": "Leg een landenrisico-beweging uit",
-      "countryRiskDesc": "Traceer de politieke, veiligheids-, economische en veerkrachtssignalen achter een verandering van een land.",
+      "countryRiskDesc": "Volg de politieke, veiligheids-, economische en veerkrachtsignalen achter veranderingen in een land; veerkracht gerangschikt voor {{resilienceRanked}} landen.",
       "open": "Open bewijs"
     }
   },

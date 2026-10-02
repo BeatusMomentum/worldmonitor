@@ -71,7 +71,7 @@ export const Moments = () => (
                         {signal}
                       </span>
                       <p className="text-sm text-wm-muted leading-relaxed">
-                        {t(`welcome.moments.${key}.s${si + 1}`)}
+                        {t(`welcome.moments.${key}.s${si + 1}`, depthProofStats)}
                       </p>
                     </div>
                   ))}
