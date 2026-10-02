@@ -614,7 +614,7 @@ export async function dispatchToolsCall(
         actual_bytes: textBytes,
         hint,
       };
-      return rpcOk(id, { content: [{ type: 'text', text: JSON.stringify(envelope) }], structuredContent: envelope }, corsHeaders);
+      return rpcOk(id, { content: [{ type: 'text', text: JSON.stringify(envelope) }], structuredContent: envelope, ...(panelUsage ? { _meta: { 'worldmonitor/usage': panelUsage } } : {}) }, corsHeaders);
     }
     // Every tool advertises an `outputSchema`, so a strict client rejects a
     // result without `structuredContent` before the model sees it (#8328). A
