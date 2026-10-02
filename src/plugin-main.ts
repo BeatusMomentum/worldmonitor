@@ -38,6 +38,7 @@ let news: NewsItem[] = [];
 let digest: ListFeedDigestResponse | undefined;
 let view: PluginNewsView = { time_range: 'all' };
 let viewQueue: Promise<unknown> = Promise.resolve();
+let renderGeneration = 0;
 let applyingTimeRange = false;
 let modelContext = false;
 let sourceSelect: HTMLSelectElement;
@@ -68,6 +69,8 @@ async function analyze(args: object): Promise<{ summary: string; model: string }
 }
 
 async function renderResult(result: unknown, keepCurrentView = false): Promise<boolean> {
+  const inputView = keepCurrentView ? undefined : hostView;
+  if (!keepCurrentView) hostView = undefined;
   if (!result || typeof result !== 'object') return false;
   const response = result as { isError?: boolean; content?: Array<{ text?: string }>; structuredContent?: ListFeedDigestResponse & { requestedView?: unknown; panelRequest?: unknown } };
   if (response.isError) {
@@ -81,14 +84,17 @@ async function renderResult(result: unknown, keepCurrentView = false): Promise<b
     return false;
   }
   const nextAdmission = data.panelRequest === undefined ? undefined : newsPanelAdmissionSchema.parse(data.panelRequest);
+  const generation = ++renderGeneration;
+  const requestedView = data.requestedView ?? inputView;
   const admissionChanged = !nextAdmission || nextAdmission.token !== admission?.token;
   if (admissionChanged) hazardCache.clear();
   admission = nextAdmission;
   showUsage();
   digest = data;
   renderDigest();
-  if (keepCurrentView || admissionChanged || (data.requestedView ?? hostView)) {
-    await applyView(data.requestedView ?? hostView ?? {}, { keepCurrentView, reloadLayers: admissionChanged }).catch(error => {
+  if (keepCurrentView || admissionChanged || requestedView) {
+    await applyView(requestedView ?? {}, { keepCurrentView, reloadLayers: admissionChanged, generation }).catch(error => {
+      if (generation !== renderGeneration) return;
       status.textContent = 'The requested view could not be applied. Showing news with the previous filters.';
       mapStatus.textContent = error instanceof Error ? error.message : 'The requested map view is unavailable.';
     });
@@ -177,18 +183,20 @@ function updateSelect(select: HTMLSelectElement, values: string[], value: string
   select.value = value;
 }
 
-async function applyView(input: unknown, options: { reset?: boolean; keepCurrentView?: boolean; reloadLayers?: boolean } = {}): Promise<object> {
+async function applyView(input: unknown, options: { reset?: boolean; keepCurrentView?: boolean; reloadLayers?: boolean; generation?: number } = {}): Promise<object> {
   const next = pluginNewsViewSchema.parse(input);
   const operation = viewQueue.then(() => {
     const desired = options.keepCurrentView ? { ...view } : { ...next };
     if (options.reloadLayers && desired.map_layers === undefined) desired.map_layers = view.map_layers ?? [];
-    return updateView(desired, options.reset ?? false);
+    return updateView(desired, options.reset ?? false, options.generation);
   });
   viewQueue = operation.catch(() => {});
   return operation;
 }
 
-async function updateView(next: PluginNewsView, reset: boolean): Promise<object> {
+async function updateView(next: PluginNewsView, reset: boolean, generation?: number): Promise<object> {
+  const superseded = () => generation !== undefined && generation !== renderGeneration;
+  if (superseded()) return { applied: false, superseded: true };
   const intended = { ...(reset ? { map_layers: view.map_layers } : view), ...next };
   const selectedLayers = intended.map_layers ?? [];
   let snapshot: PluginHazardSnapshot | undefined;
@@ -203,10 +211,12 @@ async function updateView(next: PluginNewsView, reset: boolean): Promise<object>
       void loaded.catch(() => { if (hazardCache.get(key) === loaded) hazardCache.delete(key); });
     }
     snapshot = await loaded;
+    if (superseded()) return { applied: false, superseded: true };
   }
   let renderer: object | undefined;
   if (next.renderer) {
     const result = next.renderer === 'globe' ? await map.switchToGlobe() : await map.switchToFlat();
+    if (superseded()) return { applied: false, superseded: true };
     renderer = result;
     intended.renderer = result.mode;
     for (const control of document.querySelectorAll<HTMLButtonElement>('#mapDimensionToggle button')) {
@@ -220,22 +230,27 @@ async function updateView(next: PluginNewsView, reset: boolean): Promise<object>
   }
   if (next.country) {
     await preloadCountryGeometry();
+    if (superseded()) return { applied: false, superseded: true };
     const country = getCountryMapFocus(next.country);
     if (!country) throw new Error('Country geography is unavailable.');
     const token = map.setCenter(country.lat, country.lon, country.zoom);
     await map.whenViewportSettled(token);
+    if (superseded()) return { applied: false, superseded: true };
     map.highlightCountry(next.country);
   }
   if (next.map_zoom !== undefined && next.map_latitude === undefined && !next.country) {
     await map.whenRendererReady();
+    if (superseded()) return { applied: false, superseded: true };
     const center = map.getCenter();
     if (!center) throw new Error('Map center is unavailable.');
     const token = map.setCenter(center.lat, center.lon, next.map_zoom);
     await map.whenViewportSettled(token);
+    if (superseded()) return { applied: false, superseded: true };
   }
   if (next.map_latitude !== undefined && next.map_longitude !== undefined) {
     const token = map.setCenter(next.map_latitude, next.map_longitude, next.map_zoom);
     await map.whenViewportSettled(token);
+    if (superseded()) return { applied: false, superseded: true };
   }
   if (snapshot) {
     if (snapshot.earthquakes) map.setEarthquakes(snapshot.earthquakes, { replaceEmpty: true });

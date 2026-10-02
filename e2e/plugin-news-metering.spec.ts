@@ -8,11 +8,15 @@ type HostCall = { name: string; arguments: Record<string, unknown> };
 async function installNewsHost(page: Page, deniedInitially = false, serverTools = true) {
   const calls: HostCall[] = [];
   let units = 0;
+  let viewUpdates = 0;
   let denied = deniedInitially;
   let failHazards = false;
   let delayRefresh = false;
   let releaseRefresh: () => void = () => {};
   const delayedRefresh = new Promise<void>(resolve => { releaseRefresh = resolve; });
+  let delayHazards = false;
+  let releaseHazards: () => void = () => {};
+  const delayedHazards = new Promise<void>(resolve => { releaseHazards = resolve; });
   const successfulRefreshes = new Set<string>();
   const article = { title: 'Controlled earthquake report in Japan', source: 'Fixture publisher', link: 'https://example.com/news', publishedAt: Date.now(), location: { latitude: 35, longitude: 139 }, isAlert: true };
   await page.route('**/plugin/assets/**', route => route.fulfill({ path: join(process.cwd(), 'dist/plugin/assets', new URL(route.request().url()).pathname.split('/').at(-1)!), headers: { 'Access-Control-Allow-Origin': '*' } }));
@@ -21,6 +25,7 @@ async function installNewsHost(page: Page, deniedInitially = false, serverTools 
   await page.route('**/news-host-test', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><title>News plugin metering acceptance</title><h1>Built news plugin — controlled host and data</h1><p>Checks rendering and request reuse. Does not test live OAuth, ChatGPT installation or source freshness.</p><iframe title="WorldMonitor news and maps" sandbox="allow-scripts" style="width:100%;height:1050px;border:0"></iframe>' }));
   await page.exposeFunction('newsHost', async (method: string, params: HostCall) => {
     if (method === 'ui/initialize') return { hostCapabilities: { ...(serverTools ? { serverTools: {} } : {}), updateModelContext: {} }, hostContext: { theme: 'dark' } };
+    if (method === 'ui/update-model-context') viewUpdates++;
     if (method !== 'tools/call') return {};
     calls.push(params);
     if (params.name === 'open_news_dashboard') {
@@ -32,6 +37,7 @@ async function installNewsHost(page: Page, deniedInitially = false, serverTools 
       return { structuredContent: { categories: { world: { items: [article] } }, coverage: { state: 'complete', servedStale: false }, requestedView, panelRequest: { panel: 'news', token: `news.controlled-${units}`, expiresAt: new Date(Date.now() + 300000).toISOString(), reused: false, usage: { used: units, limit: 50, remaining: 50 - units, resetsAt: '2026-10-03T00:00:00.000Z', unit: 'requests' } } } };
     }
     if (params.name === 'get_natural_disasters') {
+      if (delayHazards) await delayedHazards;
       if (failHazards) return { isError: true };
       const quake = { id: 'controlled-quake', place: 'Japan fixture', magnitude: 5, depthKm: 10, location: { latitude: 35, longitude: 139 }, occurredAt: Date.now(), sourceUrl: 'https://example.com/quake', source: 'Controlled USGS', category: 'earthquake' };
       const fire = { id: 'controlled-fire', location: { latitude: 30, longitude: 35 }, detectedAt: Date.now(), brightness: 350, frp: 12, confidence: 'FIRE_CONFIDENCE_HIGH', region: 'Fixture', dayNight: 'D' };
@@ -57,7 +63,7 @@ async function installNewsHost(page: Page, deniedInitially = false, serverTools 
     });
     frame.srcdoc = html.replace('<head>', `<head><base href="${location.origin}/">`);
   }, html);
-  return { calls, get units() { return units; }, deny: () => { denied = true; }, delayRefresh: () => { delayRefresh = true; }, releaseRefresh, failHazards: () => { failHazards = true; }, recoverHazards: () => { failHazards = false; } };
+  return { calls, get units() { return units; }, get viewUpdates() { return viewUpdates; }, deny: () => { denied = true; }, delayRefresh: () => { delayRefresh = true; }, releaseRefresh, delayHazards: () => { delayHazards = true; }, releaseHazards, failHazards: () => { failHazards = true; }, recoverHazards: () => { failHazards = false; } };
 }
 
 test('news and map hydration share one request, toggles reuse data and refresh charges once', async ({ page }, info) => {
@@ -196,4 +202,56 @@ test('refresh controls are disabled without server tool capability', async ({ pa
   await expect(frame.getByRole('button', { name: 'Refresh news', exact: true })).toBeDisabled();
   await expect(frame.getByRole('button', { name: 'Refresh map data', exact: true })).toBeDisabled();
   expect(host.calls.map(call => call.name)).toEqual(['open_news_dashboard']);
+});
+
+test('a host input is consumed once and cannot restore cleared filters', async ({ page }) => {
+  const host = await installNewsHost(page);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#pluginMapStatus')).toContainText('earthquakes: 1 valid');
+  await page.evaluate(async () => {
+    const host = (window as unknown as { newsHost: (method: string, params: object) => Promise<{ structuredContent?: Record<string, unknown> }> }).newsHost;
+    const target = document.querySelector('iframe')!.contentWindow!;
+    const args = { source: 'Fixture publisher', map_layers: ['natural'] };
+    target.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-input', params: { arguments: args } }, '*');
+    const result = await host('tools/call', { name: 'open_news_dashboard', arguments: args });
+    delete result.structuredContent!.requestedView;
+    target.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: result }, '*');
+  });
+  await expect(frame.getByRole('combobox', { name: 'News source' })).toHaveValue('Fixture publisher');
+  await frame.getByRole('button', { name: 'Clear filters', exact: true }).click();
+  await expect(frame.getByRole('combobox', { name: 'News source' })).toHaveValue('');
+  await page.evaluate(async () => {
+    const host = (window as unknown as { newsHost: (method: string, params: object) => Promise<{ structuredContent?: Record<string, unknown> }> }).newsHost;
+    const result = await host('tools/call', { name: 'open_news_dashboard', arguments: { refresh: true, request_id: crypto.randomUUID() } });
+    delete result.structuredContent!.requestedView;
+    document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: result }, '*');
+  });
+  await expect(frame.locator('#pluginUsage')).toContainText('48 of 50 requests remaining');
+  await expect.poll(() => host.viewUpdates).toBe(4);
+  await expect(frame.getByRole('combobox', { name: 'News source' })).toHaveValue('');
+});
+
+test('a delayed older host render cannot commit filters after a newer result', async ({ page }) => {
+  const host = await installNewsHost(page);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#pluginMapStatus')).toContainText('earthquakes: 1 valid');
+  host.delayHazards();
+  await page.evaluate(async () => {
+    const host = (window as unknown as { newsHost: (method: string, params: object) => Promise<object> }).newsHost;
+    const result = await host('tools/call', { name: 'open_news_dashboard', arguments: { source: 'Fixture publisher', map_layers: ['natural'], refresh: true, request_id: crypto.randomUUID() } });
+    document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: result }, '*');
+  });
+  await expect.poll(() => host.calls.filter(call => call.name === 'get_natural_disasters').length).toBe(2);
+  await page.evaluate(async () => {
+    const host = (window as unknown as { newsHost: (method: string, params: object) => Promise<object> }).newsHost;
+    const result = await host('tools/call', { name: 'open_news_dashboard', arguments: { refresh: true, request_id: crypto.randomUUID() } });
+    document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: result }, '*');
+  });
+  await expect(frame.locator('#pluginUsage')).toContainText('47 of 50 requests remaining');
+  host.releaseHazards();
+  await expect.poll(() => host.calls.filter(call => call.name === 'get_natural_disasters').length).toBe(3);
+  await expect.poll(() => host.viewUpdates).toBeGreaterThanOrEqual(2);
+  await expect(frame.locator('#pluginMapStatus')).toContainText('earthquakes: 1 valid');
+  await expect(frame.getByRole('combobox', { name: 'News source' })).toHaveValue('');
+  expect(host.calls.at(-1)?.arguments.panel_request).toBe('news.controlled-3');
 });
