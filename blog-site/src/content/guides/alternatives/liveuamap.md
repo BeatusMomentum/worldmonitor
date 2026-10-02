@@ -36,6 +36,7 @@ If your entire assignment is to follow developments in one theater, a focused ma
 Use it when the map is one part of a larger briefing that includes transport, infrastructure, and markets. You gain a shared dashboard, but must still verify individual reports. It does not reproduce Liveuamap's editorial feed.
 
 Read [World Monitor](https://www.worldmonitor.app/dashboard) and check the required access before choosing.
+
 ## 2. ACLED
 
 **Best for a consistent conflict dataset.**
@@ -43,6 +44,7 @@ Read [World Monitor](https://www.worldmonitor.app/dashboard) and check the requi
 Choose ACLED when you need defined event categories and research-ready records rather than a stream of mapped news. Access, reporting lag, and data use terms matter. This is a change of research method, not a faster news feed.
 
 Read [ACLED](https://acleddata.com/conflict-data/knowledge-base/methodology) and check the required access before choosing.
+
 ## 3. Dataminr
 
 **Best for corporate facility monitoring.**

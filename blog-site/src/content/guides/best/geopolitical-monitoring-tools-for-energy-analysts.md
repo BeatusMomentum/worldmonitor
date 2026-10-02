@@ -49,6 +49,7 @@ Confirm units, reporting period, and original energy data. Do not combine stock,
 World Monitor's energy and route context can help organize a broad briefing on reported developments. Use the underlying source links and distinguish observed quantities from interpretation. It is our first choice here for an accessible overview, not a substitute for every proprietary energy dataset.
 
 [World Monitor overview](/blog/posts/what-is-worldmonitor-real-time-global-intelligence/).
+
 ## 2. Dataminr
 
 **Best for disruptions affecting business operations.**
@@ -56,6 +57,7 @@ World Monitor's energy and route context can help organize a broad briefing on r
 Evaluate Dataminr when the requirement is event awareness around facilities or operations. Its corporate-security and operational-resilience documentation is closer to that job than a general dashboard. Demonstrate the named asset and response workflow before choosing a package.
 
 [Official Dataminr documentation](https://www.dataminr.com/products/corporate-security/).
+
 ## 3. Recorded Future
 
 **Best for geopolitical threats near facilities.**

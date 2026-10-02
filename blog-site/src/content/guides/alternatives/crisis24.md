@@ -36,6 +36,7 @@ A travel manager needs to know who is exposed, contact them, and arrange help. R
 Evaluate its people and asset monitoring when early awareness of disruptions is the main requirement. Confirm the exact travel-support and assistance scope separately; event detection is not automatically an assistance contract.
 
 Read [Dataminr](https://www.dataminr.com/products/corporate-security/) and check the required access before choosing.
+
 ## 2. Recorded Future
 
 **Best for facility threats and country research.**
@@ -43,6 +44,7 @@ Read [Dataminr](https://www.dataminr.com/products/corporate-security/) and check
 Evaluate Geopolitical Intelligence for location-related threat research and monitoring. Keep traveler communication and assistance requirements in the evaluation rather than assuming an intelligence module supplies them.
 
 Read [Recorded Future](https://www.recordedfuture.com/products/geopolitical-intelligence) and check the required access before choosing.
+
 ## 3. World Monitor
 
 **Best for external context for a small research team.**

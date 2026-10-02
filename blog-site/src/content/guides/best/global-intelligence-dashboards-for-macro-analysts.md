@@ -49,6 +49,7 @@ Check your separate market-data, execution, and research requirements. A geopoli
 Choose World Monitor when your main task is to organize current geopolitical context beside available market and transport observations. That shared view supports an analyst's first questions. It does not establish a causal model, a price forecast, or complete institutional market-data coverage.
 
 [World Monitor overview](/blog/posts/what-is-worldmonitor-real-time-global-intelligence/).
+
 ## 2. ACLED
 
 **Best for research on conflict-event patterns.**
@@ -56,6 +57,7 @@ Choose World Monitor when your main task is to organize current geopolitical con
 ACLED is the stronger choice when the hypothesis requires coded conflict observations. Check date coverage, event definitions, revisions, and access. Pair the data with the financial series and research method you actually need rather than treating a news timeline as a statistical sample.
 
 [Official ACLED documentation](https://acleddata.com/conflict-data/knowledge-base/methodology).
+
 ## 3. Recorded Future
 
 **Best for organizational geopolitical threat research.**

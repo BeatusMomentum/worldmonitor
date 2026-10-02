@@ -49,6 +49,7 @@ Keep an incident timeline with publication and event times. Explain uncertainty 
 The free core dashboard is a practical starting point for a class briefing. It lets students explore news and available geographic signals in one workspace. Keep paid and developer capabilities separate when planning an assignment. Broad access does not mean every data source is complete or equally current.
 
 [World Monitor overview](/blog/posts/what-is-worldmonitor-real-time-global-intelligence/).
+
 ## 2. ACLED
 
 **Best for learning conflict-data methods.**
@@ -56,6 +57,7 @@ The free core dashboard is a practical starting point for a class briefing. It l
 ACLED's published methodology is useful even before you obtain a research dataset. Its definitions help explain how event categories differ. Check the access level available through your institution. ACLED is a better fit than World Monitor when the assignment requires a coded event dataset.
 
 [Official ACLED documentation](https://acleddata.com/conflict-data/knowledge-base/methodology).
+
 ## 3. Liveuamap
 
 **Best for a regional report timeline.**

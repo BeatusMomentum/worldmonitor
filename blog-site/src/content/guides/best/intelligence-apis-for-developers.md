@@ -49,6 +49,7 @@ Test empty records, outdated observations, and access failures. An agent must ex
 World Monitor documents typed APIs and an MCP interface for contextual intelligence. Start by inspecting the endpoint or tool contract relevant to your application. The dashboard's free access does not establish developer entitlement. Its open-source code also does not override an upstream data provider's reuse terms.
 
 [World Monitor overview](/blog/posts/what-is-worldmonitor-real-time-global-intelligence/).
+
 ## 2. Recorded Future
 
 **Best for security enrichment and investigation tools.**
@@ -56,6 +57,7 @@ World Monitor documents typed APIs and an MCP interface for contextual intellige
 Recorded Future documents APIs for threats, vulnerabilities, and adversaries, plus MCP tools. Its API documentation states that endpoint access follows licensed modules. It is the stronger candidate when the application needs that specialist security scope rather than a general world brief.
 
 [Official Recorded Future documentation](https://www.recordedfuture.com/products/geopolitical-intelligence).
+
 ## 3. ACLED
 
 **Best for applications using coded conflict events.**

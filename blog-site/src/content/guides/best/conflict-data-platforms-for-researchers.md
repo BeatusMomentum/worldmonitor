@@ -49,6 +49,7 @@ Check granularity, lag, export rights, and API entitlement. A free visualization
 ACLED is the stronger option when you need a published coding method and comparable event records. Its myACLED framework distinguishes access levels. Confirm that your institution receives the records and timing the project requires. The existence of a public map is not evidence of unrestricted exports.
 
 [Official ACLED documentation](https://acleddata.com/conflict-data/knowledge-base/methodology).
+
 ## 2. World Monitor
 
 **Best for finding research questions.**
@@ -56,6 +57,7 @@ ACLED is the stronger option when you need a published coding method and compara
 Use World Monitor to notice a development and inspect related news or geographic context. Its cross-domain dashboard can help formulate a hypothesis. Move the statistical analysis to the original source dataset. World Monitor's visible layers are not a replacement for a versioned research extract.
 
 [World Monitor overview](/blog/posts/what-is-worldmonitor-real-time-global-intelligence/).
+
 ## 3. Liveuamap
 
 **Best for incident discovery for case work.**

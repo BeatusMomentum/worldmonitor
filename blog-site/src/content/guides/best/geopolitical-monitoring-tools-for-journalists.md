@@ -49,6 +49,7 @@ You need consistent event definitions and a defined time period. A count of visi
 For an assignment concentrated on one conflict, a geolocated reporting feed is a sensible first stop. Keep a source ledger beside the map. We prefer that focused workflow to World Monitor's breadth when the brief only asks what changed in one theater. Neither product establishes independent confirmation.
 
 [Official Liveuamap documentation](https://dc.liveuamap.com/about).
+
 ## 2. World Monitor
 
 **Best for a daily international briefing.**
@@ -56,6 +57,7 @@ For an assignment concentrated on one conflict, a geolocated reporting feed is a
 Choose World Monitor when you need to connect a reported incident with adjacent transport, infrastructure, or market context. Its strength is assembling questions in one dashboard. The reporter still has to open the source and establish the facts. Do not turn proximity on the map into proof of a causal link.
 
 [World Monitor overview](/blog/posts/what-is-worldmonitor-real-time-global-intelligence/).
+
 ## 3. ACLED
 
 **Best for stories about patterns of violence.**

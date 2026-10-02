@@ -49,6 +49,7 @@ Keep the supplier relationship and operational facts separate from public intell
 Dataminr's operational-resilience documentation covers disruptions near operations, transport routes, and third parties. That is a closer fit to an operations team than a general news dashboard. Ask it to demonstrate your required locations and handoffs rather than accepting a generic global map.
 
 [Official Dataminr documentation](https://www.dataminr.com/products/corporate-security/).
+
 ## 2. Recorded Future
 
 **Best for facility-related threat investigation.**
@@ -56,6 +57,7 @@ Dataminr's operational-resilience documentation covers disruptions near operatio
 Its Geopolitical Intelligence module documents monitoring threats near facilities and country risk. Evaluate it when analysts need to investigate a threat that could affect a location. Confirm how the result enters your own supplier or logistics process; intelligence alone is not a shipment decision.
 
 [Official Recorded Future documentation](https://www.recordedfuture.com/products/geopolitical-intelligence).
+
 ## 3. World Monitor
 
 **Best for public chokepoint and country context.**

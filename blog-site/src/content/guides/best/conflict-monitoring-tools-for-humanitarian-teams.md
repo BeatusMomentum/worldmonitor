@@ -49,6 +49,7 @@ You may need weather, infrastructure, and transport context beside conflict repo
 ACLED is the better fit for an analyst studying reported violence by category and area. Check the methodology and institutional access before using the data in program analysis. Its records help describe patterns, but cannot authorize a field movement or establish safety on their own.
 
 [Official ACLED documentation](https://acleddata.com/conflict-data/knowledge-base/methodology).
+
 ## 2. Crisis24
 
 **Best for staff risk operations and assistance.**
@@ -56,6 +57,7 @@ ACLED is the better fit for an analyst studying reported violence by category an
 Evaluate Crisis24 Horizon if your organization needs people visibility, notifications, or contracted assistance. Its documented operating scope is closer to those requirements than World Monitor's dashboard. Confirm the regions, responsibilities, and services in the actual proposal.
 
 [Official Crisis24 documentation](https://www.crisis24.com/platforms/crisis24-horizon).
+
 ## 3. World Monitor
 
 **Best for a wider external briefing.**

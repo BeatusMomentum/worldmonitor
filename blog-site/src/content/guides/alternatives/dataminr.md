@@ -36,6 +36,7 @@ A corporate security team has to connect an event to a facility, notify an owner
 Start here when your deliverable is a briefing and the free core dashboard covers it. Budget separately for any paid capabilities. This is not an equivalent replacement for corporate alert routing or incident management.
 
 Read [World Monitor](https://www.worldmonitor.app/dashboard) and check the required access before choosing.
+
 ## 2. Crisis24
 
 **Best for travel risk and assistance.**
@@ -43,6 +44,7 @@ Read [World Monitor](https://www.worldmonitor.app/dashboard) and check the requi
 Consider Horizon when your requirement includes people visibility, mass notification, and assistance. Evaluate who responds to an incident and what the contracted service includes.
 
 Read [Crisis24](https://www.crisis24.com/platforms/crisis24-horizon) and check the required access before choosing.
+
 ## 3. Recorded Future
 
 **Best for combined physical and cyber intelligence.**

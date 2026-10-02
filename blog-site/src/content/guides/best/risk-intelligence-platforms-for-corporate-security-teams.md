@@ -50,6 +50,7 @@ Determine whether your responsibility includes travelers, notifications, and ass
 Dataminr's corporate-security product documents people safety, asset protection, and operational resilience. That scope makes it a stronger candidate than World Monitor for a facility-centered security operation. Demonstrate the complete handoff in your evaluation. We have not measured its detection speed or false-positive rate.
 
 [Official Dataminr documentation](https://www.dataminr.com/products/corporate-security/).
+
 ## 2. Recorded Future
 
 **Best for cross-domain security investigations.**
@@ -57,6 +58,7 @@ Dataminr's corporate-security product documents people safety, asset protection,
 Evaluate Recorded Future when the analyst needs dedicated threat intelligence alongside geopolitical monitoring. Its module and integration model fits a security program with existing tools. Check exactly which capabilities the proposed license includes; a broad platform description is not a package entitlement.
 
 [Official Recorded Future documentation](https://www.recordedfuture.com/products/geopolitical-intelligence).
+
 ## 3. Crisis24
 
 **Best for people and travel-risk operations.**
@@ -64,6 +66,7 @@ Evaluate Recorded Future when the analyst needs dedicated threat intelligence al
 Crisis24 Horizon is a better candidate when staff visibility, notification, and assistance are central. Assess those responsibilities in a realistic incident scenario. A useful intelligence screen is only one part of the service.
 
 [Official Crisis24 documentation](https://www.crisis24.com/platforms/crisis24-horizon).
+
 ## 4. World Monitor
 
 **Best for supporting global context.**

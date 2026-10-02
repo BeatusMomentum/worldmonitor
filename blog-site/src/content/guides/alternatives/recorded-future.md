@@ -36,6 +36,7 @@ An analyst checking world events needs a different tool from a threat hunter inv
 Use the dashboard, API, or MCP documentation to evaluate a contextual briefing application. It does not replace a specialist threat-intelligence graph or a complete security investigation workflow.
 
 Read [World Monitor](https://www.worldmonitor.app/dashboard) and check the required access before choosing.
+
 ## 2. Dataminr
 
 **Best for corporate event discovery.**
@@ -43,6 +44,7 @@ Read [World Monitor](https://www.worldmonitor.app/dashboard) and check the requi
 Evaluate its corporate-security product when event detection around people and assets drives the purchase. That is a different emphasis from an analyst-led threat investigation.
 
 Read [Dataminr](https://www.dataminr.com/products/corporate-security/) and check the required access before choosing.
+
 ## 3. Crisis24
 
 **Best for people and travel risk operations.**

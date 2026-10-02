@@ -49,6 +49,7 @@ Use intelligence as an input to your organization's process. Check the original 
 Crisis24 Horizon documents travel risk, people visibility, mass notification, and assistance. That makes it the strongest match in this selection for the travel manager's full operating task. Coverage and service levels still depend on the contract. We have not tested the response service.
 
 [Official Crisis24 documentation](https://www.crisis24.com/platforms/crisis24-horizon).
+
 ## 2. Dataminr
 
 **Best for awareness of disruptive events.**
@@ -56,6 +57,7 @@ Crisis24 Horizon documents travel risk, people visibility, mass notification, an
 Evaluate Dataminr if your primary gap is discovering events affecting people or assets. Its corporate-security scope addresses that problem. Confirm travel-support responsibilities separately. Do not assume event awareness includes the complete assistance service your organization requires.
 
 [Official Dataminr documentation](https://www.dataminr.com/products/corporate-security/).
+
 ## 3. World Monitor
 
 **Best for initial destination context.**

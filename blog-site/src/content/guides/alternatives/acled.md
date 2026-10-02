@@ -36,6 +36,7 @@ A researcher needs consistent event definitions, date ranges, and a record of da
 Use it to identify developments and bring conflict reports into a wider briefing. Do not use the number of visible markers as a replacement for an ACLED event count.
 
 Read [World Monitor](https://www.worldmonitor.app/dashboard) and check the required access before choosing.
+
 ## 2. Liveuamap
 
 **Best for following regional news reports.**
@@ -43,6 +44,7 @@ Read [World Monitor](https://www.worldmonitor.app/dashboard) and check the requi
 A mapped news feed can support incident discovery and timeline work. It is not an interchangeable statistical dataset. Preserve source links and use your own verification process.
 
 Read [Liveuamap](https://dc.liveuamap.com/about) and check the required access before choosing.
+
 ## 3. Recorded Future
 
 **Best for organizational geopolitical exposure.**
