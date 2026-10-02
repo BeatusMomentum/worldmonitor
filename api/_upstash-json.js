@@ -128,22 +128,37 @@ export async function readJsonBatchFromUpstashWithStatus(keys, timeoutMs = 3_000
   }
 }
 
+/**
+ * Soft-fail Redis GET used by MCP cache tools and legacy edge readers.
+ * Returns null on miss, HTTP failure, parse failure, network error, and
+ * AbortSignal.timeout / AbortError. Must never reject: MCP
+ * `loadCachedToolData` runs many of these under Promise.all and relies on
+ * nulls for the F6 `cache_all_null` path. An uncaught TimeoutError from
+ * AbortSignal.timeout used to bypass that contract and surface as a
+ * tool-execution Sentry error (Sentry WORLDMONITOR-176 / WORLDMONITOR-ZM).
+ * Contrast `readRawJsonFromUpstash`, which intentionally throws so callers
+ * can distinguish infrastructure failure from empty state.
+ */
 export async function readJsonFromUpstash(key, timeoutMs = 3_000, raw = false) {
   const url = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return null;
 
-  const resp = await fetch(`${url}/get/${encodeURIComponent(raw ? key : applyRedisKeyPrefix(key))}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    signal: AbortSignal.timeout(timeoutMs),
-  });
-  if (!resp.ok) return null;
-
-  const data = await resp.json();
-  if (data.result == null) return null;
-
   try {
-    return unwrapEnvelope(JSON.parse(data.result)).data;
+    const resp = await fetch(`${url}/get/${encodeURIComponent(raw ? key : applyRedisKeyPrefix(key))}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (!resp.ok) return null;
+
+    const data = await resp.json();
+    if (data.result == null) return null;
+
+    try {
+      return unwrapEnvelope(JSON.parse(data.result)).data;
+    } catch {
+      return null;
+    }
   } catch {
     return null;
   }
