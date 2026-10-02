@@ -5,11 +5,14 @@ import { COUNTRY_RISK_APP_HTML } from '../api/mcp/ui/country-risk-app';
 
 test.use({ serviceWorkers: 'block' });
 type HostCall = { name: string; arguments: Record<string, unknown> };
-async function installNewsHost(page: Page, deniedInitially = false) {
+async function installNewsHost(page: Page, deniedInitially = false, serverTools = true) {
   const calls: HostCall[] = [];
   let units = 0;
   let denied = deniedInitially;
   let failHazards = false;
+  let delayRefresh = false;
+  let releaseRefresh: () => void = () => {};
+  const delayedRefresh = new Promise<void>(resolve => { releaseRefresh = resolve; });
   const successfulRefreshes = new Set<string>();
   const article = { title: 'Controlled earthquake report in Japan', source: 'Fixture publisher', link: 'https://example.com/news', publishedAt: Date.now(), location: { latitude: 35, longitude: 139 }, isAlert: true };
   await page.route('**/plugin/assets/**', route => route.fulfill({ path: join(process.cwd(), 'dist/plugin/assets', new URL(route.request().url()).pathname.split('/').at(-1)!), headers: { 'Access-Control-Allow-Origin': '*' } }));
@@ -17,10 +20,11 @@ async function installNewsHost(page: Page, deniedInitially = false) {
   await page.route('**/data/countries-*m.json', route => route.fulfill({ path: join(process.cwd(), 'public/data', new URL(route.request().url()).pathname.split('/').at(-1)!), headers: { 'Access-Control-Allow-Origin': '*' } }));
   await page.route('**/news-host-test', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><title>News plugin metering acceptance</title><h1>Built news plugin — controlled host and data</h1><p>Checks rendering and request reuse. Does not test live OAuth, ChatGPT installation or source freshness.</p><iframe title="WorldMonitor news and maps" sandbox="allow-scripts" style="width:100%;height:1050px;border:0"></iframe>' }));
   await page.exposeFunction('newsHost', async (method: string, params: HostCall) => {
-    if (method === 'ui/initialize') return { hostCapabilities: { serverTools: {}, updateModelContext: {} }, hostContext: { theme: 'dark' } };
+    if (method === 'ui/initialize') return { hostCapabilities: { ...(serverTools ? { serverTools: {} } : {}), updateModelContext: {} }, hostContext: { theme: 'dark' } };
     if (method !== 'tools/call') return {};
     calls.push(params);
     if (params.name === 'open_news_dashboard') {
+      if (delayRefresh && params.arguments.refresh) await delayedRefresh;
       if (denied) return { isError: true, content: [{ type: 'text', text: 'Daily MCP quota exceeded. Resets at next UTC midnight.' }] };
       const id = String(params.arguments.request_id ?? 'initial');
       if (!successfulRefreshes.has(id)) { units++; successfulRefreshes.add(id); }
@@ -53,7 +57,7 @@ async function installNewsHost(page: Page, deniedInitially = false) {
     });
     frame.srcdoc = html.replace('<head>', `<head><base href="${location.origin}/">`);
   }, html);
-  return { calls, get units() { return units; }, deny: () => { denied = true; }, failHazards: () => { failHazards = true; }, recoverHazards: () => { failHazards = false; } };
+  return { calls, get units() { return units; }, deny: () => { denied = true; }, delayRefresh: () => { delayRefresh = true; }, releaseRefresh, failHazards: () => { failHazards = true; }, recoverHazards: () => { failHazards = false; } };
 }
 
 test('news and map hydration share one request, toggles reuse data and refresh charges once', async ({ page }, info) => {
@@ -144,4 +148,52 @@ test('single-result panels show their paid usage notice without more data calls'
   await page.screenshot({ path: info.outputPath('single-panel-usage-desktop.png'), fullPage: true });
   await page.setViewportSize({ width: 430, height: 800 });
   await page.screenshot({ path: info.outputPath('single-panel-usage-mobile.png'), fullPage: true });
+});
+
+test('refresh preserves newer filter and layer selections', async ({ page }) => {
+  const host = await installNewsHost(page);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#pluginMapStatus')).toContainText('earthquakes: 1 valid');
+  host.delayRefresh();
+  await frame.getByRole('button', { name: 'Refresh news', exact: true }).click();
+  await expect.poll(() => host.calls.filter(call => call.name === 'open_news_dashboard').length).toBe(2);
+  await frame.getByRole('checkbox', { name: 'Natural Events' }).uncheck();
+  await frame.getByRole('combobox', { name: 'News source' }).selectOption('Fixture publisher');
+  await expect(frame.locator('#pluginMapStatus')).toBeEmpty();
+  host.releaseRefresh();
+  await expect(frame.locator('#pluginUsage')).toContainText('48 of 50 requests remaining');
+  await expect(frame.getByRole('checkbox', { name: 'Natural Events' })).not.toBeChecked();
+  await expect(frame.getByRole('combobox', { name: 'News source' })).toHaveValue('Fixture publisher');
+  expect(host.calls.filter(call => call.name === 'get_natural_disasters')).toHaveLength(1);
+});
+
+test('a new host admission reloads inherited active layers with the new token', async ({ page }) => {
+  const host = await installNewsHost(page);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#pluginMapStatus')).toContainText('earthquakes: 1 valid');
+  await page.evaluate(async () => {
+    const host = (window as unknown as { newsHost: (method: string, params: object) => Promise<object> }).newsHost;
+    const result = await host('tools/call', { name: 'open_news_dashboard', arguments: { refresh: true, request_id: crypto.randomUUID() } });
+    document.querySelector('iframe')!.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: result }, '*');
+  });
+  await expect.poll(() => host.calls.filter(call => call.name === 'get_natural_disasters').length).toBe(2);
+  expect(host.calls.at(-1)?.arguments.panel_request).toBe('news.controlled-2');
+});
+
+test('denied map refresh reports the quota reason in the map status', async ({ page }) => {
+  const host = await installNewsHost(page);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#pluginMapStatus')).toContainText('earthquakes: 1 valid');
+  host.deny();
+  await frame.getByRole('button', { name: 'Refresh map data', exact: true }).click();
+  await expect(frame.locator('#pluginMapStatus')).toContainText('Daily MCP quota exceeded');
+  expect(host.calls.filter(call => call.name === 'get_natural_disasters')).toHaveLength(1);
+});
+
+test('refresh controls are disabled without server tool capability', async ({ page }) => {
+  const host = await installNewsHost(page, false, false);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.getByRole('button', { name: 'Refresh news', exact: true })).toBeDisabled();
+  await expect(frame.getByRole('button', { name: 'Refresh map data', exact: true })).toBeDisabled();
+  expect(host.calls.map(call => call.name)).toEqual(['open_news_dashboard']);
 });

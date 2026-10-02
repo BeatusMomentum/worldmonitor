@@ -67,31 +67,33 @@ async function analyze(args: object): Promise<{ summary: string; model: string }
   return { summary: data.summary, model: data.model ?? '' };
 }
 
-async function renderResult(result: unknown): Promise<void> {
-  if (!result || typeof result !== 'object') return;
+async function renderResult(result: unknown, keepCurrentView = false): Promise<boolean> {
+  if (!result || typeof result !== 'object') return false;
   const response = result as { isError?: boolean; content?: Array<{ text?: string }>; structuredContent?: ListFeedDigestResponse & { requestedView?: unknown; panelRequest?: unknown } };
   if (response.isError) {
     status.textContent = response.content?.find(item => item.text)?.text ?? 'News refresh failed. Previously loaded news remains visible.';
     for (const panel of panels.values()) panel.setRefreshDegraded(true);
-    return;
+    return false;
   }
   const data = response.structuredContent;
   if (!data?.categories || typeof data.categories !== 'object' || Array.isArray(data.categories)) {
     status.textContent = 'News data is unavailable. Previously loaded news remains visible.';
-    return;
+    return false;
   }
   const nextAdmission = data.panelRequest === undefined ? undefined : newsPanelAdmissionSchema.parse(data.panelRequest);
-  if (!nextAdmission || nextAdmission.token !== admission?.token) hazardCache.clear();
+  const admissionChanged = !nextAdmission || nextAdmission.token !== admission?.token;
+  if (admissionChanged) hazardCache.clear();
   admission = nextAdmission;
   showUsage();
   digest = data;
   renderDigest();
-  if (data.requestedView ?? hostView) {
-    await applyView(data.requestedView ?? hostView).catch(error => {
+  if (keepCurrentView || admissionChanged || (data.requestedView ?? hostView)) {
+    await applyView(data.requestedView ?? hostView ?? {}, { keepCurrentView, reloadLayers: admissionChanged }).catch(error => {
       status.textContent = 'The requested view could not be applied. Showing news with the previous filters.';
       mapStatus.textContent = error instanceof Error ? error.message : 'The requested map view is unavailable.';
     });
   }
+  return true;
 }
 
 function showUsage(): void {
@@ -102,15 +104,12 @@ function showUsage(): void {
 }
 
 function refreshDashboard(): Promise<void> {
+  if (!serverTools) return Promise.reject(new Error('News refresh is unavailable in this host.'));
   if (refreshing) return refreshing;
   if (!refreshAttempt || Date.now() - refreshAttempt.startedAt >= 300_000) refreshAttempt = { id: crypto.randomUUID(), startedAt: Date.now() };
   refreshing = (async () => {
     const result = await request('tools/call', { name: 'open_news_dashboard', arguments: { ...view, refresh: true, request_id: refreshAttempt!.id } });
-    if (result && typeof result === 'object' && 'isError' in result && result.isError) {
-      await renderResult(result);
-      return;
-    }
-    await renderResult(result);
+    if (!await renderResult(result, true)) throw new Error(status.textContent || 'News refresh failed. Previously loaded news remains visible.');
     refreshAttempt = undefined;
   })().finally(() => { refreshing = undefined; });
   return refreshing;
@@ -178,9 +177,13 @@ function updateSelect(select: HTMLSelectElement, values: string[], value: string
   select.value = value;
 }
 
-async function applyView(input: unknown, reset = false): Promise<object> {
+async function applyView(input: unknown, options: { reset?: boolean; keepCurrentView?: boolean; reloadLayers?: boolean } = {}): Promise<object> {
   const next = pluginNewsViewSchema.parse(input);
-  const operation = viewQueue.then(() => updateView(next, reset));
+  const operation = viewQueue.then(() => {
+    const desired = options.keepCurrentView ? { ...view } : { ...next };
+    if (options.reloadLayers && desired.map_layers === undefined) desired.map_layers = view.map_layers ?? [];
+    return updateView(desired, options.reset ?? false);
+  });
   viewQueue = operation.catch(() => {});
   return operation;
 }
@@ -267,7 +270,7 @@ async function focusNews(link: string): Promise<object> {
   if (!item || !digest) throw new Error('This article is not in the current news snapshot.');
   const category = Object.entries(digest.categories).find(([, bucket]) => bucket.items.some(candidate => candidate.link === link))?.[0];
   const mapFocused = Number.isFinite(item.lat) && Number.isFinite(item.lon);
-  await applyView({ category, time_range: 'all', ...(mapFocused ? { map_latitude: item.lat, map_longitude: item.lon, map_zoom: 4 } : {}) }, true);
+  await applyView({ category, time_range: 'all', ...(mapFocused ? { map_latitude: item.lat, map_longitude: item.lon, map_zoom: 4 } : {}) }, { reset: true });
   for (const panel of panels.values()) if (panel.hasNewsItem(item.link)) panel.scrollToNewsItem(item.link);
   return { applied: true, link, title: item.title, source: item.source, mapFocused, center: map.getCenter(), view };
 }
@@ -308,11 +311,12 @@ async function start(): Promise<void> {
   refreshMap.type = 'button';
   refreshMap.className = 'search-btn';
   refreshMap.textContent = 'Refresh map data';
+  refreshMap.disabled = true;
   refreshMap.addEventListener('click', async () => {
     refreshMap.disabled = true;
     try { await refreshDashboard(); }
     catch (error) { mapStatus.textContent = error instanceof Error ? error.message : 'Map refresh failed. Previous map data remains visible.'; }
-    finally { refreshMap.disabled = false; }
+    finally { refreshMap.disabled = !serverTools; }
   });
   layerControls.appendChild(refreshMap);
   mapStatus = document.createElement('div');
@@ -359,7 +363,7 @@ async function start(): Promise<void> {
   clear.type = 'button';
   clear.className = 'search-btn';
   clear.textContent = 'Clear filters';
-  clear.addEventListener('click', () => { void applyView({ time_range: 'all' }, true).catch(() => { status.textContent = 'Filters could not be cleared.'; }); });
+  clear.addEventListener('click', () => { void applyView({ time_range: 'all' }, { reset: true }).catch(() => { status.textContent = 'Filters could not be cleared.'; }); });
   document.getElementById('pluginActions')!.appendChild(clear);
   const searchButton = document.createElement('button');
   searchButton.type = 'button';
@@ -426,6 +430,7 @@ async function start(): Promise<void> {
   modelContext = Boolean(initialized.hostCapabilities?.updateModelContext);
   openLinks = Boolean(initialized.hostCapabilities?.openLinks);
   refresh.disabled = !serverTools;
+  refreshMap.disabled = !serverTools;
   if (['light', 'dark'].includes(initialized.hostContext?.theme ?? '')) document.documentElement.dataset.theme = initialized.hostContext!.theme;
   send({ method: 'ui/notifications/initialized' });
   const observer = new ResizeObserver(() => send({ method: 'ui/notifications/size-changed', params: { height: document.documentElement.scrollHeight } }));
