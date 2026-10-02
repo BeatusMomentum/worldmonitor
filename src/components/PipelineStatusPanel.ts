@@ -1,3 +1,4 @@
+import { CountrySectionError } from '@/services/country-brief-error';
 import { Panel } from './Panel';
 import { escapeHtml, sanitizeUrl, unsafeRawHtml } from '@/utils/sanitize';
 import { createLazyClient, getRpcBaseUrl, rpcFetch } from '@/services/rpc-client';
@@ -8,7 +9,6 @@ import type {
   ListPipelinesResponse,
   PipelineEntry,
   GetPipelineDetailResponse,
-  ListEnergyDisruptionsResponse,
   EnergyDisruptionEntry,
 } from '@/generated/client/worldmonitor/supply_chain/v1/service_client';
 import { formatEventWindow, formatCapacityOffline } from '@/shared/disruption-timeline';
@@ -177,6 +177,7 @@ export class PipelineStatusPanel extends Panel {
   private selectedId: string | null = null;
   private detail: GetPipelineDetailResponse | null = null;
   private detailLoading = false;
+  private detailError: string | null = null;
   // Disruption events for the currently-open pipeline. Fetched lazily
   // alongside getPipelineDetail. undefined = not yet fetched;
   // empty array = fetched and no events on file.
@@ -188,7 +189,7 @@ export class PipelineStatusPanel extends Panel {
     void this.loadDetail(id);
   };
 
-  constructor() {
+  constructor(private readonly detailSource?: Pick<ReturnType<typeof getSupplyChainClient>, 'getPipelineDetail' | 'listEnergyDisruptions'>) {
     super({
       id: 'pipeline-status',
       title: 'Oil & Gas Pipeline Status',
@@ -306,22 +307,29 @@ export class PipelineStatusPanel extends Panel {
     }
   }
 
+  public async presentDetail(data: ListPipelinesResponse, id: string): Promise<void> {
+    this.data = data;
+    await this.loadDetail(id);
+  }
+
   private async loadDetail(pipelineId: string): Promise<void> {
     this.selectedId = pipelineId;
     this.detailLoading = true;
+    this.detailError = null;
     this.detailEvents = undefined;
     this.render();
     try {
-      const [d, events] = await Promise.all([
-        getSupplyChainClient().getPipelineDetail({ pipelineId }),
-        getSupplyChainClient().listEnergyDisruptions({ assetId: pipelineId, assetType: 'pipeline', ongoingOnly: false }),
+      const [d, events] = await Promise.allSettled([
+        (this.detailSource ?? getSupplyChainClient()).getPipelineDetail({ pipelineId }),
+        (this.detailSource ?? getSupplyChainClient()).listEnergyDisruptions({ assetId: pipelineId, assetType: 'pipeline', ongoingOnly: false }),
       ]);
       if (!this.element?.isConnected || this.selectedId !== pipelineId) return;
-      this.detail = d;
-      this.detailEvents = (events as ListEnergyDisruptionsResponse)?.events ?? [];
+      if (d.status === 'rejected') throw d.reason;
+      this.detail = d.value;
+      this.detailEvents = events.status === 'fulfilled' && !events.value.upstreamUnavailable ? events.value.events : undefined;
       this.detailLoading = false;
       this.render();
-    } catch {
+    } catch (error) {
       if (!this.element?.isConnected) return;
       // Mirror the same stale-response guard the success path uses: if the
       // user has already clicked a different pipeline while this one was
@@ -331,6 +339,7 @@ export class PipelineStatusPanel extends Panel {
       if (this.selectedId !== pipelineId) return;
       this.detailLoading = false;
       this.detail = null;
+      this.detailError = error instanceof CountrySectionError ? error.message : null;
       this.render();
     }
   }
@@ -343,7 +352,7 @@ export class PipelineStatusPanel extends Panel {
   }
 
   private renderDisruptionTimeline(): string {
-    if (this.detailEvents === undefined) return '';
+    if (this.detailEvents === undefined) return this.detailLoading ? '' : '<div class="pp-evidence"><div class="pp-sub">Disruption timeline unavailable. Asset details remain visible.</div></div>';
     if (this.detailEvents.length === 0) {
       return `<div class="pp-evidence">
         <div class="pp-sub" style="margin-bottom:6px">Disruption timeline</div>
@@ -400,7 +409,7 @@ export class PipelineStatusPanel extends Panel {
       ? `<div class="economic-warning">${escapeHtml(t('components.supplyChain.upstreamUnavailable'))}</div>`
       : '';
 
-    this.setSafeContent(unsafeRawHtml(`
+    const html = unsafeRawHtml(`
       <div class="pp-wrap">
         ${coverageWarning}
         <table class="pp-table">
@@ -438,7 +447,9 @@ export class PipelineStatusPanel extends Panel {
         .pp-ev-item a { color: #4ade80; text-decoration: none; }
         .pp-ev-item a:hover { text-decoration: underline; }
       </style>
-    `, 'legacy Panel.setContent() migration'));
+    `, 'legacy Panel.setContent() migration');
+    if (this.detailSource) this.setSafeContentImmediate(html);
+    else this.setSafeContent(html);
   }
 
   private renderRow(p: PipelineEntry): string {
@@ -462,7 +473,7 @@ export class PipelineStatusPanel extends Panel {
     }
     const p = this.detail?.pipeline;
     if (!p) {
-      return `<div class="pp-drawer"><button class="pp-drawer-close" aria-label="Close">✕</button>Pipeline detail unavailable.</div>`;
+      return `<div class="pp-drawer"><button class="pp-drawer-close" aria-label="Close">✕</button>${escapeHtml(this.detailError ?? 'Pipeline detail unavailable.')}</div>`;
     }
 
     const ev = p.evidence;

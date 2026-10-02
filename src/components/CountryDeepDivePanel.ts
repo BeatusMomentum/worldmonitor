@@ -1,3 +1,4 @@
+import type { ListPipelinesResponse, ListStorageFacilitiesResponse, ListFuelShortagesResponse } from '@/generated/client/worldmonitor/supply_chain/v1/service_client';
 import type { CountryBriefSource } from '@/services/country-brief-source';
 import type { BriefTopic } from '../../shared/country-brief-sections';
 import type { CountryBriefSignals } from '@/types';
@@ -153,6 +154,9 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
   private presentation: CountryBriefPresentation | null = null;
   private sections: BriefSection[] = [];
   private outputClose: (() => void) | null = null;
+  private atlasRevision = 0;
+  private hostedAtlas: { code: string; signal: AbortSignal; pipelines?: ListPipelinesResponse; facilities?: ListStorageFacilitiesResponse; shortages?: ListFuelShortagesResponse } | null = null;
+  private atlasSelection: { type: 'pipeline' | 'storage' | 'shortage'; id: string } | null = null;
   private outputRequestSignal: AbortSignal | null = null;
   private signalsBody: HTMLElement | null = null;
   private signalBreakdownBody: HTMLElement | null = null;
@@ -1225,6 +1229,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
 
     if (!hasAny) {
       this.energyBody.append(this.makeEmpty('Energy data unavailable for this country.'));
+      if (this.source?.mode === 'host') this.renderAtlasExposure();
       return;
     }
 
@@ -1539,11 +1544,17 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     if (!this.energyBody) return;
     const iso2 = this.currentCode;
     if (!iso2 || iso2.length !== 2) return;
+    if (this.source?.mode === 'host') {
+      void this.loadHostedAtlas(iso2, ++this.atlasRevision, this.signal);
+      return;
+    }
+    const signal = this.signal;
 
     // Late-import so non-energy variants can tree-shake these modules at
     // build time if the Atlas panels aren't bundled. Static imports are
     // safe here because all four stores are pure client caches.
     import('@/shared/pipeline-registry-store').then(({ getCachedPipelineRegistries }) => {
+      if (signal.aborted || this.signal !== signal || this.currentCode !== iso2) return;
       const { gas, oil } = getCachedPipelineRegistries() as {
         gas: { pipelines?: Record<string, { fromCountry?: string; toCountry?: string; transitCountries?: string[]; name?: string; id?: string }> } | undefined;
         oil: { pipelines?: Record<string, { fromCountry?: string; toCountry?: string; transitCountries?: string[]; name?: string; id?: string }> } | undefined;
@@ -1570,6 +1581,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     }).catch(() => {});
 
     import('@/shared/storage-facility-registry-store').then(({ getCachedStorageFacilityRegistry }) => {
+      if (signal.aborted || this.signal !== signal || this.currentCode !== iso2) return;
       const { registry } = getCachedStorageFacilityRegistry() as {
         registry: { facilities?: Record<string, { country?: string; name?: string; id?: string }> } | undefined;
       };
@@ -1589,6 +1601,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     }).catch(() => {});
 
     import('@/shared/fuel-shortage-registry-store').then(({ getCachedFuelShortageRegistry }) => {
+      if (signal.aborted || this.signal !== signal || this.currentCode !== iso2) return;
       const { registry } = getCachedFuelShortageRegistry() as {
         registry: { shortages?: Record<string, { country?: string; product?: string; severity?: string; id?: string; shortDescription?: string; resolvedAt?: string | null }> } | undefined;
       };
@@ -1625,6 +1638,89 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     // disruption surface (EnergyDisruptionsPanel is), so an empty row is
     // preferable to a spurious error.
     this.loadDisruptionsForCountry(iso2);
+  }
+
+  private async loadHostedAtlas(code: string, revision: number, signal: AbortSignal): Promise<void> {
+    const source = this.source!;
+    const results = await Promise.allSettled([
+      source.supply.listPipelines({ commodityType: '' }, { signal }),
+      source.supply.listStorageFacilities({ facilityType: '' }, { signal }),
+      source.supply.listFuelShortages({ country: '', product: '', severity: '' }, { signal }),
+    ]);
+    if (signal.aborted || this.signal !== signal || this.currentCode !== code || this.atlasRevision !== revision) return;
+    const [pipelines, facilities, shortages] = results;
+    const data = this.hostedAtlas = { code, signal,
+      pipelines: pipelines.status === 'fulfilled' && Array.isArray(pipelines.value.pipelines) ? pipelines.value : undefined,
+      facilities: facilities.status === 'fulfilled' && Array.isArray(facilities.value.facilities) ? facilities.value : undefined,
+      shortages: shortages.status === 'fulfilled' && Array.isArray(shortages.value.shortages) ? shortages.value : undefined,
+    };
+    const pipes = data.pipelines?.pipelines.filter(p => p.fromCountry === code || p.toCountry === code || p.transitCountries.includes(code)) ?? [];
+    const stores = data.facilities?.facilities.filter(f => f.country === code) ?? [];
+    const crises = data.shortages?.shortages.filter(s => s.country === code && !s.resolvedAt) ?? [];
+    const confirmed = crises.filter(s => s.severity === 'confirmed').length;
+    this.appendAtlasRow(`Pipelines touching ${code}`, `${pipes.length} pipeline${pipes.length === 1 ? '' : 's'}`, pipes.map(p => ({ id: p.id, label: p.name, event: 'energy:open-pipeline-detail', detail: { pipelineId: p.id } })));
+    this.appendAtlasRow(`Storage in ${code}`, `${stores.length} facilit${stores.length === 1 ? 'y' : 'ies'}`, stores.map(f => ({ id: f.id, label: f.name, event: 'energy:open-storage-facility-detail', detail: { facilityId: f.id } })));
+    this.appendAtlasRow(`Fuel shortages in ${code}`, confirmed ? `${confirmed} confirmed · ${crises.length - confirmed} watch` : `${crises.length} watch`, crises.map(s => ({ id: s.id, label: `${s.product} — ${s.shortDescription}`, event: 'energy:open-fuel-shortage-detail', detail: { shortageId: s.id } })));
+    for (const [label, available, result] of [['Pipeline', data.pipelines, pipelines], ['Storage', data.facilities, facilities], ['Fuel shortage', data.shortages, shortages]] as const) {
+      if (available?.upstreamUnavailable) this.energyBody?.append(this.makeEmpty(`${label} Atlas coverage is partial. Counts include only loaded observations.`));
+      if (!available) this.energyBody?.append(this.makeEmpty(`${label} Atlas ${result.status === 'rejected' && result.reason instanceof CountrySectionError && result.reason.state === 'locked' ? 'data is not authorized by this connection' : 'data unavailable'}. Other loaded observations remain visible.`));
+    }
+    await this.loadDisruptionsForCountry(code);
+  }
+
+  public getAtlasSelection() {
+    return this.atlasSelection ? { ...this.atlasSelection, renderedText: this.content.querySelector<HTMLElement>('[data-country-atlas-detail]')?.innerText.slice(0, 6000) ?? '' } : null;
+  }
+
+  public async openAtlasDetail(type: 'pipeline' | 'storage' | 'shortage', id: string): Promise<void> {
+    const data = this.hostedAtlas;
+    const code = this.currentCode;
+    const signal = this.signal;
+    if (!data || !code || data.code !== code || data.signal !== signal || signal.aborted || this.outputClose || !this.source) throw new Error('Country Atlas data is not ready.');
+    const outputController = new AbortController();
+    const client = this.source.atlas(code, AbortSignal.any([signal, outputController.signal]));
+    const shell = this.content.querySelector<HTMLElement>('.cdp-shell')!;
+    const scrollTop = this.content.scrollTop;
+    const selection = { type, id };
+    let detailPanel: import('./Panel').Panel;
+    let show: () => Promise<void>;
+    if (type === 'pipeline') {
+      const rows = data.pipelines?.pipelines.filter(p => p.fromCountry === code || p.toCountry === code || p.transitCountries.includes(code));
+      if (!rows?.some(p => p.id === id)) throw new Error('Pipeline is not in this country.');
+      const { PipelineStatusPanel } = await import('./PipelineStatusPanel');
+      const panel = new PipelineStatusPanel(client); detailPanel = panel;
+      show = () => panel.presentDetail({ ...data.pipelines!, pipelines: rows }, id);
+    } else if (type === 'storage') {
+      const rows = data.facilities?.facilities.filter(f => f.country === code);
+      if (!rows?.some(f => f.id === id)) throw new Error('Storage facility is not in this country.');
+      const { StorageFacilityMapPanel } = await import('./StorageFacilityMapPanel');
+      const panel = new StorageFacilityMapPanel(client); detailPanel = panel;
+      show = () => panel.presentDetail({ ...data.facilities!, facilities: rows }, id);
+    } else {
+      const rows = data.shortages?.shortages.filter(s => s.country === code && !s.resolvedAt);
+      if (!rows?.some(s => s.id === id)) throw new Error('Fuel shortage is not active in this country.');
+      const { FuelShortagePanel } = await import('./FuelShortagePanel');
+      const panel = new FuelShortagePanel(client); detailPanel = panel;
+      show = () => panel.presentDetail({ ...data.shortages!, shortages: rows }, id);
+    }
+    if (signal.aborted || this.signal !== signal || this.currentCode !== code || this.outputClose) { detailPanel.destroy(); return; }
+    const output = this.el('div', 'cdp-atlas-output');
+    output.dataset.countryAtlasDetail = type;
+    const back = this.el('button', 'cdp-action-btn', 'Back to country');
+    back.addEventListener('click', () => this.outputClose?.());
+    output.addEventListener('click', event => {
+      if (!(event.target instanceof Element) || !event.target.closest('.pp-drawer-close, .sf-drawer-close, .fs-drawer-close, .panel-close-btn')) return;
+      event.stopImmediatePropagation();
+      this.outputClose?.();
+    }, true);
+    output.append(back, detailPanel.getElement());
+    this.atlasSelection = selection;
+    this.outputClose = () => {
+      outputController.abort(); detailPanel.destroy(); output.remove(); shell.hidden = false; this.outputClose = null; this.atlasSelection = null;
+      this.content.scrollTop = scrollTop;
+    };
+    shell.hidden = true; this.content.append(output); this.content.scrollTop = 0; back.focus();
+    await show();
   }
 
   private async loadDisruptionsForCountry(iso2: string): Promise<void> {
@@ -1705,11 +1801,17 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     header.append(this.el('div', 'cdp-economic-source', summary));
     section.append(header);
     for (const it of items.slice(0, 5)) {
-      const row = this.el('div', '');
+      const row = this.el('button', 'cdp-action-btn');
       row.style.cssText = 'font-size:calc(11px * var(--wm-panel-effective-scale, 1));color:#ddd;padding:2px 0;cursor:pointer';
       row.textContent = it.label || it.id;
       row.addEventListener('click', () => {
         if (!it.id) return;
+        if (this.source?.mode === 'host') {
+          const type = it.event === 'energy:open-pipeline-detail' ? 'pipeline' : it.event === 'energy:open-storage-facility-detail' ? 'storage' : 'shortage';
+          const id = it.detail.pipelineId ?? it.detail.facilityId ?? it.detail.shortageId ?? it.id;
+          void this.openAtlasDetail(type, id).catch(() => showToast('Atlas detail is not available. Please retry.'));
+          return;
+        }
         try {
           window.dispatchEvent(new CustomEvent(it.event, { detail: it.detail }));
         } catch { /* Non-browser runtime no-op */ }
