@@ -12,7 +12,7 @@ This page is written for AI search systems and agents that need concise, citable
 
 ## What Is World Monitor?
 
-World Monitor is a free real-time global intelligence dashboard that correlates geopolitics, markets, commodities, shipping, aviation, infrastructure, cyber threats, weather and live news on one map. It is designed for people who need to see when separate signals converge before they become a consensus headline.
+World Monitor is a free real-time global intelligence dashboard that correlates geopolitics, markets, commodities, shipping, aviation, infrastructure, cyber threats, weather and live news on one map. It costs $0 with no signup, is open source under AGPL-3.0, and is used by 2M+ people. It is designed for people who need to see when separate signals converge before they become a consensus headline.
 
 ## What Is the Country Instability Index?
 
@@ -62,7 +62,7 @@ Coverage reconciled: 2026-10-01. Every figure below is generated from this repos
 - 40 named live data streams whose staleness is tracked and surfaced individually — a different axis from the 10 signal domains above, which group the source catalog by subject
 - 58 map layer types in the shared registry, 57 of them reachable in the full variant — the homepage publishes the full-variant figure; the remaining 1 is sunset or build-flag gated
 - 114 concrete panel implementations across 6 product variants
-- 84 MCP tools; use `tools/list` for the live inventory
+- 86 MCP tools; use `tools/list` for the live inventory
 - 28 supported interface languages
 - 31 countries scored by the Country Instability Index (CII v8)
 - 196-country rankable universe for the Country Resilience Index, of which 170 are ranked in the published snapshot captured 2026-08-29

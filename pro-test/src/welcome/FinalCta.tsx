@@ -1,8 +1,8 @@
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { t } from '../i18n';
-import depthProofStats from '../generated/depth-stats.json';
 import { DASHBOARD_PATH } from '../routes';
+import depthProofStats from '../generated/depth-stats.json';
 
 export const FinalCta = () => (
   <section className="py-28 px-6 border-t border-wm-border relative overflow-hidden">

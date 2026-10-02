@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor är inte en öppen källkod Palantir",
       "asOf": "Per {{date}}",
       "whatIsTitle": "Vad är World Monitor?",
-      "whatIsBody": "World Monitor är en gratis, öppen instrumentpanel som streamar geopolitik, marknader, sjöfart, luftfart, infrastruktur och cybersignaler på en live världskarta. Den korrelerar separata flöden från {{feeds}} källor till en gemensam lägesbild och flaggar konvergens före rubrikerna, med varje siffra källhänvisad och varje metod dokumenterad."
+      "whatIsBody": "World Monitor är en kostnadsfri dashboard med öppen källkod (AGPL-3.0) som används av 2M+ personer. Den streamar {{feeds}} nyhets- och OSINT-flöden från {{providers}} attribuerade leverantörer på en live-världskarta med {{mapLayers}} kartlagertyper, som spänner över geopolitik, marknader, sjöfart, luftfart och cyber. Den korrelerar dem så att konvergerande händelser blir synliga före rubrikerna. Varje siffra är källhänvisad och varje metod dokumenterad."
     },
     "live": {
       "eyebrow": "Live just nu",
@@ -510,7 +510,7 @@
     "moments": {
       "eyebrow": "Korrelationsmotor",
       "title": "Hur korrelerar World Monitor signaler?",
-      "sub": "Du kan hitta flödena på hundra ställen. Fördelen är en yta där geopolitik, sjöfart, råvaror, makro, marknader, väder, infrastruktur, cyber, nyheter och landsrisk kan förklara varandra.",
+      "sub": "Den placerar {{mapLayers}} kartlagertyper på en yta så att geopolitik, sjöfart, råvaror, makro, marknader, väder, infrastruktur, cyber, nyheter och landsrisk kan förklara varandra. Vem som helst kan samla in flöden; att se dem röra sig tillsammans på en karta är skillnaden.",
       "signalStack": "Signaler sammanslagna",
       "correlation": "Korrelation",
       "bridge1": "Inte en lista med flöden.",
@@ -626,7 +626,7 @@
       "eyebrow": "För utvecklare och AI-agenter",
       "title": "Hur bygger jag på World Monitor från min egen stack?",
       "sub": "Allt på kartan är också ett API. Integrera det med Claude via MCP, anropa REST-slutpunkterna från var som helst, eller installera en inbyggd klient för Python, Ruby, Go eller JavaScript — din kod forskar med livedata istället för träningsdata.",
-      "b1": "{{mcpTools}} MCP-verktyg — riskpoäng, flaskhalsar, konflikter, marknader, briefningar",
+      "b1": "{{mcpTools}} MCP-verktyg — riskpoäng, flaskhalsar, konflikter, marknader, rapporter",
       "b2": "Dokumenterad REST API — en OpenAPI 3.1-specifikation, en nyckel",
       "b3": "Officiella SDK:er på npm, PyPI, RubyGems och Go — nollberoenden, MCP-först",
       "b4": "JMESPath-projektion på varje anrop — hämta exakt de fält du behöver",
@@ -673,15 +673,15 @@
       "q2": "Vad är en global intelligence-instrumentbräda?",
       "a2": "En enda live-vy som sammanfogar signaler som de flesta verktyg håller åtskilda: konflikthändelser, fartygs- och flygspårning, sjövägsflaskhalsar, satelliter, undersjökablar, pipelines, marknader och cyberhotningar — på en realtids-världskarta, med AI-poäng och sammanfattningar överst. World Monitor är en gratis sådan.",
       "q3": "Var kommer data från?",
-      "a3": "Namngivna leverantörer inkluderar ACLED och UCDP för konflikt, AISStream för live-fartyg, OpenSky för flygplan, NASA FIRMS för bränder, USGS för jordbävningar, IMF, BIS, FRED och Finnhub för marknader och makro — plus kurerade nyhetsflöden. Varje panel citerar sina källor och tidsstämplar inline.",
+      "a3": "Från {{providers}} verifierade källor. Namngivna inkluderar ACLED och UCDP för konflikter, AISStream för live fartyg, OpenSky för flygplan, NASA FIRMS för bränder, USGS för jordbävningar, IMF, BIS, FRED och Finnhub för marknader och makro — plus utvalda nyhetsflöden. Varje panel citerar sina källor och tidsstämplar inline.",
       "q4": "Kan jag övervaka flaskhalsar som Hormuz eller Bab el-Mandeb i realtid?",
-      "a4": "Ja. Flaskhalsar spåras med live AIS-fartygsräkningar, vecka-över-vecka transiteringsändring och disruptionspoäng — och densitetsavvikelser flaggas mot varje sunds rullande baslinje.",
+      "a4": "Ja. {{chokepoints}} flaskhalsar, inklusive Hormuz och Bab el-Mandeb, övervakas med live AIS-fartygsräkningar, veckovis transitförändring och disruption-poäng — och densitetsavvikelser flaggas mot varje flaskhals rullande baslinjer.",
       "q5": "Hur skiljer sig detta från en konfliktkarta som Liveuamap?",
       "a5": "Konflikt är ett kartlager. World Monitor sammanför konflikter med sjöfart, militär flygtrafik, infrastruktur, marknader och cyberverksamhet — därefter beräknar AI konvergensen: instabilitetsindex, hotspot-eskalering, bekräftade breaking-varningar och dagliga situationsrapporter. Jämför World Monitor med Liveuamap och andra konfliktkartor: worldmonitor.app/compare/liveuamap-alternatives. För bredare övervakningsalternativ, se worldmonitor.app/compare/best-geopolitical-risk-dashboards.",
       "q6": "Varför ska jag lita på en avisering?",
-      "a6": "En breaking-banner startar endast när oberoende ursprungstyper bekräftar — nyhetsklassificering, nyckelordshastighet, hotspot-eskalering, militär ökning, officiella sirener — deduplicerad och hastighetsbegränsad. Färre aviseringar, verkliga.",
+      "a6": "Eftersom varje varning måste passera fasta grindar innan den når dig. Varningar kommer från {{alertOrigins}} oberoende källor: högrisk-nyhetsartiklar, nyckelordsspjutor, hotspot-eskalering, militär surgedetektering och siréner för civil försvar. Varje källa passerar samma filter: objekt äldre än 15 minuter släpps, upprepning av samma händelse undertrycks i 30 minuter, och en 60-sekunders nedkylning följer efter varje varning. Lägre klassificerade källor behöver också en AI-bekräftad klassificering innan de kan utlösa en.",
       "q7": "Kan AI-agenter som Claude eller GPT använda det?",
-      "a7": "Ja. World Monitor levereras med en MCP-server med ett live-verktygsregister, så Claude, GPT eller vilken MCP-kompatibel agent som helst kan fråga live-riskpoäng, flaskhalssstatus, konflikter, marknader och briefningar — med JMESPath-projektion så agenter hämtar exakt vad de behöver.",
+      "a7": "Ja. World Monitors MCP-server exponerar {{mcpTools}} live-verktyg, så Claude, GPT eller vilken MCP-kompatibel agent som helst kan fråga riskpoäng, flaskhalsstatus, konflikter, marknader och rapporter — med JMESPath-projektion så agenter hämtar exakt vad de behöver.",
       "q8": "Behöver jag ett konto?",
       "a8": "Nej. Instrumentbrädan fungerar omedelbar utan registrering. Ett konto spelar endast roll när du uppgraderar till Pro eller vill synkronisera inställningar mellan enheter.",
       "q9": "Är det öppen källkod?",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Hur kommer jag igång med att övervaka världskartan?",
-      "subtitle": "Medan du läste denna sida fortsatte det att förändras — {{chokepoints}} flaskhalsar, {{hotspots}} kritiska områden, {{stockExchanges}} börser, {{feeds}} kurerade feedkällor. En av dem är imorgons frontpage. Hitta den först — gratis, utan konto.",
+      "subtitle": "Öppna worldmonitor.app/dashboard i valfri webbläsare: kostnadsfritt, ingen konto, {{mapLayers}} kartlagertyper klara att slå på från första inläsning. Klicka på valfritt land för dess briefing, eller tryck ⌘K / Ctrl-K för kommandopaletten. Kartan har fortsatt att uppdateras medan du läste denna sida.",
       "button": "Hitta den först",
       "note": "Gratis · Ingen registrering · Laddar på sekunder",
       "secondary": "Eller se Pro-planer →"

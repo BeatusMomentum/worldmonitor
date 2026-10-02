@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor não é um Palantir de código aberto",
       "asOf": "Em {{date}}",
       "whatIsTitle": "O que é World Monitor?",
-      "whatIsBody": "World Monitor é um dashboard gratuito e de código aberto que transmite sinais de geopolítica, mercados, navegação marítima, aviação, infraestrutura e cibernética em um único mapa ao vivo. Ele correlaciona feeds separados de {{feeds}} fontes em uma única imagem operacional e sinaliza convergências antes dos headlines, com cada número rastreado e cada método documentado."
+      "whatIsBody": "O World Monitor é um dashboard gratuito e de código aberto (AGPL-3.0) usado por mais de 2 milhões de pessoas. Ele transmite {{feeds}} feeds de notícias e inteligência de {{providers}} provedores atribuídos em um único mapa-múndi ao vivo com {{mapLayers}} tipos de camada de mapa, abrangendo geopolítica, mercados, navegação marítima, aviação e cibersegurança. Correlaciona-os para que eventos convergentes apareçam antes das manchetes. Cada dado é rastreado e cada método documentado."
     },
     "live": {
       "eyebrow": "Ao vivo agora",
@@ -510,7 +510,7 @@
     "moments": {
       "eyebrow": "Mecanismo de correlação",
       "title": "Como o World Monitor correlaciona sinais?",
-      "sub": "Você pode encontrar os feeds em cem lugares. A vantagem é uma superfície única onde geopolítica, navegação, commodities, macro, mercados, clima, infraestrutura, cibernética, notícias e risco país podem se explicar mutuamente.",
+      "sub": "Coloca {{mapLayers}} tipos de camada de mapa em uma única superfície para que geopolítica, navegação marítima, commodities, macro, mercados, clima, infraestrutura, cibersegurança, notícias e risco de país possam se explicar mutuamente. Qualquer pessoa pode coletar os feeds; vê-los se movimentar juntos em um único mapa é o diferencial.",
       "signalStack": "Sinais fundidos",
       "correlation": "Correlação",
       "bridge1": "Não é uma lista de feeds.",
@@ -626,7 +626,7 @@
       "eyebrow": "Para construtores & agentes de IA",
       "title": "Como construo sobre World Monitor a partir da minha própria stack?",
       "sub": "Tudo no mapa também é uma API. Integre ao Claude via MCP, chame os endpoints REST de qualquer lugar, ou instale um cliente nativo para Python, Ruby, Go ou JavaScript — seu código pesquisa com dados ao vivo em vez de memórias de dados de treinamento.",
-      "b1": "{{mcpTools}} ferramentas MCP — escores de risco, pontos críticos, conflitos, mercados, briefings",
+      "b1": "{{mcpTools}} ferramentas MCP — pontuações de risco, gargalos, conflitos, mercados, briefings",
       "b2": "REST API documentada — uma especificação OpenAPI 3.1, uma chave",
       "b3": "SDKs oficiais no npm, PyPI, RubyGems e Go — sem dependências, MCP-first",
       "b4": "Projeção JMESPath em cada chamada — busque exatamente os campos que você precisa",
@@ -673,15 +673,15 @@
       "q2": "O que é um dashboard de inteligência global?",
       "a2": "Uma única visualização ao vivo que funde sinais que a maioria das ferramentas mantém separados: eventos de conflito, rastreamento de navios e aeronaves, pontos de estrangulamento de navegação, satélites, cabos submarinos, gasodutos, mercados e ameaças cibernéticas — em um único mapa-múndi em tempo real, com pontuação de IA e resumos no topo. World Monitor é um gratuito.",
       "q3": "De onde vêm os dados?",
-      "a3": "Provedores nomeados incluem ACLED e UCDP para conflitos, AISStream para navios ao vivo, OpenSky para aeronaves, NASA FIRMS para incêndios, USGS para terremotos, IMF, BIS, FRED e Finnhub para mercados e macro — mais feeds de notícias curados. Cada painel cita suas fontes e timestamps inline.",
+      "a3": "De {{providers}} provedores atribuídos. Os nomeados incluem ACLED e UCDP para conflito, AISStream para navios ao vivo, OpenSky para aeronaves, NASA FIRMS para incêndios, USGS para terremotos, IMF, BIS, FRED e Finnhub para mercados e macro — além de feeds de notícias selecionados. Cada painel cita suas fontes e timestamps inline.",
       "q4": "Posso monitorar pontos de estrangulamento como Hormuz ou Bab el-Mandeb em tempo real?",
-      "a4": "Sim. Gargalos são monitorados com contagens ao vivo de navios AIS, mudança de trânsito semana-a-semana e pontuação de disrupção — e anomalias de densidade são sinalizadas contra a linha de base móvel de cada estreito.",
+      "a4": "Sim. {{chokepoints}} pontos de estrangulamento, incluindo Ormuz e Bab el-Mandebe, são monitorados com contagens ao vivo de navios via AIS, mudança de trânsito semana a semana e pontuação de perturbação — e anomalias de densidade são sinalizadas em relação à linha de base contínua de cada ponto de estrangulamento.",
       "q5": "Como isso é diferente de um mapa de conflitos como Liveuamap?",
       "a5": "Conflito é uma camada de mapa. World Monitor funde conflitos com navegação marítima, voos militares, infraestrutura, mercados e cibersegurança — e depois a IA pontua a convergência: índices de instabilidade, escalação em pontos críticos, alertas de breaking corroborados e briefings diários. Compare World Monitor com Liveuamap e outros mapas de conflito: worldmonitor.app/compare/liveuamap-alternatives. Para opções mais amplas de monitoramento, veja worldmonitor.app/compare/best-geopolitical-risk-dashboards.",
       "q6": "Por que devo confiar em um alerta?",
-      "a6": "Um banner de breaking dispara apenas quando tipos de origem independentes corroboram — classificação de notícias, velocidade de palavras-chave, escalada de hotspot, picos militares, sirenes oficiais — desduplicados e rate-limited. Menos alertas, alertas reais.",
+      "a6": "Porque cada alerta deve passar por gates fixos antes de chegar até você. Os alertas vêm de {{alertOrigins}} origens independentes: itens de notícias de alta ameaça, picos de palavras-chave, escalação de pontos quentes, detecção de aumento militar e sirenes de defesa civil. Cada origem passa pelos mesmos filtros: itens com mais de 15 minutos são descartados, uma repetição do mesmo evento é suprimida por 30 minutos, e um cooldown de 60 segundos segue qualquer alerta. Fontes de nível inferior também precisam de uma classificação confirmada por IA antes de poderem disparar um.",
       "q7": "Agentes de IA como Claude ou GPT podem usar?",
-      "a7": "Sim. World Monitor envia um servidor MCP com um registro de ferramentas ativas, então Claude, GPT ou qualquer agente compatível com MCP podem consultar scores de risco ao vivo, status de pontos críticos, conflitos, mercados e briefings — com projeção JMESPath para que agentes obtenham exatamente o que precisam.",
+      "a7": "Sim. O servidor MCP do World Monitor expõe {{mcpTools}} ferramentas ao vivo, então Claude, GPT ou qualquer agente compatível com MCP pode consultar pontuações de risco, status de gargalos, conflitos, mercados e briefings — com projeção JMESPath para que agentes busquem exatamente o que precisam.",
       "q8": "Preciso de uma conta?",
       "a8": "Não. O dashboard funciona instantaneamente sem inscrição. Uma conta só importa quando você atualiza para Pro ou quer sincronizar configurações entre dispositivos.",
       "q9": "É open source?",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Como começo a monitorar o mapa do mundo?",
-      "subtitle": "Enquanto você lê esta página, ela continuou se movimentando — {{chokepoints}} pontos de estrangulamento, {{hotspots}} pontos críticos, {{stockExchanges}} bolsas, {{feeds}} fontes de feed curadas. Uma delas será a primeira página de amanhã. Encontre primeiro — gratuito, sem conta.",
+      "subtitle": "Abra worldmonitor.app/dashboard em qualquer navegador: gratuito, sem conta, {{mapLayers}} tipos de camada de mapa prontos para ativar desde o primeiro carregamento. Clique em qualquer país para seu briefing, ou pressione ⌘K / Ctrl-K para a paleta de comandos. O mapa continuou atualizando enquanto você lia esta página.",
       "button": "Encontre primeiro",
       "note": "Gratuito · Sem inscrição · Carrega em segundos",
       "secondary": "Ou veja planos Pro →"

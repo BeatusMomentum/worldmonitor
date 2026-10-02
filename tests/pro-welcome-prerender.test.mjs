@@ -9,6 +9,10 @@ const welcomeHtml = () =>
   (cachedWelcomeHtml ??= readFileSync(new URL('../public/pro/welcome.html', import.meta.url), 'utf8'));
 const enLocale = () =>
   JSON.parse(readFileSync(new URL('../pro-test/src/locales/en.json', import.meta.url), 'utf8'));
+// The FAQ answers interpolate the same build-measured figures the page renders.
+const proofFacts = () =>
+  JSON.parse(readFileSync(new URL('../pro-test/src/generated/depth-stats.json', import.meta.url), 'utf8'));
+const fillProofFacts = (text, facts) => text.replace(/\{\{(\w+)\}\}/g, (_, key) => String(facts[key]));
 const WELCOME_FAQ_COUNT = 11;
 const CANONICAL_ORIGIN = 'https://www.worldmonitor.app/';
 
@@ -35,6 +39,7 @@ const welcomeRoot = () => {
 
 test('welcome FAQPage JSON-LD matches every visible FAQ entry', { skip }, () => {
   const en = enLocale();
+  const facts = proofFacts();
   const faqPage = welcomeJsonLdBlocks().find((block) => block['@type'] === 'FAQPage');
 
   assert.ok(faqPage, 'welcome.html should include FAQPage JSON-LD');
@@ -42,11 +47,31 @@ test('welcome FAQPage JSON-LD matches every visible FAQ entry', { skip }, () => 
   for (let n = 1; n <= WELCOME_FAQ_COUNT; n += 1) {
     const entry = faqPage.mainEntity[n - 1];
     assert.equal(entry.name, en.welcome.faq[`q${n}`]);
-    assert.equal(entry.acceptedAnswer?.text, en.welcome.faq[`a${n}`]);
+    assert.equal(entry.acceptedAnswer?.text, fillProofFacts(en.welcome.faq[`a${n}`], facts));
   }
+  assert.doesNotMatch(welcomeHtml(), /\{\{\w+\}\}/, 'no raw {{placeholder}} may reach the published page');
+  // The chokepoint answer must state the measured count, not a placeholder.
+  assert.match(faqPage.mainEntity[3].acceptedAnswer.text, new RegExp(`^Yes\\. ${facts.chokepoints} chokepoints`));
   // The structured answer to the Liveuamap question must carry the compare
   // destination itself, not only the DOM anchor derived from it (#7746).
   assert.match(faqPage.mainEntity[4].acceptedAnswer.text, /worldmonitor\.app\/compare\/liveuamap-alternatives/);
+});
+
+// AI answers quote one passage, not the stat rail beside it, so each
+// question-headed passage must carry its own measured figure.
+test('question-headed welcome passages state their own measured figures', { skip }, () => {
+  const facts = proofFacts();
+  const { content } = welcomeRoot();
+  const passageAfter = (heading) => {
+    const at = content.indexOf(`>${heading}</h2>`);
+    assert.ok(at >= 0, `missing heading: ${heading}`);
+    return content.slice(at).match(/<p[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? '';
+  };
+  const whatIs = passageAfter('What is World Monitor?');
+  assert.match(whatIs, new RegExp(`${facts.feeds} news and OSINT feeds from ${facts.providers} attributed providers`));
+  assert.match(whatIs, new RegExp(`${facts.mapLayers} map layer types`));
+  assert.match(passageAfter('How do I start watching the world map?'), new RegExp(`free, no account, ${facts.mapLayers} map layer types ready to switch on`));
+  assert.match(content, new RegExp(`${facts.mcpTools} MCP tools`));
 });
 
 test('welcome JSON-LD connects the page, website, application, and publisher', { skip }, () => {

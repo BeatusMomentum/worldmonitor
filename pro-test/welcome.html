@@ -382,12 +382,12 @@
         {
           "@type": "Question",
           "name": "Where does the data come from?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Named providers include ACLED and UCDP for conflict, AISStream for live vessels, OpenSky for aircraft, NASA FIRMS for fires, USGS for earthquakes, IMF, BIS, FRED and Finnhub for markets and macro — plus curated news feeds. Every panel cites its sources and timestamps inline." }
+          "acceptedAnswer": { "@type": "Answer", "text": "From {{providers}} attributed providers. Named ones include ACLED and UCDP for conflict, AISStream for live vessels, OpenSky for aircraft, NASA FIRMS for fires, USGS for earthquakes, IMF, BIS, FRED and Finnhub for markets and macro — plus curated news feeds. Every panel cites its sources and timestamps inline." }
         },
         {
           "@type": "Question",
           "name": "Can I watch chokepoints like Hormuz or Bab el-Mandeb in real time?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Chokepoints are tracked with live AIS vessel counts, week-over-week transit change and disruption scoring — and density anomalies are flagged against each strait's rolling baseline." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. {{chokepoints}} chokepoints, Hormuz and Bab el-Mandeb among them, are tracked with live AIS vessel counts, week-over-week transit change and disruption scoring — and density anomalies are flagged against each chokepoint's rolling baseline." }
         },
         {
           "@type": "Question",
@@ -397,12 +397,12 @@
         {
           "@type": "Question",
           "name": "Why should I trust an alert?",
-          "acceptedAnswer": { "@type": "Answer", "text": "A breaking banner fires only when independent origin types corroborate — news classification, keyword velocity, hotspot escalation, military surges, official sirens — deduplicated and rate-limited. Fewer alerts, real ones." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Because every alert must pass fixed gates before it reaches you. Alerts come from {{alertOrigins}} independent origins: high-threat news items, keyword spikes, hotspot escalation, military surge detection and civil-defense sirens. Each origin passes the same filters: items older than 15 minutes are dropped, a repeat of the same event is suppressed for 30 minutes, and a 60-second cooldown follows any alert. Lower-tier sources also need an AI-confirmed classification before they can trigger one." }
         },
         {
           "@type": "Question",
           "name": "Can AI agents like Claude or GPT use it?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. World Monitor ships an MCP server with a live tool registry, so Claude, GPT or any MCP-compatible agent can query live risk scores, chokepoint status, conflicts, markets and briefs — with JMESPath projection so agents fetch exactly what they need." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. World Monitor's MCP server exposes {{mcpTools}} live tools, so Claude, GPT or any MCP-compatible agent can query risk scores, chokepoint status, conflicts, markets and briefs — with JMESPath projection so agents fetch exactly what they need." }
         },
         {
           "@type": "Question",

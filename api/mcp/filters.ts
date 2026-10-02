@@ -260,6 +260,7 @@ export function summarizeData(data: Record<string, unknown>): Record<string, unk
 // Every cache tool returns a uniform envelope from `executeTool`:
 //
 //   { cached_at: string|null, stale: boolean, activationUnknown?: true,
+//     freshnessUnknown?: true, unreadable?: string[],
 //     contentFreshnessPendingUntil?: string, data: { [label]: ... } }
 //
 // where each `label` is derived from one of the tool's `_cacheKeys` via the
@@ -300,6 +301,15 @@ export function cacheEnvelope(dataProperties: Record<string, object>): object {
       activationUnknown: {
         type: 'boolean',
         description: 'Optional. True when an activation marker this tool consults could not be read, so `stale` was computed without knowing whether the producer has ever published. Distinguishes an unreadable marker from a producer that genuinely never ran — the same signal /api/health and /api/seed-health publish under this name.',
+      },
+      freshnessUnknown: {
+        type: 'boolean',
+        description: 'Optional. True when a freshness record could not be read (a cache timeout), so `stale` is true because freshness is unknown, not because the data was shown to be old. Retrying shortly will usually clear it.',
+      },
+      unreadable: {
+        type: 'array',
+        items: { type: 'string' },
+        description: 'Optional. Labels of `data` sections whose cache read failed. Those sections are null because they could not be read, not because the dataset is empty. Retrying shortly will usually fill them.',
       },
       contentFreshnessPendingUntil: {
         type: 'string',

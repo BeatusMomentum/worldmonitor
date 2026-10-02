@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor není open-source Palantir",
       "asOf": "K {{date}}",
       "whatIsTitle": "Co je World Monitor?",
-      "whatIsBody": "World Monitor je bezplatný open-source dashboard, který streamuje geopolitiku, trhy, námořní dopravu, letectví, infrastrukturu a kybernetické signály na jednu živou mapu světa. Koreluje samostatné zdroje od {{feeds}} zdrojů do jednoho provozního obrazu a upozorňuje na konvergenci před titulky – každá číslice je zdrojovaná a každá metoda dokumentovaná."
+      "whatIsBody": "World Monitor je volný dashboard s otevřeným zdrojovým kódem (AGPL-3.0), který používá více než 2 miliony lidí. Streamuje {{feeds}} zpravodajských a OSINT feedů od {{providers}} ověřených poskytovatelů na jednu živou mapu světa s {{mapLayers}} typy mapových vrstev, která pokrývá geopolitiku, trhy, lodní dopravu, letectví a kyber. Koreluje je tak, aby konvergující události vyplynuly na povrch dřív než se dostanou do titulků. Každá údaj je zdrojován a každá metoda dokumentována."
     },
     "live": {
       "eyebrow": "Live právě teď",
@@ -510,7 +510,7 @@
     "moments": {
       "eyebrow": "Korelační engine",
       "title": "Jak World Monitor koreluje signály?",
-      "sub": "Zdroje dat najdete na stovce míst. Výhoda je jeden povrch, kde geopolitika, námořní doprava, komodity, makro, trhy, počasí, infrastruktura, kyber, zprávy a riziko zemí si mohou navzájem vysvětlit.",
+      "sub": "Umisťuje {{mapLayers}} typů mapových vrstev na jednu plochu, takže si geopolitika, lodní doprava, komodity, makro, trhy, počasí, infrastruktura, kyber, zpravodajství a riziko v jednotlivých zemích mohou navzájem vysvětlit. Kdokoli může sbírat feedy; jejich pohyb společně na jedné mapě je rozdíl.",
       "signalStack": "Signály sloučeny",
       "correlation": "Korelace",
       "bridge1": "Není to seznam zdrojů.",
@@ -626,7 +626,7 @@
       "eyebrow": "Pro tvůrce a AI agenty",
       "title": "Jak vytvářím na World Monitor ze svého vlastního stacku?",
       "sub": "Vše na mapě je také API. Připojte to do Claudea přes MCP, zavolejte REST endpointy odkudkoli, nebo nainstalujte nativního klienta pro Python, Ruby, Go nebo JavaScript — váš kód provádí výzkum s živými daty místo paměti trénovacích dat.",
-      "b1": "{{mcpTools}} nástrojů MCP — skóre rizika, průsmyky, konflikty, trhy, přehledy",
+      "b1": "{{mcpTools}} nástrojů MCP – skóre rizika, uzavřená místa, konflikty, trhy, briefingy",
       "b2": "Dokumentované REST API — jedna specifikace OpenAPI 3.1, jeden klíč",
       "b3": "Oficiální SDK na npm, PyPI, RubyGems a Go — bez závislostí, MCP-first",
       "b4": "JMESPath projekce na každém volání — načtěte přesně ta pole, která potřebujete",
@@ -673,14 +673,14 @@
       "q2": "Co je globální inteligentní panel?",
       "a2": "Jediné živé zobrazení, které spojuje signály, které většina nástrojů drží odděleně: konfliktní události, sledování lodí a letadel, kritická místa v přepravě, satelity, podmořské kabely, potrubí, trhy a kybernetické hrozby — na jedné mapě světa v reálném čase s AI skórováním a souhrny. World Monitor je ten zdarma.",
       "q3": "Odkud data pocházejí?",
-      "a3": "Pojmenované poskytovatele zahrnují ACLED a UCDP pro konflikty, AISStream pro živé plavidla, OpenSky pro letadla, NASA FIRMS pro požáry, USGS pro zemětřesení, IMF, BIS, FRED a Finnhub pro trhy a makro — plus kurované zpravodajské kanály. Každý panel uvádí své zdroje a časové značky vložené.",
+      "a3": "Od {{providers}} atribuovaných poskytovatelů. Pojmenovaní poskytovatelé zahrnují ACLED a UCDP pro konflikty, AISStream pro živé lodě, OpenSky pro letadla, NASA FIRMS pro požáry, USGS pro zemětřesení, IMF, BIS, FRED a Finnhub pro trhy a makro – plus kurátorské zpravodajské zdroje. Každý panel cituje své zdroje a časové značky přímo v textu.",
       "q4": "Mohu sledovat kritická místa jako Hormuz nebo Bab el-Mandeb v reálném čase?",
-      "a4": "Ano. Úzká místa jsou sledována s počty živých AIS plavidel, změnami tranziturů týden na týden a skóre narušení — a anomálie hustoty jsou označeny proti základní linii každého průlivu.",
+      "a4": "Ano. {{chokepoints}} úžin, včetně Hormuzu a Bábu al-Mandebu, se sleduje s živými počty lodí AIS, změnou tranzitu v porovnání s týdnem a skóre narušení – a anomálie hustoty se označují proti klouzavému základnímu stavu každého úžin.",
       "q5": "Jak se liší od mapy konfliktů jako Liveuamap?",
       "a5": "Konflikt je jedna vrstva mapy. World Monitor spojuje konflikty se námořní dopravou, vojenským letectvem, infrastrukturou, trhy a kyberbezpečností — a pak AI vyhodnocuje jejich konvergenci: indexy nestability, eskalaci horkých míst, potvrzená urgentní hlášení a denní briefy. Porovnejte World Monitor s Liveuamap a dalšími konflikčními mapami: worldmonitor.app/compare/liveuamap-alternatives. Další možnosti monitorování najdete na worldmonitor.app/compare/best-geopolitical-risk-dashboards.",
-      "a6": "Přerušující banner se aktivuje pouze pokud si nezávislé typy zdrojů potvrdí — klasifikace zpráv, rychlost klíčových slov, eskalace hotspotů, vojenské nárůsty, oficiální sirény — deduplikovány a omezeny podle frekvence. Méně alertů, skutečné.",
+      "a6": "Protože každá výstraha musí projít pevnými branami, než se k vám dostane. Výstrahy pocházejí z {{alertOrigins}} nezávislých zdrojů: vysoce rizikové zpravodajské položky, náhlé změny klíčových slov, eskalace aktivních zón, detekce vojenské mobilizace a sirény civilní obrany. Každý zdroj prochází stejnými filtry: položky starší než 15 minut se zahazují, opakování stejné události se potlačí na 30 minut a po jakékoli výstraze následuje 60sekundové zpoždění. Zdroje nižší úrovně také potřebují potvrzení klasifikace AI, aby mohly spustit výstrahu.",
       "q7": "Mohou jej používat AI agenti jako Claude nebo GPT?",
-      "a7": "Ano. World Monitor dodává MCP server se živým registrem nástrojů, takže Claude, GPT nebo jakýkoliv MCP-kompatibilní agent může dotazovat živé skóre rizik, stav průsmyků, konflikty, trhy a briefy — s JMESPath projekcí, takže agenti získají přesně to, co potřebují.",
+      "a7": "Ano. Server MCP World Monitoru odhaluje {{mcpTools}} živých nástrojů, takže Claude, GPT nebo jakýkoliv agent kompatibilní s MCP může dotazovat skóre rizika, stav uzavřených míst, konflikty, trhy a briefingy – s JMESPath projekcí, aby agenti načetli přesně to, co potřebují.",
       "q8": "Potřebuji účet?",
       "a8": "Ne. Dashboard funguje okamžitě bez registrace. Účet je důležitý pouze pokud upgradujete na Pro nebo chcete synchronizovat nastavení mezi zařízeními.",
       "q9": "Je to open source?",
@@ -693,7 +693,7 @@
     },
     "cta": {
       "title": "Jak začít sledovat mapu světa?",
-      "subtitle": "Zatímco čtete tuto stránku, pokračoval – {{chokepoints}} uzavřených míst, {{hotspots}} ohnisek, {{stockExchanges}} burz, {{feeds}} kurátorských zdrojů. Jeden z nich bude zítřejší titulní strana. Objevte jej první – bezplatně, bez účtu.",
+      "subtitle": "Otevřete worldmonitor.app/dashboard v libovolném prohlížeči: zdarma, bez účtu, {{mapLayers}} typů mapových vrstev připraveno přepínat od prvního načtení. Klikněte na libovolnou zemi pro její přehled, nebo stiskněte ⌘K / Ctrl-K pro paletu příkazů. Mapa se při čtení této stránky neustále aktualizuje.",
       "button": "Najdi jej první",
       "note": "Zdarma · Bez registrace · Načte se za sekundy",
       "secondary": "Nebo podívej se na Pro plány →"

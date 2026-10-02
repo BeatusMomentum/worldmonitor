@@ -32,7 +32,7 @@ export const Moments = () => (
       <SectionHeading
         eyebrow={t('welcome.moments.eyebrow')}
         title={t('welcome.moments.title')}
-        subtitle={t('welcome.moments.sub')}
+        subtitle={t('welcome.moments.sub', depthProofStats)}
       />
       <div className="grid md:grid-cols-2 gap-6">
         {MOMENTS.map(({ key, twoLineTitle, signals, chips, href }, mi) => {
