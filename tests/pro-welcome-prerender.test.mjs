@@ -144,6 +144,25 @@ test('first-five probe cards state measured figures at citation length', { skip 
   }
 });
 
+// geo.new credits only prices, percentages and dates on statistics, so each of
+// these sections carries a real one: the $0 plan, the generated Pro price, and
+// the GPS thresholds at 40+ words.
+test('sections state a price or percentage the audit credits', { skip }, () => {
+  const copy = JSON.parse(readFileSync(new URL('../pro-test/src/generated/copy-stats.json', import.meta.url), 'utf8'));
+  const { content } = welcomeRoot();
+  const passageAfter = (heading) => {
+    const at = content.indexOf(`>${heading}</h`);
+    assert.ok(at >= 0, `missing heading: ${heading}`);
+    return tagsToText(content.slice(at).match(/<p[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? '', '');
+  };
+  assert.match(passageAfter('What is World Monitor?'), /^World Monitor is a free \(\$0\), open-source/);
+  assert.match(passageAfter('How do I start watching the world map?'), /in any browser for \$0, with no account/);
+  assert.match(passageAfter('How do I build on World Monitor from my own stack?'), new RegExp(`MCP access comes with Pro, from \\$${copy.proMonthlyPrice}/mo\\.`));
+  const gps = passageAfter('GPS jamming zones');
+  assert.match(gps, /at least 2% of aircraft/);
+  assert.ok(gps.split(/\s+/).length >= 40, `GPS card is under 40 words: ${gps}`);
+});
+
 // The FAQ figures live inside <details> answers, which geo.new did not credit
 // to the heading (the FAQ scored weakest, 37/100, though its first answer
 // opens with $0). The heading therefore needs its own paragraph, directly

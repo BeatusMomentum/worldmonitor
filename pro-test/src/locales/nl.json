@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor is geen open-source Palantir",
       "asOf": "Per {{date}}",
       "whatIsTitle": "Wat is World Monitor?",
-      "whatIsBody": "World Monitor is een gratis, open-source (AGPL-3.0) dashboard dat door 2M+ mensen wordt gebruikt. Het streamt {{feeds}} nieuws- en OSINT-feeds van {{providers}} geattribueerde providers op één live wereldkaart met {{mapLayers}} kaartlaagtypen, over geopolitiek, markten, scheepvaart, luchtvaart en cyberbeveiliging. Het correleert ze zodat convergerende gebeurtenissen naar voren komen voordat de krantenkoppen ze melden. Elk gegeven is gesourceerd en elke methode gedocumenteerd."
+      "whatIsBody": "World Monitor is een gratis ($0), open-source (AGPL-3.0) dashboard dat door 2M+ mensen wordt gebruikt. Het streamt {{feeds}} nieuws- en OSINT-feeds van {{providers}} geattribueerde providers op één live wereldkaart met {{mapLayers}} kaartlaagtypen, omvattend geopolitiek, markten, scheepvaart, luchtvaart en cyber. Het correleert ze zodat convergende gebeurtenissen eerder aan het licht komen dan in de koppen. Elke cijfer is bronvermeld en elke methode gedocumenteerd."
     },
     "live": {
       "eyebrow": "Nu live",
@@ -609,7 +609,7 @@
       "n1Title": "Satelliettracking",
       "n1Desc": "Live baanposities berekend in-browser met SGP4 en iedere 3 seconden bijgewerkt — militaire en aardobservatie-satellieten van CelesTrak, elke 2 uur vernieuwd.",
       "n2Title": "GPS-jamming zones",
-      "n2Desc": "Dagelijkse RF-storingskaart van vliegtuigrapporten: cellen waar minimaal 2% van de vliegtuigen verslechterde GPS zien, worden gemarkeerd, boven 10% als hoog.",
+      "n2Desc": "Dagelijkse RF-interferentiekaart op basis van vliegtuigrapporten: cellen waar minstens 2% van de vliegtuigen verslechterde GPS zien, worden gemarkeerd en boven 10% gemarkeerd als hoog. De cellen zijn zeshoeken die dagelijks uit die rapporten worden herbouwd, dus de kaart toont waar vluchten afgelopen dag jamming of spoofing hebben ondervonden, niet op dit moment.",
       "n3Title": "Chokepoint-transitinformatie",
       "n3Desc": "Scheepsaantallen door Hormuz, Suez, Bab el-Mandeb en 10 meer straten — met verstoringsscore.",
       "n4Title": "AI-datacentrumkaart",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Voor makers & AI-agents",
       "title": "Hoe bouw ik voort op World Monitor vanuit mijn eigen stack?",
-      "sub": "Alles op de kaart is ook een API. Integreer het in Claude via MCP met {{mcpTools}} live tools, call de REST endpoints van overal, of installeer een native client voor Python, Ruby, Go of JavaScript — je code doet onderzoek met live data in plaats van trainingsgegevens.",
+      "sub": "Alles op de kaart is ook een API. Koppel het via MCP aan Claude met {{mcpTools}} live tools, roep de REST-eindpunten vanaf elke plek aan, of installeer een native client voor Python, Ruby, Go of JavaScript — je code doet onderzoek met live data in plaats van herinneringen uit trainingsdata. MCP-toegang komt met Pro, vanaf ${{proMonthlyPrice}}/mo.",
       "b1": "{{mcpTools}} MCP-tools — risicocijfers, knelpunten, conflicten, markten, briefings",
       "b2": "Gedocumenteerde REST API — één OpenAPI 3.1-spec, één sleutel",
       "b3": "Officiële SDK's op npm, PyPI, RubyGems en Go — nul afhankelijkheden, MCP-first",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Hoe begin ik met het wereldwijde kaartvolgen?",
-      "subtitle": "Open worldmonitor.app/dashboard in elke browser, zonder account: {{mapLayers}} kaartlaagtypen, alle behalve Resilience gratis om in te schakelen. Klik op een land voor zijn briefing, of druk ⌘K / Ctrl-K voor het opdrachtpalet. De kaart is blijven bijwerken terwijl je deze pagina las.",
+      "subtitle": "Open worldmonitor.app/dashboard in elke browser voor $0, zonder account: {{mapLayers}} kaartlaagtypen, allemaal gratis om in te schakelen behalve Resilience. Klik op elk land voor zijn briefing, of druk op ⌘K / Ctrl-K voor het command palette. De kaart is blijven updaten terwijl je deze pagina las.",
       "button": "Vind het eerst",
       "note": "Gratis · Geen registratie · Laadt in seconden",
       "secondary": "Of bekijk Pro-plannen →"

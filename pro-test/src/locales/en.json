@@ -485,7 +485,7 @@
       "trustBuild": "Build on it:",
       "positioningLink": "WorldMonitor is not an open-source Palantir",
       "whatIsTitle": "What is World Monitor?",
-      "whatIsBody": "World Monitor is a free, open-source (AGPL-3.0) dashboard used by 2M+ people. It streams {{feeds}} news and OSINT feeds from {{providers}} attributed providers onto one live world map with {{mapLayers}} map layer types, spanning geopolitics, markets, shipping, aviation and cyber. It correlates them so converging events surface before the headlines do. Every figure is sourced and every method documented."
+      "whatIsBody": "World Monitor is a free ($0), open-source (AGPL-3.0) dashboard used by 2M+ people. It streams {{feeds}} news and OSINT feeds from {{providers}} attributed providers onto one live world map with {{mapLayers}} map layer types, spanning geopolitics, markets, shipping, aviation and cyber. It correlates them so converging events surface before the headlines do. Every figure is sourced and every method documented."
     },
     "tasks": {
       "eyebrow": "Start with the question",
@@ -621,7 +621,7 @@
       "n1Title": "Satellite tracking",
       "n1Desc": "Live orbital positions computed in-browser with SGP4 and updated every 3 seconds — military and Earth-observation satellites from CelesTrak, refreshed every 2 hours.",
       "n2Title": "GPS jamming zones",
-      "n2Desc": "Daily RF-interference map from aircraft reports: cells where at least 2% of aircraft see degraded GPS are flagged, over 10% marked high.",
+      "n2Desc": "Daily RF-interference map from aircraft reports: cells where at least 2% of aircraft see degraded GPS are flagged, over 10% marked high. The cells are hexagons rebuilt once a day from those reports, so the map shows where flights met jamming or spoofing over the latest day, not this minute.",
       "n3Title": "Chokepoint transit intel",
       "n3Desc": "Vessel counts through Hormuz, Suez, Bab el-Mandeb and 10 more straits — with disruption scoring.",
       "n4Title": "AI datacenter map",
@@ -637,7 +637,7 @@
     "agents": {
       "eyebrow": "For builders & AI agents",
       "title": "How do I build on World Monitor from my own stack?",
-      "sub": "Everything on the map is also an API. Wire it into Claude over MCP with {{mcpTools}} live tools, call the REST endpoints from anywhere, or install a native client for Python, Ruby, Go, or JavaScript — your code researches with live data instead of training-data memories.",
+      "sub": "Everything on the map is also an API. Wire it into Claude over MCP with {{mcpTools}} live tools, call the REST endpoints from anywhere, or install a native client for Python, Ruby, Go, or JavaScript — your code researches with live data instead of training-data memories. MCP access comes with Pro, from ${{proMonthlyPrice}}/mo.",
       "b1": "{{mcpTools}} MCP tools — risk scores, chokepoints, conflicts, markets, briefs",
       "b2": "Documented REST API — one OpenAPI 3.1 spec, one key",
       "b3": "Official SDKs on npm, PyPI, RubyGems, and Go — zero-dependency, MCP-first",
@@ -706,7 +706,7 @@
     },
     "cta": {
       "title": "How do I start watching the world map?",
-      "subtitle": "Open worldmonitor.app/dashboard in any browser, with no account: {{mapLayers}} map layer types, every one except Resilience free to switch on. Click any country for its brief, or press ⌘K / Ctrl-K for the command palette. The map has kept updating while you read this page.",
+      "subtitle": "Open worldmonitor.app/dashboard in any browser for $0, with no account: {{mapLayers}} map layer types, every one except Resilience free to switch on. Click any country for its brief, or press ⌘K / Ctrl-K for the command palette. The map has kept updating while you read this page.",
       "button": "Find it first",
       "note": "Free · No signup · Loads in seconds",
       "secondary": "Or see Pro plans →"

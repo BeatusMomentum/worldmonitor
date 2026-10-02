@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor är inte en öppen källkod Palantir",
       "asOf": "Per {{date}}",
       "whatIsTitle": "Vad är World Monitor?",
-      "whatIsBody": "World Monitor är en kostnadsfri dashboard med öppen källkod (AGPL-3.0) som används av 2M+ personer. Den streamar {{feeds}} nyhets- och OSINT-flöden från {{providers}} attribuerade leverantörer på en live-världskarta med {{mapLayers}} kartlagertyper, som spänner över geopolitik, marknader, sjöfart, luftfart och cyber. Den korrelerar dem så att konvergerande händelser blir synliga före rubrikerna. Varje siffra är källhänvisad och varje metod dokumenterad."
+      "whatIsBody": "World Monitor är en kostnadsfri ($0), öppen källkod (AGPL-3.0) dashboard som används av 2M+ personer. Den strömmar {{feeds}} nyhets- och OSINT-flöden från {{providers}} attribuerade leverantörer till en live-världskarta med {{mapLayers}} kartlagertyper, som omfattar geopolitik, marknader, sjöfart, luftfart och cyber. Den korrelerar dem så att konvergerande händelser dyker upp innan rubrikerna gör det. Varje siffra är källa och varje metod dokumenterad."
     },
     "live": {
       "eyebrow": "Live just nu",
@@ -609,7 +609,7 @@
       "n1Title": "Satellitspårning",
       "n1Desc": "Live-orbitalpositioner beräknade i webbläsaren med SGP4 och uppdaterade var 3:e sekund — militär- och jordobservationssatelliter från CelesTrak, uppdaterade var 2:e timme.",
       "n2Title": "GPS-jamningszoner",
-      "n2Desc": "Daglig RF-interferenskarta från flygrapporter: celler där minst 2 % av flygplanen ser försämrad GPS flaggas, över 10 % markeras högt.",
+      "n2Desc": "Daglig RF-störningskarta från flygrapporter: celler där minst 2% av flygplan ser försämrad GPS flaggas, över 10% markeras högt. Cellerna är hexagoner som återskapas en gång per dag från dessa rapporter, så kartan visar var flygningar mötte jamning eller spoofing under den senaste dagen, inte denna minut.",
       "n3Title": "Flaskhalstransitintelligens",
       "n3Desc": "Fartygsantal genom Hormuz, Suez, Bab el-Mandeb och 10 fler sund — med avbrottsbedömning.",
       "n4Title": "AI-datacenterkarta",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "För utvecklare och AI-agenter",
       "title": "Hur bygger jag på World Monitor från min egen stack?",
-      "sub": "Allt på kartan är också ett API. Integrera det med Claude via MCP med {{mcpTools}} live-verktyg, anropa REST-slutpunkterna från var som helst, eller installera en systemspecifik klient för Python, Ruby, Go eller JavaScript — din kod forskar med live-data istället för träningsdata.",
+      "sub": "Allt på kartan är också ett API. Anslut det till Claude via MCP med {{mcpTools}} live-verktyg, anropa REST-slutpunkterna från var som helst, eller installera en inbyggd klient för Python, Ruby, Go eller JavaScript — din kod forskar med live-data istället för träningsdata-minnen. MCP-åtkomst ingår i Pro, från ${{proMonthlyPrice}}/mån.",
       "b1": "{{mcpTools}} MCP-verktyg — riskpoäng, flaskhalsar, konflikter, marknader, rapporter",
       "b2": "Dokumenterad REST API — en OpenAPI 3.1-specifikation, en nyckel",
       "b3": "Officiella SDK:er på npm, PyPI, RubyGems och Go — nollberoenden, MCP-först",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Hur kommer jag igång med att övervaka världskartan?",
-      "subtitle": "Öppna worldmonitor.app/dashboard i valfri webbläsare, utan konto: {{mapLayers}} kartlagertyper, alla utom Resilience gratis att slå på. Klicka på vilket land som helst för dess briefing, eller tryck ⌘K / Ctrl-K för kommandopaletten. Kartan har fortsatt uppdateras medan du läste denna sida.",
+      "subtitle": "Öppna worldmonitor.app/dashboard i vilken webbläsare som helst för $0, utan konto: {{mapLayers}} kartlagertyper, alla utom Resilience är kostnadsfria att aktivera. Klicka på ett land för dess briefing, eller tryck ⌘K / Ctrl-K för kommandopaletten. Kartan har fortsatt att uppdateras medan du läste den här sidan.",
       "button": "Hitta den först",
       "note": "Gratis · Ingen registrering · Laddar på sekunder",
       "secondary": "Eller se Pro-planer →"

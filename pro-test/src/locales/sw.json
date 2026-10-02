@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor si Palantir ya chanzo wazi",
       "asOf": "Kufikia {{date}}",
       "whatIsTitle": "World Monitor ni nini?",
-      "whatIsBody": "World Monitor ni dashboard ya bure, ya chanzo wazi (AGPL-3.0) inayotumiwa na watu 2M+. Inatiririsha vyanzo {{feeds}} vya habari na OSINT kutoka kwa watoa huduma {{providers}} waliotajwa, kwenye ramani moja hai ya dunia yenye aina {{mapLayers}} za tabaka za ramani, ikijumuisha siasa za kijiografia, masoko, usafirishaji wa baharini, usafiri wa anga na usalama wa mtandao. Inaviunganisha ili matukio yanayokutana yaonekane kabla ya vichwa vya habari. Kila takwimu ina chanzo na kila mbinu imeandikwa."
+      "whatIsBody": "World Monitor ni dashibodi ya bure ($0), yenye chanzo wazi (AGPL-3.0) inayotumiwa na watu 2M+. Inatiririsha {{feeds}} milisho ya habari na OSINT kutoka kwa watoa huduma {{providers}} waliotajwa kwenye ramani moja hai ya dunia yenye aina {{mapLayers}} za tabaka za ramani, ikishughulikia jiopolitiki, masoko, usafirishaji wa baharini, usafiri wa anga na mtandao. Inazilinganisha ili matukio yanayokutana yajitokeze kabla ya vichwa vya habari. Kila takwimu ina chanzo na kila mbinu imeandikwa."
     },
     "live": {
       "eyebrow": "Moja kwa moja sasa sasa",
@@ -609,7 +609,7 @@
       "n1Title": "Kufuatilia satelaiti",
       "n1Desc": "Nafasi za obiti za moja kwa moja zinazokokotolewa ndani ya kivinjari kwa SGP4 na kusasishwa kila sekunde 3 — satelaiti za kijeshi na za uchunguzi wa Dunia kutoka CelesTrak, zikisasishwa kila saa 2.",
       "n2Title": "Sehemu za kuingiliwa kwa GPS",
-      "n2Desc": "Ramani ya kila siku ya mwingiliano wa RF kutoka ripoti za ndege: seli ambapo angalau 2% ya ndege huona GPS iliyoharibika huwekewa alama, zaidi ya 10% huwekwa alama kuwa juu.",
+      "n2Desc": "Ramani ya kila siku ya mwingiliano wa RF kutoka ripoti za ndege: seli ambapo angalau 2% ya ndege huona GPS iliyoharibika huwekewa alama, na zaidi ya 10% huwekwa alama kuwa juu. Seli hizo ni hexagons zinazojengwa upya mara moja kwa siku kutoka ripoti hizo, kwa hivyo ramani inaonyesha mahali ambapo safari za ndege zilikutana na jamming au spoofing katika siku ya karibuni, si dakika hii.",
       "n3Title": "Akhabar ya kupitia sehemu nyingi",
       "n3Desc": "Idadi ya meli kupitia Hormuz, Suez, Bab el-Mandeb na kumega nyingine 10 — na alama ya usumbufu.",
       "n4Title": "Ramani ya kituo cha AI",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Kwa wajenzi & wakalishi wa AI",
       "title": "Ninajenga vipi kwenye World Monitor kutoka kwenye stack yangu?",
-      "sub": "Kila kitu kwenye ramani pia ni API. Unganisha kwenye Claude kupitia MCP na {{mcpTools}} zana hai, piga simu endpoints za REST kutoka mahali popote, au sakinisha mteja asilia kwa Python, Ruby, Go, au JavaScript — msimbo wako unafanya utafiti na data hai badala ya kumbukumbu za data za mafunzo.",
+      "sub": "Kila kitu kwenye ramani pia ni API. Iunganishe na Claude kupitia MCP pamoja na {{mcpTools}} zana za moja kwa moja, ita endpoints za REST kutoka mahali popote, au sakinisha mteja asili wa Python, Ruby, Go, au JavaScript — msimbo wako unatafiti kwa data ya moja kwa moja badala ya kumbukumbu za data ya mafunzo. Ufikiaji wa MCP unakuja na Pro, kuanzia ${{proMonthlyPrice}}/mwezi.",
       "b1": "{{mcpTools}} zana za MCP — alama za hatari, njia zenye kizuizi, migogoro, soko, muhtasari",
       "b2": "REST API iliyoandaliwa — kielezo kimoja cha OpenAPI 3.1, ufunguo mmoja",
       "b3": "SDKs rasmi kwenye npm, PyPI, RubyGems, na Go — hakuna utegemezi, MCP kwanza",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Ninaanzia vipi kuangalia ramani ya dunia?",
-      "subtitle": "Fungua worldmonitor.app/dashboard katika kivinjari yoyote, bila akaunti: {{mapLayers}} aina za tabaka la ramani, kila moja isipokuwa Resilience inaweza kuwashwa bure. Bofya nchi yoyote kwa muhtasari wake, au bonyeza ⌘K / Ctrl-K kwa palet ya amri. Ramani imebaki ikiingia habari wakati unasoma ukurasa huu.",
+      "subtitle": "Fungua worldmonitor.app/dashboard katika kivinjari chochote kwa $0, bila akaunti: aina {{mapLayers}} za tabaka za ramani, kila moja isipokuwa Resilience ni bure kuwasha. Bofya nchi yoyote ili kuona muhtasari wake, au bonyeza ⌘K / Ctrl-K kwa paleti ya amri. Ramani imeendelea kusasishwa ulipokuwa ukisoma ukurasa huu.",
       "button": "Itafuta kwanza",
       "note": "Bure · Hakuna kuweka akaunti · Inapakia kwa sekunde",
       "secondary": "Au ona mipango ya Pro →"

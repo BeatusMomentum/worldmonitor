@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor není open-source Palantir",
       "asOf": "K {{date}}",
       "whatIsTitle": "Co je World Monitor?",
-      "whatIsBody": "World Monitor je volný dashboard s otevřeným zdrojovým kódem (AGPL-3.0), který používá více než 2 miliony lidí. Streamuje {{feeds}} zpravodajských a OSINT feedů od {{providers}} ověřených poskytovatelů na jednu živou mapu světa s {{mapLayers}} typy mapových vrstev, která pokrývá geopolitiku, trhy, lodní dopravu, letectví a kyber. Koreluje je tak, aby konvergující události vyplynuly na povrch dřív než se dostanou do titulků. Každá údaj je zdrojován a každá metoda dokumentována."
+      "whatIsBody": "World Monitor je bezplatný ($0), open-source (AGPL-3.0) dashboard, který používá 2M+ lidí. Streamuje {{feeds}} zpravodajských a OSINT zdrojů z {{providers}} atribuovaných poskytovatelů na jednu živou mapu světa s {{mapLayers}} typy mapových vrstev, která pokrývá geopolitiku, trhy, námořní dopravu, letectví a kybernetiku. Koreluje je tak, aby se sbíhající se události objevily dříve než se dostanou na titulky. Každá údaj má uvedený zdroj a každá metoda je zdokumentovaná."
     },
     "live": {
       "eyebrow": "Live právě teď",
@@ -609,7 +609,7 @@
       "n1Title": "Sledování satelitů",
       "n1Desc": "Živé orbitální pozice počítané v prohlížeči pomocí SGP4 a aktualizované každé 3 sekundy — vojenské a pozorovací satelity Země z CelesTrak, aktualizované každé 2 hodiny.",
       "n2Title": "Zóny rušení GPS",
-      "n2Desc": "Denní mapa radiofrekvenčního rušení z hlášení letadel: buňky, kde nejméně 2 % letadel zaznamenávají zhoršené GPS, jsou označeny, nad 10 % značeny jako vysoké.",
+      "n2Desc": "Denní mapa elektromagnetických interferencí ze zpráv letadel: buňky, kde nejméně 2 % letadel hlásí zhoršený GPS, jsou označeny, nad 10 % jsou označeny jako vysoké. Buňky jsou šestiúhelníky obnovované jednou denně z těchto zpráv, takže mapa ukazuje, kde se letadla v poslední den setkala s rušením nebo falšováním, nikoliv v tuto chvíli.",
       "n3Title": "Intel o kritických průchodech",
       "n3Desc": "Počty lodí procházejících Hormuzem, Suezem, Bab el-Mandebem a 10 dalšími průlivy — s vyhodnocením přerušení.",
       "n4Title": "Mapa AI datových center",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Pro tvůrce a AI agenty",
       "title": "Jak vytvářím na World Monitor ze svého vlastního stacku?",
-      "sub": "Vše na mapě je také API. Propojte to s Claude přes MCP s {{mcpTools}} živými nástroji, volejte REST endpointy odkudkoli nebo nainstalujte nativního klienta pro Python, Ruby, Go nebo JavaScript — váš kód provádí výzkum s živými daty místo pamětí z trénovacích dat.",
+      "sub": "Všechno na mapě je také API. Propojte to s Claude přes MCP s {{mcpTools}} živými nástroji, volajte REST endpointy odkudkoliv, nebo nainstalujte nativního klienta pro Python, Ruby, Go nebo JavaScript — váš kód provádí výzkum s živými daty místo pamětí z trénovacích dat. Přístup přes MCP je součástí Pro za ${{proMonthlyPrice}}/měsíc.",
       "b1": "{{mcpTools}} nástrojů MCP – skóre rizika, úzká místa, konflikty, trhy, briefingy",
       "b2": "Dokumentované REST API — jedna specifikace OpenAPI 3.1, jeden klíč",
       "b3": "Oficiální SDK na npm, PyPI, RubyGems a Go — bez závislostí, MCP-first",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Jak začít sledovat mapu světa?",
-      "subtitle": "Otevřete worldmonitor.app/dashboard v jakémkoli prohlížeči, bez účtu: {{mapLayers}} typů vrstev mapy, každý kromě Resilience je zdarma k zapnutí. Klikněte na kteroukoli zemi pro její přehled, nebo stiskněte ⌘K / Ctrl-K pro paletu příkazů. Mapa se stále aktualizuje, zatímco čtete tuto stránku.",
+      "subtitle": "Otevřete worldmonitor.app/dashboard v jakémkoliv prohlížeči za $0, bez účtu: {{mapLayers}} typů mapových vrstev, všechny kromě Resilience jsou zdarma k aktivaci. Klikněte na jakoukoli zemi pro její briefing, nebo stiskněte ⌘K / Ctrl-K pro příkazovou paletu. Mapa se během čtení této stránky stále aktualizuje.",
       "button": "Najdi jej první",
       "note": "Zdarma · Bez registrace · Načte se za sekundy",
       "secondary": "Nebo podívej se na Pro plány →"

@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor không phải là Palantir mã nguồn mở",
       "asOf": "Tính đến {{date}}",
       "whatIsTitle": "World Monitor là gì?",
-      "whatIsBody": "World Monitor là một dashboard miễn phí, mã nguồn mở (AGPL-3.0) được sử dụng bởi hơn 2 triệu người. Nó phát trực tiếp {{feeds}} nguồn tin tức và OSINT từ {{providers}} nhà cung cấp được xác định trên một bản đồ thế giới trực tiếp với {{mapLayers}} loại lớp bản đồ, bao gồm địa chính trị, thị trường, vận tải biển, hàng không và an ninh mạng. Nó tương quan chúng để các sự kiện hội tụ nổi bật trước khi các tiêu đề xuất hiện. Mọi con số đều có nguồn và mọi phương pháp đều được ghi chép."
+      "whatIsBody": "World Monitor là một dashboard miễn phí ($0), mã nguồn mở (AGPL-3.0) được sử dụng bởi hơn 2 triệu người. Nó phát trực tiếp {{feeds}} nguồn tin tức và OSINT từ {{providers}} nhà cung cấp được ghi nguồn lên một bản đồ thế giới trực tiếp với {{mapLayers}} loại lớp bản đồ, bao gồm địa chính trị, thị trường, vận tải biển, hàng không và mạng. Nó tương quan chúng để các sự kiện hội tụ được nổi lên trước khi có tiêu đề. Mỗi con số đều có nguồn gốc và mỗi phương pháp đều được ghi chép."
     },
     "live": {
       "eyebrow": "Trực tiếp ngay bây giờ",
@@ -609,7 +609,7 @@
       "n1Title": "Theo dõi vệ tinh",
       "n1Desc": "Vị trí quỹ đạo trực tiếp được tính trong trình duyệt bằng SGP4 và cập nhật mỗi 3 giây — vệ tinh quân sự và quan sát Trái Đất từ CelesTrak, làm mới mỗi 2 giờ.",
       "n2Title": "Vùng gây nhiễu GPS",
-      "n2Desc": "Bản đồ nhiễu RF hàng ngày từ báo cáo của máy bay: các ô nơi ít nhất 2% máy bay ghi nhận GPS suy giảm được đánh dấu, trên 10% được đánh dấu cao.",
+      "n2Desc": "Bản đồ nhiễu RF hàng ngày từ báo cáo của máy bay: các ô nơi ít nhất 2% máy bay phát hiện GPS suy giảm được đánh dấu, trên 10% được đánh dấu cao. Các ô này là hình lục giác được xây dựng lại một lần mỗi ngày từ những báo cáo đó, do đó bản đồ hiển thị nơi các chuyến bay gặp gây nhiễu hoặc giả mạo trong ngày gần nhất, không phải phút này.",
       "n3Title": "Thông tin chuyên chở tại điểm nghẽn",
       "n3Desc": "Số lượng tàu thuyền qua Hormuz, Suez, Bab el-Mandeb và 10 eo biển khác — kèm theo chỉ số gián đoạn.",
       "n4Title": "Bản đồ trung tâm dữ liệu AI",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Cho những người xây dựng & tác nhân AI",
       "title": "Làm cách nào tôi xây dựng trên World Monitor từ ngăn xếp của riêng tôi?",
-      "sub": "Mọi thứ trên bản đồ đều là API. Kết nối nó với Claude qua MCP với {{mcpTools}} công cụ live, gọi các endpoint REST từ bất kỳ đâu, hoặc cài đặt native client cho Python, Ruby, Go, hoặc JavaScript — mã của bạn nghiên cứu với dữ liệu live thay vì bộ nhớ training-data.",
+      "sub": "Mọi thứ trên bản đồ cũng là một API. Kết nối nó vào Claude qua MCP với {{mcpTools}} công cụ trực tiếp, gọi các điểm cuối REST từ bất kỳ đâu, hoặc cài đặt ứng dụng khách gốc cho Python, Ruby, Go hoặc JavaScript — mã của bạn nghiên cứu với dữ liệu trực tiếp thay vì bộ nhớ dữ liệu huấn luyện. Truy cập MCP đi kèm với Pro, từ ${{proMonthlyPrice}}/tháng.",
       "b1": "{{mcpTools}} công cụ MCP — điểm số rủi ro, điểm thắt cổ chai, xung đột, thị trường, bản tin",
       "b2": "REST API được ghi chép — một thông số kỹ thuật OpenAPI 3.1, một khóa",
       "b3": "SDK chính thức trên npm, PyPI, RubyGems và Go — không phụ thuộc, MCP-first",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Làm cách nào tôi bắt đầu theo dõi bản đồ thế giới?",
-      "subtitle": "Mở worldmonitor.app/dashboard trên bất kỳ trình duyệt nào, không cần tài khoản: {{mapLayers}} loại lớp bản đồ, mọi loại ngoại trừ Resilience đều miễn phí chuyển đổi. Nhấp vào bất kỳ quốc gia nào để xem bản tóm tắt của nó, hoặc nhấn ⌘K / Ctrl-K để mở bảng lệnh. Bản đồ đã tiếp tục cập nhật trong khi bạn đọc trang này.",
+      "subtitle": "Mở worldmonitor.app/dashboard trong bất kỳ trình duyệt nào với $0, không cần tài khoản: {{mapLayers}} loại lớp bản đồ, mỗi loại ngoại trừ Resilience đều có thể bật. Nhấp vào bất kỳ quốc gia nào để xem bản tóm tắt của nó, hoặc nhấn ⌘K / Ctrl-K để mở bảng lệnh. Bản đồ đã tiếp tục cập nhật trong khi bạn đọc trang này.",
       "button": "Tìm thấy nó trước",
       "note": "Miễn phí · Không đăng ký · Tải trong vài giây",
       "secondary": "Hoặc xem các gói Pro →"

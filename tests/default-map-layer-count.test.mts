@@ -38,5 +38,6 @@ test('rejects a count of zero or the whole catalog', () => {
 test('the real full-variant defaults match the published copy stats', () => {
   const source = readFileSync(new URL('../src/config/variants/full.ts', import.meta.url), 'utf8');
   const published = JSON.parse(readFileSync(new URL('../pro-test/src/generated/copy-stats.json', import.meta.url), 'utf8'));
-  assert.deepEqual(defaultOnLayerStats(source, getCompleteLayerCatalogKeys('full')), published);
+  const { defaultOnLayers, defaultOnLayerPct } = published;
+  assert.deepEqual(defaultOnLayerStats(source, getCompleteLayerCatalogKeys('full')), { defaultOnLayers, defaultOnLayerPct });
 });

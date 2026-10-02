@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor nu este un Palantir open-source",
       "asOf": "Din {{date}}",
       "whatIsTitle": "Ce este World Monitor?",
-      "whatIsBody": "World Monitor este un dashboard gratuit și open-source (AGPL-3.0) folosit de 2M+ persoane. Transmite {{feeds}} fluxuri de știri și OSINT de la {{providers}} furnizori atribuiți pe o singură hartă mondială live cu {{mapLayers}} tipuri de straturi de hartă, acoperind geopolitică, piețe, transport maritim, aviație și cyber. Le corelează astfel încât evenimentele convergente să iasă în evidență înaintea titlurilor. Fiecare cifră este sursită și fiecare metodă documentată."
+      "whatIsBody": "World Monitor este un dashboard gratuit ($0), open-source (AGPL-3.0) folosit de 2M+ persoane. Transmite {{feeds}} fluxuri de știri și OSINT de la {{providers}} furnizori atribuiți pe o hartă mondială live unificată cu {{mapLayers}} tipuri de straturi de hartă, acoperind geopolitică, piețe, transport maritim, aviație și cyber. Le corelează pentru ca evenimentele convergente să apară înaintea știrilor. Fiecare cifră este sursa și fiecare metodă documentată."
     },
     "live": {
       "eyebrow": "Live chiar acum",
@@ -609,7 +609,7 @@
       "n1Title": "Urmărire sateliți",
       "n1Desc": "Pozițiile orbitale live calculate în-browser cu SGP4 și actualizate la fiecare 3 secunde — sateliți militari și de observație a Pământului de la CelesTrak, reîmprospătați la fiecare 2 ore.",
       "n2Title": "Zone de perturbație GPS",
-      "n2Desc": "Hartă zilnică a interferenței RF din rapoartele aeronavelor: celulele în care cel puțin 2% din aeronave înregistrează GPS degradat sunt marcate, peste 10% marcate ca nivel înalt.",
+      "n2Desc": "Hartă zilnică de interferență RF din rapoarte de aeronave: celulele în care cel puțin 2% dintre aeronave experimentează GPS degradat sunt marcate, peste 10% marcate ca ridicate. Celulele sunt hexagoane reconstruite o dată pe zi din acele rapoarte, deci harta arată unde zborurile au întâlnit jamming sau spoofing în ultima zi, nu în această clipă.",
       "n3Title": "Intel asupra tranzitului prin puncte critice",
       "n3Desc": "Numărul de nave prin Hormuz, Suez, Bab el-Mandeb și 10 alte strâmtori — cu cotare a perturbării.",
       "n4Title": "Hartă centre de date AI",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Pentru constructori și agenți AI",
       "title": "Cum construiesc pe World Monitor din propriul meu stack?",
-      "sub": "Tot ce este pe hartă este și o API. Conectează-o la Claude prin MCP cu {{mcpTools}} instrumente live, apelează endpoint-urile REST de oriunde, sau instalează un client nativ pentru Python, Ruby, Go sau JavaScript — codul tău face cercetare cu date live în loc de memorii din datele de antrenament.",
+      "sub": "Totul pe hartă este și un API. Conectează-l la Claude prin MCP cu {{mcpTools}} instrumente live, apelează punctele finale REST de oriunde, sau instalează un client nativ pentru Python, Ruby, Go, sau JavaScript — codul tău face cercetare cu date live în loc de amintiri din datele de antrenament. Accesul MCP vine cu Pro, de la ${{proMonthlyPrice}}/lună.",
       "b1": "{{mcpTools}} instrumente MCP — scoruri de risc, puncte vulnerabile, conflicte, piețe, scurte rapoarte",
       "b2": "REST API documentat — o specificație OpenAPI 3.1, o cheie",
       "b3": "SDK-uri oficiale pe npm, PyPI, RubyGems și Go — fără dependințe, MCP-first",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Cum încep să monitorizez harta lumii?",
-      "subtitle": "Deschide worldmonitor.app/dashboard în orice browser, fără cont: {{mapLayers}} tipuri de straturi pe hartă, fiecare dintre ele, cu excepția Resilience, poate fi activat gratuit. Dă clic pe orice țară pentru brieful ei, sau apasă ⌘K / Ctrl-K pentru paleta de comenzi. Harta a continuat să se actualizeze în timp ce ai citit această pagină.",
+      "subtitle": "Deschide worldmonitor.app/dashboard în orice browser pentru $0, fără cont: {{mapLayers}} tipuri de straturi de hartă, fiecare cu excepția Resilience gratuit pentru activare. Dă clic pe orice țară pentru brieful ei, sau apasă ⌘K / Ctrl-K pentru paleta de comenzi. Harta a continuat să se actualizeze în timp ce ai citit această pagină.",
       "button": "Găsește-l primul",
       "note": "Gratuit · Fără înregistrare · Se încarcă în secunde",
       "secondary": "Sau vezi planuri Pro →"

@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor non è un Palantir open-source",
       "asOf": "A partire dal {{date}}",
       "whatIsTitle": "Cos'è World Monitor?",
-      "whatIsBody": "World Monitor è una dashboard gratuita e open-source (AGPL-3.0) utilizzata da 2M+ persone. Trasferisce {{feeds}} feed di news e OSINT da {{providers}} provider attribuiti su un'unica mappa mondiale live con {{mapLayers}} tipi di layer cartografici, coprendo geopolitica, mercati, shipping, aviazione e cyber. Li correla in modo che gli eventi convergenti emergano prima dei titoli. Ogni dato è documentato e ogni metodo è tracciato."
+      "whatIsBody": "World Monitor è una dashboard gratuita ($0), open-source (AGPL-3.0) utilizzata da 2M+ persone. Trasmette {{feeds}} feed di notizie e OSINT da {{providers}} provider attribuiti su un'unica mappa mondiale live con {{mapLayers}} tipi di layer cartografico, coprendo geopolitica, mercati, trasporto marittimo, aviazione e cyber. Li correla in modo che gli eventi convergenti emergano prima dei titoli. Ogni dato è documentato e ogni metodo è tracciato."
     },
     "live": {
       "eyebrow": "Live in questo momento",
@@ -609,7 +609,7 @@
       "n1Title": "Tracciamento satellitare",
       "n1Desc": "Posizioni orbitali dal vivo calcolate nel browser con SGP4 e aggiornate ogni 3 secondi — satelliti militari e di osservazione terrestre da CelesTrak, aggiornati ogni 2 ore.",
       "n2Title": "Zone di disturbo GPS",
-      "n2Desc": "Mappa giornaliera di interferenza RF da rapporti di aeromobili: le celle dove almeno il 2% degli aeromobili riscontra GPS degradato sono contrassegnate, oltre il 10% marcate come elevate.",
+      "n2Desc": "Mappa giornaliera di interferenza RF dai report degli aerei: le celle dove almeno il 2% degli aerei rileva GPS degradato sono segnalate, oltre il 10% marcate come elevate. Le celle sono esagoni ricostruiti una volta al giorno da quei report, quindi la mappa mostra dove i voli hanno incontrato jamming o spoofing nell'ultimo giorno, non in questo momento.",
       "n3Title": "Intelligence su transiti strategici",
       "n3Desc": "Conteggio navi attraverso lo Stretto di Hormuz, Suez, Bab el-Mandeb e 10 altri stretti — con punteggi di disruzione.",
       "n4Title": "Mappa datacenter AI",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Per creatori e agenti AI",
       "title": "Come creo su World Monitor dal mio stack?",
-      "sub": "Tutto sulla mappa è anche un'API. Collegala a Claude tramite MCP con {{mcpTools}} strumenti live, chiama gli endpoint REST da qualsiasi luogo, o installa un client nativo per Python, Ruby, Go o JavaScript — il tuo codice esegue ricerche con dati live invece di affidarsi ai dati di addestramento.",
+      "sub": "Tutto sulla mappa è anche un'API. Collegala a Claude tramite MCP con {{mcpTools}} tool live, chiama gli endpoint REST da qualsiasi luogo, o installa un client nativo per Python, Ruby, Go, o JavaScript — il tuo codice ricerca con dati live invece dei ricordi dai dati di training. L'accesso MCP è incluso con Pro, da {{proMonthlyPrice}}$/mese.",
       "b1": "{{mcpTools}} strumenti MCP — score di rischio, chokepoint, conflitti, mercati, briefing",
       "b2": "REST API documentata — una spec OpenAPI 3.1, una chiave",
       "b3": "SDK ufficiali su npm, PyPI, RubyGems e Go — zero dipendenze, MCP-first",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Come inizio a monitorare la mappa mondiale?",
-      "subtitle": "Apri worldmonitor.app/dashboard in qualsiasi browser, senza account: {{mapLayers}} tipi di layer mappa, tutti tranne Resilience attivabili gratuitamente. Clicca su qualsiasi paese per il suo briefing, o premi ⌘K / Ctrl-K per la palette dei comandi. La mappa continua ad aggiornarsi mentre leggi questa pagina.",
+      "subtitle": "Apri worldmonitor.app/dashboard in qualsiasi browser per $0, senza account: {{mapLayers}} tipi di layer cartografico, tutti gratuiti tranne Resilience. Clicca su qualsiasi paese per il suo briefing, o premi ⌘K / Ctrl-K per la palette dei comandi. La mappa ha continuato ad aggiornarsi mentre leggevi questa pagina.",
       "button": "Scoprilo per primo",
       "note": "Gratuito · Senza iscrizione · Si carica in secondi",
       "secondary": "Oppure visualizza i piani Pro →"

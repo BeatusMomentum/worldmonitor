@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor ist kein Open-Source-Palantir",
       "asOf": "Stand: {{date}}",
       "whatIsTitle": "Was ist World Monitor?",
-      "whatIsBody": "World Monitor ist ein kostenloses, quelloffenes (AGPL-3.0) Dashboard, das von über 2 Millionen Menschen genutzt wird. Es streamt {{feeds}} Nachrichten- und OSINT-Feeds von {{providers}} zugeordneten Anbietern auf eine Live-Weltkarte mit {{mapLayers}} Kartenebenentypen, die Geopolitik, Märkte, Schifffahrt, Luftfahrt und Cyber abdeckt. Es korreliert diese, sodass konvergierende Ereignisse vor den Schlagzeilen sichtbar werden. Jede Zahl ist belegt und jede Methode dokumentiert."
+      "whatIsBody": "World Monitor ist ein kostenloses ($0), quelloffenes (AGPL-3.0) Dashboard, das von über 2 Millionen Menschen genutzt wird. Es streamt {{feeds}} Nachrichten- und OSINT-Feeds von {{providers}} zugeordneten Anbietern auf eine Live-Weltkarte mit {{mapLayers}} Kartenebenentypen, die Geopolitik, Märkte, Schifffahrt, Luftfahrt und Cyber abdeckt. Das System korreliert diese Daten, sodass zusammenhängende Ereignisse bereits vor den Schlagzeilen sichtbar werden. Jede Angabe ist belegt und jede Methode dokumentiert."
     },
     "live": {
       "eyebrow": "Live jetzt",
@@ -609,7 +609,7 @@
       "n1Title": "Satellitentracking",
       "n1Desc": "Live-Orbitalposition, im Browser mit SGP4 berechnet und alle 3 Sekunden aktualisiert — Militär- und Erdbeobachtungssatelliten von CelesTrak, alle 2 Stunden aktualisiert.",
       "n2Title": "GPS-Störzonen",
-      "n2Desc": "Tägliche HF-Störungskarte aus Flugzeugmeldungen: Zellen, in denen mindestens 2 % der Flugzeuge beeinträchtigtes GPS feststellen, werden gekennzeichnet, über 10 % als hoch markiert.",
+      "n2Desc": "Tägliche HF-Störungskarte aus Flugzeugberichten: Zellen, in denen mindestens 2% der Flugzeuge ein verschlechtertes GPS-Signal feststellen, werden markiert, über 10% werden als hoch gekennzeichnet. Die Zellen sind Sechsecke, die einmal täglich aus diesen Berichten neu berechnet werden, sodass die Karte zeigt, wo Flüge am letzten Tag auf Störsignale oder Spoofing trafen, nicht in diesem Moment.",
       "n3Title": "Engpass-Transitintelligenz",
       "n3Desc": "Schiffszählungen durch Hormus, Suez, Bab el-Mandeb und 10 weitere Meerengen — mit Störungsbewertung.",
       "n4Title": "KI-Rechenzentren-Karte",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Für Builder & KI-Agenten",
       "title": "Wie baue ich auf World Monitor aus meinem eigenen Stack auf?",
-      "sub": "Alles auf der Karte ist auch eine API. Integrieren Sie es über MCP mit {{mcpTools}} Live-Tools in Claude ein, rufen Sie die REST-Endpunkte von überall aus auf, oder installieren Sie einen nativen Client für Python, Ruby, Go oder JavaScript – Ihr Code recherchiert mit Live-Daten statt mit Trainings-Daten-Erinnerungen.",
+      "sub": "Alles auf der Karte ist auch eine API. Verbinden Sie sie mit Claude über MCP mit {{mcpTools}} Live-Tools, rufen Sie die REST-Endpoints von überall auf, oder installieren Sie einen nativen Client für Python, Ruby, Go oder JavaScript – Ihr Code recherchiert mit Live-Daten statt mit Trainings-Erinnerungen. MCP-Zugriff ist in Pro enthalten, ab {{proMonthlyPrice}}$/Monat.",
       "b1": "{{mcpTools}} MCP-Tools – Risikoscores, Engpässe, Konflikte, Märkte, Lageberichte",
       "b2": "Dokumentierte REST API – eine OpenAPI-3.1-Spezifikation, ein Key",
       "b3": "Offizielle SDKs auf npm, PyPI, RubyGems und Go — nullabhängig, MCP-First",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Wie starte ich die Überwachung der Weltkarte?",
-      "subtitle": "Öffnen Sie worldmonitor.app/dashboard in einem beliebigen Browser, ohne Konto: {{mapLayers}} Kartenschicht-Typen, alle außer Resilience können kostenlos umgeschaltet werden. Klicken Sie auf ein beliebiges Land für dessen Bericht, oder drücken Sie ⌘K / Ctrl-K für die Befehlspalette. Die Karte wird während Sie diese Seite lesen weiterhin aktualisiert.",
+      "subtitle": "Öffnen Sie worldmonitor.app/dashboard in einem beliebigen Browser für $0, ohne Konto: {{mapLayers}} Kartenebenentypen, alle außer Resilience können kostenlos aktiviert werden. Klicken Sie auf ein Land, um dessen Briefing zu sehen, oder drücken Sie ⌘K / Ctrl-K für die Befehlspalette. Die Karte hat sich weiterhin aktualisiert, während Sie diese Seite gelesen haben.",
       "button": "Finden Sie ihn zuerst",
       "note": "Kostenlos · Keine Anmeldung · Lädt in Sekunden",
       "secondary": "Oder siehe Pro-Pläne →"
