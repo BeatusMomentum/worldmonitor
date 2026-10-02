@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { t } from '../i18n';
+import depthProofStats from '../generated/depth-stats.json';
 import { DASHBOARD_PATH } from '../routes';
 import { SectionHeading } from './SectionHeading';
 
@@ -31,7 +32,7 @@ export const Moments = () => (
       <SectionHeading
         eyebrow={t('welcome.moments.eyebrow')}
         title={t('welcome.moments.title')}
-        subtitle={t('welcome.moments.sub')}
+        subtitle={t('welcome.moments.sub', depthProofStats)}
       />
       <div className="grid md:grid-cols-2 gap-6">
         {MOMENTS.map(({ key, twoLineTitle, signals, chips, href }, mi) => {
