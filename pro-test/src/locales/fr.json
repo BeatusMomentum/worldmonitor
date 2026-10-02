@@ -584,7 +584,7 @@
       "f4Title": "Choisissez votre objectif",
       "f4Desc": "Monde, Tech, Finance, Matière première, Énergie ou Happy — même moteur, six moniteurs calibrés, un clic de distance.",
       "f5Title": "Vous en avez vu peut-être un dixième",
-      "f5Desc": "À l'ouverture de la carte, {{defaultOnLayers}} des {{mapLayers}} types de couches cartographiques, environ {{defaultOnLayerPct}}%, sont activés. Les autres apparaissent au fur et à mesure que le monde change : passages de satellites, brouillage GPS, navires fantômes signalés à partir de lacunes AIS, clusters de protestation et alertes de sirènes de défense civile. Chacun est accessible en un clic dans le menu des couches ou la palette ⌘K.",
+      "f5Desc": "Lorsque la carte s'ouvre sur ordinateur, {{defaultOnLayers}} des {{mapLayers}} types de couches cartographiques, soit environ {{defaultOnLayerPct}}%, sont activés. Le reste apparaît au fil des mouvements du monde : passages de satellites, brouillage GPS, navires sombres signalés à partir des lacunes AIS, groupements de manifestations et alertes de sirènes de protection civile. La plupart peuvent être activés depuis le menu des couches ou la palette ⌘K.",
       "cta": "Lancer le chrono"
     },
     "depth": {

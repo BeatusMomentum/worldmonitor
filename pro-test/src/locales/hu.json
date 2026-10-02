@@ -584,7 +584,7 @@
       "f4Title": "Válassza ki az ön lencséjét",
       "f4Desc": "Világméretű, Tech, Pénzügyi, Árupiaci, Energetikai vagy Vidám — ugyanaz a motor, hat finomhangolt monitor, egy kattintás távolságra.",
       "f5Title": "Talán a tizedét látta",
-      "f5Desc": "A térkép megnyitásakor {{defaultOnLayers}} a {{mapLayers}} térképréteg-típusból, körülbelül {{defaultOnLayerPct}}%, be van kapcsolva. A többi akkor jelenik meg, ahogy a világ változik: műholdas áthaladások, GPS-jamming, sötét hajók az AIS-hiányokból, tüntetési klaszterek és polgári védelmi szirénaértesítések. Mindegyik egy kattintás távolságra van a réteg menüben vagy a ⌘K palettán.",
+      "f5Desc": "Amikor a térkép asztali eszközön megnyílik, {{defaultOnLayers}} a {{mapLayers}} térképréteg-típus közül, körülbelül {{defaultOnLayerPct}}%, be van kapcsolva. A többi a világ mozgásával jelenik meg: műholdes átjárások, GPS-jamming, AIS-hiányokból észlelt sötét hajók, tüntetési klaszterek és polgári védelmi szirénaészlelések. A legtöbbjük bekapcsolható a rétegenüből vagy a ⌘K palettáról.",
       "cta": "Indítsa el az órát"
     },
     "depth": {

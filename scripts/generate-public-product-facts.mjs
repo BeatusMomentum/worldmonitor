@@ -222,7 +222,12 @@ function buildWelcomeCopyStats() {
     throw new Error('could not isolate DEFAULT_MAP_LAYERS in src/config/variants/full.ts');
   }
   const catalog = new Set(getCompleteLayerCatalogKeys('full'));
-  const onKeys = [...source.slice(start, end).matchAll(/^\s+(\w+):\s*true\b/gm)].map((m) => m[1]);
+  const block = source.slice(start, end);
+  const onKeys = [...block.matchAll(/^\s*['"]?(\w+)['"]?\s*:\s*true\b/gm)].map((m) => m[1]);
+  const trueValues = (block.match(/:\s*true\b/g) || []).length;
+  if (onKeys.length !== trueValues) {
+    throw new Error(`DEFAULT_MAP_LAYERS has ${trueValues} true values but only ${onKeys.length} parsed keys; update the parser`);
+  }
   const defaultOnLayers = onKeys.filter((key) => catalog.has(key)).length;
   if (defaultOnLayers <= 0 || defaultOnLayers >= catalog.size) {
     throw new Error(`default-on layer count must be between 1 and ${catalog.size - 1}, got ${defaultOnLayers}`);

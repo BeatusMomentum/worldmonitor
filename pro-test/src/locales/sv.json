@@ -584,7 +584,7 @@
       "f4Title": "Välj ditt perspektiv",
       "f4Desc": "World, Tech, Finance, Commodity, Energy eller Happy — samma motor, sex justerade övervakningar, ett klick från varandra.",
       "f5Title": "Du har sett kanske en tiondel av det",
-      "f5Desc": "När kartan öppnas är {{defaultOnLayers}} av dess {{mapLayers}} kartskikttyper, cirka {{defaultOnLayerPct}}%, aktiverade. Resten dyker upp när världen förändras: satellitpassager, GPS-störningar, mörka fartyg flaggade från AIS-luckor, protestkluster och varningar från sirener för civilförsvaret. Var och en är ett klick bort i skiktmenyn eller paletten ⌘K.",
+      "f5Desc": "När kartan öppnas på skrivbordet är {{defaultOnLayers}} av dess {{mapLayers}} kartlagertyper, cirka {{defaultOnLayerPct}}%, aktiverade. Resten visas när världen uppdateras: satellitpassager, GPS-störningar, mörka fartyg flaggade från AIS-luckor, protestkluster och sirenvarningar från civilförsvaret. De flesta kan aktiveras från lagermenyn eller paletten ⌘K.",
       "cta": "Starta klockan"
     },
     "depth": {

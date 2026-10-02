@@ -137,7 +137,7 @@ test('first-five probe cards state measured figures at citation length', { skip 
     return tagsToText(content.slice(at).match(/<p[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? '', '').replace(/&#x27;/g, "'");
   };
   const tenth = cardText('You&#x27;ve seen maybe a tenth of it');
-  assert.match(tenth, new RegExp(`^When the map opens, ${copy.defaultOnLayers} of its ${facts.mapLayers} map layer types, about ${copy.defaultOnLayerPct}%, are switched on\\.`));
+  assert.match(tenth, new RegExp(`^When the map opens on desktop, ${copy.defaultOnLayers} of its ${facts.mapLayers} map layer types, about ${copy.defaultOnLayerPct}%, are switched on\\.`));
   const country = cardText('Click any country');
   for (const [name, text] of [['tenth', tenth], ['country', country]]) {
     assert.ok(text.split(/\s+/).length >= 40, `${name} card is under 40 words: ${text}`);

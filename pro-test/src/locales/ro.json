@@ -584,7 +584,7 @@
       "f4Title": "Alege-ți obiectivul",
       "f4Desc": "Lume, Tehnologie, Finanțe, Materii Prime, Energie sau Fericit — același motor, șase monitoare reglate, la o singură clic distanță.",
       "f5Title": "Ai văzut poate o zecime din ea",
-      "f5Desc": "Când se deschide harta, {{defaultOnLayers}} din {{mapLayers}} tipuri de straturi de hartă, aproximativ {{defaultOnLayerPct}}%, sunt activate. Restul apar pe măsură ce lumea se mișcă: treceri de sateliți, bruiaj GPS, nave întunecate semnalate pe baza golurilor AIS, clustere de proteste și alerte ale sirenelor de apărare civilă. Fiecare este la doar un clic distanță în meniul straturilor sau paleta ⌘K.",
+      "f5Desc": "Când harta se deschide pe desktop, {{defaultOnLayers}} din {{mapLayers}} tipurile de straturi ale hărții, aproximativ {{defaultOnLayerPct}}%, sunt activate. Restul apar pe măsură ce lumea se mișcă: trecerile satelitare, perturbarea GPS, nave întunecate marcate din lacunele AIS, grupuri de proteste și alertele sirenelor de apărare civilă. Majoritatea pot fi activate din meniul de straturi sau din paleta ⌘K.",
       "cta": "Pornește cronometrul"
     },
     "depth": {

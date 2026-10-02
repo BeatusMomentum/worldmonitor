@@ -584,7 +584,7 @@
       "f4Title": "Odaberi svoju leću",
       "f4Desc": "Svijet, Tehnologija, Financije, Roba, Energija ili Pozitivno — isti engine, šest prilagođenih monitora, jedan klik dalje.",
       "f5Title": "Vidio si možda deseti dio",
-      "f5Desc": "Kada se karta otvori, {{defaultOnLayers}} od {{mapLayers}} tipova kartografskih slojeva, otprilike {{defaultOnLayerPct}}%, uključeno je. Ostatak se pojavljuje kako se svijet mijenja: satelitski preleti, GPS ometanje, tamni brodovi označeni na temelju AIS praznina, skupine prosvjeda i upozorenja sirena civilne zaštite. Svaki je jedan klik udaljen u izborniku slojeva ili u ⌘K paleti.",
+      "f5Desc": "Kada se mapa otvori na računalu, {{defaultOnLayers}} od {{mapLayers}} vrsta slojeva mape, oko {{defaultOnLayerPct}}%, je uključeno. Ostatak se pojavljuje kako se svijet kreće: satelitski proleti, GPS ometanje, tamni brodovi označeni iz AIS praznina, skupovi protesta i alarmi civilne obrane. Većinu je moguće uključiti iz izbornika slojeva ili palete ⌘K.",
       "cta": "Počni odbrojavanje"
     },
     "depth": {

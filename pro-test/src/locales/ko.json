@@ -584,7 +584,7 @@
       "f4Title": "시점 선택하기",
       "f4Desc": "World, Tech, Finance, Commodity, Energy 또는 Happy — 같은 엔진, 6개의 맞춤형 모니터, 한 번의 클릭으로 전환됩니다.",
       "f5Title": "전체의 10분의 1 정도만 봤습니다",
-      "f5Desc": "맵이 열릴 때, {{mapLayers}}개의 맵 레이어 유형 중 {{defaultOnLayers}}개(약 {{defaultOnLayerPct}}%)가 활성화되어 있습니다. 나머지는 세계가 움직일 때 나타납니다: 위성 통과, GPS 재밍, AIS 갭으로 표시된 암흑 선박, 시위 클러스터 및 민방위 사이렌 알림. 각각은 레이어 메뉴나 ⌘K 팔레트에서 한 번의 클릭으로 접근할 수 있습니다.",
+      "f5Desc": "데스크톱에서 맵이 열릴 때 {{mapLayers}}개의 맵 레이어 유형 중 {{defaultOnLayers}}개(약 {{defaultOnLayerPct}}%)가 켜져 있습니다. 나머지는 세계가 움직이면서 나타납니다: 위성 패스, GPS 재밍, AIS 신호 끊김으로 감지된 암흑함, 시위 클러스터 및 민방위 사이렌 경보. 대부분 레이어 메뉴 또는 ⌘K 팔레트에서 켤 수 있습니다.",
       "cta": "시작하기"
     },
     "depth": {
