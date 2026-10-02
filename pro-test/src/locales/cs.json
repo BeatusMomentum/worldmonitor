@@ -578,13 +578,13 @@
       "f1Title": "Mapa se již pohybuje",
       "f1Desc": "Konflikty, plavidla, lety, požáry a výpadky se vykreslují při načítání stránky. Nic se nejdříve nekonfiguruje.",
       "f2Title": "Klikněte na jakoukoli zemi",
-      "f2Desc": "Otevře se úplný spis: skóre nestability s jeho komponentami, AI shrnutí s citovanými titulky, aktivní signály, 7denní časová osa.",
+      "f2Desc": "Pro vybranou zemi se otevře úplný spis: její skóre nestability rozložené na jednotlivé komponenty, briefing s podporou AI, který se odkazuje na články, na kterých je založen, aktivní signály na mapě a 7denní časová osa změn. Není potřeba nic připravovat; jeden klik otevře vše.",
       "f3Title": "Stiskněte ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} příkazů. Přejděte na jakoukoli vrstvu, panel nebo zemi bez nutnosti se nejdřív učit UI.",
       "f4Title": "Zvolte si svoji perspektivu",
       "f4Desc": "Svět, Tech, Finance, Komodity, Energie nebo Happy — stejný základ, šest vyladěných monitorů, jeden klik od sebe.",
       "f5Title": "Viděli jste snad desetinu",
-      "f5Desc": "Během vývoje světa vyplouvá většina typů vrstev mapy {{mapLayers}} — průlety satelitů, rušení GPS, temné lodě, shluky protestů, výstrahy sirén.",
+      "f5Desc": "Když se mapa otevře, je zapnuto {{defaultOnLayers}} z {{mapLayers}} typů mapových vrstev, přibližně {{defaultOnLayerPct}}%. Zbytek se objevuje s pohybem světa: průlety satelitů, rušení GPS, temné lodě označené na základě mezer v AIS, shluky protestů a upozornění sirén civilní obrany. Každá je na jedno kliknutí v nabídce vrstev nebo v paletě ⌘K.",
       "cta": "Spustit časomíru"
     },
     "depth": {

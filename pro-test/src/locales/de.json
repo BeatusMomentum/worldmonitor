@@ -578,13 +578,13 @@
       "f1Title": "Die Karte bewegt sich bereits",
       "f1Desc": "Konflikte, Schiffe, Flüge, Brände und Ausfälle werden beim Laden der Seite dargestellt. Vorher nichts zu konfigurieren.",
       "f2Title": "Klicke auf ein beliebiges Land",
-      "f2Desc": "Ein vollständiges Dossier öffnet sich: Instabilitätswert mit seinen Komponenten, eine AI-Zusammenfassung mit zitierten Schlagzeilen, aktive Signale, eine 7-Tage-Zeitleiste.",
+      "f2Desc": "Ein vollständiges Dossier öffnet sich für dieses Land: sein Instabilitätsscore aufgeschlüsselt nach den Komponenten, ein KI-Brief, der die zugrunde liegenden Schlagzeilen zitiert, die aktiven Signale auf der Karte und eine 7-Tage-Zeitleiste der Veränderungen. Es muss nichts vorher eingerichtet werden; ein Klick öffnet alles.",
       "f3Title": "Drücke ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} Befehle. Springe zu einer beliebigen Ebene, einem Panel oder Land, ohne die Oberfläche erst zu lernen.",
       "f4Title": "Wähle deine Perspektive",
       "f4Desc": "Welt, Tech, Finanzen, Rohstoffe, Energie oder Happy – dasselbe System, sechs abgestimmte Monitore, einen Klick entfernt.",
       "f5Title": "Du hast vielleicht ein Zehntel gesehen",
-      "f5Desc": "Die meisten {{mapLayers}} Kartenebenen-Typen aktualisieren sich, während sich die Welt bewegt — Satellitenpässe, GPS-Störungen, dunkle Schiffe, Protestcluster, Sirenenalarme.",
+      "f5Desc": "Wenn die Karte öffnet, sind {{defaultOnLayers}} von {{mapLayers}} Kartenschichttypen, etwa {{defaultOnLayerPct}}%, aktiviert. Die übrigen werden sichtbar, wenn sich die Welt bewegt: Satellitenpässe, GPS-Jamming, dunkle Schiffe aus AIS-Lücken und Protestcluster sowie Zivilschutz-Sirenenalarme. Jede ist einen Klick entfernt im Schicht-Menü oder der ⌘K-Palette.",
       "cta": "Starten"
     },
     "depth": {

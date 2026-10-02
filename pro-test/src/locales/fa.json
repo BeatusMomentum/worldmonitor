@@ -578,13 +578,13 @@
       "f1Title": "The map is already moving",
       "f1Desc": "Conflicts, vessels, flights, fires and outages render as the page loads. Nothing to configure first.",
       "f2Title": "Click any country",
-      "f2Desc": "A full dossier opens: instability score with its components, an AI brief with cited headlines, active signals, a 7-day timeline.",
+      "f2Desc": "یک پرونده کامل برای آن کشور باز می‌شود: نمره ناپایداری آن به اجزایی که پشت آن قرار دارند تقسیم شده است، خلاصه‌ای از هوش مصنوعی که به سرخط‌هایی که بر پایه آن‌ها تهیه شده استناد می‌کند، سیگنال‌های فعال روی نقشه، و یک جدول زمانی ۷ روزه از آنچه تغییر کرده است. نیازی به تنظیم اولیه نیست؛ یک کلیک همه آن را باز می‌کند.",
       "f3Title": "Hit ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} دستور. به هر لایه، پنل یا کشور بپرید بدون یادگیری رابط کاربری.",
       "f4Title": "Pick your lens",
       "f4Desc": "جهانی، فناوری، مالی، کالا، انرژی یا خوشحال — همان موتور، شش مانیتور تنظیم‌شده، یک کلیک فاصله.",
       "f5Title": "You've seen maybe a tenth of it",
-      "f5Desc": "اکثر انواع لایه‌های نقشه {{mapLayers}} در حین حرکت جهان سطح می‌یابند — گذارهای ماهواره‌ای، تشویش GPS، کشتی‌های تاریک، خوشه‌های اعتراض، هشدارهای سایرن.",
+      "f5Desc": "وقتی نقشه باز می‌شود، {{defaultOnLayers}} از {{mapLayers}} نوع لایه نقشه، حدود {{defaultOnLayerPct}}%، فعال‌اند. بقیه با حرکت جهان نمایان می‌شوند: گذرهای ماهواره‌ای، تشویش GPS، کشتی‌های تاریک پرچم‌خورده از شکاف‌های AIS، خوشه‌های اعتراض و هشدارهای سایرن دفاع‌شهری. هر کدام یک کلیک فاصله‌ای در منوی لایه یا پالت ⌘K دارد.",
       "cta": "Start the clock"
     },
     "depth": {

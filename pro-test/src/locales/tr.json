@@ -578,13 +578,13 @@
       "f1Title": "Harita zaten hareket ediyor",
       "f1Desc": "Çatışmalar, gemiler, uçaklar, yangınlar ve kesintiler sayfa yüklenirken render edilir. Önce yapılandırılacak bir şey yok.",
       "f2Title": "Herhangi bir ülkeyi tıkla",
-      "f2Desc": "Tam bir dosya açılır: bileşenleriyle istikrarsızlık puanı, alıntılanan başlıkları içeren AI özeti, aktif sinyaller, 7 günlük zaman çizelgesi.",
+      "f2Desc": "O ülke için tam bir dosya açılır: istikrarsızlık puanı bunu oluşturan bileşenlere ayrılmış, kullandığı başlıkları alıntılayan bir yapay zeka özeti, haritadaki aktif sinyaller ve değişenlerin 7 günlük zaman çizelgesi. Öncesinde bir şey kurulması gerekmez; bir tıkla hepsi açılır.",
       "f3Title": "⌘K / Ctrl-K tuşuna bas",
       "f3Desc": "{{commands}} komut. Arayüzü öğrenmeden herhangi bir katmana, panele veya ülkeye atlayın.",
       "f4Title": "Lensini seç",
       "f4Desc": "Dünya, Teknoloji, Finans, Emtia, Enerji veya Happy — aynı motor, altı ayarlanmış monitor, bir tık uzakta.",
       "f5Title": "Belki onda birini gördün",
-      "f5Desc": "{{mapLayers}} harita katmanı türünün çoğu dünya hareket ettikçe ortaya çıkar — uydu geçişleri, GPS karıştırması, karanlık gemiler, protesto kümeleri, siren uyarıları.",
+      "f5Desc": "Harita açıldığında, {{mapLayers}} harita katmanı türünün {{defaultOnLayers}}'i (yaklaşık %{{defaultOnLayerPct}}) açık olur. Gerisi dünya hareket ettikçe ortaya çıkar: uydu geçişleri, GPS karıştırması, AIS boşluklarından işaretlenen karanlık gemiler, protesto kümeleri ve sivil savunma siren uyarıları. Her biri katman menüsünde veya ⌘K paletinde bir tıkla ulaşılabilir.",
       "cta": "Kronometreyi başlat"
     },
     "depth": {

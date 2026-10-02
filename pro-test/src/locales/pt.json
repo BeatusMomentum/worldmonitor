@@ -578,13 +578,13 @@
       "f1Title": "O mapa já está se movendo",
       "f1Desc": "Conflitos, embarcações, voos, incêndios e interrupções renderizam conforme a página carrega. Nada para configurar antes.",
       "f2Title": "Clique em qualquer país",
-      "f2Desc": "Um dossiê completo abre: pontuação de instabilidade com seus componentes, resumo de IA com manchetes citadas, sinais ativos, cronograma de 7 dias.",
+      "f2Desc": "Um dossiê completo se abre para esse país: sua pontuação de instabilidade decomposta nos componentes que a formam, um briefing de IA que cita as manchetes em que se baseou, os sinais ativos no mapa e uma linha do tempo de 7 dias do que mudou. Nada precisa ser configurado antes; um clique abre tudo.",
       "f3Title": "Pressione ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} comandos. Acesse qualquer camada, painel ou país sem aprender a UI primeiro.",
       "f4Title": "Escolha sua lente",
       "f4Desc": "Mundo, Tech, Finanças, Commodities, Energia ou Happy — mesmo motor, seis monitores ajustados, um clique de distância.",
       "f5Title": "Você viu talvez um décimo disso",
-      "f5Desc": "A maioria dos {{mapLayers}} tipos de camadas de mapa aparecem conforme o mundo se move — passagens de satélite, interferência de GPS, navios fantasmas, aglomerados de protestos, alertas de sirene.",
+      "f5Desc": "Quando o mapa se abre, {{defaultOnLayers}} de seus {{mapLayers}} tipos de camadas de mapa, cerca de {{defaultOnLayerPct}}%, estão ativados. O resto aparece conforme o mundo se move: passagens de satélite, interferência de GPS, navios ocultos sinalizados por lacunas de AIS, aglomerados de protestos e alertas de sirenes de defesa civil. Cada um fica a um clique de distância no menu de camadas ou na paleta ⌘K.",
       "cta": "Comece a contagem"
     },
     "depth": {

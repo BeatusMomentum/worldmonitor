@@ -578,13 +578,13 @@
       "f1Title": "La carte se déplace déjà",
       "f1Desc": "Les conflits, les navires, les vols, les incendies et les pannes s'affichent au chargement de la page. Rien à configurer d'abord.",
       "f2Title": "Cliquez sur n'importe quel pays",
-      "f2Desc": "Un dossier complet s'ouvre : score d'instabilité avec ses composantes, un résumé IA avec des titres cités, des signaux actifs, une chronologie de 7 jours.",
+      "f2Desc": "Un dossier complet s'ouvre pour ce pays : son indice d'instabilité décomposé en ses composantes, un brief IA citant les gros titres sur lesquels il s'appuie, les signaux actifs sur la carte, et une chronologie de 7 jours des changements. Aucune configuration n'est nécessaire : un seul clic ouvre tout.",
       "f3Title": "Appuyez sur ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} commandes. Accédez à n'importe quelle couche, panneau ou pays sans apprendre l'interface d'abord.",
       "f4Title": "Choisissez votre objectif",
       "f4Desc": "Monde, Tech, Finance, Matière première, Énergie ou Happy — même moteur, six moniteurs calibrés, un clic de distance.",
       "f5Title": "Vous en avez vu peut-être un dixième",
-      "f5Desc": "La plupart des {{mapLayers}} types de couche cartographique apparaissent à la surface du monde qui bouge — passages satellites, brouillage GPS, navires obscurs, amas de manifestations, alertes de sirène.",
+      "f5Desc": "À l'ouverture de la carte, {{defaultOnLayers}} des {{mapLayers}} types de couches cartographiques, environ {{defaultOnLayerPct}}%, sont activés. Les autres apparaissent au fur et à mesure que le monde change : passages de satellites, brouillage GPS, navires fantômes signalés à partir de lacunes AIS, clusters de protestation et alertes de sirènes de défense civile. Chacun est accessible en un clic dans le menu des couches ou la palette ⌘K.",
       "cta": "Lancer le chrono"
     },
     "depth": {

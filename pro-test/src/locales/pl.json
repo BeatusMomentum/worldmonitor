@@ -578,13 +578,13 @@
       "f1Title": "Mapa już się porusza",
       "f1Desc": "Konflikty, statki, loty, pożary i awarie renderują się podczas ładowania strony. Nic do konfiguracji wcześniej.",
       "f2Title": "Kliknij dowolny kraj",
-      "f2Desc": "Otwiera się pełna dokumentacja: wynik niestabilności z jego składnikami, przegląd AI z przywoływanymi nagłówkami, aktywne sygnały, oś czasu 7-dniowa.",
+      "f2Desc": "Otwiera się pełna kartoteka kraju: jego wskaźnik niestabilności rozłożony na składniki, raport sytuacyjny z sztuczną inteligencją, który powołuje się na wiadomości, na których się opiera, aktywne sygnały na mapie oraz oś czasu 7-dniowa pokazująca zmiany. Nic nie trzeba konfigurować na początku; jeden klik otwiera wszystko.",
       "f3Title": "Naciśnij ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} poleceń. Przeskocz do dowolnej warstwy, panelu lub kraju bez wcześniejszego uczenia się interfejsu.",
       "f4Title": "Wybierz swój obiektyw",
       "f4Desc": "Świat, Tech, Finanse, Surowce, Energia lub Happy — ten sam silnik, sześć wyspecjalizowanych monitorów, jeden klik dalej.",
       "f5Title": "Widziałeś może jedną dziesiątą",
-      "f5Desc": "Większość {{mapLayers}} typów warstw mapy pojawia się dynamicznie — przejazdy satelitów, zagłuszanie GPS, statki bez identyfikacji, skupiska protestów, alerty syren.",
+      "f5Desc": "Gdy mapa się otwiera, {{defaultOnLayers}} z {{mapLayers}} typów warstw mapy, około {{defaultOnLayerPct}}%, jest włączonych. Pozostałe pojawiają się w miarę zmian na świecie: przeloty satelitów, zagłuszanie GPS, ciemne statki oznaczone na podstawie luk w AIS, skupiska protestów i alarmy syren obrony cywilnej. Każdy jest dostępny jednym kliknięciem w menu warstw lub w palecie ⌘K.",
       "cta": "Uruchom licznik"
     },
     "depth": {

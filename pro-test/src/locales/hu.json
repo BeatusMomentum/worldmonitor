@@ -578,13 +578,13 @@
       "f1Title": "A térkép már mozog",
       "f1Desc": "A konfliktusok, hajók, repülőgépek, tüzek és üzemszünetek az oldal betöltésével jelennek meg. Előzetes konfigurálásra nincs szükség.",
       "f2Title": "Kattintson bármely országra",
-      "f2Desc": "Megnyílik egy teljes dosszié: instabilitási pontszám összetevőivel, AI-bejegyzés idézett címsorokkal, aktív jelzések, 7 napos idővonal.",
+      "f2Desc": "Teljes dossié nyílik meg az országról: instabilitási pontszáma összetevőire bontva, egy AI-briefinget, amely a felhasznált hírekre hivatkozik, az aktív jelek a térképen, és egy 7 napos idővonal a változásokról. Semmi nem kell előbb beállítani; egy kattintás mindent megnyit.",
       "f3Title": "Nyomja meg a ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} parancs. Ugorjon bármely rétegre, panelre vagy országra a felhasználói felület megtanulása nélkül.",
       "f4Title": "Válassza ki az ön lencséjét",
       "f4Desc": "Világméretű, Tech, Pénzügyi, Árupiaci, Energetikai vagy Vidám — ugyanaz a motor, hat finomhangolt monitor, egy kattintás távolságra.",
       "f5Title": "Talán a tizedét látta",
-      "f5Desc": "A {{mapLayers}} térképréteg-típus nagy része felszínre kerül a világ változásával — műholdas áthaladások, GPS-zavarás, rejtett hajók, tüntetési klaszterek, szirénariasztások.",
+      "f5Desc": "A térkép megnyitásakor {{defaultOnLayers}} a {{mapLayers}} térképréteg-típusból, körülbelül {{defaultOnLayerPct}}%, be van kapcsolva. A többi akkor jelenik meg, ahogy a világ változik: műholdas áthaladások, GPS-jamming, sötét hajók az AIS-hiányokból, tüntetési klaszterek és polgári védelmi szirénaértesítések. Mindegyik egy kattintás távolságra van a réteg menüben vagy a ⌘K palettán.",
       "cta": "Indítsa el az órát"
     },
     "depth": {

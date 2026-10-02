@@ -124,6 +124,26 @@ test('question-headed welcome passages state their own measured figures', { skip
   assert.match(content, new RegExp(`${facts.mcpTools} MCP tools`));
 });
 
+// geo.new scores a plain count 0 on statistics and a block under ~40 words 60
+// on self-containment, so these two first-five cards carry a percentage or the
+// length that earns those dimensions. The figures come from copy-stats.json.
+test('first-five probe cards state measured figures at citation length', { skip }, () => {
+  const facts = proofFacts();
+  const copy = JSON.parse(readFileSync(new URL('../pro-test/src/generated/copy-stats.json', import.meta.url), 'utf8'));
+  const { content } = welcomeRoot();
+  const cardText = (heading) => {
+    const at = content.indexOf(`>${heading}</h3>`);
+    assert.ok(at >= 0, `missing card: ${heading}`);
+    return tagsToText(content.slice(at).match(/<p[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? '', '').replace(/&#x27;/g, "'");
+  };
+  const tenth = cardText('You&#x27;ve seen maybe a tenth of it');
+  assert.match(tenth, new RegExp(`^When the map opens, ${copy.defaultOnLayers} of its ${facts.mapLayers} map layer types, about ${copy.defaultOnLayerPct}%, are switched on\\.`));
+  const country = cardText('Click any country');
+  for (const [name, text] of [['tenth', tenth], ['country', country]]) {
+    assert.ok(text.split(/\s+/).length >= 40, `${name} card is under 40 words: ${text}`);
+  }
+});
+
 // The FAQ figures live inside <details> answers, which geo.new did not credit
 // to the heading (the FAQ scored weakest, 37/100, though its first answer
 // opens with $0). The heading therefore needs its own paragraph, directly

@@ -578,13 +578,13 @@
       "f1Title": "Karta se već kreće",
       "f1Desc": "Konflikti, plovila, letovi, požari i prekidi se prikazuju tijekom učitavanja stranice. Nema što konfigurirati prvo.",
       "f2Title": "Klikni bilo koju zemlju",
-      "f2Desc": "Otvara se potpuni dosje: rezultat nestabilnosti s komponentama, AI sažetak s citiranim vijestima, aktivni signali, vremenski prikaz od 7 dana.",
+      "f2Desc": "Otvara se potpuni dosije za tu zemlju: njena ocjena nestabilnosti razložena na komponente koje je čine, AI-generirani izvještaj koji navodi naslove na kojima se temelji, aktivni signali na karti te vremenska linija od 7 dana što se promijenilo. Nije potrebna nikakva prethodna postavka; jedan klik otvara sve.",
       "f3Title": "Pritisni ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} naredbi. Skočite na bilo koji sloj, panel ili zemlju bez prethodnog učenja korisničkog sučelja.",
       "f4Title": "Odaberi svoju leću",
       "f4Desc": "Svijet, Tehnologija, Financije, Roba, Energija ili Pozitivno — isti engine, šest prilagođenih monitora, jedan klik dalje.",
       "f5Title": "Vidio si možda deseti dio",
-      "f5Desc": "Većina {{mapLayers}} tipova slojeva karte se pojavljuje dok se svijet kreće — proleti satelita, GPS ometanje, tamni brodovi, nakupine prosvjeda, alarmi sirena.",
+      "f5Desc": "Kada se karta otvori, {{defaultOnLayers}} od {{mapLayers}} tipova kartografskih slojeva, otprilike {{defaultOnLayerPct}}%, uključeno je. Ostatak se pojavljuje kako se svijet mijenja: satelitski preleti, GPS ometanje, tamni brodovi označeni na temelju AIS praznina, skupine prosvjeda i upozorenja sirena civilne zaštite. Svaki je jedan klik udaljen u izborniku slojeva ili u ⌘K paleti.",
       "cta": "Počni odbrojavanje"
     },
     "depth": {

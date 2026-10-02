@@ -578,13 +578,13 @@
       "f1Title": "Kartan rör sig redan",
       "f1Desc": "Konflikter, fartyg, flygplan, bränder och avbrott återges när sidan läses in. Inget att konfigurera först.",
       "f2Title": "Klicka på ett land",
-      "f2Desc": "En fullständig rapport öppnas: instabilitetspoäng med dess komponenter, ett AI-sammanfattning med citerade rubriker, aktiva signaler, en 7-dagars tidslinje.",
+      "f2Desc": "En fullständig dossiär öppnas för det landet: dess instabilitetspoäng uppdelat i de komponenter som ligger bakom det, en AI-briefing som citerar de rubriker den bygger på, de aktiva signalerna på kartan och en 7-dagars tidslinje över vad som förändrades. Inget behöver ställas in först; ett klick öppnar allt.",
       "f3Title": "Tryck på ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} kommandon. Hoppa till vilket lager, panel eller land som helst utan att först lära dig gränssnittet.",
       "f4Title": "Välj ditt perspektiv",
       "f4Desc": "World, Tech, Finance, Commodity, Energy eller Happy — samma motor, sex justerade övervakningar, ett klick från varandra.",
       "f5Title": "Du har sett kanske en tiondel av det",
-      "f5Desc": "De flesta av {{mapLayers}} kartlagertyperna dyker upp när världen förändras — satellitpassager, GPS-störningar, mörka fartyg, protestkluster, sirenvarningar.",
+      "f5Desc": "När kartan öppnas är {{defaultOnLayers}} av dess {{mapLayers}} kartskikttyper, cirka {{defaultOnLayerPct}}%, aktiverade. Resten dyker upp när världen förändras: satellitpassager, GPS-störningar, mörka fartyg flaggade från AIS-luckor, protestkluster och varningar från sirener för civilförsvaret. Var och en är ett klick bort i skiktmenyn eller paletten ⌘K.",
       "cta": "Starta klockan"
     },
     "depth": {

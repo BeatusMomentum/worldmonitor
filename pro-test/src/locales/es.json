@@ -578,13 +578,13 @@
       "f1Title": "El mapa ya se está moviendo",
       "f1Desc": "Conflictos, buques, vuelos, incendios e interrupciones se renderizan mientras se carga la página. Nada que configurar primero.",
       "f2Title": "Haz clic en cualquier país",
-      "f2Desc": "Se abre un expediente completo: puntuación de inestabilidad con sus componentes, resumen de IA con titulares citados, señales activas, cronología de 7 días.",
+      "f2Desc": "Se abre un expediente completo para ese país: su puntuación de inestabilidad desglosada en los componentes que la originan, un informe de IA que cita los titulares en los que se basó, las señales activas en el mapa y una línea de tiempo de 7 días de los cambios. No hay que configurar nada primero; un clic abre todo.",
       "f3Title": "Presiona ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} comandos. Salta a cualquier capa, panel o país sin aprender la interfaz primero.",
       "f4Title": "Elige tu lente",
       "f4Desc": "Mundo, Tecnología, Finanzas, Materias Primas, Energía o Positivo — el mismo motor, seis monitores personalizados, a un clic de distancia.",
       "f5Title": "Has visto quizás una décima parte",
-      "f5Desc": "La mayoría de los tipos de capas del mapa {{mapLayers}} se actualizan mientras el mundo se mueve — pasos de satélites, interferencia GPS, barcos oscuros, agrupaciones de protestas, alertas de sirenas.",
+      "f5Desc": "Cuando se abre el mapa, {{defaultOnLayers}} de sus {{mapLayers}} tipos de capas del mapa, aproximadamente {{defaultOnLayerPct}}%, están activadas. El resto aparece conforme el mundo cambia: pasos de satélites, interferencia GPS, buques oscuros marcados a partir de brechas de AIS, clusters de protestas y alertas de sirenas de defensa civil. Cada uno está a un clic en el menú de capas o en la paleta ⌘K.",
       "cta": "Inicia el cronómetro"
     },
     "depth": {
