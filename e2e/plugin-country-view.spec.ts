@@ -69,7 +69,12 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
       maritime: { countryCode: code, upstreamUnavailable: true },
       markets: { markets: [], dataAvailable: true },
       housing: { data: { bisPropertyResidential: { entries: [{ countryCode: code, indexValue: 156.4, yoyChange: -2.1, qoqChange: null, period: '2026-Q1' }] }, bisDsr: { entries: [{ countryCode: code, dsrPct: 8, change: 1.3, period: '2026-Q1' }] } } },
-      imf: { data: {} },
+      imf: { data: {
+        imfMacro: { countries: { [code]: { inflationPct: 2.5, year: 2026 } } },
+        imfGrowth: { countries: { [code]: { realGdpGrowthPct: 1.8, gdpPerCapitaUsd: 85000, year: 2026 } } },
+        imfLabor: { countries: { [code]: { unemploymentPct: 4.1, year: 2026 } } },
+        imfExternal: { countries: { [code]: { exportsUsd: 123, year: 2026 } } },
+      }, missing: [] },
       exposure: { exposures: fullExposure ? [{ chokepointId: 'hormuz', chokepointName: 'Strait of Hormuz', exposureScore: 0.2 }] : [], primaryChokepointId: 'hormuz', vulnerabilityIndex: 0.2, fetchedAt: '2026-10-01' },
       dependency: { flags: [], primaryExporterIso2: 'CN', primaryExporterShare: 0.2 },
       commodities: { vulnerabilities: [], upstreamUnavailable: true },
@@ -121,6 +126,8 @@ test('built opaque country view uses the shared sections, host reads, sources an
   await expect(frame.locator('[data-brief-section=food]')).toContainText('2025/26');
   await expect(frame.locator('[data-brief-section=food]')).toContainText('25.0%');
   await frame.getByRole('button', { name: 'Economy & trade', exact: true }).click();
+  await expect(frame.locator('[data-brief-section=economic]')).toContainText('2.5%');
+  await expect(frame.locator('[data-brief-section=economic]')).toContainText('IMF WEO');
   await expect(frame.locator('[data-brief-section=housing]')).toContainText('156.4');
   await expect(frame.locator('[data-brief-section=housing]')).toContainText('2026-Q1');
   await frame.getByRole('button', { name: 'Security', exact: true }).click();
@@ -142,9 +149,13 @@ test('built opaque country view uses the shared sections, host reads, sources an
   expect(report).toContain('2026-Q1');
   expect(report).toContain('Controlled US source article');
   await frame.getByRole('button', { name: '← Back to brief', exact: true }).click();
+  await frame.getByRole('button', { name: 'Economy & trade', exact: true }).click();
   for (const [name, width, height] of [['desktop', 1280, 1000], ['mobile', 390, 844]] as const) {
     await page.setViewportSize({ width, height });
+    await frame.locator('[data-brief-section=economic]').scrollIntoViewIfNeeded();
     await page.screenshot({ path: info.outputPath(`country-plugin-${name}.png`), fullPage: true });
+    await frame.locator('[data-brief-section=housing]').scrollIntoViewIfNeeded();
+    await page.screenshot({ path: info.outputPath(`country-housing-${name}.png`), fullPage: true });
     await expect.poll(() => frame.locator('body').evaluate(body => body.scrollWidth <= innerWidth + 1)).toBe(true);
   }
   expect(host.unmanaged).toEqual([]);

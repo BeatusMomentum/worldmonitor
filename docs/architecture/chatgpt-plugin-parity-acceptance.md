@@ -18,8 +18,8 @@ Compare the same country, tier and source snapshot. The website renderer is `Cou
 | C08 | News | Country coverage and news renderer | Same country relevance, deduplication, publisher roster and URLs | Shared news and host coverage; source-link fixture verified |
 | C09 | Military | Military projection, defense-industrial service | Same activity scope and defense details; unavailable is not calm | Defense read and gate mounted; live flight/vessel projection missing |
 | C10 | Sanctions | Pro section loader | Same entity count, active status and source scope | Shared renderer and server-authorized risk read; populated comparison open |
-| C11 | Economics | IMF bundle and economic projection | Exact series, units, trends and native period labels | Shared IMF/stock projection; populated comparison open |
-| C12 | Housing | Housing-cycle loader | Exact availability, periods and values | Shared renderer; BIS values and native quarterly period verified |
+| C11 | Economics | IMF bundle and economic projection | Exact series, units, trends and native period labels | Native IMF read falsely returned locked; public single-key bootstrap repair verified locally; deployed comparison open |
+| C12 | Housing | Housing-cycle loader | Exact availability, periods and values | Native BIS read falsely returned locked; public single-key bootstrap repair verified locally; deployed comparison open |
 | C13 | Debt | National-debt loader | Debt ratio, debt amount, annual change and source | Shared loader/renderer; populated comparison open |
 | C14 | Trade flows | Comtrade loader | Same partners, products, values and changes | Shared loader/renderer; populated comparison open |
 | C15 | Tariffs | Tariff loader | Same current rate, historical series and direction | Shared loader/renderer; populated comparison open |
@@ -87,6 +87,19 @@ Baseline owners must be located before promising feature-specific widget changes
 - Signed-in Chrome session inspection timed out during baseline review. No native country-view pass is recorded. The compiled fixture view was manually inspected in the in-app browser.
 
 ## Delivery gates
+
+### Signed-in acceptance checkpoint, 2026-10-02
+
+Production deployment of the panel-metering merge succeeded at 15:22 UTC. The signed-in Chrome conversation `Open USA brief` shows the country view tool and the native news-and-map iframe. The latest news call returned HTTP 429 with the 50/day allowance exhausted. That response supplies no headline or marker evidence. It resets at 2026-10-03 00:00 UTC. Native acceptance remains incomplete.
+
+| Website output | Observed ChatGPT output | Difference and repair status |
+|---|---|---|
+| IMF economics and BIS housing use public on-demand bootstrap data | Exact IMF and housing section calls returned `locked` despite an authorized connection | The MCP readers used the legacy authenticated multi-key URL. Fixed single-key public URLs preserve the existing bundle shape. Real bootstrap-handler integration verifies seven dataset reads consume one country allocation. Native retest awaits deployment and quota reset. |
+| Complete data can be reused; missing datasets can recover | A partial bootstrap bundle could remain cached by the panel receipt and browser transport | Partial bundles are excluded from both caches. Recovery checks verify retries and subsequent reuse without an extra allocation. |
+| Dashboard shows country signals and military observations | The inspected country context reported signals and military unavailable | These projections remain open. The bootstrap repair does not supply them. |
+| News panels and map display current source data | The latest embedded view shows `Connecting to WorldMonitor…` while the assistant reports quota exhaustion | No populated native map acceptance is recorded. Check initial error delivery and recovery separately. |
+
+Local integration, renderer fixtures, merged source, production deployment and native acceptance are separate verdicts. This checkpoint does not establish store readiness.
 
 Run focused existing behavior tests first. Browser changes also require `npm run typecheck` and `npm run lint:boundaries`; MCP/API changes require `npm run typecheck:api` and focused handler/quota tests. Add only regressions needed for the matrix failures. Preserve the existing 84 tool schemas and subscription behavior.
 

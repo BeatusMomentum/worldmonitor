@@ -4,6 +4,7 @@ import { BRIEF_TOPICS } from '../../../shared/country-brief-sections';
 import { resolveCountryCode } from '../../../shared/country-code-resolve';
 import { buildAuthHeaders } from '../auth';
 import { assertToolFetchOk, RpcValidationError, throwIfBillingDenial } from '../billing-denial';
+import { readBoundedResponseBody } from '../bounded-body';
 import { fetchMcpDownstream } from '../downstream';
 import type { ToolDef } from '../types';
 import { COUNTRY_VIEW_UI_URI } from '../ui/news-dashboard-app';
@@ -75,13 +76,33 @@ export const COUNTRY_VIEW_TOOLS: ToolDef[] = [{
     const reader = COUNTRY_READERS[section];
     const args = reader.args.safeParse(parsed.data.arguments);
     if (!args.success) throw new RpcValidationError('get_country_brief_section', [{ field: 'arguments', description: 'Invalid arguments for this country section.' }]);
-    const query = new URLSearchParams(Object.entries(args.data).map(([key, value]) => [key, String(value)]));
-    const url = `${base}${reader.path}${query.size ? `?${query}` : ''}`;
-    const headers = await buildAuthHeaders(context, 'GET', url, null);
-    const response = await fetchMcpDownstream(url, { headers: { ...headers, 'User-Agent': 'WorldMonitor-MCP/1.0' }, signal: AbortSignal.timeout(15_000) }, execution);
-    throwIfBillingDenial(response, section);
-    if (response.status === 401 || response.status === 403) return { state: 'locked', section, reason: 'This connection is not authorized for this section.' };
-    await assertToolFetchOk(response, section, { preserveBackoff: true });
-    return { state: 'ready', section, value: await response.json(), retrievedAt: new Date().toISOString() };
+    const bootstrapKeys = reader.path === '/api/bootstrap' && 'keys' in args.data ? args.data.keys.split(',') : undefined;
+    const queries = bootstrapKeys
+      ? bootstrapKeys.map(key => new URLSearchParams({ keys: key, public: '1' }))
+      : [new URLSearchParams(Object.entries(args.data).map(([key, value]) => [key, String(value)]))];
+    const values = await Promise.all(queries.map(async query => {
+      const url = `${base}${reader.path}${query.size ? `?${query}` : ''}`;
+      const headers = bootstrapKeys ? {} : await buildAuthHeaders(context, 'GET', url, null);
+      const response = await fetchMcpDownstream(url, { headers: { ...headers, 'User-Agent': 'WorldMonitor-MCP/1.0' }, signal: AbortSignal.timeout(15_000) }, execution);
+      throwIfBillingDenial(response, section);
+      if (response.status === 401 || response.status === 403) return null;
+      await assertToolFetchOk(response, section, { preserveBackoff: true });
+      return bootstrapKeys ? JSON.parse(new TextDecoder().decode(await readBoundedResponseBody(response, 524288))) : response.json();
+    }));
+    if (values.some(value => value === null)) return { state: 'locked', section, reason: 'This connection is not authorized for this section.' };
+    let value = values[0];
+    if (bootstrapKeys) {
+      const data: Record<string, unknown> = {};
+      const missing: string[] = [];
+      values.forEach((body, index) => {
+        const key = bootstrapKeys[index]!;
+        const result = z.object({ data: z.record(z.string(), z.unknown()), missing: z.array(z.string()) }).parse(body);
+        if (result.missing.includes(key) || result.data[key] === undefined || result.data[key] === null) missing.push(key);
+        else data[key] = result.data[key];
+      });
+      if (!Object.keys(data).length) return { state: 'unavailable', section, reason: 'These country datasets are currently unavailable.' };
+      value = { data, missing };
+    }
+    return { state: 'ready', section, value, retrievedAt: new Date().toISOString() };
   },
 }];
