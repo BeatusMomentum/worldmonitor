@@ -578,13 +578,13 @@
       "f1Title": "De kaart beweegt al",
       "f1Desc": "Conflicten, vaartuigen, vluchten, branden en storingen worden weergegeven terwijl de pagina wordt geladen. Niets om eerst in te stellen.",
       "f2Title": "Klik op een willekeurig land",
-      "f2Desc": "Een volledig dossier opent: instabiliteitsscore met componenten, AI-samenvatting met geciteerde koppen, actieve signalen, een 7-daags tijdlijn.",
+      "f2Desc": "Een volledig dossier opent voor dat land: de instabiliteitscore opgedeeld in de componenten erachter, een AI-briefing die verwijst naar de headlines waarop het is gebaseerd, de actieve signalen op de kaart en een 7-daagse tijdlijn van wat er veranderd is. Er hoeft niets vooraf ingesteld te worden; één klik opent alles.",
       "f3Title": "Druk ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} commando's. Spring naar een willekeurige laag, panel of land zonder eerst de UI te leren.",
       "f4Title": "Kies uw perspectief",
       "f4Desc": "Wereld, Tech, Financiën, Grondstof, Energie of Happy — dezelfde engine, zes afgestemde monitoren, één klik uit elkaar.",
       "f5Title": "U heeft misschien een tiende gezien",
-      "f5Desc": "De meeste {{mapLayers}} kaartlaagtypen verschijnen naarmate de wereld zich beweegt — satellietpassages, GPS-storing, donkere schepen, protestclusters, sirenealarmen.",
+      "f5Desc": "Wanneer de kaart opent, zijn {{defaultOnLayers}} van de {{mapLayers}} kaartlaagtypen, ongeveer {{defaultOnLayerPct}}%, ingeschakeld. De rest verschijnt naarmate de wereld verandert: satellietpasses, GPS-storing, donkere schepen gemarkeerd uit AIS-gaten, protestclusters en waarschuwingen van civiele-verdedigingssirenes. Elk daarvan is één klik verwijderd in het lagenmenu of het ⌘K-palet.",
       "cta": "Start de klok"
     },
     "depth": {

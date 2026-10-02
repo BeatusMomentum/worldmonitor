@@ -578,13 +578,13 @@
       "f1Title": "The map is already moving",
       "f1Desc": "Conflicts, vessels, flights, fires and outages render as the page loads. Nothing to configure first.",
       "f2Title": "Click any country",
-      "f2Desc": "A full dossier opens: instability score with its components, an AI brief with cited headlines, active signals, a 7-day timeline.",
+      "f2Desc": "Для цієї країни відкривається повна досьє: показник нестабільності розбитий на компоненти, що його формують, стислий звіт ШІ зі посиланнями на заголовки, на яких він базується, активні сигнали на карті та 7-денна шкала часу змін. Немає необхідності щось налаштовувати попередньо — один клік відкриває всі дані.",
       "f3Title": "Hit ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} команд. Перейдіть до будь-якого шару, панелі або країни без попереднього вивчення інтерфейсу.",
       "f4Title": "Pick your lens",
       "f4Desc": "World, Tech, Finance, Commodity, Energy або Happy — один механізм, шість спеціалізованих моніторів, один клік розділяє їх.",
       "f5Title": "You've seen maybe a tenth of it",
-      "f5Desc": "Більшість {{mapLayers}} типів шарів карти відображаються в реальному часі — проходи супутників, глушення GPS, темні судна, скупчення протестів, сирени сповіщення.",
+      "f5Desc": "Коли карта відкривається, {{defaultOnLayers}} із {{mapLayers}} типів шарів карти, приблизно {{defaultOnLayerPct}}%, увімкнені. Решта з'являються з розвитком світової ситуації: супутникові проходження, GPS-глушення, темні судна, позначені на основі розривів AIS, скупчення протестів та сигнали сирен цивільної оборони. Кожен із них доступний одним кліком у меню шарів або палітрі ⌘K.",
       "cta": "Start the clock"
     },
     "depth": {

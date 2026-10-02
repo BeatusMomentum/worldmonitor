@@ -590,13 +590,13 @@
       "f1Title": "The map is already moving",
       "f1Desc": "Conflicts, vessels, flights, fires and outages render as the page loads. Nothing to configure first.",
       "f2Title": "Click any country",
-      "f2Desc": "A full dossier opens: instability score with its components, an AI brief with cited headlines, active signals, a 7-day timeline.",
+      "f2Desc": "A full dossier opens for that country: its instability score broken into the components behind it, an AI brief that cites the headlines it drew on, the active signals on the map, and a 7-day timeline of what changed. Nothing has to be set up first; one click opens all of it.",
       "f3Title": "Hit ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} commands. Jump to any layer, panel or country without learning the UI first.",
       "f4Title": "Pick your lens",
       "f4Desc": "World, Tech, Finance, Commodity, Energy or Happy — same engine, six tuned monitors, one click apart.",
       "f5Title": "You've seen maybe a tenth of it",
-      "f5Desc": "Most of the {{mapLayers}} map layer types surface as the world moves — satellite passes, GPS jamming, dark ships, protest clusters, siren alerts.",
+      "f5Desc": "When the map opens, {{defaultOnLayers}} of its {{mapLayers}} map layer types, about {{defaultOnLayerPct}}%, are switched on. The rest surface as the world moves: satellite passes, GPS jamming, dark ships flagged from AIS gaps, protest clusters and civil-defense siren alerts. Each one is a click away in the layer menu or the ⌘K palette.",
       "cta": "Start the clock"
     },
     "depth": {

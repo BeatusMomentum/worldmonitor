@@ -211,6 +211,28 @@ function buildDepthProofStats(hero) {
   return candidate;
 }
 
+// Welcome copy figures that are not band slots. The full variant's
+// DEFAULT_MAP_LAYERS reads import.meta.env and cannot load under Node, so the
+// block is isolated in source and counted, failing closed like docs-stats.
+function buildWelcomeCopyStats() {
+  const source = read('src/config/variants/full.ts');
+  const start = source.indexOf('export const DEFAULT_MAP_LAYERS');
+  const end = source.indexOf('export const MOBILE_DEFAULT_MAP_LAYERS');
+  if (start === -1 || end <= start) {
+    throw new Error('could not isolate DEFAULT_MAP_LAYERS in src/config/variants/full.ts');
+  }
+  const catalog = new Set(getCompleteLayerCatalogKeys('full'));
+  const onKeys = [...source.slice(start, end).matchAll(/^\s+(\w+):\s*true\b/gm)].map((m) => m[1]);
+  const defaultOnLayers = onKeys.filter((key) => catalog.has(key)).length;
+  if (defaultOnLayers <= 0 || defaultOnLayers >= catalog.size) {
+    throw new Error(`default-on layer count must be between 1 and ${catalog.size - 1}, got ${defaultOnLayers}`);
+  }
+  return {
+    defaultOnLayers,
+    defaultOnLayerPct: Math.round((defaultOnLayers / catalog.size) * 100),
+  };
+}
+
 const catalogBundle = {
   _generated: facts._generated,
   facts,
@@ -227,6 +249,7 @@ emit('scripts/shared/product-facts.generated.json', json(facts));
 emit('pro-test/src/generated/hero-stats.json', json(facts.heroProofStats));
 // Same rationale for the "Under the hood" band numerals that Depth.tsx renders.
 emit('pro-test/src/generated/depth-stats.json', json(facts.depthProofStats));
+emit('pro-test/src/generated/copy-stats.json', json(buildWelcomeCopyStats()));
 emit('shared/product-catalog.generated.json', json(catalogBundle));
 emit('scripts/shared/product-catalog.generated.json', json(catalogBundle));
 

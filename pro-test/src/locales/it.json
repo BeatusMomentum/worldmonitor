@@ -578,13 +578,13 @@
       "f1Title": "La mappa si muove già",
       "f1Desc": "Conflitti, navi, voli, incendi e interruzioni si visualizzano mentre la pagina carica. Niente da configurare prima.",
       "f2Title": "Clicca un qualsiasi paese",
-      "f2Desc": "Si apre un dossier completo: punteggio di instabilità con i suoi componenti, un brief AI con headline citate, segnali attivi, una timeline di 7 giorni.",
+      "f2Desc": "Si apre un fascicolo completo per quel paese: il suo punteggio di instabilità suddiviso nei componenti che lo determinano, un briefing AI che cita i titoli su cui si basa, i segnali attivi sulla mappa e una cronologia di 7 giorni dei cambiamenti. Non è necessario configurare nulla in anticipo; un clic apre tutto.",
       "f3Title": "Premi ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} comandi. Salta a qualsiasi livello, pannello o paese senza imparare l'interfaccia.",
       "f4Title": "Scegli il tuo filtro",
       "f4Desc": "Mondo, Tech, Finance, Commodity, Energy o Happy — lo stesso motore, sei monitor specializzati, a un clic di distanza.",
       "f5Title": "Hai visto forse un decimo",
-      "f5Desc": "La maggior parte dei {{mapLayers}} tipi di livello mappa affiorano mentre il mondo si muove — passaggi satellitari, jamming GPS, navi fantasma, cluster di proteste, avvisi sirena.",
+      "f5Desc": "Quando la mappa si apre, {{defaultOnLayers}} dei suoi {{mapLayers}} tipi di layer mappa, circa {{defaultOnLayerPct}}%, sono attivati. Gli altri emergono mentre il mondo cambia: passaggi satellitari, disturbi GPS, navi fantasma segnalate a partire da lacune AIS, cluster di proteste e avvisi di sirene di protezione civile. Ognuno è a un clic di distanza nel menu dei layer o nella palette ⌘K.",
       "cta": "Avvia il contatore"
     },
     "depth": {

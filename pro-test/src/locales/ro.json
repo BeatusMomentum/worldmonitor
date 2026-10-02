@@ -578,13 +578,13 @@
       "f1Title": "Harta se mișcă deja",
       "f1Desc": "Conflictele, vasele, zborurile, incendiile și întreruperile se redau pe măsură ce se încarcă pagina. Nimic de configurat mai întâi.",
       "f2Title": "Fă clic pe orice țară",
-      "f2Desc": "Se deschide un dosar complet: scor de instabilitate cu componentele sale, o scurtă descriere AI cu titluri citate, semnale active, cronologie de 7 zile.",
+      "f2Desc": "Se deschide un dosar complet pentru acea țară: scorul său de instabilitate descompus în componentele care îl determină, o evaluare din IA care citează articolele pe care se bazează, semnalele active pe hartă și o cronologie de 7 zile cu ce s-a schimbat. Nu trebuie să configurezi nimic înainte; un singur clic deschide totul.",
       "f3Title": "Apasă ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} comenzi. Sări la orice strat, panou sau țară fără să înveti interfața mai întâi.",
       "f4Title": "Alege-ți obiectivul",
       "f4Desc": "Lume, Tehnologie, Finanțe, Materii Prime, Energie sau Fericit — același motor, șase monitoare reglate, la o singură clic distanță.",
       "f5Title": "Ai văzut poate o zecime din ea",
-      "f5Desc": "Majoritatea tipurilor de straturi de hartă {{mapLayers}} se actualizează pe măsură ce lumea se mișcă — trecerile sateliților, perturbarea GPS, nave fantomă, grupuri de proteste, alerte de sirene.",
+      "f5Desc": "Când se deschide harta, {{defaultOnLayers}} din {{mapLayers}} tipuri de straturi de hartă, aproximativ {{defaultOnLayerPct}}%, sunt activate. Restul apar pe măsură ce lumea se mișcă: treceri de sateliți, bruiaj GPS, nave întunecate semnalate pe baza golurilor AIS, clustere de proteste și alerte ale sirenelor de apărare civilă. Fiecare este la doar un clic distanță în meniul straturilor sau paleta ⌘K.",
       "cta": "Pornește cronometrul"
     },
     "depth": {

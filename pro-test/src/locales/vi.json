@@ -578,13 +578,13 @@
       "f1Title": "Bản đồ đang chuyển động",
       "f1Desc": "Xung đột, tàu, chuyến bay, cháy và mất điện hiển thị khi trang tải. Không cần cấu hình trước.",
       "f2Title": "Nhấp vào bất kỳ quốc gia nào",
-      "f2Desc": "Một hồ sơ đầy đủ sẽ mở ra: điểm số bất ổn định với các thành phần của nó, tóm tắt AI có trích dẫn tiêu đề, tín hiệu hoạt động, dòng thời gian 7 ngày.",
+      "f2Desc": "Một hồ sơ đầy đủ mở ra cho quốc gia đó: điểm số bất ổn định được chia thành các thành phần đằng sau nó, một bản tóm tắt AI trích dẫn từ các tiêu đề nó được rút ra, các tín hiệu hoạt động trên bản đồ, và một dòng thời gian 7 ngày về những gì đã thay đổi. Không cần phải thiết lập gì trước; một cú nhấp chuột mở tất cả.",
       "f3Title": "Nhấn ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} lệnh. Nhảy đến bất kỳ lớp, bảng điều khiển hoặc quốc gia nào mà không cần học UI trước.",
       "f4Title": "Chọn lăng kính của bạn",
       "f4Desc": "Thế giới, Công nghệ, Tài chính, Hàng hóa, Năng lượng hoặc Vui vẻ — cùng một động cơ, sáu màn hình được tinh chỉnh, cách nhau một clic.",
       "f5Title": "Bạn có thể đã thấy khoảng một phần mười",
-      "f5Desc": "Hầu hết {{mapLayers}} loại lớp bản đồ hiển thị khi thế giới chuyển động — các vòng quỹ đạo vệ tinh, gây nhiễu GPS, tàu tối (dark ships), các cụm biểu tình, cảnh báo còi.",
+      "f5Desc": "Khi bản đồ mở ra, {{defaultOnLayers}} trong {{mapLayers}} loại lớp bản đồ, khoảng {{defaultOnLayerPct}}%, được bật. Phần còn lại xuất hiện khi thế giới thay đổi: các lần vệ tinh đi qua, gây nhiễu GPS, các tàu tối được gắn cờ từ khoảng cách AIS, các cụm biểu tình và cảnh báo còi báo động dân sự. Mỗi cái đều chỉ cách một cú nhấp chuột trong menu lớp hoặc bảng điều khiển ⌘K.",
       "cta": "Bắt đầu tính giờ"
     },
     "depth": {
