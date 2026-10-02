@@ -669,7 +669,7 @@
       "eyebrow": "Fără surprize",
       "title": "Care sunt întrebările frecvente despre World Monitor?",
       "q1": "Este World Monitor cu adevărat gratuit?",
-      "a1": "Da. Harta live — fiecare strat cu excepția Resilience, fluxuri curate, rapoarte scurte pe țară, alerte breaking și suprafețe de monitorizare — este gratuit fără înregistrare și fără cronometru de încercare. Pro plătește pentru fluxuri: adaugă WM Analyst, motorul de scenarii, Route Explorer, digeste programate, acces MCP pentru clienți AI și stratul de hartă Resilience. Fără reclame și niciun cont nu înseamnă că nu există date de utilizator de vândut.",
+      "a1": "Da. Harta live costă 0$ fără înregistrare și fără trial: {{mapLayers}} tipuri de straturi de hartă, toate cu excepția Resilience, plus feed-uri curate, scurte informative pe țări, alerte breaking și suprafețe de monitorizare. Pro plătește pentru feed-uri: adaugă WM Analyst, motorul de scenarii, Route Explorer, digest-uri programate, acces MCP pentru clienți AI și stratul de hartă Resilience. Fără reclame și fără cont înseamnă că nu există date de utilizator de vândut.",
       "q2": "Ce este un tablou de bord de informații globale?",
       "a2": "O viziune live unică care fuzionează semnale pe care majoritatea instrumentelor le păstrează separate: evenimente de conflict, urmărirea navelor și aeronavelor, puncte de strângulare maritimă, sateliți, cabluri subsalinie, conducte, piețe și amenințări cibernetice — pe o hartă mondială în timp real, cu scoruri AI și rezumate în partea de sus. World Monitor este una gratuită.",
       "q3": "De unde provin datele?",

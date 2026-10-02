@@ -669,7 +669,7 @@
       "eyebrow": "Nincs másodszándék",
       "title": "Milyen gyakori kérdések vannak a World Monitor-ról?",
       "q1": "Tényleg ingyenes a World Monitor?",
-      "a1": "Igen. Az élő térkép — minden réteg kivéve a Resilience, válogatott feedek, országösszefoglalók, break riasztások és monitorozási felületek — ingyenes regisztráció és próbaidő nélkül. A Pro a feedekért fizet: hozzáadja a WM Analystr, a forgatókönyv motort, a Route Explorert, az ütemezett összefoglalókat, az MCP hozzáférést az AI-ügyfeleknek és a Resilience térképréteg. Nincsenek hirdetések, és mivel nincs fiók, nincsenek felhasználói adatok az eladáshoz.",
+      "a1": "Igen. Az élő térkép $0-ba kerül, nincs regisztráció és nincs próbaidő: {{mapLayers}} térképréteg-típus, minden az Resilience kivételével, valamint válogatott feedek, országbriefek, breaking riasztások és monitoring felületek. A Pro verzió a feedeket finanszírozza: hozzáadja a WM Analyst elemzőt, a scenario engine-t, a Route Explorer-t, ütemezett digesteket, MCP-hozzáférést AI-klienseknek és a Resilience térképréteget. Nincs hirdetés, és mivel nincs fiók, nincs felhasználói adat az eladáshoz.",
       "q2": "Mi az a globális hírszerzési irányítópult?",
       "a2": "Egy egyetlen élő nézet, amely olyan jeleket egyesít, amelyeket a legtöbb eszköz külön tárol: konfliktusesemények, hajó- és légiforgalom-követés, szállítási szűk keresztmetszetek, műholdak, tengeralatti kábelek, vezetékek, piacok és kiberfenyegetések — egy valós idejű világtérképen, AI-pontozással és összefoglalókkal. A World Monitor egy ingyenes ilyen.",
       "q3": "Honnan származnak az adatok?",

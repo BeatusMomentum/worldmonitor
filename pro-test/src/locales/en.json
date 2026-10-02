@@ -681,7 +681,7 @@
       "eyebrow": "No catch",
       "title": "What are common questions about World Monitor?",
       "q1": "Is World Monitor really free?",
-      "a1": "Yes. The live map — every layer except Resilience, curated feeds, country briefs, breaking alerts, and monitoring surfaces — is free with no signup and no trial clock. Pro pays for the feeds: it adds WM Analyst, the scenario engine, Route Explorer, scheduled digests, MCP access for AI clients and the Resilience map layer. No ads, and no account means there's no user data to sell.",
+      "a1": "Yes. The live map costs $0 with no signup and no trial clock: {{mapLayers}} map layer types, every one but Resilience, plus curated feeds, country briefs, breaking alerts and monitoring surfaces. Pro pays for the feeds: it adds WM Analyst, the scenario engine, Route Explorer, scheduled digests, MCP access for AI clients and the Resilience map layer. No ads, and no account means there's no user data to sell.",
       "q2": "What is a global intelligence dashboard?",
       "a2": "A single live view that fuses signals most tools keep separate: conflict events, ship and aircraft tracking, shipping chokepoints, satellites, subsea cables, pipelines, markets and cyber threats — on one real-time world map, with AI scoring and briefs on top. World Monitor is a free one.",
       "q3": "Where does the data come from?",

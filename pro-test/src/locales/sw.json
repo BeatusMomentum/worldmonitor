@@ -663,13 +663,13 @@
       "proF4": "MCP, REST API & SDKs rasmi — zana za moja kwa moja chini ya ufunguo mmoja",
       "proF5": "Mjenzi wa widget unaobadilika kwa paneli zako",
       "cta": "Angalia mipango & bei",
-      "note": "Kutoka $39.99/mwezi · miezi 3 bure inapobaliwa kila mwaka"
+      "note": "Kutoka $39.99/mwezi · miezi 3 bure inapolipwa kila mwaka"
     },
     "faq": {
       "eyebrow": "Hakuna utamu",
       "title": "Maswali yapi ya kawaida kuhusu World Monitor?",
       "q1": "Je, World Monitor ni halisi bure?",
-      "a1": "Ndiyo. Ramani ya moja kwa moja — kila tabaka isipokuwa Endurance, milo iliyoteuliwa, muhtasari wa nchi, onyo za kuvunja, na uso wa ufuatiliaji — ni bure bila kusajili na bila saa ya jaribio. Pro hulipa milo: inaongeza WM Analyst, injini ya hali, Route Explorer, muhtasari uliowekwa ratiba, upatikanaji wa MCP kwa wateja wa AI na tabaka la ramani la Endurance. Hakuna matangazo, na hakuna akaunti inamaanisha hakuna data ya mtumiaji kuuza.",
+      "a1": "Ndiyo. Ramani ya moja kwa moja inagharimu $0 bila kujisajili na bila kikomo cha muda wa majaribio: aina {{mapLayers}} za safu za ramani, zote isipokuwa Resilience, pamoja na milisho iliyochaguliwa, muhtasari wa nchi, arifa za dharura na nyuso za ufuatiliaji. Pro hulipia milisho: inaongeza WM Analyst, injini ya hali, Route Explorer, muhtasari ulioratibiwa, ufikiaji wa MCP kwa wateja wa AI na safu ya ramani ya Resilience. Hakuna matangazo, na kutokuwa na akaunti kunamaanisha hakuna data ya watumiaji ya kuuza.",
       "q2": "KDashboard ya ujumbe wa ulimwengu ni nini?",
       "a2": "Muonekano mmoja hai unaounganisha ishara ambazo zana nyingi huziweka tofauti: matukio ya migogoro, ufuatiliaji wa meli na ndege, vituo vya utoaji, satelaiti, nyuzinyuzi chini ya bahari, bomba la kuweka, soko na hatari za kiberaneti — kwenye ramani moja ya ulimwengu halisi, na alama ya AI na briefing juu. World Monitor ni moja bure.",
       "q3": "Data inatoka wapi?",

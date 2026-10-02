@@ -663,13 +663,13 @@
       "proF4": "MCP, REST API & offizielle SDKs – Live-Tools unter einem Key",
       "proF5": "Custom-Widget-Builder für Ihre eigenen Panels",
       "cta": "Pläne & Preise ansehen",
-      "note": "Ab 39,99 €/Monat · 3 Monate kostenlos bei jährlicher Abrechnung"
+      "note": "Ab 39,99 $/Monat · 3 Monate kostenlos bei jährlicher Abrechnung"
     },
     "faq": {
       "eyebrow": "Kein Haken",
       "title": "Was sind häufige Fragen zu World Monitor?",
       "q1": "Ist World Monitor wirklich kostenlos?",
-      "a1": "Ja. Die Live-Karte – jede Ebene außer Resilience, kuratierte Feeds, Länder-Briefs, Breaking Alerts und Monitoring-Oberflächen – ist kostenlos ohne Anmeldung und ohne Test-Timer. Pro zahlt sich für die Feeds aus: Es fügt WM Analyst, die Szenario-Engine, Route Explorer, geplante Digests, MCP-Zugriff für KI-Clients und die Resilience-Kartenebene hinzu. Keine Anzeigen, und kein Konto bedeutet, dass es keine Nutzerdaten zu verkaufen gibt.",
+      "a1": "Ja. Die Live-Karte kostet $0 ohne Anmeldung und ohne Testphase: {{mapLayers}} Kartenebenen-Typen, alle außer Resilience, plus kuratierte Feeds, Länderberichte, Breaking-Alerts und Monitoring-Oberflächen. Pro bezahlt für die Feeds: Es ergänzt WM Analyst, die Szenario-Engine, Route Explorer, geplante Digests, MCP-Zugang für KI-Clients und die Resilience-Kartenebene. Keine Werbung und kein Benutzerkonto bedeutet, dass es keine Nutzerdaten zum Verkauf gibt.",
       "q2": "Was ist ein globales Intelligence-Dashboard?",
       "a2": "Eine einzige Live-Ansicht, die Signale zusammenführt, die die meisten Tools separat halten: Konfliktereignisse, Schiffs- und Flugzeugverfolgung, Versandengpässe, Satelliten, Unterseekabel, Pipelines, Märkte und Cyber-Bedrohungen — auf einer Echtzeit-Weltkarte mit KI-Bewertung und Zusammenfassungen. World Monitor ist eine kostenlose Version davon.",
       "q3": "Woher stammen die Daten?",

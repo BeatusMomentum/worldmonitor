@@ -663,13 +663,13 @@
       "proF4": "MCP, REST API & oficiální SDK — živé nástroje pod jedním klíčem",
       "proF5": "Vlastní konstruktor widgetů pro vaše vlastní panely",
       "cta": "Zobrazit plány a ceny",
-      "note": "Od 39,99 Kč/měs · 3 měsíce zdarma při ročním fakturaci"
+      "note": "Od $39,99/měs · 3 měsíce zdarma při roční fakturaci"
     },
     "faq": {
       "eyebrow": "Bez háčku",
       "title": "Jaké jsou běžné otázky o World Monitor?",
       "q1": "Je World Monitor opravdu zdarma?",
-      "a1": "Ano. Živá mapa — každá vrstva kromě Resilience, kurovaných kanálů, zemských souhrnů, kritických upozornění a monitorovacích ploch — je zdarma bez registrace a bez časového limitu zkoušky. Pro platí za kanály: přidává WM Analyst, scenario engine, Route Explorer, plánované souhrny, přístup MCP pro AI klienty a mapovou vrstvu Resilience. Bez reklam a bez účtu znamená, že nejsou žádná uživatelská data k prodeji.",
+      "a1": "Ano. Live mapa je zdarma bez registrace a bez zkušební doby: {{mapLayers}} typů map layers, všechny kromě Resilience, plus kurátované zdroje, briefy o zemích, breaking alerts a monitoring surfaces. Pro financuje zdroje: přidává WM Analyst, scenario engine, Route Explorer, naplánované digesty, MCP access pro AI klienty a mapu layer Resilience. Bez reklam a bez účtu znamená, že není žádná uživatelská data k prodeji.",
       "q2": "Co je globální inteligentní panel?",
       "a2": "Jediné živé zobrazení, které spojuje signály, které většina nástrojů drží odděleně: konfliktní události, sledování lodí a letadel, kritická místa v přepravě, satelity, podmořské kabely, potrubí, trhy a kybernetické hrozby — na jedné mapě světa v reálném čase s AI skórováním a souhrny. World Monitor je ten zdarma.",
       "q3": "Odkud data pocházejí?",

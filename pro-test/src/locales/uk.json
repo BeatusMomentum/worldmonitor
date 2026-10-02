@@ -663,13 +663,13 @@
       "proF4": "MCP, REST API та офіційні SDK — живі інструменти під одним ключем",
       "proF5": "Custom widget builder for your own panels",
       "cta": "See plans & pricing",
-      "note": "From $39.99/mo · 3 months free when billed annually"
+      "note": "Від $39.99/міс · 3 місяці безкоштовно при щорічній оплаті"
     },
     "faq": {
       "eyebrow": "No catch",
       "title": "Які найчастіші питання про World Monitor?",
       "q1": "Is World Monitor really free?",
-      "a1": "Так. Жива карта — кожен шар крім Resilience, куровані стрічки, брифінги по країнах, критичні оповіщення та поверхні моніторингу — безплатна без реєстрації та без таймера пробного періоду. Pro платить за стрічки: додає WM Analyst, движок сценаріїв, Route Explorer, планові дайджести, доступ MCP для AI-клієнтів та шар карти Resilience. Без реклами, і без облікового запису означає, що немає користувацьких даних для продажу.",
+      "a1": "Так. Жива карта коштує $0 без реєстрації та без обмеження за часом: {{mapLayers}} типів шарів карти, усі крім Resilience, плюс курирована стрічка, брифи країн, breaking-сповіщення та моніторинг. Pro оплачує стрічку: додає WM Analyst, движок сценаріїв, Route Explorer, запланований digest, MCP доступ для AI-клієнтів та шар Resilience. Без реклами, та без акаунта означає, що немає користувацьких даних для продажу.",
       "q2": "What is a global intelligence dashboard?",
       "a2": "A single live view that fuses signals most tools keep separate: conflict events, ship and aircraft tracking, shipping chokepoints, satellites, subsea cables, pipelines, markets and cyber threats — on one real-time world map, with AI scoring and briefs on top. World Monitor is a free one.",
       "q3": "Where does the data come from?",

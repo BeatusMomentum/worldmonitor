@@ -669,7 +669,7 @@
       "eyebrow": "Ingen fålla",
       "title": "Vilka är vanliga frågor om World Monitor?",
       "q1": "Är World Monitor verkligen gratis?",
-      "a1": "Ja. Live-kartan — varje lager utom Resilience, kurerade flöden, landssammanfattningar, kritiska aviseringar och övervakningsytor — är gratis utan registrering och utan provperiod. Pro betalar för flödena: det lägger till WM Analyst, scenariomotorn, Route Explorer, schemalagda sammanfattningar, MCP-åtkomst för AI-klienter och Resilience-kartlagret. Ingen reklam, och inget konto betyder att det inte finns användardata att sälja.",
+      "a1": "Ja. Livekartan är gratis utan registrering och utan försökstidsgräns: {{mapLayers}} kartlagertyper, alla utom Resilience, plus utvalda flöden, landsrapporter, breaking-varningar och övervakningsytor. Pro betalar för flödena: det lägger till WM Analyst, scenariomotorn, Route Explorer, schemalagda sammanfattningar, MCP-åtkomst för AI-klienter och kartlagret Resilience. Inga annonser, och inget konto betyder att det inte finns några användardata att sälja.",
       "q2": "Vad är en global intelligence-instrumentbräda?",
       "a2": "En enda live-vy som sammanfogar signaler som de flesta verktyg håller åtskilda: konflikthändelser, fartygs- och flygspårning, sjövägsflaskhalsar, satelliter, undersjökablar, pipelines, marknader och cyberhotningar — på en realtids-världskarta, med AI-poäng och sammanfattningar överst. World Monitor är en gratis sådan.",
       "q3": "Var kommer data från?",

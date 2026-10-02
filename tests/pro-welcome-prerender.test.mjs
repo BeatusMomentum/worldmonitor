@@ -76,6 +76,22 @@ test('question-headed welcome passages state their own measured figures', { skip
   assert.match(content, new RegExp(`${facts.mcpTools} MCP tools`));
 });
 
+// The geo.new CIT-02/03 audit judges each H2 section by its opening, roughly
+// the first 60 words, so a figure buried in the fifth FAQ answer does not
+// count. Every H2 section, the noscript fallback included, must open with one.
+test('every H2 section states a figure within its first 60 words', { skip }, () => {
+  const facts = proofFacts();
+  const html = welcomeHtml().replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
+  const parts = html.split(/<h2[^>]*>([\s\S]*?)<\/h2>/);
+  assert.ok(parts.length > 20, 'expected the welcome page H2 sections');
+  for (let i = 1; i < parts.length; i += 2) {
+    const heading = parts[i].replace(/<[^>]+>/g, '').trim();
+    const opening = parts[i + 1].replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).slice(0, 60).join(' ');
+    assert.match(opening, /\d/, `"${heading}" opens without a figure: ${opening}`);
+  }
+  assert.match(welcomeHtml(), new RegExp(`${facts.feeds} news and OSINT feeds — onto one live map with ${facts.mapLayers} map layer types`));
+});
+
 test('welcome JSON-LD connects the page, website, application, and publisher', { skip }, () => {
   const html = welcomeHtml();
   const blocks = welcomeJsonLdBlocks();

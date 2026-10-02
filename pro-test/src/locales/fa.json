@@ -663,13 +663,13 @@
       "proF4": "MCP، REST API و SDKهای رسمی — ابزارهای زنده تحت یک کلید",
       "proF5": "Custom widget builder for your own panels",
       "cta": "See plans & pricing",
-      "note": "From $39.99/mo · 3 months free when billed annually"
+      "note": "از $39.99 در ماه · ۳ ماه رایگان با پرداخت سالانه"
     },
     "faq": {
       "eyebrow": "No catch",
       "title": "سؤالات متداول درباره World Monitor چیست؟",
       "q1": "Is World Monitor really free?",
-      "a1": "بله. نقشه زنده — هر لایه به جز Resilience، خوراک‌های منتخب، خلاصه‌های کشوری، هشدارهای شکاف، و سطح نظارت — بدون ثبت‌نام و بدون ساعت آزمایشی رایگان است. Pro برای خوراک‌ها پرداخت می‌کند: WM Analyst، موتور سناریو، Route Explorer، خلاصه‌های برنامه‌ریزی‌شده، دسترسی MCP برای کلاینت‌های هوشمند مصنوعی و لایه نقشه Resilience را اضافه می‌کند. بدون تبلیغات، و بدون حساب به این معنی است که هیچ داده کاربری برای فروش نیست.",
+      "a1": "بله. نقشه زنده بدون هزینه و بدون نیاز به ثبت‌نام یا دوره آزمایشی است: {{mapLayers}} نوع لایه نقشه، تمام آن‌ها به جز Resilience، به علاوه خوراک‌های منتخب، خلاصه‌های کشوری، هشدارهای فوری و سطوح نظارتی. Pro برای خوراک‌ها هزینه دارد: WM Analyst، موتور سناریو، Route Explorer، خلاصه‌های برنامه‌ریزی‌شده، دسترسی MCP برای کلاینت‌های AI و لایه نقشه Resilience را اضافه می‌کند. بدون تبلیغ، و بدون حساب به معنای عدم وجود داده‌های کاربری برای فروش است.",
       "q2": "What is a global intelligence dashboard?",
       "a2": "A single live view that fuses signals most tools keep separate: conflict events, ship and aircraft tracking, shipping chokepoints, satellites, subsea cables, pipelines, markets and cyber threats — on one real-time world map, with AI scoring and briefs on top. World Monitor is a free one.",
       "q3": "Where does the data come from?",

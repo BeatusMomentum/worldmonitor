@@ -669,7 +669,7 @@
       "eyebrow": "Ek koşul yok",
       "title": "World Monitor hakkında yaygın sorular nelerdir?",
       "q1": "World Monitor gerçekten ücretsiz mi?",
-      "a1": "Evet. Canlı harita — Resilience hariç her katman, seçilmiş beslemeler, ülke özetleri, kesintiye uğrayan uyarılar ve izleme yüzeyleri — kaydolmaksızın ve deneme saati olmaksızın ücretsiz. Pro beslemelere ödeme yapar: WM Analyst, senaryo motorunu, Route Explorer'ı, planlanan özetleri, AI istemcileri için MCP erişimini ve Resilience harita katmanını ekler. Reklam yok, ve hesap olmadığı için satılacak kullanıcı verisi yok.",
+      "a1": "Evet. Canlı harita hiçbir kayıt ve deneme süresi olmaksızın 0 $ tutarındadır: {{mapLayers}} harita katmanı türü, Resilience hariç hepsi, ve küratörlü feed'ler, ülke briefler, breaking uyarıları ve izleme yüzeyleri. Pro, feed'leri destekler: WM Analyst, senaryo motorunu, Route Explorer'ı, planlı özet bilgileri, AI istemcileri için MCP erişimini ve Resilience harita katmanını ekler. Reklam yok ve hesap olmadığı için satmak için kullanıcı verisi yok.",
       "q2": "Global istihbarat panosu nedir?",
       "a2": "Çoğu aracın ayrı tuttuğu sinyalleri birleştiren tek bir canlı görünüm: çatışma olayları, gemi ve uçak takibi, nakliye darboğazları, uyduları, denizaltı kabloları, boru hatları, pazarlar ve siber tehditleri — tek bir gerçek zamanlı dünya haritasında, AI puanlandırması ve özetleriyle. World Monitor ücretsiz olanıdır.",
       "q3": "Veriler nereden geliyor?",

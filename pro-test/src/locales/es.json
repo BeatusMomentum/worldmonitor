@@ -669,7 +669,7 @@
       "eyebrow": "Sin trampa",
       "title": "¿Cuáles son las preguntas comunes sobre World Monitor?",
       "q1": "¿World Monitor es realmente gratuito?",
-      "a1": "Sí. El mapa en vivo — todas las capas excepto Resilience, feeds curados, reportes de país, alertas urgentes y superficies de monitoreo — es gratuito sin registro ni reloj de prueba. Pro paga por los feeds: añade WM Analyst, el motor de escenarios, Route Explorer, resúmenes programados, acceso MCP para clientes IA y la capa de mapa Resilience. Sin anuncios, y sin cuenta significa que no hay datos de usuario para vender.",
+      "a1": "Sí. El mapa en vivo cuesta $0 sin registro y sin reloj de prueba: {{mapLayers}} tipos de capas de mapa, todos excepto Resilience, más feeds curados, briefings de país, alertas de breaking y superficies de monitoreo. Pro paga por los feeds: añade WM Analyst, el motor de escenarios, Route Explorer, digests programados, acceso MCP para clientes AI y la capa de mapa Resilience. Sin anuncios, y sin cuenta significa que no hay datos de usuario para vender.",
       "q2": "¿Qué es un panel de inteligencia global?",
       "a2": "Una vista en vivo única que fusiona señales que la mayoría de herramientas mantienen separadas: eventos de conflicto, seguimiento de barcos y aeronaves, cuellos de botella de envío, satélites, cables submarinos, oleoductos, mercados y amenazas cibernéticas — en un mapa mundial en tiempo real, con puntuación de IA y resúmenes incluidos. World Monitor es uno gratuito.",
       "q3": "¿De dónde provienen los datos?",

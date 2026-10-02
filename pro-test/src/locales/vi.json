@@ -669,7 +669,7 @@
       "eyebrow": "Không có điều kiện kèm theo",
       "title": "Các câu hỏi phổ biến về World Monitor là gì?",
       "q1": "World Monitor có thực sự miễn phí không?",
-      "a1": "Có. Bản đồ trực tiếp — mọi lớp ngoại trừ Resilience, các nguồn cấp được chọn lọc, bản tóm tắt quốc gia, cảnh báo đột phá, và các bề mặt giám sát — là miễn phí mà không cần đăng ký và không có đồng hồ dùng thử. Pro thanh toán cho các nguồn cấp: nó thêm WM Analyst, công cụ tình huống, Route Explorer, bản tóm tắt được lên lịch, quyền truy cập MCP cho các khách hàng AI và lớp bản đồ Resilience. Không có quảng cáo, và không có tài khoản có nghĩa là không có dữ liệu người dùng để bán.",
+      "a1": "Có. Bản đồ trực tiếp miễn phí $0 không cần đăng ký và không có thời hạn dùng thử: {{mapLayers}} loại lớp bản đồ, tất cả trừ Resilience, cộng với các feed được lựa chọn, tóm tắt quốc gia, cảnh báo đột phát và các bề mặt giám sát. Pro hỗ trợ các feed: thêm WM Analyst, công cụ kịch bản, Route Explorer, các bản tóm tắt theo lịch, truy cập MCP cho các client AI và lớp bản đồ Resilience. Không có quảng cáo, và không có tài khoản có nghĩa là không có dữ liệu người dùng để bán.",
       "q2": "Bảng điều khiển trí tuệ toàn cầu là gì?",
       "a2": "Một chế độ xem trực tiếp duy nhất hợp nhất các tín hiệu mà hầu hết các công cụ giữ riêng: sự kiện xung đột, theo dõi tàu và máy bay, các điểm nghẽn vận chuyển, vệ tinh, cáp dưới biển, đường ống, thị trường và mối đe doạ mạng — trên một bản đồ thế giới thời gian thực, với điểm số AI và tóm tắt ở trên cùng. World Monitor là một cái miễn phí.",
       "q3": "Dữ liệu đến từ đâu?",
