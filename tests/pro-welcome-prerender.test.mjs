@@ -157,7 +157,8 @@ test('sections state a price or percentage the audit credits', { skip }, () => {
   };
   assert.match(passageAfter('What is World Monitor?'), /^World Monitor is a free \(\$0\), open-source/);
   assert.match(passageAfter('How do I start watching the world map?'), /in any browser for \$0, with no account/);
-  assert.match(passageAfter('How do I build on World Monitor from my own stack?'), new RegExp(`MCP access comes with Pro, from \\$${copy.proMonthlyPrice}/mo\\.`));
+  const build = passageAfter('How do I build on World Monitor from my own stack?');
+  assert.ok(build.includes(`MCP access comes with Pro, from $${copy.proMonthlyPrice}/mo.`), build);
   const gps = passageAfter('GPS jamming zones');
   assert.match(gps, /at least 2% of aircraft/);
   assert.ok(gps.split(/\s+/).length >= 40, `GPS card is under 40 words: ${gps}`);

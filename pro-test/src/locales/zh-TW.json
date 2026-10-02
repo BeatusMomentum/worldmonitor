@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "我如何開始監控世界地圖？",
-      "subtitle": "在任何瀏覽器中開啟 worldmonitor.app/dashboard，無需帳戶即可免費使用：{{mapLayers}} 種地圖圖層型別，除 Resilience 外全部免費切換。點選任何國家檢視其簡報，或按 ⌘K / Ctrl-K 開啟命令面板。你閱讀本頁面的過程中，地圖一直在更新。",
+      "subtitle": "在任何瀏覽器中開啟 worldmonitor.app/dashboard，無需帳戶，費用為 $0：{{mapLayers}} 種地圖圖層型別，除 Resilience 外全部免費切換。點選任何國家檢視其簡報，或按 ⌘K / Ctrl-K 開啟命令面板。你閱讀本頁面的過程中，地圖一直在更新。",
       "button": "率先找到它",
       "note": "免費 · 無需註冊 · 秒速載入",
       "secondary": "或檢視 Pro 計劃 →"

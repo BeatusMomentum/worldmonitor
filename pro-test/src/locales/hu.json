@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Hogyan kezdhetek a világtérkép figyelésbe?",
-      "subtitle": "Nyissa meg a worldmonitor.app/dashboard webhelyet bármilyen böngészőben ingyenesen, fiók nélkül: {{mapLayers}} térképréteg-típus, minden ingyenes a Resilience kivételével. Kattintson bármilyen országra annak rövid jelentéséhez, vagy nyomja meg a ⌘K / Ctrl-K billentyűkombinációt a parancspalettához. A térkép továbbra is frissült, amíg olvasta ezt az oldalt.",
+      "subtitle": "Nyissa meg a worldmonitor.app/dashboard webhelyet bármilyen böngészőben 0 dollárért, fiók nélkül: {{mapLayers}} térképréteg-típus, minden ingyenes a Resilience kivételével. Kattintson bármilyen országra annak rövid jelentéséhez, vagy nyomja meg a ⌘K / Ctrl-K billentyűkombinációt a parancspalettához. A térkép továbbra is frissült, amíg olvasta ezt az oldalt.",
       "button": "Találd meg először",
       "note": "Ingyenes · Nincs regisztráció · Másodpercekben betöltődik",
       "secondary": "Vagy tekintsd meg a Pro csomagokat →"
