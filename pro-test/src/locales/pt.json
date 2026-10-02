@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Painel Gratuito de Inteligência Global em Tempo Real",
-      "description": "Quando vira notícia, você já sabe. Conflitos, pontos críticos, voos militares, mercados e ciberataques em um único mapa-múndi ao vivo e gratuito, com análise por IA. Sem cadastro.",
+      "description": "Quando vira notícia, você já sabia. Conflitos, pontos críticos, voos militares, mercados, cibernética: um mapa ao vivo gratuito com análise de IA. Sem cadastro.",
       "ogTitle": "World Monitor — Quando vira notícia, você já sabia.",
       "ogDescription": "Os sinais brutos do mundo — navios, jatos, sirenes, cabos, mercados — em um mapa de inteligência ao vivo gratuito, com IA que sinaliza quando convergem. Grátis, sem cadastro."
     },
@@ -533,7 +533,7 @@
         "kicker": "Commodities + pontos de estrangulamento + clima",
         "title1": "Movimentos de commodities começam",
         "title2": "no mundo físico.",
-        "s1": "AIS, portos, oleodutos, GNL, refinarias, hidrovias e {{chokepoints}} pontos críticos mostram quando o suprimento está desacelerando, se rerouting ou se concentrando.",
+        "s1": "AIS, portos, oleodutos, GNL, refinarias, hidrovias e {{chokepoints}} pontos críticos mostram quando o suprimento está desacelerando, sendo redirecionado ou se concentrando.",
         "s2": "Clima, incêndios, terremotos, apagões e camadas de conflito mostram os eventos físicos que podem impactar produção ou transporte.",
         "s3": "Petróleo, gás, ouro, grãos, mineradoras, armadores e moedas vinculadas a commodities mostram como o choque é precificado.",
         "s4": "Inteligência de commodities só funciona quando fluxo físico, sinal de disrupção e spread de mercado são visíveis juntos.",
@@ -574,7 +574,7 @@
     "firstFive": {
       "eyebrow": "Do zero à orientação",
       "title": "O que acontece nos seus primeiros cinco minutos no mapa?",
-      "sub": "Sem tour, sem estados vazios, sem muro de cadastro. Isto é o que realmente acontece.",
+      "sub": "Sem tour, sem estados vazios, sem muro de cadastro. Isto é o que realmente acontece nos primeiros 5 minutos.",
       "f1Title": "O mapa já está se movendo",
       "f1Desc": "Conflitos, embarcações, voos, incêndios e interrupções renderizam conforme a página carrega. Nada para configurar antes.",
       "f2Title": "Clique em qualquer país",
@@ -584,7 +584,7 @@
       "f4Title": "Escolha sua lente",
       "f4Desc": "Mundo, Tech, Finanças, Commodities, Energia ou Happy — mesmo motor, seis monitores ajustados, um clique de distância.",
       "f5Title": "Você viu talvez um décimo disso",
-      "f5Desc": "O resto aparece conforme o mundo se move — passagens de satélites, jammers GPS, navios fantasmas, aglomerações de protestos, alertas de sirene.",
+      "f5Desc": "Os {{mapLayers}} tipos de camada de mapa restantes surgem conforme o mundo se move — passagens de satélite, interferência de GPS, navios escuros, aglomerados de protestos, alertas de sirenes.",
       "cta": "Comece a contagem"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Idiomas · incl. RTL",
       "s15l": "Origens de alerta independentes",
       "n1Title": "Rastreamento de satélites",
-      "n1Desc": "Posições orbitais ao vivo calculadas no navegador com SGP4 — acompanhe a ISS, Starlink e satélites militares acima de você.",
+      "n1Desc": "Posições orbitais ao vivo calculadas no navegador com SGP4 e atualizadas a cada 3 segundos — satélites militares e de observação da Terra da CelesTrak, atualizados a cada 2 horas.",
       "n2Title": "Zonas de interferência GPS",
-      "n2Desc": "Mapa de interferência RF ao vivo mostrando onde o GPS está sendo degradado ou falsificado agora.",
+      "n2Desc": "Mapa diário de interferência RF de relatórios de aeronaves: células onde mais de 2% das aeronaves veem GPS degradado são sinalizadas, acima de 10% marcado como alto.",
       "n3Title": "Inteligência de trânsito em pontos críticos",
       "n3Desc": "Contagem de embarcações através de Hormuz, Suez, Bab el-Mandeb e 10 outros estreitos — com pontuação de disrupção.",
       "n4Title": "Mapa de datacenters de IA",
@@ -617,7 +617,7 @@
       "n5Title": "Cabos submarinos",
       "n5Desc": "{{submarineCables}} cabos submarinos que transportam a internet, sobrepostos com sinais de interrupção e ameaça.",
       "n6Title": "Rastreamento de protestos",
-      "n6Desc": "Detecção de protestos de dupla fonte com desduplicação entre fontes — sinal, não boato.",
+      "n6Desc": "Detecção de protestos do ACLED e GDELT; relatórios de uma mesma fonte na mesma célula de 0,1° no mesmo dia são consolidados em um único evento — sinal, não rumor.",
       "faith": "Não confie apenas nos números —",
       "faithCta": "abra o app e verifique.",
       "faithNote": "As fontes estão citadas em cada painel."
@@ -648,7 +648,7 @@
       "eyebrow": "Acesso",
       "title1": "Grátis é o observatório.",
       "title2": "Pro é a sala de operações.",
-      "sub": "O dashboard é gratuito — todas as camadas de mapa exceto Resilience, todos os feeds, sem cadastro. Pro adiciona a camada de decisão.",
+      "sub": "O dashboard é gratuito a $0 — toda camada de mapa exceto Resilience, todo feed, sem cadastro. Pro adiciona a camada de decisão.",
       "freeTitle": "Grátis",
       "freeDesc": "O plano gratuito é um produto completo, não uma avaliação. Todas as camadas de mapa exceto Resilience, todos os feeds de {{feeds}} fontes, todos os seis monitores — sem cadastro, sem limite de tempo.",
       "freeF1": "Todas as camadas de mapa exceto Resilience e feeds curados",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Comece pela pergunta",
       "title": "O que você está tentando descobrir?",
-      "sub": "Escolha a trilha de evidências que corresponde à sua tarefa. Cada rota abre uma visualização apoiada em fontes, não um painel vazio.",
+      "sub": "Escolha qual dos {{routes}} trilhos de evidências corresponde à tarefa em questão. Cada trilho abre uma visualização com fonte, não um dashboard vazio.",
       "verifyTitle": "Verificar um evento de última hora",
       "verifyDesc": "Verifique os rastreadores de crise atuais, métricas datadas e contexto citado antes de confiar em uma notícia de última hora.",
       "chokepointTitle": "Verificar um ponto de estrangulamento",

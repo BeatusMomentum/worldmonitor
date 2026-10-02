@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Gratis instrumentpanel för global underrättelse i realtid",
-      "description": "Innan det blir nyheter vet du redan. Konflikter, flaskhalsar, militärflyg, marknader och cyber på en gratis live-världskarta, med AI-analys. Ingen registrering.",
+      "description": "Innan det blir nyheter vet du redan. Konflikter, flaskhalsar, militärflygningar, marknader, cyber: en gratis livekarta med AI-analys. Ingen registrering.",
       "ogTitle": "World Monitor — Innan det blir nyheter, visste du redan.",
       "ogDescription": "Världens råa signaler — fartyg, jetplan, sirener, kablar, marknader — på en gratis live-underrättelsekarta, med AI som flaggar när de konvergerar. Gratis, ingen registrering."
     },
@@ -574,17 +574,17 @@
     "firstFive": {
       "eyebrow": "Från noll till orienterad",
       "title": "Vad händer under dina första fem minuter på kartan?",
-      "sub": "Ingen guidad tur, inga tomma tillstånd, ingen registreringsväggstopp. Det här är vad som faktiskt händer.",
+      "sub": "Ingen vägledning, inga tomma tillstånd, ingen registreringsvall. Det här är vad som faktiskt händer under de första 5 minuterna.",
       "f1Title": "Kartan rör sig redan",
       "f1Desc": "Konflikter, fartyg, flygplan, bränder och avbrott återges när sidan läses in. Inget att konfigurera först.",
       "f2Title": "Klicka på ett land",
       "f2Desc": "En fullständig rapport öppnas: instabilitetspoäng med dess komponenter, ett AI-sammanfattning med citerade rubriker, aktiva signaler, en 7-dagars tidslinje.",
       "f3Title": "Tryck på ⌘K / Ctrl-K",
-      "f3Desc": "{{commands}} kommandon. Hoppa till vilket lager, panel eller land som helst utan att först lära dig användarflödet.",
+      "f3Desc": "{{commands}} kommandon. Hoppa till vilket lager, panel eller land som helst utan att först lära dig gränssnittet.",
       "f4Title": "Välj ditt perspektiv",
       "f4Desc": "World, Tech, Finance, Commodity, Energy eller Happy — samma motor, sex justerade övervakningar, ett klick från varandra.",
       "f5Title": "Du har sett kanske en tiondel av det",
-      "f5Desc": "Resten dyker upp när världen rör sig — satellitpass, GPS-störning, mörka fartyg, protestkluster, sirenvarningar.",
+      "f5Desc": "Resten av de {{mapLayers}} kartlagertyperna dyker upp när världen förändras — satellitpassager, GPS-störning, mörka fartyg, protestkluster, sirenavisningar.",
       "cta": "Starta klockan"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Språk · RTL inkl.",
       "s15l": "Oberoende varningsursprung",
       "n1Title": "Satellitspårning",
-      "n1Desc": "Live-omloppspositioner beräknade i webbläsaren med SGP4 — se ISS, Starlink och militära satelliter overhead.",
+      "n1Desc": "Live-orbitalpositioner beräknade i webbläsaren med SGP4 och uppdaterade var 3:e sekund — militär- och jordobservationssatelliter från CelesTrak, uppdaterade var 2:e timme.",
       "n2Title": "GPS-jamningszoner",
-      "n2Desc": "Live-RF-interferenskarta som visar var GPS försämras eller förfalskats just nu.",
+      "n2Desc": "Daglig RF-störningskarta från flygrapporter: celler där över 2 % av flygplanen ser försämrad GPS flaggas, över 10 % markeras högt.",
       "n3Title": "Flaskhalstransitintelligens",
       "n3Desc": "Fartygsantal genom Hormuz, Suez, Bab el-Mandeb och 10 fler sund — med avbrottsbedömning.",
       "n4Title": "AI-datacenterkarta",
@@ -617,7 +617,7 @@
       "n5Title": "Undersjökablar",
       "n5Desc": "{{submarineCables}} undersjöiska kablar som bär internet, överlagrat med avbrott- och hotsignaler.",
       "n6Title": "Protestspårning",
-      "n6Desc": "Dubbelkällsprotestdetektering med tvärkällsdeduplikering — signal, inte rykte.",
+      "n6Desc": "Protestdetektering från ACLED och GDELT; rapporter från en källa i samma 0,1°-cell samma dag slås samman till en händelse — signal, inte rykten.",
       "faith": "Lita inte på siffrorna blint —",
       "faithCta": "öppna appen och räkna själv.",
       "faithNote": "Källor citeras på varje panel."
@@ -648,7 +648,7 @@
       "eyebrow": "Åtkomst",
       "title1": "Gratis är observatoriet.",
       "title2": "Pro är operationsrummet.",
-      "sub": "Instrumentpanelen är gratis — varje kartlager utom Resilience, alla flöden, ingen registrering. Pro lägger till beslutlagret.",
+      "sub": "Instrumentbrädan är gratis för 0 USD — alla kartlager utom Resilience, alla flöden, ingen registrering. Pro lägger till beslutslagret.",
       "freeTitle": "Gratis",
       "freeDesc": "Den kostnadsfria nivån är en fullständig produkt, inte en provversion. Varje kartlager utom Resilience, varje flöde från {{feeds}} källor, alla sex monitorer — ingen registrering, ingen tidsgräns.",
       "freeF1": "Alla kartlager utom Resilience & kurerade flöden",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Börja med frågan",
       "title": "Vad försöker du ta reda på?",
-      "sub": "Välj beviskedjan som motsvarar ditt uppdrag. Varje väg öppnar en källstödd vy, inte en tom instrumentpanel.",
+      "sub": "Välj någon av de {{routes}} spåren av bevis som motsvarar uppgiften framför dig. Varje spår öppnar en källstödd vy, inte en tom instrumentbräda.",
       "verifyTitle": "Verifiera en breaking-händelse",
       "verifyDesc": "Kontrollera aktuella krishanterare, uppdaterade mätvärden och citerad kontext innan du litar på ett breaking-claim.",
       "chokepointTitle": "Kontrollera en flaskhal",

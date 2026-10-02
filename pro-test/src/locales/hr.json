@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Besplatna nadzorna ploča globalne obavještajne službe u stvarnom vremenu",
-      "description": "Dok postane vijest, već ste znali. Konflikti, kritične točke, vojni letovi, tržišta i cyber na jednoj besplatnoj uživo svjetskoj karti, s AI analizom. Bez registracije.",
+      "description": "Dok se to do vijesti dogodi, vi ste već znali. Konflikti, uska grla, vojni letovi, tržišta, kibernetika: jedna besplatna živa karta s AI analizom. Bez registracije.",
       "ogTitle": "World Monitor — Dok postane vijest, već si znao.",
       "ogDescription": "Sirovi signali svijeta — brodovi, zrakoplovi, sirene, kabeli, tržišta — na jednoj besplatnoj živoj obavještajnoj karti, s AI koji se aktivira kada se konvergiraju. Besplatno, bez prijave."
     },
@@ -574,7 +574,7 @@
     "firstFive": {
       "eyebrow": "Od nule do orijentacije",
       "title": "Što se događa tijekom vaših prvih pet minuta na karti?",
-      "sub": "Nema ture, nema praznih stanja, nema zida za prijavu. Evo što se zapravo događa.",
+      "sub": "Bez tura, bez praznih stanja, bez zida za registraciju. Ovo je ono što se zaista događa tijekom prvih 5 minuta.",
       "f1Title": "Karta se već kreće",
       "f1Desc": "Konflikti, plovila, letovi, požari i prekidi se prikazuju tijekom učitavanja stranice. Nema što konfigurirati prvo.",
       "f2Title": "Klikni bilo koju zemlju",
@@ -584,7 +584,7 @@
       "f4Title": "Odaberi svoju leću",
       "f4Desc": "Svijet, Tehnologija, Financije, Roba, Energija ili Pozitivno — isti engine, šest prilagođenih monitora, jedan klik dalje.",
       "f5Title": "Vidio si možda deseti dio",
-      "f5Desc": "Ostatak se pojavljuje kako se svijet kreće — prolasci satelita, GPS ometanje, mračni brodovi, skupini prosvjeda, alarmi sirena.",
+      "f5Desc": "Ostali {{mapLayers}} tipovi slojeva karte pojavljuju se kako se svijet kreće — satelitski prolazi, GPS ometanje, tamni brodovi, skupovi protesta, upozorenja sirena.",
       "cta": "Počni odbrojavanje"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Jezici · RTL uključen",
       "s15l": "Nezavisni izvori upozorenja",
       "n1Title": "Praćenje satelita",
-      "n1Desc": "Užive orbitalne pozicije računate u pregledniku sa SGP4 — pratite ISS, Starlink i vojne satelite iznad vas.",
+      "n1Desc": "Položaji orbita izračunati u pregledniku s SGP4 i ažurirani svakih 3 sekunde — vojni i sateliti za promatranje Zemlje iz CelesTraka, osvježeni svakih 2 sata.",
       "n2Title": "Zone ometanja GPS-a",
-      "n2Desc": "Živa RF mapa smetnji koja pokazuje gdje se GPS trenutno degradira ili falsificira.",
+      "n2Desc": "Dnevna karta RF-ometanja iz izvještaja zrakoplova: ćelije gdje više od 2% zrakoplova vide oštećeni GPS su označene, više od 10% označene kao visoke.",
       "n3Title": "Intel uskih grla u tranzitu",
       "n3Desc": "Broj brodova kroz Hormuz, Suez, Bab el-Mandeb i 10 drugih tjesnaca — s bodovanjem smetnji.",
       "n4Title": "Mapa AI podatkovnih centara",
@@ -617,7 +617,7 @@
       "n5Title": "Podmorski kabeli",
       "n5Desc": "{{submarineCables}} podmorskih kabela koji nose internet, preklapanja sa signalima prekida i prijetnje.",
       "n6Title": "Praćenje protesta",
-      "n6Desc": "Dvostruko-izvorena detekcija protesta s dedupliciranjem između izvora — signal, ne tračak.",
+      "n6Desc": "Detekcija protesta iz ACLED i GDELT; izvještaji iz jednog izvora u istoj ćeliji od 0,1° istoga dana spajaju se u jedan događaj — signal, a ne glasina.",
       "faith": "Ne vjerujte brojevima na samo vjeru —",
       "faithCta": "otvorite aplikaciju i prebrojite.",
       "faithNote": "Izvori su navedeni na svakom panelu."
@@ -648,7 +648,7 @@
       "eyebrow": "Pristup",
       "title1": "Besplatno je opservatorij.",
       "title2": "Pro je operacijska soba.",
-      "sub": "Nadzorna ploča je besplatna — svi slojevi mapa osim Resilience, svi feedovi, bez prijave. Pro dodaje sloj odlučivanja.",
+      "sub": "Ploča je besplatna za $0 — svaki sloj karte osim Resilience, svaki feed, bez registracije. Pro dodaje sloj odlučivanja.",
       "freeTitle": "Besplatno",
       "freeDesc": "Besplatna razina je kompletan proizvod, nije trial verzija. Svaki sloj karte osim Resilience, svaki stream iz {{feeds}} izvora, svih šest monitora — bez registracije, bez vremenskog ograničenja.",
       "freeF1": "Svi slojevi karte osim Resilience & kurirani feedovi",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Počnite s pitanjem",
       "title": "Što pokušavate otkriti?",
-      "sub": "Odaberite tragu dokaza koja odgovara vašem zadatku. Svaki put otvara pregled s izvorima, ne praznu kontrolnu ploču.",
+      "sub": "Odaberite bilo koju od {{routes}} traga dokaza koji odgovara vašem zadatku. Svaki trag otvara izvor-potkrijeljen prikaz, ne praznu ploču.",
       "verifyTitle": "Potvrdi tekući događaj",
       "verifyDesc": "Provjerite trenutne praćenje kriza, datirane metrike i citirani kontekst prije nego što vjerujete ranog izvještaja.",
       "chokepointTitle": "Provjeri usko mjesto",

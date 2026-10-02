@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Tabloul de bord gratuit de inteligență globală în timp real",
-      "description": "Până când devine știre, tu deja știai. Conflicte, puncte critice, zboruri militare, piețe și cyber pe o singură hartă vie a lumii, cu analiză AI. Fără înregistrare.",
+      "description": "Până când devine știre, tu deja știai. Conflicte, puncte critice, zboruri militare, piețe, cyber: o hartă live gratuită cu analiză AI. Fără înregistrare.",
       "ogTitle": "World Monitor — Până când devine știre, deja știai.",
       "ogDescription": "Semnalele brute ale lumii — nave, avioane, sirene, cabluri, piețe — pe o singură hartă de inteligență în direct, cu AI care marchează când se converg. Gratuit, fără înregistrare."
     },
@@ -574,7 +574,7 @@
     "firstFive": {
       "eyebrow": "De la zero la orientare",
       "title": "Ce se întâmplă în primele cinci minute pe hartă?",
-      "sub": "Fără tur, fără stări goale, fără zid de înregistrare. Asta se întâmplă de fapt.",
+      "sub": "Fără ghid, fără stări goale, fără perete de înregistrare. Asta se întâmplă de fapt în primele 5 minute.",
       "f1Title": "Harta se mișcă deja",
       "f1Desc": "Conflictele, vasele, zborurile, incendiile și întreruperile se redau pe măsură ce se încarcă pagina. Nimic de configurat mai întâi.",
       "f2Title": "Fă clic pe orice țară",
@@ -584,7 +584,7 @@
       "f4Title": "Alege-ți obiectivul",
       "f4Desc": "Lume, Tehnologie, Finanțe, Materii Prime, Energie sau Fericit — același motor, șase monitoare reglate, la o singură clic distanță.",
       "f5Title": "Ai văzut poate o zecime din ea",
-      "f5Desc": "Restul apare pe măsură ce lumea se mișcă — pasaje prin satelit, blocaj GPS, nave întunecate, clustere de proteste, alerte de sirene.",
+      "f5Desc": "Restul tipurilor de {{mapLayers}} straturi de hartă apar pe măsură ce lumea se mișcă — treceri de sateliți, interferență GPS, nave întunecate, clustere de proteste, alerte de sirene.",
       "cta": "Pornește cronometrul"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Limbi · inclusiv RTL",
       "s15l": "Origini de alerte independente",
       "n1Title": "Urmărire sateliți",
-      "n1Desc": "Poziții orbitale în timp real calculate în browser cu SGP4 — urmărește ISS, Starlink și alte sateliți militari deasupra.",
+      "n1Desc": "Pozițiile orbitale live calculate în-browser cu SGP4 și actualizate la fiecare 3 secunde — sateliți militari și de observație a Pământului de la CelesTrak, reîmprospătați la fiecare 2 ore.",
       "n2Title": "Zone de perturbație GPS",
-      "n2Desc": "Hartă live RF cu interferențe care arată unde GPS este degradat sau falsificat chiar acum.",
+      "n2Desc": "Hartă zilnică de interferență RF din rapoarte de aeronave: celule în care peste 2% din aeronave raportează GPS degradat sunt marcate, peste 10% marcate ca nivel înalt.",
       "n3Title": "Intel asupra tranzitului prin puncte critice",
       "n3Desc": "Numărul de nave prin Hormuz, Suez, Bab el-Mandeb și 10 alte strâmtori — cu cotare a perturbării.",
       "n4Title": "Hartă centre de date AI",
@@ -617,7 +617,7 @@
       "n5Title": "Cabluri submarine",
       "n5Desc": "{{submarineCables}} cabluri submarine care transportă internetul, suprapuse cu semnale de întreruperi și amenințări.",
       "n6Title": "Urmărire proteste",
-      "n6Desc": "Detectare dual-sursă a protestelor cu deduplicare între surse — semnal, nu zvon.",
+      "n6Desc": "Detectarea protestelor din ACLED și GDELT; rapoartele de la o singură sursă în aceeași celulă 0.1° în aceeași zi se fuzionează într-un singur eveniment — semnal, nu zvon.",
       "faith": "Nu lua numerele în serios —",
       "faithCta": "deschide aplicația și numără.",
       "faithNote": "Sursele sunt citate pe fiecare panou."
@@ -648,7 +648,7 @@
       "eyebrow": "Acces",
       "title1": "Free este observatorul.",
       "title2": "Pro este sala operațiilor.",
-      "sub": "Tabloul de bord este gratuit — fiecare strat de hartă în afară de Resilience, fiecare flux, fără înregistrare. Pro adaugă stratul de decizie.",
+      "sub": "Dashboard-ul este gratuit la $0 — fiecare strat de hartă cu excepția Resilience, fiecare feed, fără înregistrare. Pro adaugă stratul decizional.",
       "freeTitle": "Free",
       "freeDesc": "Nivelul gratuit este un produs complet, nu o versiune de probă. Fiecare strat de hartă cu excepția Resilience, fiecare flux din {{feeds}} surse, toți șase monitorul — fără înregistrare, fără ceas de probă.",
       "freeF1": "Toate straturile de hartă, cu excepția Resilience și fluxuri curate",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Începeți cu întrebarea",
       "title": "Ce încercați să aflați?",
-      "sub": "Alegeți traseul de dovezi care se potrivește sarcinii în fața dumneavoastră. Fiecare rută deschide o vizualizare susținută de surse, nu o tablă de bord goală.",
+      "sub": "Alege oricare dintre cele {{routes}} trasee de probe care se potrivesc sarcinii tale. Fiecare traseu deschide o vedere susținută de surse, nu un dashboard gol.",
       "verifyTitle": "Verificați un eveniment de ultimă oră",
       "verifyDesc": "Verificați monitorurile de crize actuale, metricile cu dată și contextul citat înainte de a avea încredere într-o pretenție de ultimă oră.",
       "chokepointTitle": "Verificați un punct de strangulare",

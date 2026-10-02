@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Panel de Inteligencia Global en Tiempo Real Gratuito",
-      "description": "Para cuando sea noticia, ya lo sabrías. Conflictos, puntos de estrangulamiento, vuelos militares, mercados y ciberseguridad en un mapa mundial en vivo y gratuito, con análisis de IA. Sin registro.",
+      "description": "Antes de que sea noticia, ya lo sabías. Conflictos, cuellos de botella, vuelos militares, mercados, cibernética: un mapa en vivo gratuito con análisis de IA. Sin registro.",
       "ogTitle": "World Monitor — Cuando se convierte en noticia, ya lo sabías.",
       "ogDescription": "Las señales crudas del mundo — barcos, aviones, sirenas, cables, mercados — en un mapa de inteligencia en vivo gratuito, con IA que señala cuándo convergen. Gratuito, sin registro."
     },
@@ -574,7 +574,7 @@
     "firstFive": {
       "eyebrow": "De cero a orientado",
       "title": "¿Qué sucede en tus primeros cinco minutos en el mapa?",
-      "sub": "Sin tour, sin estados vacíos, sin muro de registro. Esto es lo que realmente sucede.",
+      "sub": "Sin tour, sin estados vacíos, sin muro de registro. Esto es lo que realmente ocurre en los primeros 5 minutos.",
       "f1Title": "El mapa ya se está moviendo",
       "f1Desc": "Conflictos, buques, vuelos, incendios e interrupciones se renderizan mientras se carga la página. Nada que configurar primero.",
       "f2Title": "Haz clic en cualquier país",
@@ -584,7 +584,7 @@
       "f4Title": "Elige tu lente",
       "f4Desc": "Mundo, Tecnología, Finanzas, Materias Primas, Energía o Positivo — el mismo motor, seis monitores personalizados, a un clic de distancia.",
       "f5Title": "Has visto quizás una décima parte",
-      "f5Desc": "El resto aparece a medida que el mundo se mueve — pasos de satélite, interferencia GPS, buques oscuros, clusters de protestas, alertas de sirenas.",
+      "f5Desc": "El resto de los {{mapLayers}} tipos de capas del mapa aparecen conforme el mundo se mueve — pasos de satélites, interferencia GPS, barcos oscuros, grupos de protestas, alertas de sirenas.",
       "cta": "Inicia el cronómetro"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Idiomas · RTL incl.",
       "s15l": "Orígenes de alerta independientes",
       "n1Title": "Seguimiento satelital",
-      "n1Desc": "Posiciones orbitales en vivo calculadas en el navegador con SGP4 — observa la ISS, Starlink y satélites militares sobre tu cabeza.",
+      "n1Desc": "Posiciones orbitales en vivo calculadas en el navegador con SGP4 y actualizadas cada 3 segundos — satélites militares y de observación terrestre de CelesTrak, actualizados cada 2 horas.",
       "n2Title": "Zonas de interferencia GPS",
-      "n2Desc": "Mapa en vivo de interferencia RF mostrando dónde se está degradando o falsificando el GPS en este momento.",
+      "n2Desc": "Mapa diario de interferencia RF a partir de reportes de aeronaves: se marcan celdas donde más del 2% de aeronaves detectan GPS degradado, más del 10% se marcan como alto riesgo.",
       "n3Title": "Inteligencia de tránsito en cuellos de botella",
       "n3Desc": "Conteos de buques a través de Hormuz, Suez, Bab el-Mandeb y 10 estrechos más — con puntuación de disrupciones.",
       "n4Title": "Mapa de centros de datos de IA",
@@ -617,7 +617,7 @@
       "n5Title": "Cables submarinos",
       "n5Desc": "{{submarineCables}} cables submarinos que portan internet, superpuestos con señales de interrupciones y amenazas.",
       "n6Title": "Seguimiento de protestas",
-      "n6Desc": "Detección de protestas de doble fuente con deduplicación entre fuentes — señal, no rumor.",
+      "n6Desc": "Detección de protestas desde ACLED y GDELT; reportes de una fuente en la misma celda de 0,1° el mismo día se fusionan en un evento — señal, no rumor.",
       "faith": "No confíes en los números —",
       "faithCta": "abre la aplicación y verifica.",
       "faithNote": "Las fuentes están citadas en cada panel."
@@ -648,7 +648,7 @@
       "eyebrow": "Acceso",
       "title1": "Gratis es el observatorio.",
       "title2": "Pro es la sala de operaciones.",
-      "sub": "El panel de control es gratuito: cada capa de mapa excepto Resilience, cada feed, sin registro. Pro añade la capa de decisión.",
+      "sub": "El dashboard es gratuito a $0 — cada capa de mapa excepto Resilience, cada feed, sin registro. Pro añade la capa de decisión.",
       "freeTitle": "Gratis",
       "freeDesc": "El plan gratuito es un producto completo, no una prueba. Todas las capas del mapa excepto Resilience, todos los feeds de {{feeds}} fuentes, los seis monitores — sin registro, sin límite de tiempo.",
       "freeF1": "Todas las capas de mapa excepto Resilience y feeds curados",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Comienza con la pregunta",
       "title": "¿Qué intentas averiguar?",
-      "sub": "Elige la línea de evidencia que corresponde a la tarea que tienes. Cada ruta abre una vista respaldada por fuentes, no un panel vacío.",
+      "sub": "Elige cualquiera de los {{routes}} rastros de evidencia que se ajuste a la tarea que tienes delante. Cada ruta abre una vista respaldada por fuentes, no un panel vacío.",
       "verifyTitle": "Verificar un evento de ruptura",
       "verifyDesc": "Verifica los monitores de crisis actuales, métricas con fecha y contexto citado antes de confiar en una noticia de último momento.",
       "chokepointTitle": "Inspeccionar un punto crítico",

@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Free Real-Time Global Intelligence Dashboard",
-      "description": "By the time it's news, you already knew. Conflicts, chokepoints, military flights, markets and cyber on one free live world map, with AI analysis. No signup.",
+      "description": "By the time it's news, you already knew. Conflicts, chokepoints, military flights, markets, cyber: one free live map with AI analysis. No signup.",
       "ogTitle": "World Monitor — By the time it's news, you already knew.",
       "ogDescription": "The world's raw signals — ships, jets, sirens, cables, markets — on one free live intelligence map, with AI that flags when they converge. Free, no signup."
     },
@@ -490,7 +490,7 @@
     "tasks": {
       "eyebrow": "Start with the question",
       "title": "What are you trying to find out?",
-      "sub": "Choose the evidence trail that matches the job in front of you. Each route opens a source-backed view, not an empty dashboard.",
+      "sub": "Choose whichever of the {{routes}} evidence trails matches the job in front of you. Each route opens a source-backed view, not an empty dashboard.",
       "verifyTitle": "Verify a breaking event",
       "verifyDesc": "Check current crisis trackers, dated metrics, and cited context before trusting a breaking claim.",
       "chokepointTitle": "Check a chokepoint",
@@ -586,7 +586,7 @@
     "firstFive": {
       "eyebrow": "Zero to oriented",
       "title": "What happens in your first five minutes on the map?",
-      "sub": "No tour, no empty states, no signup wall. This is what actually happens.",
+      "sub": "No tour, no empty states, no signup wall. This is what actually happens in the first 5 minutes.",
       "f1Title": "The map is already moving",
       "f1Desc": "Conflicts, vessels, flights, fires and outages render as the page loads. Nothing to configure first.",
       "f2Title": "Click any country",
@@ -596,7 +596,7 @@
       "f4Title": "Pick your lens",
       "f4Desc": "World, Tech, Finance, Commodity, Energy or Happy — same engine, six tuned monitors, one click apart.",
       "f5Title": "You've seen maybe a tenth of it",
-      "f5Desc": "The rest surfaces as the world moves — satellite passes, GPS jamming, dark ships, protest clusters, siren alerts.",
+      "f5Desc": "The rest of the {{mapLayers}} map layer types surfaces as the world moves — satellite passes, GPS jamming, dark ships, protest clusters, siren alerts.",
       "cta": "Start the clock"
     },
     "depth": {
@@ -619,9 +619,9 @@
       "s14l": "Languages · RTL incl.",
       "s15l": "Independent alert origins",
       "n1Title": "Satellite tracking",
-      "n1Desc": "Live orbital positions computed in-browser with SGP4 — watch ISS, Starlink and military birds overhead.",
+      "n1Desc": "Live orbital positions computed in-browser with SGP4 and updated every 3 seconds — military and Earth-observation satellites from CelesTrak, refreshed every 2 hours.",
       "n2Title": "GPS jamming zones",
-      "n2Desc": "Live RF-interference map showing where GPS is being degraded or spoofed right now.",
+      "n2Desc": "Daily RF-interference map from aircraft reports: cells where over 2% of aircraft see degraded GPS are flagged, over 10% marked high.",
       "n3Title": "Chokepoint transit intel",
       "n3Desc": "Vessel counts through Hormuz, Suez, Bab el-Mandeb and 10 more straits — with disruption scoring.",
       "n4Title": "AI datacenter map",
@@ -629,7 +629,7 @@
       "n5Title": "Submarine cables",
       "n5Desc": "{{submarineCables}} undersea cables that carry the internet, overlaid with outage and threat signals.",
       "n6Title": "Protest tracking",
-      "n6Desc": "Dual-source protest detection with cross-source deduplication — signal, not rumor.",
+      "n6Desc": "Protest detection from ACLED and GDELT; reports from one source in the same 0.1° cell on the same day merge into one event — signal, not rumor.",
       "faith": "Don't take the numbers on faith —",
       "faithCta": "open the app and count.",
       "faithNote": "Sources are cited on every panel."
@@ -660,7 +660,7 @@
       "eyebrow": "Access",
       "title1": "Free is the observatory.",
       "title2": "Pro is the operations room.",
-      "sub": "The dashboard is free — every map layer except Resilience, every feed, no signup. Pro adds the decision layer.",
+      "sub": "The dashboard is free at $0 — every map layer except Resilience, every feed, no signup. Pro adds the decision layer.",
       "freeTitle": "Free",
       "freeDesc": "The free tier is a full product, not a trial. Every map layer except Resilience, every feed from {{feeds}} sources, all six monitors — no signup, no trial clock.",
       "freeF1": "All map layers except Resilience & curated feeds",

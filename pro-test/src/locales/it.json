@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Dashboard di intelligence globale gratuita in tempo reale",
-      "description": "Prima che diventi notizia, tu l'avevi già saputo. Conflitti, strozzature, voli militari, mercati e cyber su una mappa mondiale live gratuita, con analisi AI. Nessuna registrazione.",
+      "description": "Quando diventa notizia, tu lo sai già. Conflitti, strozzature, voli militari, mercati, cyber: una mappa dal vivo gratuita con analisi AI. Nessuna registrazione.",
       "ogTitle": "World Monitor — Quando diventa notizia, tu lo sai già.",
       "ogDescription": "I segnali grezzi del mondo — navi, jet, sirene, cavi, mercati — su una mappa di intelligence live gratuita, con AI che segnala quando convergono. Gratuito, nessuna registrazione."
     },
@@ -574,7 +574,7 @@
     "firstFive": {
       "eyebrow": "Da zero a orientato",
       "title": "Cosa accade nei tuoi primi cinque minuti sulla mappa?",
-      "sub": "Niente tour, niente stati vuoti, niente muro di registrazione. Questo è quello che succede davvero.",
+      "sub": "Nessuna guida, nessuno stato vuoto, nessun muro di registrazione. Questo è ciò che succede realmente nei primi 5 minuti.",
       "f1Title": "La mappa si muove già",
       "f1Desc": "Conflitti, navi, voli, incendi e interruzioni si visualizzano mentre la pagina carica. Niente da configurare prima.",
       "f2Title": "Clicca un qualsiasi paese",
@@ -584,7 +584,7 @@
       "f4Title": "Scegli il tuo filtro",
       "f4Desc": "Mondo, Tech, Finance, Commodity, Energy o Happy — lo stesso motore, sei monitor specializzati, a un clic di distanza.",
       "f5Title": "Hai visto forse un decimo",
-      "f5Desc": "Il resto emerge mentre il mondo si muove — passaggi satellitari, jamming GPS, navi fantasma, cluster di proteste, avvisi di sirena.",
+      "f5Desc": "I rimanenti {{mapLayers}} tipi di strati della mappa emergono mentre il mondo si muove — passaggi satellitari, jamming GPS, navi oscure, cluster di proteste, avvisi sirena.",
       "cta": "Avvia il contatore"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Lingue · RTL incluso",
       "s15l": "Origini di avviso indipendenti",
       "n1Title": "Tracciamento satellitare",
-      "n1Desc": "Posizioni orbitali in tempo reale calcolate nel browser con SGP4 — monitora ISS, Starlink e satelliti militari sopra di te.",
+      "n1Desc": "Posizioni orbitali dal vivo calcolate nel browser con SGP4 e aggiornate ogni 3 secondi — satelliti militari e di osservazione terrestre da CelesTrak, aggiornati ogni 2 ore.",
       "n2Title": "Zone di disturbo GPS",
-      "n2Desc": "Mappa RF-interference in tempo reale che mostra dove il GPS è degradato o falsificato adesso.",
+      "n2Desc": "Mappa giornaliera di interferenza RF dai rapporti degli aerei: le celle in cui oltre il 2% degli aerei rileva un GPS degradato sono segnalate, oltre il 10% contrassegnate come alte.",
       "n3Title": "Intelligence su transiti strategici",
       "n3Desc": "Conteggio navi attraverso lo Stretto di Hormuz, Suez, Bab el-Mandeb e 10 altri stretti — con punteggi di disruzione.",
       "n4Title": "Mappa datacenter AI",
@@ -617,7 +617,7 @@
       "n5Title": "Cavi sottomarini",
       "n5Desc": "{{submarineCables}} cavi sottomarini che trasportano internet, sovrapposti con segnali di interruzione e minaccia.",
       "n6Title": "Tracciamento proteste",
-      "n6Desc": "Rilevamento proteste a doppia fonte con deduplicazione cross-source — segnale, non voce.",
+      "n6Desc": "Rilevamento di proteste da ACLED e GDELT; i report da una sola fonte nella stessa cella 0,1° nello stesso giorno si uniscono in un unico evento — segnale, non voce.",
       "faith": "Non fidarti dei numeri ciecamente —",
       "faithCta": "apri l'app e conta.",
       "faithNote": "Le fonti sono citate su ogni pannello."
@@ -648,7 +648,7 @@
       "eyebrow": "Accesso",
       "title1": "Free è l'osservatorio.",
       "title2": "Pro è la sala operativa.",
-      "sub": "La dashboard è gratuita — ogni livello di mappa eccetto Resilience, ogni feed, nessuna registrazione. Pro aggiunge il livello decisionale.",
+      "sub": "La dashboard è gratuita a $0 — ogni strato della mappa eccetto Resilience, ogni feed, nessuna registrazione. Pro aggiunge il livello decisionale.",
       "freeTitle": "Free",
       "freeDesc": "Il tier gratuito è un prodotto completo, non una prova. Ogni livello della mappa tranne Resilience, ogni feed da {{feeds}} fonti, tutti e sei i monitor — senza registrazione, senza scadenza di prova.",
       "freeF1": "Tutti i layer mappe tranne Resilience e feed curati",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Inizia dalla domanda",
       "title": "Cosa stai cercando di scoprire?",
-      "sub": "Scegli il percorso di prove che corrisponde al compito da svolgere. Ogni rotta apre una visualizzazione supportata da fonti, non una dashboard vuota.",
+      "sub": "Scegli quale dei {{routes}} percorsi di prove corrisponde al compito che hai davanti. Ogni percorso apre una visualizzazione basata su fonti, non una dashboard vuota.",
       "verifyTitle": "Verifica un evento in corso",
       "verifyDesc": "Verifica gli attuali monitoraggi delle crisi, le metriche datate e il contesto citato prima di dare credito a un'affermazione di rottura.",
       "chokepointTitle": "Controlla un punto critico",

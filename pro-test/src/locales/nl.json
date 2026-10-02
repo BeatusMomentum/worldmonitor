@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Gratis realtime dashboard voor wereldwijd inlichtingen",
-      "description": "Tegen de tijd dat het nieuws is, wist je het al. Conflicten, knelpunten, militaire vluchten, markten en cyber op één gratis live wereldkaart, met AI-analyse. Geen registratie nodig.",
+      "description": "Op het moment dat het nieuws is, wist je het al. Conflicten, knelpunten, militaire vluchten, markten, cyberdreiging: één gratis live kaart met AI-analyse. Geen registratie nodig.",
       "ogTitle": "World Monitor — Tegen de tijd dat het nieuws is, wist je het al.",
       "ogDescription": "De onbewerkte signalen van de wereld — schepen, vliegtuigen, sirenes, kabels, markten — op één gratis live inlichtingenkaart, met AI die aangeeft wanneer ze samenkomen. Gratis, geen registratie."
     },
@@ -574,7 +574,7 @@
     "firstFive": {
       "eyebrow": "Van nul tot georiënteerd",
       "title": "Wat gebeurt er in je eerste vijf minuten op de kaart?",
-      "sub": "Geen rondleiding, geen lege staten, geen inschrijvingsmuur. Dit is wat echt gebeurt.",
+      "sub": "Geen rondleiding, geen lege schermen, geen registratiebarrière. Dit is wat echt gebeurt in de eerste 5 minuten.",
       "f1Title": "De kaart beweegt al",
       "f1Desc": "Conflicten, vaartuigen, vluchten, branden en storingen worden weergegeven terwijl de pagina wordt geladen. Niets om eerst in te stellen.",
       "f2Title": "Klik op een willekeurig land",
@@ -582,9 +582,9 @@
       "f3Title": "Druk ⌘K / Ctrl-K",
       "f3Desc": "{{commands}} commando's. Spring naar een willekeurige laag, panel of land zonder eerst de UI te leren.",
       "f4Title": "Kies uw perspectief",
-      "f4Desc": "Wereld, Tech, Financiën, Grondstof, Energie of Goed — dezelfde engine, zes afgestemd monitoren, één klik uit elkaar.",
+      "f4Desc": "Wereld, Tech, Financiën, Grondstof, Energie of Happy — dezelfde engine, zes afgestemde monitoren, één klik uit elkaar.",
       "f5Title": "U heeft misschien een tiende gezien",
-      "f5Desc": "De rest komt naar voren als de wereld verandert — satellietpassages, GPS-jamming, donkere schepen, protestclusters, sirenesignalen.",
+      "f5Desc": "De overige {{mapLayers}} kaartlaagtypen verschijnen naarmate de wereld verandert — satellietdoorgangen, gps-jamming, donkere schepen, protestclusters, sirenealarmen.",
       "cta": "Start de klok"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Talen · RTL incl.",
       "s15l": "Onafhankelijke waarschuwingsbronnen",
       "n1Title": "Satelliettracking",
-      "n1Desc": "Live baanposities berekend in-browser met SGP4 — volg ISS, Starlink en militaire satellieten overhead.",
+      "n1Desc": "Live baanposities berekend in-browser met SGP4 en iedere 3 seconden bijgewerkt — militaire en aardobservatie-satellieten van CelesTrak, elke 2 uur vernieuwd.",
       "n2Title": "GPS-jamming zones",
-      "n2Desc": "Live RF-interferentiekaart die aantoont waar GPS nu wordt verstoord of vervalst.",
+      "n2Desc": "Dagelijkse RF-storingkaart van vliegtuigrapporten: cellen waar meer dan 2% van vliegtuigen verslechterde GPS zien worden gemarkeerd, meer dan 10% hoog gemarkeerd.",
       "n3Title": "Chokepoint-transitinformatie",
       "n3Desc": "Scheepsaantallen door Hormuz, Suez, Bab el-Mandeb en 10 meer straten — met verstoringsscore.",
       "n4Title": "AI-datacentrumkaart",
@@ -617,7 +617,7 @@
       "n5Title": "Onderzeese kabels",
       "n5Desc": "{{submarineCables}} onderzeeëse kabels die het internet dragen, met storingen en dreigingssignalen.",
       "n6Title": "Protesttracking",
-      "n6Desc": "Tweeledige protestdetectie met cross-source deduplicatie — signaal, geen gerucht.",
+      "n6Desc": "Protestdetectie van ACLED en GDELT; meldingen van één bron in dezelfde 0,1°-cel op dezelfde dag worden samengevoegd tot één gebeurtenis — daadwerkelijk signaal, geen gerucht.",
       "faith": "Vertrouw de getallen niet zomaar op hun woord —",
       "faithCta": "open de app en tel zelf.",
       "faithNote": "Bronnen worden op elk paneel geciteerd."
@@ -648,7 +648,7 @@
       "eyebrow": "Toegang",
       "title1": "Gratis is het observatorium.",
       "title2": "Pro is de operationele kamer.",
-      "sub": "Het dashboard is gratis — elke kaartlaag behalve Resilience, elke feed, geen registratie. Pro voegt de beslissingslaag toe.",
+      "sub": "De dashboard is gratis tegen $0 — elke kaartlaag behalve Resilience, elke feed, geen registratie. Pro voegt de beslissingslaag toe.",
       "freeTitle": "Gratis",
       "freeDesc": "De gratis versie is een volwaardig product, geen proefperiode. Elke kaartlaag behalve Resilience, elke feed van {{feeds}} bronnen, alle zes monitors — geen inschrijving, geen klok.",
       "freeF1": "Alle kaartlagen behalve Resilience & samengestelde feeds",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Begin met de vraag",
       "title": "Wat wil je ontdekken?",
-      "sub": "Kies het bewijspad dat aansluit bij je taak. Elke route opent een brongestuurde weergave, geen leeg dashboard.",
+      "sub": "Kies uit de {{routes}} onderzoekspaden dat aansluit bij je taak. Elk pad opent een brongebaseerde weergave, geen lege dashboard.",
       "verifyTitle": "Verifieer een breaking event",
       "verifyDesc": "Controleer huidige crisisbewakers, actuele metrische gegevens en geciteerde context voordat u een breaking claim vertrouwt.",
       "chokepointTitle": "Controleer een kritiek passage",

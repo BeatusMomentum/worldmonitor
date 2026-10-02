@@ -452,7 +452,7 @@
   "welcome": {
     "meta": {
       "title": "World Monitor — Безкоштовна панель глобальної розвідки в реальному часі",
-      "description": "Поки це стане новиною, ви вже знатимете. Конфлікти, вузькі місця, військові рейси, ринки та кібератаки — на одній живій карті світу з аналізом на основі штучного інтелекту. Без реєстрації.",
+      "description": "Поки це стає новиною, ви вже знаєте. Конфлікти, вузькі місця, військові польоти, ринки, кібер: одна безкоштовна жива карта з AI-аналізом. Без реєстрації.",
       "ogTitle": "World Monitor — Коли це вже новини, ви вже знали.",
       "ogDescription": "Сирі сигнали світу — кораблі, літаки, сирени, кабелі, ринки — на одній безкоштовній живій мапі розвідки, з AI, що помічає, коли вони сходяться. Безкоштовно, без реєстрації."
     },
@@ -574,7 +574,7 @@
     "firstFive": {
       "eyebrow": "Zero to oriented",
       "title": "Що відбувається протягом перших п'яти хвилин на карті?",
-      "sub": "No tour, no empty states, no signup wall. This is what actually happens.",
+      "sub": "Без екскурсії, без порожніх станів, без стіни реєстрації. Це те, що дійсно відбувається в перші 5 хвилин.",
       "f1Title": "The map is already moving",
       "f1Desc": "Conflicts, vessels, flights, fires and outages render as the page loads. Nothing to configure first.",
       "f2Title": "Click any country",
@@ -584,7 +584,7 @@
       "f4Title": "Pick your lens",
       "f4Desc": "World, Tech, Finance, Commodity, Energy або Happy — один механізм, шість спеціалізованих моніторів, один клік розділяє їх.",
       "f5Title": "You've seen maybe a tenth of it",
-      "f5Desc": "The rest surfaces as the world moves — satellite passes, GPS jamming, dark ships, protest clusters, siren alerts.",
+      "f5Desc": "Решта {{mapLayers}} типів шарів карти з'являється в міру розвитку подій — супутникові проходи, глушення GPS, темні судна, скупчення протестів, сирени.",
       "cta": "Start the clock"
     },
     "depth": {
@@ -607,9 +607,9 @@
       "s14l": "Languages · RTL incl.",
       "s15l": "Independent alert origins",
       "n1Title": "Satellite tracking",
-      "n1Desc": "Live orbital positions computed in-browser with SGP4 — watch ISS, Starlink and military birds overhead.",
+      "n1Desc": "Живі орбітальні позиції обчислюються в браузері за допомогою SGP4 та оновлюються кожні 3 секунди — військові та спостережувальні супутники Землі від CelesTrak, оновлюються кожні 2 години.",
       "n2Title": "GPS jamming zones",
-      "n2Desc": "Live RF-interference map showing where GPS is being degraded or spoofed right now.",
+      "n2Desc": "Щоденна карта радіочастотних перешкод зі звітів літаків: осередки, де понад 2% літаків бачать погіршення GPS, позначаються, понад 10% — як високий рівень.",
       "n3Title": "Chokepoint transit intel",
       "n3Desc": "Vessel counts through Hormuz, Suez, Bab el-Mandeb and 10 more straits — with disruption scoring.",
       "n4Title": "AI datacenter map",
@@ -617,7 +617,7 @@
       "n5Title": "Submarine cables",
       "n5Desc": "{{submarineCables}} підводних кабелів, які несуть інтернет, з наложеними сигналами про збої та загрози.",
       "n6Title": "Protest tracking",
-      "n6Desc": "Dual-source protest detection with cross-source deduplication — signal, not rumor.",
+      "n6Desc": "Виявлення протестів з ACLED та GDELT; звіти з одного джерела в одній комірці 0,1° в один день об'єднуються в одну подію — сигнал, а не чутка.",
       "faith": "Don't take the numbers on faith —",
       "faithCta": "open the app and count.",
       "faithNote": "Sources are cited on every panel."
@@ -648,7 +648,7 @@
       "eyebrow": "Access",
       "title1": "Free is the observatory.",
       "title2": "Pro is the operations room.",
-      "sub": "The dashboard is free — every map layer except Resilience, every feed, no signup. Pro adds the decision layer.",
+      "sub": "Dashboard безкоштовний — $0 — кожен шар карти крім Resilience, кожен feed, без реєстрації. Pro додає шар рішень.",
       "freeTitle": "Free",
       "freeDesc": "Безкоштовний рівень — це повноцінний продукт, не пробна версія. Кожен шар карти крім Resilience, кожен потік від {{feeds}} джерел, всі шість моніторів — без реєстрації, без часового ліміту.",
       "freeF1": "Усі шари карт крім Resilience та куровані стрічки",
@@ -701,7 +701,7 @@
     "tasks": {
       "eyebrow": "Почніть з питання",
       "title": "Що ви намагаєтесь дізнатися?",
-      "sub": "Виберіть шлях доказів, що відповідає вашому завданню. Кожний маршрут відкриває представлення з джерелами, а не порожній dashboard.",
+      "sub": "Виберіть будь-який з {{routes}} слідів доказів, що відповідає вашому завданню. Кожен маршрут відкриває представлення на основі джерел, а не порожній dashboard.",
       "verifyTitle": "Перевірити критичну подію",
       "verifyDesc": "Перевірте поточні відстеження криз, датовані показники та наведені контексти перед тим, як довіритися спеціальному повідомленню.",
       "chokepointTitle": "Перевірити вузьке місце",
