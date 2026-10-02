@@ -17,6 +17,7 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
   const contexts: Array<{ countryCode: string; topic: string; sections: Array<{ section: string; state: string; coverage?: string; renderedText: string }> }> = [];
   const links: string[] = [];
   let failFacts = false;
+  let failActivity = false;
   let partialBootstrap = false;
   let quotaExceeded = false;
   let admissions = 0;
@@ -60,7 +61,11 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
     const section = String(args.section);
     if (section === 'facts' && code === 'US' && delayUS) await delayed;
     if (section === 'facts' && failFacts) return { structuredContent: { section, state: 'unavailable', reason: 'Controlled source failure' } };
+    if (failActivity && section === 'vessels') return { structuredContent: { section, state: 'unavailable', reason: 'Controlled AIS outage' } };
     const values: Record<string, object> = {
+      flights: { flights: [{ id: 'controlled-us-flight', operatorCountry: 'US', location: { latitude: 38, longitude: -77 } }], pagination: { nextCursor: '' } },
+      vessels: { dataAvailable: true, snapshot: { snapshotAt: Date.now(), status: { connected: true }, candidateReports: [{ mmsi: '235123456', name: 'Controlled military activity', shipType: 35, lat: 38, lon: -77, timestamp: Date.now() }] } },
+      fleet: {},
       facts: { countryCode: code, countryName: code, capital: code === 'US' ? 'Washington, D.C.' : 'Kyiv', population: '340100000', areaSqKm: 9826675, languages: ['English'], currencies: ['US dollar'] },
       factors: us.scorecard,
       risk: { upstreamUnavailable: true },
@@ -117,8 +122,43 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
     });
     frame.srcdoc = html.replace('<head>', `<head><base href="${location.origin}/">`);
   }, html);
-  return { calls, contexts, links, unmanaged, cancelled, partial: () => { partialBootstrap = true; }, complete: () => { partialBootstrap = false; }, quota: () => { quotaExceeded = true; }, get admissions() { return admissions; }, delayAdmission: () => { delayAdmission = true; }, releaseAdmission, delayCoverage: () => { delayCoverage = true; }, releaseCoverage, fail: () => { failFacts = true; }, recover: () => { failFacts = false; }, delay: () => { delayUS = true; }, release: releaseUS };
+  return { calls, contexts, links, unmanaged, cancelled, activityOutage: () => { failActivity = true; }, activityRecover: () => { failActivity = false; }, partial: () => { partialBootstrap = true; }, complete: () => { partialBootstrap = false; }, quota: () => { quotaExceeded = true; }, get admissions() { return admissions; }, delayAdmission: () => { delayAdmission = true; }, releaseAdmission, delayCoverage: () => { delayCoverage = true; }, releaseCoverage, fail: () => { failFacts = true; }, recover: () => { failFacts = false; }, delay: () => { delayUS = true; }, release: releaseUS };
 }
+
+test('country military observations render under one allocation and survive an AIS outage', async ({ page }, info) => {
+  const host = await installCountryHost(page);
+  const frame = page.frameLocator('iframe');
+  await frame.getByRole('button', { name: 'Security', exact: true }).click();
+  const military = frame.locator('[data-brief-section=military]');
+  await expect(military).toContainText('Flight counts include observations licensed');
+  await expect(military).toContainText('bounded to 1,500 reports');
+  const aisCalls = host.calls.filter(call => call.arguments.section === 'vessels');
+  expect(aisCalls).toHaveLength(1);
+  expect(aisCalls[0]?.arguments.arguments).toMatchObject({ ne_lat: 0, ne_lon: 0, sw_lat: 0, sw_lon: 0 });
+  await expect(military.locator('.cdp-military-grid')).toContainText('Own Flights1');
+  await expect(military.locator('.cdp-military-grid')).toContainText('Naval Vessels1');
+  expect(host.admissions).toBe(1);
+  expect(host.unmanaged).toEqual([]);
+  await military.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('country-military-desktop.png'), fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await military.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('country-military-mobile.png'), fullPage: true });
+  host.activityOutage();
+  await frame.getByRole('button', { name: 'Refresh country', exact: true }).click();
+  await expect(military.locator('.cdp-military-grid')).toContainText('Naval VesselsUnavailable');
+  await expect(military.locator('.cdp-military-grid')).toContainText('Foreign PresenceUnknown');
+  await expect(military).toContainText('Live AIS observations unavailable');
+  await expect(military.locator('.cdp-military-grid')).toContainText('Own Flights1');
+  await expect.poll(() => host.contexts.at(-1)?.sections.find(section => section.section === 'military')?.renderedText).toContain('Live AIS observations unavailable');
+  expect(host.admissions).toBe(2);
+  await military.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('country-military-outage-mobile.png'), fullPage: true });
+  host.activityRecover();
+  await frame.getByRole('button', { name: 'Refresh country', exact: true }).click();
+  await expect(military.locator('.cdp-military-grid')).toContainText('Naval Vessels1');
+  expect(host.admissions).toBe(3);
+});
 
 test('partial bootstrap coverage is visible and clears when the country recovers', async ({ page }, info) => {
   const host = await installCountryHost(page);
