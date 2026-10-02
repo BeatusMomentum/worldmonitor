@@ -261,6 +261,24 @@ function injectGithubStars(html, file) {
   return next;
 }
 
+// The FAQPage JSON-LD mirrors the FAQ locale strings verbatim, `{{token}}`
+// placeholders included, so it says what the visible answers say. Fill them
+// with the same build-measured figures the rendered answers interpolate, and
+// fail rather than publish a raw placeholder to search engines. Runs on the
+// template before the SSR markup is spliced in, so third-party headline text
+// can never reach the substitution.
+const PROOF_FACTS = JSON.parse(readFileSync(resolve(__dirname, 'src/generated/depth-stats.json'), 'utf-8'));
+
+function fillProofFacts(html, file) {
+  const filled = html.replace(/\{\{(\w+)\}\}/g, (token, key) => (Object.hasOwn(PROOF_FACTS, key) ? String(PROOF_FACTS[key]) : token));
+  const unfilled = filled.match(/\{\{\w+\}\}/);
+  if (unfilled) {
+    console.error(`[prerender] ERROR: ${file} carries ${unfilled[0]}, which no build-measured figure fills.`);
+    process.exit(1);
+  }
+  return filled;
+}
+
 const PAGES = [
   { file: 'index.html', content: '', rootAttributes: '' },
   {
@@ -275,6 +293,7 @@ for (const { file, content, rootAttributes } of PAGES) {
   let html = readFileSync(htmlPath, 'utf-8');
   html = inlineCriticalCss(html, file);
   html = injectGithubStars(html, file);
+  html = fillProofFacts(html, file);
   const emptyRoot = '<div id="root"></div>';
   if (content || rootAttributes) {
     if (!html.includes(emptyRoot)) {

@@ -484,7 +484,7 @@
       "trustBuild": "Build on it:",
       "positioningLink": "WorldMonitor is not an open-source Palantir",
       "whatIsTitle": "What is World Monitor?",
-      "whatIsBody": "World Monitor is a free, open-source dashboard that streams geopolitics, markets, shipping, aviation, infrastructure, and cyber signals onto one live world map. It correlates separate feeds into a single operating picture and flags convergence before headlines, with every figure sourced and every method documented."
+      "whatIsBody": "World Monitor is a free, open-source (AGPL-3.0) dashboard used by 2M+ people. It streams {{feeds}} news and OSINT feeds from {{providers}} attributed providers onto one live world map with {{mapLayers}} map layer types, spanning geopolitics, markets, shipping, aviation and cyber. It correlates them so converging events surface before the headlines do. Every figure is sourced and every method documented."
     },
     "tasks": {
       "eyebrow": "Start with the question",
@@ -521,7 +521,7 @@
     "moments": {
       "eyebrow": "Correlation engine",
       "title": "How does World Monitor correlate signals?",
-      "sub": "You can find the feeds in a hundred places. The edge is one surface where geopolitics, shipping, commodities, macro, markets, weather, infrastructure, cyber, news and country risk can explain each other.",
+      "sub": "It puts {{mapLayers}} map layer types on one surface so geopolitics, shipping, commodities, macro, markets, weather, infrastructure, cyber, news and country risk can explain each other. Anyone can collect the feeds; seeing them move together on one map is the difference.",
       "signalStack": "Signals fused",
       "correlation": "Correlation",
       "bridge1": "Not a list of feeds.",
@@ -637,7 +637,7 @@
       "eyebrow": "For builders & AI agents",
       "title": "How do I build on World Monitor from my own stack?",
       "sub": "Everything on the map is also an API. Wire it into Claude over MCP, call the REST endpoints from anywhere, or install a native client for Python, Ruby, Go, or JavaScript — your code researches with live data instead of training-data memories.",
-      "b1": "MCP tools — risk scores, chokepoints, conflicts, markets, briefs",
+      "b1": "{{mcpTools}} MCP tools — risk scores, chokepoints, conflicts, markets, briefs",
       "b2": "Documented REST API — one OpenAPI 3.1 spec, one key",
       "b3": "Official SDKs on npm, PyPI, RubyGems, and Go — zero-dependency, MCP-first",
       "b4": "JMESPath projection on every call — fetch exactly the fields you need",
@@ -684,15 +684,15 @@
       "q2": "What is a global intelligence dashboard?",
       "a2": "A single live view that fuses signals most tools keep separate: conflict events, ship and aircraft tracking, shipping chokepoints, satellites, subsea cables, pipelines, markets and cyber threats — on one real-time world map, with AI scoring and briefs on top. World Monitor is a free one.",
       "q3": "Where does the data come from?",
-      "a3": "Named providers include ACLED and UCDP for conflict, AISStream for live vessels, OpenSky for aircraft, NASA FIRMS for fires, USGS for earthquakes, IMF, BIS, FRED and Finnhub for markets and macro — plus curated news feeds. Every panel cites its sources and timestamps inline.",
+      "a3": "From {{providers}} attributed providers. Named ones include ACLED and UCDP for conflict, AISStream for live vessels, OpenSky for aircraft, NASA FIRMS for fires, USGS for earthquakes, IMF, BIS, FRED and Finnhub for markets and macro — plus curated news feeds. Every panel cites its sources and timestamps inline.",
       "q4": "Can I watch chokepoints like Hormuz or Bab el-Mandeb in real time?",
-      "a4": "Yes. Chokepoints are tracked with live AIS vessel counts, week-over-week transit change and disruption scoring — and density anomalies are flagged against each strait's rolling baseline.",
+      "a4": "Yes. {{chokepoints}} chokepoints, Hormuz and Bab el-Mandeb among them, are tracked with live AIS vessel counts, week-over-week transit change and disruption scoring — and density anomalies are flagged against each chokepoint's rolling baseline.",
       "q5": "How is this different from a conflict map like Liveuamap?",
       "a5": "Conflict is one map layer. World Monitor fuses conflicts with shipping, military flights, infrastructure, markets and cyber — then AI scores the convergence: instability indices, hotspot escalation, corroborated breaking alerts and daily briefs. Compare World Monitor with Liveuamap and other conflict maps: worldmonitor.app/compare/liveuamap-alternatives. For broader monitoring options, see worldmonitor.app/compare/best-geopolitical-risk-dashboards.",
       "q6": "Why should I trust an alert?",
-      "a6": "A breaking banner fires only when independent origin types corroborate — news classification, keyword velocity, hotspot escalation, military surges, official sirens — deduplicated and rate-limited. Fewer alerts, real ones.",
+      "a6": "Because every alert must pass fixed gates before it reaches you. Alerts come from {{alertOrigins}} independent origins: high-threat news items, keyword spikes, hotspot escalation, military surge detection and civil-defense sirens. Each origin passes the same filters: items older than 15 minutes are dropped, a repeat of the same event is suppressed for 30 minutes, and a 60-second cooldown follows any alert. Lower-tier sources also need an AI-confirmed classification before they can trigger one.",
       "q7": "Can AI agents like Claude or GPT use it?",
-      "a7": "Yes. World Monitor ships an MCP server with a live tool registry, so Claude, GPT or any MCP-compatible agent can query live risk scores, chokepoint status, conflicts, markets and briefs — with JMESPath projection so agents fetch exactly what they need.",
+      "a7": "Yes. World Monitor's MCP server exposes {{mcpTools}} live tools, so Claude, GPT or any MCP-compatible agent can query risk scores, chokepoint status, conflicts, markets and briefs — with JMESPath projection so agents fetch exactly what they need.",
       "q8": "Do I need an account?",
       "a8": "No. The dashboard works instantly with no signup. An account only matters when you upgrade to Pro or want settings synced across devices.",
       "q9": "Is it open source?",
@@ -704,7 +704,7 @@
     },
     "cta": {
       "title": "How do I start watching the world map?",
-      "subtitle": "While you read this page it kept moving — straits, hotspots, markets, curated feeds. One of them is tomorrow's front page. Find it first — free, no account.",
+      "subtitle": "Open worldmonitor.app/dashboard in any browser: free, no account, {{mapLayers}} map layer types ready to switch on from first load. Click any country for its brief, or press ⌘K / Ctrl-K for the command palette. The map has kept updating while you read this page.",
       "button": "Find it first",
       "note": "Free · No signup · Loads in seconds",
       "secondary": "Or see Pro plans →"
