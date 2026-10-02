@@ -1494,11 +1494,6 @@ describe('api/mcp.ts — PRO MCP Server', () => {
   });
 
   it('get_country_macro: a country NAME narrows, rather than falling open to all', async () => {
-    // `pickMapKeys` FAILS OPEN — a filter matching nothing returns the whole
-    // map (api/mcp/filters.ts:100). The country-briefing prompt fans one
-    // argument out to three tools, and once the other two accepted names, an
-    // un-normalized name reaching this one spliced EVERY country's macro
-    // indicators into a single-country brief.
     const macro = { countries: { US: { inflationPct: 3 }, DE: { inflationPct: 2 }, CN: { inflationPct: 1 } }, seededAt: 1 };
     const meta = {
       'seed-meta:economic:imf-macro': { fetchedAt: Date.now() - 60_000, recordCount: 3 },
