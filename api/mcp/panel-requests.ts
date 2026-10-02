@@ -172,6 +172,7 @@ export async function authorizePanelRead(context: McpAuthContext, pipeline: Pipe
           && Object.values(value.data).some(bucket => bucket === null || bucket && typeof bucket === 'object' && 'dataAvailable' in bucket && bucket.dataAvailable === false)) return;
         if ('state' in value && value.state !== 'ready') return;
         if ('value' in value && value.value && typeof value.value === 'object' && 'upstreamUnavailable' in value.value && value.value.upstreamUnavailable === true) return;
+        if ('value' in value && value.value && typeof value.value === 'object' && 'missing' in value.value && Array.isArray(value.value.missing) && value.value.missing.length) return;
       }
       const raw = JSON.stringify(value);
       if (!raw || encoder.encode(raw).length > cacheBudget) return;

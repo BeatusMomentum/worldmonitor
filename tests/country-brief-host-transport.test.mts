@@ -136,6 +136,19 @@ it('does not cache failures and aborting one subscriber preserves the other subs
 });
 
 
+it('retries partial bootstrap data and reuses the recovered snapshot', async () => {
+  let calls = 0;
+  const fetch = createHostCountryFetch(async (_name, args: any) => {
+    calls++;
+    return { state: 'ready', section: args.section, value: { data: { imfMacro: { countries: { US: { inflationPct: 2.5, year: 2026 } } } }, missing: calls === 1 ? ['imfGrowth'] : [] }, retrievedAt: '2026-10-02T00:00:00.000Z' };
+  });
+  const url = 'https://www.worldmonitor.app/api/bootstrap?keys=imfMacro,imfGrowth,imfLabor,imfExternal';
+  assert.deepEqual((await (await fetch(url)).json()).missing, ['imfGrowth']);
+  assert.deepEqual((await (await fetch(url)).json()).missing, []);
+  await fetch(url);
+  assert.equal(calls, 2);
+});
+
 it('expires reused data after five minutes and isolates country cache entries', async t => {
   const now = Date.now();
   let time = now;

@@ -14,9 +14,10 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
   let delayCoverage = false;
   let releaseCoverage: () => void = () => {};
   const coverageDelayed = new Promise<void>(resolve => { releaseCoverage = resolve; });
-  const contexts: Array<{ countryCode: string; topic: string; sections: Array<{ section: string; state: string; renderedText: string }> }> = [];
+  const contexts: Array<{ countryCode: string; topic: string; sections: Array<{ section: string; state: string; coverage?: string; renderedText: string }> }> = [];
   const links: string[] = [];
   let failFacts = false;
+  let partialBootstrap = false;
   let quotaExceeded = false;
   let admissions = 0;
   const admitted = new Set<string>();
@@ -69,7 +70,12 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
       maritime: { countryCode: code, upstreamUnavailable: true },
       markets: { markets: [], dataAvailable: true },
       housing: { data: { bisPropertyResidential: { entries: [{ countryCode: code, indexValue: 156.4, yoyChange: -2.1, qoqChange: null, period: '2026-Q1' }] }, bisDsr: { entries: [{ countryCode: code, dsrPct: 8, change: 1.3, period: '2026-Q1' }] } } },
-      imf: { data: {} },
+      imf: { data: {
+        imfMacro: { countries: { [code]: { inflationPct: 2.5, year: 2026 } } },
+        imfGrowth: { countries: { [code]: { realGdpGrowthPct: 1.8, gdpPerCapitaUsd: 85000, year: 2026 } } },
+        imfLabor: { countries: { [code]: { unemploymentPct: 4.1, year: 2026 } } },
+        imfExternal: { countries: { [code]: { exportsUsd: 123, year: 2026 } } },
+      }, missing: [] },
       exposure: { exposures: fullExposure ? [{ chokepointId: 'hormuz', chokepointName: 'Strait of Hormuz', exposureScore: 0.2 }] : [], primaryChokepointId: 'hormuz', vulnerabilityIndex: 0.2, fetchedAt: '2026-10-01' },
       dependency: { flags: [], primaryExporterIso2: 'CN', primaryExporterShare: 0.2 },
       commodities: { vulnerabilities: [], upstreamUnavailable: true },
@@ -80,6 +86,12 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
       food: { unavailable: false, records: [{ countryCode: code, commodity: 'wheat', marketingYear: '2025/26', stocksToUse: 0.25, hasStocksToUse: true, source: 'usda', totalUseTmt: 500 }] },
       demographics: { available: false },
     };
+    if (partialBootstrap && section === 'imf') {
+      const value = values.imf as { data: Record<string, unknown>; missing: string[] };
+      delete value.data.imfGrowth;
+      value.missing = ['imfGrowth'];
+    }
+    if (partialBootstrap && section === 'housing') (values.housing as { missing?: string[] }).missing = ['bisPropertyCommercial'];
     if (section === 'defense' || section === 'resilience') return { structuredContent: { section, state: 'locked', reason: 'Controlled connection lacks access' } };
     return { structuredContent: { section, state: 'ready', value: values[section] ?? {}, retrievedAt: '2026-10-01T15:00:00.000Z' } };
   });
@@ -105,8 +117,42 @@ async function installCountryHost(page: Page, fullExposure = false, initialOpenE
     });
     frame.srcdoc = html.replace('<head>', `<head><base href="${location.origin}/">`);
   }, html);
-  return { calls, contexts, links, unmanaged, cancelled, quota: () => { quotaExceeded = true; }, get admissions() { return admissions; }, delayAdmission: () => { delayAdmission = true; }, releaseAdmission, delayCoverage: () => { delayCoverage = true; }, releaseCoverage, fail: () => { failFacts = true; }, recover: () => { failFacts = false; }, delay: () => { delayUS = true; }, release: releaseUS };
+  return { calls, contexts, links, unmanaged, cancelled, partial: () => { partialBootstrap = true; }, complete: () => { partialBootstrap = false; }, quota: () => { quotaExceeded = true; }, get admissions() { return admissions; }, delayAdmission: () => { delayAdmission = true; }, releaseAdmission, delayCoverage: () => { delayCoverage = true; }, releaseCoverage, fail: () => { failFacts = true; }, recover: () => { failFacts = false; }, delay: () => { delayUS = true; }, release: releaseUS };
 }
+
+test('partial bootstrap coverage is visible and clears when the country recovers', async ({ page }, info) => {
+  const host = await installCountryHost(page);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('[data-brief-section=facts]')).toContainText('Washington, D.C.');
+  host.partial();
+  await frame.getByRole('button', { name: 'Refresh country', exact: true }).click();
+  await frame.getByRole('button', { name: 'Economy & trade', exact: true }).click();
+  const economic = frame.locator('[data-brief-section=economic]');
+  await expect(economic).toContainText('2.5%');
+  await expect(economic).toContainText('Partial coverage. Unavailable data: growth and GDP');
+  await expect(frame.locator('[data-brief-section=housing]')).toContainText('Partial coverage. Unavailable data: commercial property');
+  await expect.poll(() => host.contexts.at(-1)?.sections.find(section => section.section === 'economic')?.coverage).toBe('partial');
+  expect(host.contexts.at(-1)?.sections.find(section => section.section === 'economic')?.renderedText).toContain('Unavailable data: growth and GDP');
+  await frame.getByRole('button', { name: 'Export report ↗', exact: true }).click();
+  const download = page.waitForEvent('download');
+  await frame.getByRole('button', { name: 'Download report HTML', exact: true }).click();
+  const report = await readFile((await (await download).path())!, 'utf8');
+  expect(report).toContain('Unavailable data: growth and GDP');
+  expect(report).toContain('Unavailable data: commercial property');
+  await frame.getByRole('button', { name: '← Back to brief', exact: true }).click();
+  await frame.getByRole('button', { name: 'Economy & trade', exact: true }).click();
+  await economic.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('country-partial-desktop.png'), fullPage: true });
+  await page.setViewportSize({ width: 390, height: 1000 });
+  await economic.locator('.cdp-section-coverage').evaluate(element => element.scrollIntoView({ block: 'center' }));
+  await expect(economic.locator('.cdp-section-coverage')).toBeInViewport();
+  await page.screenshot({ path: info.outputPath('country-partial-mobile.png'), fullPage: true });
+  host.complete();
+  await frame.getByRole('button', { name: 'Refresh country', exact: true }).click();
+  await expect(economic).toContainText('1.8%');
+  await expect(economic.locator('.cdp-section-coverage')).toHaveCount(0);
+  await expect(frame.locator('[data-brief-section=housing] .cdp-section-coverage')).toHaveCount(0);
+});
 
 test('built opaque country view uses the shared sections, host reads, sources and actual report output', async ({ page }, info) => {
   const host = await installCountryHost(page);
@@ -121,6 +167,8 @@ test('built opaque country view uses the shared sections, host reads, sources an
   await expect(frame.locator('[data-brief-section=food]')).toContainText('2025/26');
   await expect(frame.locator('[data-brief-section=food]')).toContainText('25.0%');
   await frame.getByRole('button', { name: 'Economy & trade', exact: true }).click();
+  await expect(frame.locator('[data-brief-section=economic]')).toContainText('2.5%');
+  await expect(frame.locator('[data-brief-section=economic]')).toContainText('IMF WEO');
   await expect(frame.locator('[data-brief-section=housing]')).toContainText('156.4');
   await expect(frame.locator('[data-brief-section=housing]')).toContainText('2026-Q1');
   await frame.getByRole('button', { name: 'Security', exact: true }).click();
@@ -142,9 +190,13 @@ test('built opaque country view uses the shared sections, host reads, sources an
   expect(report).toContain('2026-Q1');
   expect(report).toContain('Controlled US source article');
   await frame.getByRole('button', { name: '← Back to brief', exact: true }).click();
+  await frame.getByRole('button', { name: 'Economy & trade', exact: true }).click();
   for (const [name, width, height] of [['desktop', 1280, 1000], ['mobile', 390, 844]] as const) {
     await page.setViewportSize({ width, height });
+    await frame.locator('[data-brief-section=economic]').scrollIntoViewIfNeeded();
     await page.screenshot({ path: info.outputPath(`country-plugin-${name}.png`), fullPage: true });
+    await frame.locator('[data-brief-section=housing]').scrollIntoViewIfNeeded();
+    await page.screenshot({ path: info.outputPath(`country-housing-${name}.png`), fullPage: true });
     await expect.poll(() => frame.locator('body').evaluate(body => body.scrollWidth <= innerWidth + 1)).toBe(true);
   }
   expect(host.unmanaged).toEqual([]);

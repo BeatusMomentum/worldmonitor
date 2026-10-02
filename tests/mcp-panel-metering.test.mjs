@@ -16,7 +16,13 @@ describe('paid country workflow through the MCP handler', () => {
     process.env.MCP_INTERNAL_HMAC_SECRET = HMAC_SECRET;
     process.env.MCP_TELEMETRY = 'false';
     fetched = [];
-    globalThis.fetch = async url => { fetched.push(String(url)); return Response.json({ countryCode: 'US', available: true }); };
+    globalThis.fetch = async url => {
+      fetched.push(String(url));
+      const parsed = new URL(url);
+      return Response.json(parsed.pathname === '/api/bootstrap'
+        ? { data: { [parsed.searchParams.get('keys')]: { available: true } }, missing: [] }
+        : { countryCode: 'US', available: true });
+    };
     handler = (await import('../api/mcp.ts')).mcpHandler;
   });
   afterEach(() => {
@@ -82,7 +88,7 @@ describe('paid country workflow through the MCP handler', () => {
       const read = await invoke(deps, 'get_country_brief_section', { section, arguments: args, panel_request: token });
       assert.equal(read.body.result?.structuredContent?.state, 'ready', `included reader ${section}`);
     }
-    assert.equal(fetched.length, readers.length);
+    assert.equal(fetched.length, readers.length + 5);
     assert.equal(pipe.count, 1);
     for (const name of ['get_country_brief', 'get_country_coverage']) {
       const read = await authorizePanelRead(context, pipe.pipeline, name, { country_code: 'US' }, token);
