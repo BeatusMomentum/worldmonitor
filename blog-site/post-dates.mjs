@@ -87,6 +87,8 @@ export function buildPostDateMap() {
     if (date > blogLastmod) blogLastmod = date;
   }
 
+  const postsLastmod = blogLastmod;
+
   if (existsSync(GUIDES_DIR)) {
     let guidesLastmod = null;
     for (const category of ['vs', 'alternatives', 'best']) {
@@ -122,7 +124,7 @@ export function buildPostDateMap() {
       const slug = basename(file, '.astro');
       const authorLastmod = laterDate(
         gitFileLastmod(new URL(file, AUTHORS_DIR)),
-        blogLastmod,
+        postsLastmod,
       );
       setPostDate(postDates, `/blog/authors/${slug}/`, authorLastmod);
     }
