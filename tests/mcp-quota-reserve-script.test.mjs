@@ -94,7 +94,7 @@ function pushValue(L, value) {
 function readReturn(L) {
   assert.equal(lua.lua_type(L, -1), lua.LUA_TTABLE, 'the script must return a table');
   const out = [];
-  for (let i = 1; i <= 2; i += 1) {
+  for (let i = 1; i <= 3; i += 1) {
     lua.lua_geti(L, -1, i);
     out.push(lua.lua_tonumber(L, -1));
     lua.lua_pop(L, 1);
@@ -147,8 +147,8 @@ function reserve({ argv, initial = {}, script = MCP_QUOTA_RESERVE_SCRIPT, keys =
   if (lua.lua_pcall(L, 0, 1, 0) !== lua.LUA_OK) {
     assert.fail(`script raised: ${luaError()}`);
   }
-  const [status, count] = readReturn(L);
-  return { status, count, redis };
+  const [status, count, expires] = readReturn(L);
+  return { status, count, expires, redis };
 }
 
 /**
@@ -373,22 +373,25 @@ describe('country panel admission and work ceiling, real Lua', () => {
   const marker = 'country:US:window';
   const reads = `${marker}:reads`;
   const previous = 'country:US:previous';
-  const admit = (initial = {}, limit = 50) => reserve({ script: PANEL_REQUEST_RESERVE_SCRIPT, keys: [COUNTER_KEY, FLOOR_KEY, marker, previous], argv: [limit, PRO_DAILY_QUOTA_TTL_SECONDS, 1, 1, 300], initial });
+  const expires = '1790942700000';
+  const admit = (initial = {}, limit = 50) => reserve({ script: PANEL_REQUEST_RESERVE_SCRIPT, keys: [COUNTER_KEY, FLOOR_KEY, marker, previous], argv: [limit, PRO_DAILY_QUOTA_TTL_SECONDS, 1, 1, 300, expires], initial });
   it('reuses the previous paid window atomically without a new marker or charge', () => {
-    const repeated = admit({ [previous]: 'paid', [COUNTER_KEY]: 50 });
+    const repeated = admit({ [previous]: expires, [COUNTER_KEY]: 50 });
     assert.equal(repeated.status, 3);
     assert.equal(repeated.redis.count, 50);
     assert.equal(repeated.redis.store.has(marker), false);
+    assert.equal(repeated.expires, Number(expires));
   });
   it('charges once, records the paid marker and reuses even at the daily cap', () => {
     const first = admit({ [COUNTER_KEY]: 49 });
     assert.equal(first.status, 1);
     assert.equal(first.redis.count, 50);
-    assert.equal(first.redis.store.get(marker), 'paid');
+    assert.equal(first.redis.store.get(marker), expires);
     assert.equal(first.redis.ttls.get(marker), 300);
     const repeated = admit(Object.fromEntries(first.redis.store));
     assert.equal(repeated.status, 2);
     assert.equal(repeated.redis.count, 50);
+    assert.equal(repeated.expires, first.expires);
     assert.equal(repeated.redis.commands.filter(cmd => cmd[0] === 'INCRBY').length, 0);
   });
   it('denied admission leaves no paid marker or extra charge', () => {
@@ -398,17 +401,18 @@ describe('country panel admission and work ceiling, real Lua', () => {
     assert.equal(denied.redis.store.has(marker), false);
   });
   it('executes 64 reads and refuses the next without advancing the stored work count', () => {
-    let initial = { [marker]: 'paid' };
+    let initial = { [marker]: expires };
     for (let i = 1; i <= 65; i++) {
-      const result = reserve({ script: PANEL_REQUEST_READ_SCRIPT, keys: [marker, reads], argv: [64, 300], initial });
+      const result = reserve({ script: PANEL_REQUEST_READ_SCRIPT, keys: [marker, reads], argv: [64, 300, expires], initial });
       assert.equal(result.status, i <= 64 ? 1 : 0);
       assert.equal(result.count, Math.min(i, 64));
       initial = Object.fromEntries(result.redis.store);
     }
   });
   it('cannot read without a paid marker or reuse a corrupt counter', () => {
-    assert.equal(reserve({ script: PANEL_REQUEST_READ_SCRIPT, keys: [marker, reads], argv: [64, 300] }).status, -1);
-    assert.equal(admit({ [marker]: 'paid', [COUNTER_KEY]: 'corrupt' }).status, -1);
+    assert.equal(reserve({ script: PANEL_REQUEST_READ_SCRIPT, keys: [marker, reads], argv: [64, 300, expires] }).status, -1);
+    assert.equal(admit({ [marker]: expires, [COUNTER_KEY]: 'corrupt' }).status, -1);
+    assert.equal(reserve({ script: PANEL_REQUEST_READ_SCRIPT, keys: [marker, reads], argv: [64, 300, Number(expires) + 1], initial: { [marker]: expires } }).status, -1);
   });
   it('the self-hosted proxy allows the exact executed scripts', () => {
     const source = readFileSync(new URL('../docker/redis-rest-proxy.mjs', import.meta.url), 'utf8');

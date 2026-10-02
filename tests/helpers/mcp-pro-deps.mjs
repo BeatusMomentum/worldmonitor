@@ -72,18 +72,18 @@ export function makePipelineMock({
     for (const cmd of commands) {
       if (cmd[0] === 'EVAL' && cmd[1] === PANEL_REQUEST_RESERVE_SCRIPT) {
         const marker = cmd[5];
-        if (store.get(marker) === 'paid') { out.push({ result: [2, counter] }); continue; }
-        if (store.get(cmd[6]) === 'paid') { out.push({ result: [3, counter] }); continue; }
+        if (store.has(marker)) { out.push({ result: [2, counter, Number(store.get(marker))] }); continue; }
+        if (store.has(cmd[6])) { out.push({ result: [3, counter, Number(store.get(cmd[6]))] }); continue; }
         const limit = cmd[7] === '' ? null : Number(cmd[7]);
         if (limit !== null && counter + 1 > limit) { out.push({ result: [0, counter] }); continue; }
         counter++;
         if (limit === null) limitFloor = -1;
         else if (limitFloor !== -1) limitFloor = Math.max(limitFloor ?? 0, limit);
-        store.set(marker, 'paid');
-        out.push({ result: [1, counter] });
+        store.set(marker, String(cmd[12]));
+        out.push({ result: [1, counter, Number(cmd[12])] });
       } else if (cmd[0] === 'EVAL' && cmd[1] === PANEL_REQUEST_READ_SCRIPT) {
         const used = Number(store.get(cmd[4]) ?? 0);
-        if (store.get(cmd[3]) !== 'paid') out.push({ result: [-1, 0] });
+        if (store.get(cmd[3]) !== String(cmd[7])) out.push({ result: [-1, 0] });
         else if (used >= Number(cmd[5])) out.push({ result: [0, used] });
         else { store.set(cmd[4], used + 1); out.push({ result: [1, used + 1] }); }
       } else if (cmd[0] === 'GET') {

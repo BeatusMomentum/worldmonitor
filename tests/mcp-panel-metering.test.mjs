@@ -60,6 +60,7 @@ describe('paid country workflow through the MCP handler', () => {
       ['housing', { keys: 'bisDsr,bisPropertyResidential,bisPropertyCommercial' }],
       ['imf', { keys: 'imfMacro,imfGrowth,imfLabor,imfExternal' }],
       ['bypass', { chokepointId: 'hormuz' }],
+      ['production', { commodity: 'copper', iso2: '', stage: '' }],
       ...['27', '84', '85', '87', '30', '72', '39', '29', '10', '62'].flatMap(hs2 => [['exposure', { iso2: 'US', hs2 }], ['dependency', { iso2: 'US', hs2 }]]),
     ];
     for (const [section, args] of readers) {
@@ -146,6 +147,7 @@ describe('paid country workflow through the MCP handler', () => {
       ['get_country_brief_section', { section: 'energy', arguments: { country_code: 'UA' } }],
       ['get_country_brief_section', { section: 'flows', arguments: { reporter_code: '156' } }],
       ['get_country_brief_section', { section: 'flows', arguments: { reporter_code: '840' } }],
+      ['get_country_brief_section', { section: 'production', arguments: { commodity: 'copper', iso2: 'CN' } }],
       ['get_country_brief_section', { section: 'markets', arguments: { category: 'country:UA', page_size: 5 } }],
       ['get_country_brief_section', { section: 'china', arguments: {} }],
       ['get_country_brief', { country_code: 'US', framework: 'Custom' }],
@@ -185,5 +187,17 @@ describe('paid country workflow through the MCP handler', () => {
     const morning = await admitCountryPanel(context, budget, pipe.pipeline, { country_code: 'US' }, midnight + 1000);
     assert.equal(morning.reused, false);
     assert.equal(pipe.count, 3);
+  });
+  it('a refresh retry returns the original paid expiry and token without extending its lifetime', async () => {
+    const { pipe } = makeProDeps();
+    const now = Date.UTC(2026, 9, 2, 12);
+    const args = { country_code: 'US', refresh: true, request_id: crypto.randomUUID() };
+    const first = await admitCountryPanel(context, budget, pipe.pipeline, args, now);
+    const retry = await admitCountryPanel(context, budget, pipe.pipeline, args, now + 60000);
+    assert.equal(retry.token, first.token);
+    assert.equal(retry.expiresAt, first.expiresAt);
+    assert.equal(pipe.count, 1);
+    await authorizePanelRead(context, pipe.pipeline, 'get_country_brief_section', energy, retry.token, now + 299999);
+    await assert.rejects(authorizePanelRead(context, pipe.pipeline, 'get_country_brief_section', energy, retry.token, now + 300000), error => error.code === 'invalid');
   });
 });

@@ -35,12 +35,12 @@ async function signature(owner: string, scope: PanelScope): Promise<string> {
   const bytes = await crypto.subtle.sign('HMAC', key, encoder.encode(`country-panel:${envPrefix()}:${owner}:${scope.country}:${scope.window}:${scope.expires}`));
   return Array.from(new Uint8Array(bytes), value => value.toString(16).padStart(2, '0')).join('');
 }
-async function tuple(pipeline: PipelineFn, command: Array<string | number>): Promise<[number, number]> {
+async function tuple(pipeline: PipelineFn, command: Array<string | number>): Promise<[number, number, number?]> {
   let result;
   try { result = await pipeline([command], 5_000, true); } catch { throw new PanelRequestError('Panel metering is temporarily unavailable.', 'backend'); }
   const value = result?.length === 1 && !result[0]?.error ? result[0]?.result : undefined;
-  if (!Array.isArray(value) || value.length !== 2 || !value.every(Number.isSafeInteger)) throw new PanelRequestError('Panel metering is temporarily unavailable.', 'backend');
-  return value as [number, number];
+  if (!Array.isArray(value) || value.length < 2 || value.length > 3 || !value.every(Number.isSafeInteger)) throw new PanelRequestError('Panel metering is temporarily unavailable.', 'backend');
+  return value as [number, number, number?];
 }
 
 export async function admitCountryPanel(context: McpAuthContext, budget: McpBudget | undefined, pipeline: PipelineFn, args: Record<string, unknown>, now = Date.now()): Promise<PanelAdmission> {
@@ -60,13 +60,16 @@ export async function admitCountryPanel(context: McpAuthContext, budget: McpBudg
   const previous: PanelScope = { country, window: `b${bucket - 1}`, expires: Math.min(midnight, (bucket + 1) * PANEL_REUSE_MS) };
   const currentDay = Date.UTC(new Date(now).getUTCFullYear(), new Date(now).getUTCMonth(), new Date(now).getUTCDate());
   const reusePrevious = !parsed.data.refresh && (bucket - 1) * PANEL_REUSE_MS >= currentDay;
-  let mac = await signature(owner, scope);
-  const [status, count] = await tuple(pipeline, ['EVAL', PANEL_REQUEST_RESERVE_SCRIPT, 4,
+  await signature(owner, scope);
+  const [status, count, expires] = await tuple(pipeline, ['EVAL', PANEL_REQUEST_RESERVE_SCRIPT, 4,
     dailyCounterKey(owner, new Date(now)), dailyQuotaFloorKey(owner, new Date(now)), panelKey(owner, scope), panelKey(owner, reusePrevious ? previous : scope),
-    limit === null ? '' : limit, PRO_DAILY_QUOTA_TTL_SECONDS, 1, 1, Math.max(1, Math.ceil((scope.expires - now) / 1000))]);
+    limit === null ? '' : limit, PRO_DAILY_QUOTA_TTL_SECONDS, 1, 1, Math.max(1, Math.ceil((scope.expires - now) / 1000)), scope.expires]);
   if (status === 0) throw new PanelRequestError('Daily MCP allowance exceeded.', 'quota', limit ?? undefined);
   if (![1, 2, 3].includes(status)) throw new PanelRequestError('Panel metering is temporarily unavailable.', 'backend');
-  if (status === 3) { scope = previous; mac = await signature(owner, scope); }
+  if (status === 3) scope = previous;
+  if (expires === undefined || expires <= now || expires > scope.expires) throw new PanelRequestError('Panel expiry is unavailable.', 'backend');
+  scope = { ...scope, expires };
+  const mac = await signature(owner, scope);
   return {
     token: `${scope.country}.${scope.window}.${scope.expires}.${mac}`, countryCode: country,
     expiresAt: new Date(scope.expires).toISOString(), reused: status !== 1,
@@ -87,7 +90,9 @@ function checkReadScope(name: string, args: Record<string, unknown>, country: st
   if (!parameters.success) throw new PanelRequestError('Invalid country reader arguments.', 'invalid');
   const values = parameters.data as Record<string, unknown>;
   for (const field of ['country_code', 'countryCode', 'iso2']) {
-    if (field in values && values[field] !== country && !(parsed.data.section === 'food' && values[field] === 'WORLD')) throw new PanelRequestError('Panel request does not cover this country.', 'invalid');
+    const globalReader = parsed.data.section === 'food' && values[field] === 'WORLD'
+      || parsed.data.section === 'production' && field === 'iso2' && values[field] === '';
+    if (field in values && values[field] !== country && !globalReader) throw new PanelRequestError('Panel request does not cover this country.', 'invalid');
   }
   if (parsed.data.section === 'flows' && (iso2ToComtradeReporterCode(country) === null || Number(values.reporter_code) !== Number(iso2ToComtradeReporterCode(country)))) throw new PanelRequestError('Panel request does not cover this reporter.', 'invalid');
   if (parsed.data.section === 'tariffs' && (iso2ToUnCode(country) === null || Number(values.reporting_country) !== Number(iso2ToUnCode(country)))) throw new PanelRequestError('Panel request does not cover this reporter.', 'invalid');
@@ -120,13 +125,13 @@ export async function authorizePanelRead(context: McpAuthContext, pipeline: Pipe
   let cached: unknown;
   try {
     const results = await pipeline([['GET', key], ['GET', cacheKey]], 5_000, true);
-    if (!results || results.length !== 2 || results.some(item => item.error) || results[0]?.result !== 'paid') throw new Error('Missing paid admission');
+    if (!results || results.length !== 2 || results.some(item => item.error) || results[0]?.result !== String(scope.expires)) throw new Error('Missing paid admission');
     const raw = results[1]?.result;
     if (typeof raw === 'string' && encoder.encode(raw).length <= MAX_CACHED_BYTES) cached = JSON.parse(raw);
   } catch { throw new PanelRequestError('Panel cache is temporarily unavailable.', 'backend'); }
   const ttl = Math.max(1, Math.ceil((scope.expires - now) / 1000));
   if (cached === undefined) {
-    const [status] = await tuple(pipeline, ['EVAL', PANEL_REQUEST_READ_SCRIPT, 2, key, `${key}:reads`, PANEL_READ_LIMIT, ttl]);
+    const [status] = await tuple(pipeline, ['EVAL', PANEL_REQUEST_READ_SCRIPT, 2, key, `${key}:reads`, PANEL_READ_LIMIT, ttl, scope.expires]);
     if (status === 0) throw new PanelRequestError('This panel reached its read budget. Refresh to start another request.', 'reads', undefined, ttl);
     if (status !== 1) throw new PanelRequestError('Panel admission is unavailable.', 'backend');
   }

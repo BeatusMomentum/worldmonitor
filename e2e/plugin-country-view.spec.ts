@@ -7,7 +7,7 @@ const root = process.cwd();
 test.use({ serviceWorkers: 'block' });
 
 type HostCall = { name: string; arguments: Record<string, unknown> };
-async function installCountryHost(page: Page, fullExposure = false) {
+async function installCountryHost(page: Page, fullExposure = false, initialOpenError?: string) {
   const calls: HostCall[] = [];
   const requestNames = new Map<number, string>();
   const cancelled: string[] = [];
@@ -48,6 +48,7 @@ async function installCountryHost(page: Page, fullExposure = false) {
     if (params.name === 'get_country_coverage' && delayCoverage) await coverageDelayed;
     if (params.name === 'get_country_coverage') return { structuredContent: { countryCode: code, countryName: code, generatedAt: '2026-10-01T15:00:00Z', degraded: false, headlines: [{ title: `Controlled ${code} source article`, source: 'Fixture publisher', url: 'https://example.com/evidence', publishedAtMs: 1790863200000 }], events: [], sources: [{ source: 'news', state: 'ready' }, { source: 'events', state: 'unavailable' }] } };
     if (params.name === 'open_country_brief') {
+      if (initialOpenError) return { isError: true, content: [{ type: 'text', text: initialOpenError }] };
       if (code === 'US' && delayAdmission) await admissionDelayed;
       if (quotaExceeded) throw new Error('Daily MCP quota exceeded (50 requests/day). Resets at next UTC midnight.');
       const reused = admitted.has(code) && !args.refresh;
@@ -257,4 +258,13 @@ test('country navigation and repeated questions reuse reads and show a quota den
   await expect(frame.locator('[data-brief-section=facts]')).toContainText('Washington, D.C.');
   expect(host.calls).toHaveLength(beforeDenied + 1);
   await writeFile(info.outputPath('country-request-cost.json'), JSON.stringify({ measuredSurface: 'built opaque iframe, controlled host', initialHostCalls: initialReads, initialDailyUnits: 1, initialMs: Math.round(initialMs), repeatedCountryAndTopicsCalls: 0, navigationBackHostCalls: returnCalls, navigationBackDailyUnits: 0, refreshHostCalls: refreshCalls, refreshDailyUnits: 1, deniedRefreshSectionCalls: 0, deniedRefreshDailyUnits: 0 }, null, 2));
+});
+
+test('an initial host open denial displays its reason without section loads', async ({ page }) => {
+  const host = await installCountryHost(page, false, 'Daily MCP quota exceeded (50 requests/day). Resets at next UTC midnight.');
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#countryStatus')).toContainText('Daily MCP quota exceeded');
+  await expect(frame.locator('#countryStatus')).toContainText('UTC midnight');
+  await expect(frame.locator('#countryUsage')).toBeHidden();
+  expect(host.calls.map(call => call.name)).toEqual(['open_country_brief']);
 });

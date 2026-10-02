@@ -28,7 +28,7 @@ country and five-minute bucket share an atomic admission, including reuse of
 the preceding still-valid bucket. A normal admission
 expires in five to ten minutes, clipped at UTC midnight. Explicit refresh uses
 a new request ID and a five-minute admission; retrying the same ID does not
-charge again.
+charge again or extend the original expiry.
 
 Receipts bind the user, country, environment, window and expiry. Redis must
 prove the admission was paid. Current subscription checks remain in place,
@@ -62,7 +62,7 @@ result.
 
 The six calls on return retry deliberately unavailable/locked sections.
 Loaded assessment, coverage and ready sections are reused. The controlled
-initial render took 702 ms in the final recorded run; fixture scheduling and local
+initial render took 808 ms in the final recorded run; fixture scheduling and local
 rendering dominate this timing. Applying the previous one-unit-per-call rule
 to the same 43 calls would consume 43 units. That comparison is calculated,
 not an observed run of the previous implementation.

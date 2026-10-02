@@ -269,7 +269,12 @@ async function mountCountryView(): Promise<void> {
     if (message.method === 'ui/notifications/tool-input') hostInput = message.params?.arguments ?? message.params;
     if (message.method === 'ui/notifications/tool-result') {
       const result = message.params?.result ?? message.params;
-      const data = result?.isError ? undefined : result?.structuredContent;
+      if (result?.isError) {
+        hostInput = undefined;
+        status.textContent = result.content?.find((item: { type: string; text?: string }) => item.type === 'text')?.text ?? 'WorldMonitor could not open this country brief.';
+        return;
+      }
+      const data = result?.structuredContent;
       if (data?.countryCode) {
         const requested = countryViewSchema.safeParse(hostInput);
         hostInput = undefined;
