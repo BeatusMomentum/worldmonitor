@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor no es un Palantir de código abierto",
       "asOf": "A partir del {{date}}",
       "whatIsTitle": "¿Qué es World Monitor?",
-      "whatIsBody": "World Monitor es un dashboard gratuito y de código abierto (AGPL-3.0) utilizado por más de 2M de personas. Transmite {{feeds}} feeds de noticias e OSINT de {{providers}} proveedores atribuidos a un único mapa mundial en vivo con {{mapLayers}} tipos de capas de mapa, abarcando geopolítica, mercados, transporte marítimo, aviación y ciberseguridad. Las correlaciona para que los eventos convergentes emerjan antes de los titulares. Cada dato está documentado en su fuente y cada método está documentado."
+      "whatIsBody": "World Monitor es un panel de control gratuito ($0) y de código abierto (AGPL-3.0) utilizado por más de 2M de personas. Transmite {{feeds}} fuentes de noticias y OSINT de {{providers}} proveedores atribuidos en un único mapa mundial en directo con {{mapLayers}} tipos de capas de mapa, que abarcan geopolítica, mercados, transporte marítimo, aviación y ciberseguridad. Las correlaciona para que los eventos convergentes salgan a la luz antes de los titulares. Cada dato está documentado en su fuente y cada método está documentado."
     },
     "live": {
       "eyebrow": "En vivo ahora mismo",
@@ -609,7 +609,7 @@
       "n1Title": "Seguimiento satelital",
       "n1Desc": "Posiciones orbitales en vivo calculadas en el navegador con SGP4 y actualizadas cada 3 segundos — satélites militares y de observación terrestre de CelesTrak, actualizados cada 2 horas.",
       "n2Title": "Zonas de interferencia GPS",
-      "n2Desc": "Mapa diario de interferencia RF según reportes de aeronaves: se marcan las celdas donde al menos el 2% de las aeronaves detectan GPS degradado, y se resaltan las superiores al 10%.",
+      "n2Desc": "Mapa diario de interferencia de RF a partir de reportes de aeronaves: se marcan las celdas donde al menos el 2% de las aeronaves detectan GPS degradado, por encima del 10% se marca como alto. Las celdas son hexágonos reconstruidos una vez al día a partir de esos reportes, por lo que el mapa muestra dónde los vuelos encontraron interferencia o suplantación durante el último día, no en este momento.",
       "n3Title": "Inteligencia de tránsito en cuellos de botella",
       "n3Desc": "Conteos de buques a través de Hormuz, Suez, Bab el-Mandeb y 10 estrechos más — con puntuación de disrupciones.",
       "n4Title": "Mapa de centros de datos de IA",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Para creadores y agentes de IA",
       "title": "¿Cómo construyo sobre World Monitor desde mi propio stack?",
-      "sub": "Todo en el mapa también es una API. Intégralo en Claude mediante MCP con {{mcpTools}} herramientas en vivo, llama a los endpoints REST desde cualquier lugar, o instala un cliente nativo para Python, Ruby, Go o JavaScript — tu código investiga con datos en vivo en lugar de memorias de datos de entrenamiento.",
+      "sub": "Todo en el mapa también es una API. Intégrala en Claude a través de MCP con {{mcpTools}} herramientas en directo, llama a los endpoints REST desde cualquier lugar, o instala un cliente nativo para Python, Ruby, Go o JavaScript — tu código investiga con datos en directo en lugar de recuerdos de datos de entrenamiento. El acceso a MCP viene con Pro, desde ${{proMonthlyPrice}}/mes.",
       "b1": "{{mcpTools}} herramientas MCP — puntuaciones de riesgo, puntos de estrangulamiento, conflictos, mercados, informes",
       "b2": "API REST documentada — una especificación OpenAPI 3.1, una clave",
       "b3": "SDKs oficiales en npm, PyPI, RubyGems y Go — sin dependencias, MCP-first",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "¿Cómo empiezo a monitorear el mapa mundial?",
-      "subtitle": "Abre worldmonitor.app/dashboard en cualquier navegador, sin cuenta: {{mapLayers}} tipos de capas de mapa, todas excepto Resilience gratuitas para activar. Haz clic en cualquier país para su informe, o presiona ⌘K / Ctrl-K para la paleta de comandos. El mapa ha seguido actualizándose mientras leías esta página.",
+      "subtitle": "Abre worldmonitor.app/dashboard en cualquier navegador por $0, sin cuenta: {{mapLayers}} tipos de capas de mapa, todos excepto Resilience son gratuitos para activar. Haz clic en cualquier país para ver su informe, o presiona ⌘K / Ctrl-K para la paleta de comandos. El mapa ha seguido actualizándose mientras leías esta página.",
       "button": "Encuéntralo primero",
       "note": "Gratis · Sin registro · Se carga en segundos",
       "secondary": "O ve los planes Pro →"

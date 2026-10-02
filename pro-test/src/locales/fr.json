@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor n'est pas un Palantir open-source",
       "asOf": "Au {{date}}",
       "whatIsTitle": "Qu'est-ce que World Monitor ?",
-      "whatIsBody": "World Monitor est un dashboard gratuit et open-source (AGPL-3.0) utilisé par plus de 2M de personnes. Il diffuse {{feeds}} flux d'actualités et de renseignement d'origine provenant de {{providers}} fournisseurs attribués sur une seule carte mondiale en direct avec {{mapLayers}} types de couches cartographiques, couvrant la géopolitique, les marchés, le transport maritime, l'aviation et la cyber. Il les met en corrélation pour que les événements convergents émergent avant que les gros titres ne les rapportent. Chaque donnée est sourcée et chaque méthode documentée."
+      "whatIsBody": "World Monitor est un tableau de bord gratuit ($0), open-source (AGPL-3.0) utilisé par 2M+ personnes. Il diffuse {{feeds}} fils d'actualités et fils OSINT de {{providers}} fournisseurs attribués sur une carte mondiale en direct unique avec {{mapLayers}} types de couches cartographiques, couvrant la géopolitique, les marchés, le transport maritime, l'aviation et la cybersécurité. Il les corrèle pour que les événements convergents s'affichent avant les gros titres. Chaque chiffre est sourcé et chaque méthode documentée."
     },
     "live": {
       "eyebrow": "En direct maintenant",
@@ -609,7 +609,7 @@
       "n1Title": "Suivi satellitaire",
       "n1Desc": "Positions orbitales live calculées dans le navigateur avec SGP4 et mises à jour toutes les 3 secondes — satellites militaires et d'observation terrestre de CelesTrak, actualisés toutes les 2 heures.",
       "n2Title": "Zones de brouillage GPS",
-      "n2Desc": "Carte quotidienne des interférences RF d'après les rapports d'aéronefs : les cellules où au moins 2 % des aéronefs détectent un GPS dégradé sont signalées, plus de 10 % marquées comme élevées.",
+      "n2Desc": "Carte quotidienne des interférences RF à partir des rapports d'aéronefs : les cellules où au moins 2% des aéronefs connaissent une dégradation du GPS sont signalées, au-delà de 10% marquées comme élevées. Les cellules sont des hexagones reconstruits une fois par jour à partir de ces rapports, la carte indique donc où les vols ont rencontré du brouillage ou du spoofing GPS au cours du dernier jour, pas à cette minute.",
       "n3Title": "Intelligence de transit des points d'étranglement",
       "n3Desc": "Comptages de navires à travers Hormuz, Suez, Bab el-Mandeb et 10 autres détroits — avec notation des perturbations.",
       "n4Title": "Carte des centres de données IA",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Pour les créateurs et agents IA",
       "title": "Comment construire sur World Monitor à partir de ma propre pile technologique ?",
-      "sub": "Tout ce qui figure sur la carte est également une API. Intégrez-la à Claude via MCP avec {{mcpTools}} outils actifs, appelez les points de terminaison REST de n'importe où, ou installez un client natif pour Python, Ruby, Go ou JavaScript — votre code fait de la recherche avec des données en direct au lieu de s'appuyer sur des souvenirs de données d'entraînement.",
+      "sub": "Tout ce qui figure sur la carte est aussi une API. Connectez-la à Claude via MCP avec {{mcpTools}} outils en direct, appelez les points de terminaison REST de n'importe où, ou installez un client natif pour Python, Ruby, Go ou JavaScript — votre code fait de la recherche avec des données en direct au lieu des souvenirs de données d'entraînement. L'accès MCP est inclus avec Pro, à partir de ${{proMonthlyPrice}}/mois.",
       "b1": "{{mcpTools}} outils MCP — scores de risque, points d'étranglement, conflits, marchés, briefs",
       "b2": "API REST documentée — une spec OpenAPI 3.1, une clé",
       "b3": "SDK officiels sur npm, PyPI, RubyGems et Go — zéro dépendance, MCP-first",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Comment commencer à surveiller la carte mondiale ?",
-      "subtitle": "Ouvrez worldmonitor.app/dashboard dans n'importe quel navigateur, sans compte : {{mapLayers}} types de couches cartographiques, tous gratuits sauf Résilience pour basculer. Cliquez sur un pays pour son briefing, ou appuyez sur ⌘K / Ctrl-K pour la palette de commandes. La carte n'a cessé de se mettre à jour pendant que vous lisiez cette page.",
+      "subtitle": "Ouvrez worldmonitor.app/dashboard dans n'importe quel navigateur pour $0, sans compte : {{mapLayers}} types de couches cartographiques, tous gratuits sauf Resilience. Cliquez sur n'importe quel pays pour son briefing, ou appuyez sur ⌘K / Ctrl-K pour la palette de commandes. La carte a continué à se mettre à jour pendant que vous lisiez cette page.",
       "button": "Trouvez-le en premier",
       "note": "Gratuit · Pas d'inscription · Se charge en secondes",
       "secondary": "Ou voir les forfaits Pro →"

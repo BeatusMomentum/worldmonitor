@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor nije otvoreni kod Palantira",
       "asOf": "Stanje od {{date}}",
       "whatIsTitle": "Što je World Monitor?",
-      "whatIsBody": "World Monitor je besplatna, open-source (AGPL-3.0) dashboard koju koristi 2M+ ljudi. Emitira {{feeds}} vijesti i OSINT izvora od {{providers}} atribuiranih pružatelja na jednu živu svjetsku kartu s {{mapLayers}} tipova slojeva mape, pokrivajući geopolitiku, tržišta, brodarstvo, zrakoplovstvo i cyber. Korelira ih kako bi se konvergirajući događaji pojavili prije nego što se pojave u naslovima. Svaki podatak je izvoren i svaka metoda dokumentirana."
+      "whatIsBody": "World Monitor je besplatna ($0), open-source (AGPL-3.0) kontrolna ploča koju koristi 2M+ osoba. Streamira {{feeds}} vijesti i OSINT izvore od {{providers}} atribuiranih pružatelja na jednu živu svjetsku kartu s {{mapLayers}} vrsta slojeva karte, pokrivajući geopolitiku, tržišta, brodarstvo, zrakoplovstvo i cyber sigurnost. Usklađuje ih tako da se konvergentni eventi pojave prije naslova. Svaki podatak je dokumentiran i svaka metoda izvora je navedena."
     },
     "live": {
       "eyebrow": "Uživo sada",
@@ -609,7 +609,7 @@
       "n1Title": "Praćenje satelita",
       "n1Desc": "Položaji orbita izračunati u pregledniku s SGP4 i ažurirani svakih 3 sekunde — vojni i sateliti za promatranje Zemlje iz CelesTraka, osvježeni svakih 2 sata.",
       "n2Title": "Zone ometanja GPS-a",
-      "n2Desc": "Dnevna karta RF-smetnji iz izvještaja zrakoplova: ćelije gdje najmanje 2% zrakoplova vidi degradirani GPS su označene, preko 10% označeno kao visoko.",
+      "n2Desc": "Dnevna RF-interferentna karta iz izvještaja zrakoplova: ćelije gdje najmanje 2% zrakoplova vidi degradirano GPS označene su, preko 10% označene kao visoke. Ćelije su šesterokuti obnovljeni jednom dnevno iz tih izvještaja, pa karta prikazuje gdje su letovi susreli ometanje ili spoofing tijekom posljednjeg dana, ne ovog trenutka.",
       "n3Title": "Intel uskih grla u tranzitu",
       "n3Desc": "Broj brodova kroz Hormuz, Suez, Bab el-Mandeb i 10 drugih tjesnaca — s bodovanjem smetnji.",
       "n4Title": "Mapa AI podatkovnih centara",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Za graditelje i AI agente",
       "title": "Kako mogu graditi na World Monitor iz vlastitog stacka?",
-      "sub": "Sve na karti je dostupno kao API. Povežite to s Claudeom preko MCP-a sa {{mcpTools}} živih alata, pozovite REST krajnje točke odavde, ili instalirajte nativnog klijenta za Python, Ruby, Go ili JavaScript — vaš kod provodi istraživanja s aktualnim podacima umjesto memorija iz podataka treniranja.",
+      "sub": "Sve na karti dostupno je i kao API. Povežite ga s Claudeom preko MCP-a s {{mcpTools}} živih alata, pozovite REST krajnje točke s bilo kojeg mjesta ili instalirajte nativni klijent za Python, Ruby, Go ili JavaScript — vaš kod istražuje s živim podacima umjesto sjećanja iz podataka za treniranje. MCP pristup dolazi s Pro verzijom, od ${{proMonthlyPrice}}/mj.",
       "b1": "{{mcpTools}} MCP alata — ocjene rizika, uska grla, konflikti, tržišta, izvještaji",
       "b2": "Dokumentirani REST API — jedna OpenAPI 3.1 specifikacija, jedan ključ",
       "b3": "Službeni SDK-ovi na npm, PyPI, RubyGems i Go — bez ovisnosti, MCP-prvi",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Kako početi pratiti mapu svijeta?",
-      "subtitle": "Otvorite worldmonitor.app/dashboard u bilo kojem pregledniku, bez računa: {{mapLayers}} tipova kartnih slojeva, svaki osim Otpornosti slobodan za uključivanje. Kliknite bilo koju državu za njezin izvještaj, ili pritisnite ⌘K / Ctrl-K za paletu naredbi. Karta se nastavila ažurirati dok ste čitali ovu stranicu.",
+      "subtitle": "Otvorite worldmonitor.app/dashboard u bilo kojem pregledniku za $0, bez računa: {{mapLayers}} vrsta slojeva karte, sve osim Resilience-a besplatno za uključivanje. Kliknite bilo koju zemlju za njen pregled, ili pritisnite ⌘K / Ctrl-K za palettu naredbi. Karta je nastavila ažurirati se tijekom čitanja ove stranice.",
       "button": "Pronađi ga prvi",
       "note": "Besplatno · Bez prijave · Učitava se u sekundama",
       "secondary": "Ili pogledaj Pro planove →"

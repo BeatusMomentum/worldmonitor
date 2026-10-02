@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor nie jest open-source'owym Palantir",
       "asOf": "Stan na {{date}}",
       "whatIsTitle": "Czym jest World Monitor?",
-      "whatIsBody": "World Monitor to darmowy, otwartoźródłowy (AGPL-3.0) dashboard używany przez 2M+ użytkowników. Przesyła {{feeds}} strumieni wiadomości i OSINT z {{providers}} przypisanych dostawców na jedną żywą mapę świata z {{mapLayers}} typami warstw mapy, obejmującą geopolitykę, rynki, transport morski, lotnictwo i cyberbezpieczeństwo. Koreluje je tak, że zbiegające się wydarzenia wyskakują przed nagłówkami. Każda liczba ma źródło, a każda metoda jest udokumentowana."
+      "whatIsBody": "World Monitor to darmowy ($0), open-source'owy (AGPL-3.0) dashboard używany przez 2M+ osób. Transmituje {{feeds}} kanałów wiadomości i OSINT ze {{providers}} przypisanych dostawców na jedną żywą mapę świata z {{mapLayers}} typami warstw mapy, obejmującymi geopolitykę, rynki, transport morski, lotnictwo i cyber. Koreluje je, aby zbieżne zdarzenia wyświetliły się przed nagłówkami. Każda liczba jest udokumentowana wraz ze źródłem i metodą."
     },
     "live": {
       "eyebrow": "Na żywo teraz",
@@ -609,7 +609,7 @@
       "n1Title": "Śledzenie satelitów",
       "n1Desc": "Pozycje orbitalne na żywo obliczane w przeglądarce za pomocą SGP4 i aktualizowane co 3 sekundy — satelity wojskowe i obserwacyjne Ziemi z CelesTrak, odświeżane co 2 godziny.",
       "n2Title": "Strefy zakłóceń GPS",
-      "n2Desc": "Codzienna mapa zakłóceń RF z raportów samolotów: komórki, w których co najmniej 2% samolotów obserwuje degradację GPS, są oznaczone, powyżej 10% oznaczone jako wysokie.",
+      "n2Desc": "Codzienna mapa zakłóceń RF z raportów samolotów: komórki, w których co najmniej 2% samolotów zanotuje degradację GPS, są oznaczone, powyżej 10% oznaczone jako wysokie. Komórki to sześciokąty przebudowywane raz dziennie z tych raportów, więc mapa pokazuje, gdzie loty napotkały zagłuszanie lub spoofing w ciągu ostatniego dnia, nie w tej chwili.",
       "n3Title": "Inteligencja tranzytowa przez punkty krytyczne",
       "n3Desc": "Liczba statków przechodzących przez Hormuz, Suez, Bab el-Mandeb i 10 kolejnych cieśnin — z oceną zakłóceń.",
       "n4Title": "Mapa centrów danych AI",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Dla twórców i agentów AI",
       "title": "Jak budować World Monitor z mojego własnego stosu?",
-      "sub": "Wszystko na mapie to także API. Podłącz do Claude'a za pośrednictwem MCP z {{mcpTools}} narzędziami na żywo, wywoływaj punkty końcowe REST z dowolnego miejsca lub zainstaluj natywnego klienta dla Pythona, Ruby'ego, Go lub JavaScriptu — Twój kod prowadzi badania na żywych danych zamiast wspomnień z danych treningowych.",
+      "sub": "Wszystko na mapie to także API. Podłącz je do Claude'a przez MCP z {{mcpTools}} narzędziami na żywo, wywołaj endpointy REST z dowolnego miejsca lub zainstaluj natywny klient dla Python, Ruby, Go lub JavaScript — twój kod prowadzi badania na danych na żywo zamiast wspomnień z danych treningowych. Dostęp MCP jest dołączony do Pro, od ${{proMonthlyPrice}}/mies.",
       "b1": "{{mcpTools}} narzędzi MCP — wyniki ryzyka, wąskie gardła, konflikty, rynki, briefingi",
       "b2": "Udokumentowany REST API — jedna specyfikacja OpenAPI 3.1, jeden klucz",
       "b3": "Oficjalne SDK na npm, PyPI, RubyGems i Go — bez zależności, MCP-first",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Jak zacząć obserwować mapę świata?",
-      "subtitle": "Otwórz worldmonitor.app/dashboard w dowolnej przeglądarce bez konta: {{mapLayers}} typy warstw mapy, każda oprócz Odporności dostępna bezpłatnie do włączenia. Kliknij dowolny kraj, aby zobaczyć jego briefing, lub naciśnij ⌘K / Ctrl-K, aby otworzyć paletę poleceń. Mapa była aktualizowana w trakcie czytania tej strony.",
+      "subtitle": "Otwórz worldmonitor.app/dashboard w dowolnej przeglądarce za $0, bez konta: {{mapLayers}} typy warstw mapy, wszystkie poza Resilience darmowe do włączenia. Kliknij dowolny kraj, aby zobaczyć jego briefing, lub naciśnij ⌘K / Ctrl-K, aby otworzyć paletę poleceń. Mapa nie przestawała się aktualizować, podczas gdy czytałeś tę stronę.",
       "button": "Znajdź go pierwszy",
       "note": "Bezpłatne · Bez rejestracji · Ładuje się w sekundy",
       "secondary": "Lub zobacz plany Pro →"

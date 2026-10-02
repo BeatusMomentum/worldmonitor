@@ -229,7 +229,12 @@ emit('pro-test/src/generated/hero-stats.json', json(facts.heroProofStats));
 // Same rationale for the "Under the hood" band numerals that Depth.tsx renders.
 emit('pro-test/src/generated/depth-stats.json', json(facts.depthProofStats));
 // Welcome copy figures that are not band slots (the first-five tenth card).
-emit('pro-test/src/generated/copy-stats.json', json(defaultOnLayerStats(read('src/config/variants/full.ts'), getCompleteLayerCatalogKeys('full'))));
+const proMonthlyPrice = plans.find((plan) => plan.planKey === 'pro_monthly')?.price;
+if (typeof proMonthlyPrice !== 'number' || proMonthlyPrice <= 0) throw new Error(`pro_monthly price must be a positive number, got ${proMonthlyPrice}`);
+emit('pro-test/src/generated/copy-stats.json', json({
+  ...defaultOnLayerStats(read('src/config/variants/full.ts'), getCompleteLayerCatalogKeys('full')),
+  proMonthlyPrice,
+}));
 emit('shared/product-catalog.generated.json', json(catalogBundle));
 emit('scripts/shared/product-catalog.generated.json', json(catalogBundle));
 

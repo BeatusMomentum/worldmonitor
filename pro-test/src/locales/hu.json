@@ -485,7 +485,7 @@
       "positioningLink": "A WorldMonitor nem nyílt forráskódú Palantir",
       "asOf": "Állapot: {{date}}",
       "whatIsTitle": "Mi az a World Monitor?",
-      "whatIsBody": "A World Monitor egy ingyenes, nyílt forráskódú (AGPL-3.0) dashboard, amelyet 2M+ felhasználó használ. {{feeds}} hír- és OSINT-forrást streamel {{providers}} attribúált szolgáltatótól egyetlen élő világtérképre {{mapLayers}} térképréteg-típussal, amely geopolitikát, piacokat, hajózást, légiközlekedést és kibernetikát ölel fel. Összefüggéseket azonosít, így a konvergáló események a hírek előtt kerülnek felszínre. Minden adat forrásos és minden módszer dokumentált."
+      "whatIsBody": "A World Monitor egy ingyenes ($0), nyílt forráskódú (AGPL-3.0) műszerfal, amelyet 2M+ ember használ. {{feeds}} hír- és OSINT-forrást közvetít {{providers}} attribútummal ellátott szolgáltatótól egyetlen élő világtérképre {{mapLayers}} térképréteg-típussal, amely geopolitikát, piacokat, hajózást, repülést és kiberterületet fed le. Korrelálja őket, így az összefutó események a hírcímek előtt kerülnek felszínre. Minden adat forrásolt és minden módszer dokumentált."
     },
     "live": {
       "eyebrow": "Most élő",
@@ -609,7 +609,7 @@
       "n1Title": "Műholdkövetés",
       "n1Desc": "Élő pályapozíciók böngészőben számítva SGP4-gyel, 3 másodpercenként frissítve — katonai és Föld-megfigyelő műholdak a CelesTrakról, 2 óránként frissítve.",
       "n2Title": "GPS-zavarzási zónák",
-      "n2Desc": "Napi RF-interferencia térkép repülőgépi jelentésekből: azok a celláink jelölve, ahol a repülőgépek legalább 2%-a gyengült GPS-t észlel, 10% felett magasként jelölve.",
+      "n2Desc": "Napi RF-zavarási térkép légijármű-jelentésekből: azok a cellák, ahol a repülőgépek legalább 2%-a romlott GPS-t észlel, jelölést kapnak, a 10% felettiek pedig magas jelölést kapnak. A cellák hatszögek, amelyeket naponta egyszer építenek újra ezekből a jelentésekből, így a térkép azt mutatja, hol találkoztak a járatok zavarójelekkel vagy spoofinggal az elmúlt napon, nem ebben a percben.",
       "n3Title": "Szűk keresztmetszeti szállítási információ",
       "n3Desc": "Hajók száma a Hormuz, Szuez, Bab el-Mandeb és további 10 szoros között — zavarzási pontokkal.",
       "n4Title": "AI adatközpont térkép",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "Építőknek és AI ágenseknek",
       "title": "Hogyan építhetek rá a World Monitor-ra a saját stack-ből?",
-      "sub": "A térképen lévő minden eszköz API-ként is elérhető. Kapcsold be a Claude-ba MCP-n keresztül {{mcpTools}} élő eszközzel, hívd meg a REST végpontokat bárhonnan, vagy telepítsd a natív klienst Python, Ruby, Go vagy JavaScript számára — a kódod élő adatokkal kutat ahelyett, hogy betanítási adatok memóriáját használná.",
+      "sub": "A térképen minden elem API is. Csatornázza az MCP-n keresztül Claude-ba {{mcpTools}} élő eszközzel, hívja meg a REST-végpontokat bárhonnan, vagy telepítsen natív klienst Python, Ruby, Go vagy JavaScript számára — a kód élő adatokkal kutat a képzési adatok memóriái helyett. Az MCP-hozzáférés a Pro csomaggal jár, ${{proMonthlyPrice}}/hó-tól.",
       "b1": "{{mcpTools}} MCP-eszköz — kockázati pontszámok, szűk keresztmetszetek, konfliktusok, piacok, rövid helyzet­jelentések",
       "b2": "Dokumentált REST API — egy OpenAPI 3.1 specifikáció, egy kulcs",
       "b3": "Hivatalos SDK-k az npm-en, PyPI-n, RubyGemsen és Go-n — zéró függőség, MCP-első",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "Hogyan kezdhetek a világtérkép figyelésbe?",
-      "subtitle": "Nyisd meg a worldmonitor.app/dashboard oldalt bármilyen böngészőben, regisztráció nélkül: {{mapLayers}} térképréteg-típus, a Rugalmasság kivételével minden ingyenes. Kattints bármely országra, hogy megkapd az összefoglalóját, vagy nyomj ⌘K / Ctrl-K billentyűkombinációt a parancspalettához. A térkép folyamatosan frissül, amíg ezt az oldalt olvasod.",
+      "subtitle": "Nyissa meg a worldmonitor.app/dashboard webhelyet bármilyen böngészőben 0 dollárért, fiók nélkül: {{mapLayers}} térképréteg-típus, minden ingyenes a Resilience kivételével. Kattintson bármilyen országra annak rövid jelentéséhez, vagy nyomja meg a ⌘K / Ctrl-K billentyűkombinációt a parancspalettához. A térkép továbbra is frissült, amíg olvasta ezt az oldalt.",
       "button": "Találd meg először",
       "note": "Ingyenes · Nincs regisztráció · Másodpercekben betöltődik",
       "secondary": "Vagy tekintsd meg a Pro csomagokat →"

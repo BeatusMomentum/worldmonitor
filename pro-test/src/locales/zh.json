@@ -485,7 +485,7 @@
       "positioningLink": "WorldMonitor 不是开源的 Palantir\t",
       "asOf": "截至{{date}}",
       "whatIsTitle": "World Monitor 是什么？",
-      "whatIsBody": "World Monitor 是一个免费、开源（AGPL-3.0）的仪表盘，由 200 万+ 用户使用。它将来自 {{providers}} 个可溯源提供方的 {{feeds}} 条新闻和 OSINT 动态流实时展示在一张世界地图上，支持 {{mapLayers}} 种地图图层类型，覆盖地缘政治、市场、海运、航空和网络安全领域。系统会关联这些数据，使相关事件在上头条前就浮现出来。每项数据都有来源，每套方法都有文档记录。"
+      "whatIsBody": "World Monitor 是一款免费（$0）、开源（AGPL-3.0）的仪表板，供 200 多万人使用。它将来自 {{providers}} 个归属提供商的 {{feeds}} 条新闻和 OSINT 源流式传输到一张实时世界地图上，包括 {{mapLayers}} 种地图图层类型，涵盖地缘政治、市场、海运、航空和网络安全。它关联这些数据，使汇聚事件在登上新闻头条前就浮现出来。每个数据都有溯源，每种方法都有文档记录。"
     },
     "live": {
       "eyebrow": "实时在线\t",
@@ -609,7 +609,7 @@
       "n1Title": "卫星追踪",
       "n1Desc": "使用SGP4在浏览器中计算的实时轨道位置，每3秒更新一次——来自CelesTrak的军事和地球观测卫星，每2小时刷新一次。",
       "n2Title": "GPS干扰区域",
-      "n2Desc": "来自飞机报告的每日射频干扰地图：至少2%的飞机发现GPS降级的区域会被标记，超过10%的区域标记为高。",
+      "n2Desc": "来自飞行报告的每日射频干扰地图：至少 2% 的飞行器出现 GPS 信号衰减的区域会被标记，超过 10% 的区域会标记为高风险。这些区域是根据这些报告每天重建一次的六边形网格，因此地图显示的是过去一天内飞行遭遇干扰或欺骗的位置，而非此刻情况。",
       "n3Title": "卡点运输情报",
       "n3Desc": "通过霍尔木兹海峡、苏伊士运河、曼德海峡及另外10个海峡的船舶计数——含中断评分。",
       "n4Title": "AI数据中心地图",
@@ -625,7 +625,7 @@
     "agents": {
       "eyebrow": "为构建者与AI代理",
       "title": "我如何从自己的堆栈在 World Monitor 上构建？",
-      "sub": "地图上的所有内容都可通过 API 调用。使用 MCP 将其接入 Claude，配备 {{mcpTools}} 个实时工具，从任何地方调用 REST 端点，或为 Python、Ruby、Go 或 JavaScript 安装本地客户端 — 你的代码可用实时数据进行研究，而不是依赖训练数据的记忆。",
+      "sub": "地图上的所有内容都可通过 API 访问。通过 MCP 将其接入 Claude，使用 {{mcpTools}} 个实时工具，从任何地方调用 REST 端点，或为 Python、Ruby、Go 或 JavaScript 安装原生客户端——你的代码可用实时数据而非训练数据进行研究。MCP 访问权限包含在 Pro 中，售价 ${{proMonthlyPrice}}/月起。",
       "b1": "{{mcpTools}} 个 MCP 工具 — 风险评分、咽喉点、冲突、市场、情报简报",
       "b2": "文档化REST API——一份OpenAPI 3.1规范，一个密钥",
       "b3": "npm、PyPI、RubyGems和Go上的官方SDK——零依赖、MCP优先",
@@ -694,7 +694,7 @@
     },
     "cta": {
       "title": "我如何开始监控世界地图？",
-      "subtitle": "在任何浏览器中打开 worldmonitor.app/dashboard，无需账户：{{mapLayers}} 个地图图层类型，除复原力外全部可免费切换。点击任何国家查看其情报简报，或按 ⌘K / Ctrl-K 打开命令面板。你阅读此页面时地图一直在更新。",
+      "subtitle": "在任何浏览器中打开 worldmonitor.app/dashboard，无需账户，费用为 $0：{{mapLayers}} 种地图图层类型，除 Resilience 外全部免费切换。点击任何国家查看其简报，或按 ⌘K / Ctrl-K 打开命令面板。你阅读本页面的过程中，地图一直在更新。",
       "button": "率先找到它",
       "note": "免费 · 无需注册 · 秒速加载",
       "secondary": "或查看 Pro 计划 →"
