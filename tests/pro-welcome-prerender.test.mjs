@@ -28,6 +28,54 @@ const welcomeJsonLdBlocks = () =>
 const skip = shouldSkipProBuiltOutput();
 guardProBuiltOutput();
 
+// Index scanners rather than regex replacement for reading section text. The
+// input is our own build output, but a single-pass `.replace` can leave a
+// partial tag behind (CodeQL js/incomplete-multi-character-sanitization) and a
+// case-sensitive `<script` pattern misses `<SCRIPT>` (js/bad-tag-filter).
+
+// Drop every <script>/<style> element (any case, closing tag may carry
+// whitespace or attributes). An unterminated element drops the rest.
+function withoutElements(html, tagNames) {
+  const lower = html.toLowerCase();
+  let out = '';
+  let i = 0;
+  while (i < html.length) {
+    const lt = lower.indexOf('<', i);
+    if (lt === -1) return out + html.slice(i);
+    const name = tagNames.find((tag) => lower.startsWith(tag, lt + 1));
+    if (!name) {
+      out += html.slice(i, lt + 1);
+      i = lt + 1;
+      continue;
+    }
+    out += html.slice(i, lt);
+    const close = lower.indexOf(`</${name}`, lt + 1);
+    const end = close === -1 ? -1 : lower.indexOf('>', close);
+    if (end === -1) return out;
+    i = end + 1;
+  }
+  return out;
+}
+
+// Replace each `<...>` tag with `separator`, keeping text between tags. A `<`
+// with no later `>` (or an empty `<>`) stays literal, as with /<[^>]+>/g.
+function tagsToText(html, separator) {
+  let out = '';
+  let i = 0;
+  while (i < html.length) {
+    const lt = html.indexOf('<', i);
+    const gt = lt === -1 ? -1 : html.indexOf('>', lt + 1);
+    if (lt === -1 || gt === -1) return out + html.slice(i);
+    if (gt === lt + 1) {
+      out += html.slice(i, gt + 1);
+    } else {
+      out += html.slice(i, lt) + separator;
+    }
+    i = gt + 1;
+  }
+  return out;
+}
+
 const welcomeRoot = () => {
   const rootMatch = welcomeHtml().match(/<div id="root"(?<attrs>[^>]*)>(?<content>[\s\S]*?)<\/body>/);
   assert.ok(rootMatch?.groups, 'welcome page should contain #root before body close');
@@ -81,12 +129,12 @@ test('question-headed welcome passages state their own measured figures', { skip
 // count. Every H2 section, the noscript fallback included, must open with one.
 test('every H2 section states a figure within its first 60 words', { skip }, () => {
   const facts = proofFacts();
-  const html = welcomeHtml().replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
+  const html = withoutElements(welcomeHtml(), ['script', 'style']);
   const parts = html.split(/<h2[^>]*>([\s\S]*?)<\/h2>/);
   assert.ok(parts.length > 20, 'expected the welcome page H2 sections');
   for (let i = 1; i < parts.length; i += 2) {
-    const heading = parts[i].replace(/<[^>]+>/g, '').trim();
-    const opening = parts[i + 1].replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).slice(0, 60).join(' ');
+    const heading = tagsToText(parts[i], '').trim();
+    const opening = tagsToText(parts[i + 1], ' ').split(/\s+/).filter(Boolean).slice(0, 60).join(' ');
     assert.match(opening, /\d/, `"${heading}" opens without a figure: ${opening}`);
   }
   assert.match(welcomeHtml(), new RegExp(`${facts.feeds} news and OSINT feeds — onto one live map with ${facts.mapLayers} map layer types`));
