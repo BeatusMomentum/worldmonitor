@@ -116,7 +116,7 @@ function checkReadScope(name: string, args: Record<string, unknown>, country: st
       || parsed.data.section === 'production' && field === 'iso2' && values[field] === '';
     if (field in values && values[field] !== country && !globalReader) throw new PanelRequestError('Panel request does not cover this country.', 'invalid');
   }
-  if (['flights', 'vessels'].includes(parsed.data.section) && !countryActivityQueries(country).some(query => Object.entries(query).every(([key, value]) => values[key] === value))) throw new PanelRequestError('Panel request does not cover this activity viewport.', 'invalid');
+  if (parsed.data.section === 'flights' && !countryActivityQueries(country).some(query => Object.entries(query).every(([key, value]) => values[key] === value))) throw new PanelRequestError('Panel request does not cover this activity viewport.', 'invalid');
   if (parsed.data.section === 'flows' && (iso2ToComtradeReporterCode(country) === null || Number(values.reporter_code) !== Number(iso2ToComtradeReporterCode(country)))) throw new PanelRequestError('Panel request does not cover this reporter.', 'invalid');
   if (parsed.data.section === 'tariffs' && (iso2ToUnCode(country) === null || Number(values.reporting_country) !== Number(iso2ToUnCode(country)))) throw new PanelRequestError('Panel request does not cover this reporter.', 'invalid');
   if (parsed.data.section === 'markets' && (values.category !== `country:${country}` || values.query !== '' || values.page_size !== 5)) throw new PanelRequestError('Panel request does not cover this market search.', 'invalid');

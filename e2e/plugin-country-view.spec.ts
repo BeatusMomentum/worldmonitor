@@ -131,6 +131,10 @@ test('country military observations render under one allocation and survive an A
   await frame.getByRole('button', { name: 'Security', exact: true }).click();
   const military = frame.locator('[data-brief-section=military]');
   await expect(military).toContainText('Flight counts include observations licensed');
+  await expect(military).toContainText('bounded to 1,500 reports');
+  const aisCalls = host.calls.filter(call => call.arguments.section === 'vessels');
+  expect(aisCalls).toHaveLength(1);
+  expect(aisCalls[0]?.arguments.arguments).toMatchObject({ ne_lat: 0, ne_lon: 0, sw_lat: 0, sw_lon: 0 });
   await expect(military.locator('.cdp-military-grid')).toContainText('Own Flights1');
   await expect(military.locator('.cdp-military-grid')).toContainText('Naval Vessels1');
   expect(host.admissions).toBe(1);

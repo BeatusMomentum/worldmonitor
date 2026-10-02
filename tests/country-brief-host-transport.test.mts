@@ -192,7 +192,7 @@ it('maps generated activity reads to bounded host readers without opening an unm
   const military = new MilitaryServiceClient('https://www.worldmonitor.app', { fetch });
   const maritime = new MaritimeServiceClient('https://www.worldmonitor.app', { fetch });
   await military.listMilitaryFlights({ neLat: 45, neLon: 0, swLat: 20, swLon: -80, pageSize: 100, cursor: 'next', operator: 'MILITARY_OPERATOR_UNSPECIFIED', aircraftType: 'MILITARY_AIRCRAFT_TYPE_UNSPECIFIED' });
-  await maritime.getVesselSnapshot({ neLat: 45, neLon: 0, swLat: 20, swLon: -80, includeCandidates: true, includeTankers: false });
+  await maritime.getVesselSnapshot({ neLat: 0, neLon: 0, swLat: 0, swLon: 0, includeCandidates: true, includeTankers: false });
   await military.getUSNIFleetReport({ forceRefresh: false });
   assert.deepEqual(calls.map(call => call.section), ['flights', 'vessels', 'fleet']);
   assert.equal(calls[0]!.arguments.ne_lon, 0);

@@ -111,11 +111,13 @@ describe('paid country workflow through the MCP handler', () => {
     const panel_request = opened.body.result.structuredContent.panelRequest.token;
     const bounds = countryActivityQueries('US')[0];
     for (const section of ['flights', 'vessels', 'fleet']) {
-      const args = section === 'fleet' ? {} : bounds;
+      const args = section === 'flights' ? bounds : {};
       const read = await invoke(deps, 'get_country_brief_section', { section, arguments: args, panel_request });
       assert.equal(read.body.result?.structuredContent?.state, 'ready', section);
       assert.equal(pipe.count, 1);
     }
+    const oversized = await invoke(deps, 'get_country_brief_section', { section: 'vessels', arguments: bounds, panel_request });
+    assert.equal(oversized.body.error?.code, -32602);
     const fetchedBefore = fetched.length;
     const denied = await invoke(deps, 'get_country_brief_section', { section: 'flights', arguments: countryActivityQueries('CN')[0], panel_request });
     assert.equal(denied.body.error?.code, -32602);
@@ -126,13 +128,25 @@ describe('paid country workflow through the MCP handler', () => {
       assert.equal(rejected.body.error?.code, -32602);
     }
   });
+  it('accepts an empty completed flight continuation but rejects the provider failure sentinel', async () => {
+    const { deps, pipe } = makeProDeps();
+    const opened = await invoke(deps, 'open_country_brief', { country_code: 'US' });
+    const panel_request = opened.body.result.structuredContent.panelRequest.token;
+    const args = { section: 'flights', arguments: { ...countryActivityQueries('US')[0], cursor: '1' }, panel_request };
+    globalThis.fetch = async () => Response.json({ flights: [], pagination: { nextCursor: '', totalCount: 1 } });
+    assert.equal((await invoke(deps, 'get_country_brief_section', args)).body.result?.structuredContent?.state, 'ready');
+    globalThis.fetch = async () => Response.json({ flights: [], pagination: { nextCursor: '', totalCount: 0 } });
+    args.arguments.cursor = '2';
+    assert.equal((await invoke(deps, 'get_country_brief_section', args)).body.result?.structuredContent?.state, 'unavailable');
+    assert.equal(pipe.count, 1);
+  });
   it('does not cache unavailable military observations within a paid country request', async () => {
     const { deps, pipe } = makeProDeps();
     const opened = await invoke(deps, 'open_country_brief', { country_code: 'US' });
     const panel_request = opened.body.result.structuredContent.panelRequest.token;
     globalThis.fetch = async url => { fetched.push(String(url)); return Response.json({ flights: [], dataAvailable: false }); };
     for (const section of ['flights', 'vessels', 'fleet']) {
-      const argumentsValue = section === 'fleet' ? {} : countryActivityQueries('US')[0];
+      const argumentsValue = section === 'flights' ? countryActivityQueries('US')[0] : {};
       for (let i = 0; i < 2; i++) {
         const read = await invoke(deps, 'get_country_brief_section', { section, arguments: argumentsValue, panel_request });
         assert.equal(read.body.result?.structuredContent?.state, 'unavailable');

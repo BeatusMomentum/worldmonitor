@@ -50,6 +50,25 @@ describe('shared country military observations', () => {
     expect(partial.nearbyVessels).toBe(1);
     expect(partial.coverageNotes.join(' ')).toContain('not a zero');
   });
+  it.each(['US', 'GB', 'RU'])('reads one valid global AIS candidate snapshot for %s', async code => {
+    const reader = source(vi.fn().mockResolvedValue({ flights: [flight('own')] }));
+    const snapshot = reader.vessels.getVesselSnapshot;
+    reader.vessels.getVesselSnapshot = vi.fn(snapshot);
+    await loadHostCountryMilitaryActivity(reader, code, code, new AbortController().signal);
+    expect(reader.vessels.getVesselSnapshot).toHaveBeenCalledExactlyOnceWith({ neLat: 0, neLon: 0, swLat: 0, swLon: 0, includeCandidates: true, includeTankers: false }, { signal: expect.any(AbortSignal) });
+  });
+  it('skips invalid military report dates while retaining valid observations and partial coverage', async () => {
+    const reader = source(vi.fn().mockResolvedValue({ flights: [flight('own')] }));
+    reader.vessels.getVesselSnapshot = vi.fn().mockResolvedValue({ dataAvailable: true, snapshot: { snapshotAt: Date.now(), status: { connected: true }, candidateReports: [
+      { mmsi: '235123456', name: 'Valid', shipType: 35, lat: 38, lon: -77, timestamp: Date.now() },
+      ...[0, Number.NaN, Date.now() + 600_000].map((timestamp, index) => ({ mmsi: String(235123457 + index), name: 'Invalid', shipType: 35, lat: 38, lon: -77, timestamp })),
+    ] } });
+    const summary = await loadHostCountryMilitaryActivity(reader, 'US', 'United States', new AbortController().signal);
+    expect(summary.nearbyVessels).toBe(1);
+    expect(summary.foreignPresence).toBe(true);
+    expect(summary.coverage).toBe('partial');
+    expect(summary.coverageNotes.join(' ')).toContain('3 military reports with invalid dates excluded');
+  });
   it('retains flights on an AIS outage and does not claim no foreign presence', async () => {
     const flights = vi.fn().mockResolvedValue({ flights: [flight('own')], pagination: { nextCursor: '' } });
     const summary = await loadHostCountryMilitaryActivity(source(flights, false), 'US', 'United States', new AbortController().signal);

@@ -84,22 +84,18 @@ export async function loadHostCountryMilitaryActivity(source: CountryBriefSource
     return flights.size ? [...flights.values()] : null;
   };
   const aisRead = async () => {
-    if (!queries.length) throw new Error('Country vessel bounds unavailable');
     const vessels = new Map<string, MilitaryVessel>();
-    const dates: number[] = [];
-    for (const box of queries) {
-      const result = await source.vessels.getVesselSnapshot({ neLat: box.ne_lat, neLon: box.ne_lon, swLat: box.sw_lat, swLon: box.sw_lon, includeCandidates: true, includeTankers: false }, { signal });
-      if (!result.dataAvailable || !result.snapshot || !result.snapshot.status?.connected || !Number.isFinite(result.snapshot.snapshotAt) || result.snapshot.snapshotAt <= 0 || Date.now() - result.snapshot.snapshotAt > 3_600_000 || result.snapshot.snapshotAt > Date.now() + 300_000) throw new Error('AIS snapshot unavailable or stale');
-      dates.push(result.snapshot.snapshotAt);
-      for (const report of result.snapshot.candidateReports) {
-        const vessel = classifyMilitaryVessel(report);
-        if (!vessel) continue;
-        if (!Number.isFinite(report.timestamp) || report.timestamp <= 0 || report.timestamp > Date.now() + 300_000) throw new Error('Military AIS observation date unavailable');
-        if (Date.now() - report.timestamp > 3_600_000) continue;
-        vessels.set(vessel.id, vessel);
-      }
+    const result = await source.vessels.getVesselSnapshot({ neLat: 0, neLon: 0, swLat: 0, swLon: 0, includeCandidates: true, includeTankers: false }, { signal });
+    if (!result.dataAvailable || !result.snapshot || !result.snapshot.status?.connected || !Number.isFinite(result.snapshot.snapshotAt) || result.snapshot.snapshotAt <= 0 || Date.now() - result.snapshot.snapshotAt > 3_600_000 || result.snapshot.snapshotAt > Date.now() + 300_000) throw new Error('AIS snapshot unavailable or stale');
+    let invalidReports = 0;
+    for (const report of result.snapshot.candidateReports) {
+      const vessel = classifyMilitaryVessel(report);
+      if (!vessel) continue;
+      if (!Number.isFinite(report.timestamp) || report.timestamp <= 0 || report.timestamp > Date.now() + 300_000) { invalidReports++; continue; }
+      if (Date.now() - report.timestamp > 3_600_000) continue;
+      vessels.set(vessel.id, vessel);
     }
-    return { vessels: [...vessels.values()], at: Math.min(...dates) };
+    return { vessels: [...vessels.values()], at: result.snapshot.snapshotAt, invalidReports };
   };
   const [flightResult, aisResult, fleetResult] = await Promise.allSettled([
     flightRead(), aisRead(), source.military.getUSNIFleetReport({ forceRefresh: false }, { signal }).then(mapProtoToReport),
@@ -112,10 +108,10 @@ export async function loadHostCountryMilitaryActivity(source: CountryBriefSource
   await preloadInfrastructureTables();
   signal.throwIfAborted();
   const summary = projectCountryMilitaryActivity(code, country, flights, vessels);
-  if ((!ais || !fleet) && summary.foreignPresence === false) summary.foreignPresence = null;
-  return { ...summary, coverage: flights && ais && fleet ? 'complete' as const : 'partial' as const, coverageNotes: [
+  if ((!ais || ais.invalidReports > 0 || !fleet) && summary.foreignPresence === false) summary.foreignPresence = null;
+  return { ...summary, coverage: flights && ais && !ais.invalidReports && fleet ? 'complete' as const : 'partial' as const, coverageNotes: [
     flights ? 'Flight counts include observations licensed for redistribution through this connection.' : 'Flight observations unavailable or unconfirmed. This is not a zero activity count.',
-    ais ? `AIS snapshot ${new Date(ais.at).toISOString()}.` : 'Live AIS observations unavailable. Vessel counts, if shown, use the reported fleet roster only.',
+    ais ? `AIS snapshot ${new Date(ais.at).toISOString()}. Country counts use the relay candidate snapshot, bounded to 1,500 reports.${ais.invalidReports ? ` ${ais.invalidReports} military reports with invalid dates excluded; coverage is partial.` : ''}` : 'Live AIS observations unavailable. Vessel counts, if shown, use the reported fleet roster only.',
     fleet ? `USNI fleet report ${fleet.articleDate}. Reported regions and homeports are approximate locations, not live positions.` : 'USNI fleet roster unavailable.',
   ] };
 }
