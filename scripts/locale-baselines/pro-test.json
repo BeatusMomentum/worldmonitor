@@ -438,6 +438,7 @@
   "welcome.faq.q7": "Can AI agents like Claude or GPT use it?",
   "welcome.faq.q8": "Do I need an account?",
   "welcome.faq.q9": "Is it open source?",
+  "welcome.faq.sub": "{{answers}} straight answers on price, data, alerts and AI access. The short version: the dashboard costs $0, needs no account, and the code is open source under AGPL-3.0.",
   "welcome.faq.title": "What are common questions about World Monitor?",
   "welcome.firstFive.cta": "Start the clock",
   "welcome.firstFive.eyebrow": "Zero to oriented",

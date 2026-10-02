@@ -124,6 +124,21 @@ test('question-headed welcome passages state their own measured figures', { skip
   assert.match(content, new RegExp(`${facts.mcpTools} MCP tools`));
 });
 
+// The FAQ figures live inside <details> answers, which geo.new did not credit
+// to the heading (the FAQ scored weakest, 37/100, though its first answer
+// opens with $0). The heading therefore needs its own paragraph, directly
+// under the <h2> and before the first <details>.
+test('FAQ heading carries its own figure paragraph before the answers', { skip }, () => {
+  const { content } = welcomeRoot();
+  const at = content.indexOf('>What are common questions about World Monitor?</h2>');
+  assert.ok(at >= 0, 'missing FAQ heading');
+  const beforeAnswers = content.slice(at, content.indexOf('<details', at));
+  const subtitle = tagsToText(beforeAnswers.match(/<p[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? '', '');
+  assert.match(subtitle, new RegExp(`^${WELCOME_FAQ_COUNT} straight answers on price, data, alerts and AI access\\.`));
+  assert.match(subtitle, /costs \$0/);
+  assert.match(subtitle, /AGPL-3\.0/);
+});
+
 // The geo.new CIT-02/03 audit judges each H2 section by its opening, roughly
 // the first 60 words, so a figure buried in the fifth FAQ answer does not
 // count. Every H2 section, the noscript fallback included, must open with one.
