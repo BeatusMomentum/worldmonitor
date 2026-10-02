@@ -584,7 +584,7 @@
       "f4Title": "Scegli il tuo filtro",
       "f4Desc": "Mondo, Tech, Finance, Commodity, Energy o Happy — lo stesso motore, sei monitor specializzati, a un clic di distanza.",
       "f5Title": "Hai visto forse un decimo",
-      "f5Desc": "Quando la mappa si apre, {{defaultOnLayers}} dei suoi {{mapLayers}} tipi di layer mappa, circa {{defaultOnLayerPct}}%, sono attivati. Gli altri emergono mentre il mondo cambia: passaggi satellitari, disturbi GPS, navi fantasma segnalate a partire da lacune AIS, cluster di proteste e avvisi di sirene di protezione civile. Ognuno è a un clic di distanza nel menu dei layer o nella palette ⌘K.",
+      "f5Desc": "Quando la mappa si apre su desktop, {{defaultOnLayers}} dei suoi {{mapLayers}} tipi di livello mappa, circa {{defaultOnLayerPct}}%, sono attivi. Gli altri emergono al movimento del mondo: passaggi satellitari, disturbo GPS, navi oscure segnalate da lacune AIS, cluster di proteste e avvisi di sirene di protezione civile. La maggior parte può essere attivata dal menu dei livelli o dalla palette ⌘K.",
       "cta": "Avvia il contatore"
     },
     "depth": {

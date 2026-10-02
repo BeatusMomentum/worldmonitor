@@ -584,7 +584,7 @@
       "f4Title": "Zvolte si svoji perspektivu",
       "f4Desc": "Svět, Tech, Finance, Komodity, Energie nebo Happy — stejný základ, šest vyladěných monitorů, jeden klik od sebe.",
       "f5Title": "Viděli jste snad desetinu",
-      "f5Desc": "Když se mapa otevře, je zapnuto {{defaultOnLayers}} z {{mapLayers}} typů mapových vrstev, přibližně {{defaultOnLayerPct}}%. Zbytek se objevuje s pohybem světa: průlety satelitů, rušení GPS, temné lodě označené na základě mezer v AIS, shluky protestů a upozornění sirén civilní obrany. Každá je na jedno kliknutí v nabídce vrstev nebo v paletě ⌘K.",
+      "f5Desc": "Když se mapa otevře na desktopu, {{defaultOnLayers}} z {{mapLayers}} typů vrstev mapy, přibližně {{defaultOnLayerPct}}%, je zapnuto. Zbývající se objevují s tím, jak se svět mění: průlety družic, rušení GPS, tmavé lodě označené z mezer v AIS, shluky protestů a výstrahy sirén civilní obrany. Většinu lze zapnout z nabídky vrstev nebo palety ⌘K.",
       "cta": "Spustit časomíru"
     },
     "depth": {

@@ -584,7 +584,7 @@
       "f4Title": "Escolha sua lente",
       "f4Desc": "Mundo, Tech, Finanças, Commodities, Energia ou Happy — mesmo motor, seis monitores ajustados, um clique de distância.",
       "f5Title": "Você viu talvez um décimo disso",
-      "f5Desc": "Quando o mapa se abre, {{defaultOnLayers}} de seus {{mapLayers}} tipos de camadas de mapa, cerca de {{defaultOnLayerPct}}%, estão ativados. O resto aparece conforme o mundo se move: passagens de satélite, interferência de GPS, navios ocultos sinalizados por lacunas de AIS, aglomerados de protestos e alertas de sirenes de defesa civil. Cada um fica a um clique de distância no menu de camadas ou na paleta ⌘K.",
+      "f5Desc": "Quando o mapa abre no desktop, {{defaultOnLayers}} dos {{mapLayers}} tipos de camada do mapa, aproximadamente {{defaultOnLayerPct}}%, estão ligados. Os demais aparecem conforme o mundo se move: passagens de satélites, interferência GPS, navios encobertos sinalizados por lacunas de AIS, aglomerados de protestos e alertas de sirenes de proteção civil. A maioria pode ser ativada no menu de camadas ou na paleta ⌘K.",
       "cta": "Comece a contagem"
     },
     "depth": {

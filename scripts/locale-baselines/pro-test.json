@@ -450,7 +450,7 @@
   "welcome.firstFive.f3Title": "Hit ⌘K / Ctrl-K",
   "welcome.firstFive.f4Desc": "World, Tech, Finance, Commodity, Energy or Happy — same engine, six tuned monitors, one click apart.",
   "welcome.firstFive.f4Title": "Pick your lens",
-  "welcome.firstFive.f5Desc": "When the map opens, {{defaultOnLayers}} of its {{mapLayers}} map layer types, about {{defaultOnLayerPct}}%, are switched on. The rest surface as the world moves: satellite passes, GPS jamming, dark ships flagged from AIS gaps, protest clusters and civil-defense siren alerts. Each one is a click away in the layer menu or the ⌘K palette.",
+  "welcome.firstFive.f5Desc": "When the map opens on desktop, {{defaultOnLayers}} of its {{mapLayers}} map layer types, about {{defaultOnLayerPct}}%, are switched on. The rest surface as the world moves: satellite passes, GPS jamming, dark ships flagged from AIS gaps, protest clusters and civil-defense siren alerts. Most can be switched on from the layer menu or the ⌘K palette.",
   "welcome.firstFive.f5Title": "You've seen maybe a tenth of it",
   "welcome.firstFive.sub": "No tour, no empty states, no signup wall. This is what actually happens in the first 5 minutes.",
   "welcome.firstFive.title": "What happens in your first five minutes on the map?",

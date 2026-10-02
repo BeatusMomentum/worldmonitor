@@ -584,7 +584,7 @@
       "f4Title": "Kies uw perspectief",
       "f4Desc": "Wereld, Tech, Financiën, Grondstof, Energie of Happy — dezelfde engine, zes afgestemde monitoren, één klik uit elkaar.",
       "f5Title": "U heeft misschien een tiende gezien",
-      "f5Desc": "Wanneer de kaart opent, zijn {{defaultOnLayers}} van de {{mapLayers}} kaartlaagtypen, ongeveer {{defaultOnLayerPct}}%, ingeschakeld. De rest verschijnt naarmate de wereld verandert: satellietpasses, GPS-storing, donkere schepen gemarkeerd uit AIS-gaten, protestclusters en waarschuwingen van civiele-verdedigingssirenes. Elk daarvan is één klik verwijderd in het lagenmenu of het ⌘K-palet.",
+      "f5Desc": "Wanneer de kaart op een desktop wordt geopend, zijn {{defaultOnLayers}} van de {{mapLayers}} kaartlaagtypen, ongeveer {{defaultOnLayerPct}}%, ingeschakeld. De overige verschijnen naarmate de wereld beweegt: satellietpassages, GPS-jamming, donkere schepen die uit AIS-gaten worden gemarkeerd, protestclusters en sirenewaarschuwingen van de civiele bescherming. De meeste kunnen worden ingeschakeld vanuit het lagenmenu of het ⌘K-palet.",
       "cta": "Start de klok"
     },
     "depth": {

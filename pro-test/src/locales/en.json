@@ -596,7 +596,7 @@
       "f4Title": "Pick your lens",
       "f4Desc": "World, Tech, Finance, Commodity, Energy or Happy — same engine, six tuned monitors, one click apart.",
       "f5Title": "You've seen maybe a tenth of it",
-      "f5Desc": "When the map opens, {{defaultOnLayers}} of its {{mapLayers}} map layer types, about {{defaultOnLayerPct}}%, are switched on. The rest surface as the world moves: satellite passes, GPS jamming, dark ships flagged from AIS gaps, protest clusters and civil-defense siren alerts. Each one is a click away in the layer menu or the ⌘K palette.",
+      "f5Desc": "When the map opens on desktop, {{defaultOnLayers}} of its {{mapLayers}} map layer types, about {{defaultOnLayerPct}}%, are switched on. The rest surface as the world moves: satellite passes, GPS jamming, dark ships flagged from AIS gaps, protest clusters and civil-defense siren alerts. Most can be switched on from the layer menu or the ⌘K palette.",
       "cta": "Start the clock"
     },
     "depth": {

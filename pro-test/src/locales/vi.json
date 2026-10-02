@@ -584,7 +584,7 @@
       "f4Title": "Chọn lăng kính của bạn",
       "f4Desc": "Thế giới, Công nghệ, Tài chính, Hàng hóa, Năng lượng hoặc Vui vẻ — cùng một động cơ, sáu màn hình được tinh chỉnh, cách nhau một clic.",
       "f5Title": "Bạn có thể đã thấy khoảng một phần mười",
-      "f5Desc": "Khi bản đồ mở ra, {{defaultOnLayers}} trong {{mapLayers}} loại lớp bản đồ, khoảng {{defaultOnLayerPct}}%, được bật. Phần còn lại xuất hiện khi thế giới thay đổi: các lần vệ tinh đi qua, gây nhiễu GPS, các tàu tối được gắn cờ từ khoảng cách AIS, các cụm biểu tình và cảnh báo còi báo động dân sự. Mỗi cái đều chỉ cách một cú nhấp chuột trong menu lớp hoặc bảng điều khiển ⌘K.",
+      "f5Desc": "Khi bản đồ mở trên máy tính để bàn, {{defaultOnLayers}} trong số {{mapLayers}} loại lớp bản đồ, khoảng {{defaultOnLayerPct}}%, được bật. Phần còn lại xuất hiện khi thế giới chuyển động: các lượt vệ tinh đi qua, gây nhiễu GPS, tàu tối được đánh dấu từ khoảng trống AIS, các cụm biểu tình và cảnh báo còi báo động phòng vệ dân sự. Hầu hết có thể được bật từ menu lớp hoặc bảng lệnh ⌘K.",
       "cta": "Bắt đầu tính giờ"
     },
     "depth": {

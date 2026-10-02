@@ -584,7 +584,7 @@
       "f4Title": "Chagua mtazamo wako",
       "f4Desc": "Dunia, Teknolojia, Fedha, Bidhaa, Nishati au Happy — injini ileile, mitazamo sita iliyopangwa, kwa mbofyo mmoja.",
       "f5Title": "Umeoona huenda kama sehemu ya kumi tu",
-      "f5Desc": "Ramani inapofunguka, {{defaultOnLayers}} kati ya aina {{mapLayers}} za tabaka za ramani, takriban {{defaultOnLayerPct}}%, huwa zimewashwa. Zilizosalia hujitokeza kadiri ulimwengu unavyosonga: mipito ya satelaiti, uvurugaji wa GPS, meli zisizoonekana zilizotiwa alama kutokana na mapengo ya AIS, makundi ya maandamano na tahadhari za ving'ora vya ulinzi wa raia. Kila moja iko umbali wa mbofyo mmoja kwenye menyu ya tabaka au paleti ya ⌘K.",
+      "f5Desc": "Ramani inapofunguliwa kwenye desktop, {{defaultOnLayers}} kati ya aina {{mapLayers}} za safu za ramani, takriban {{defaultOnLayerPct}}%, huwa zimewashwa. Zilizosalia hujitokeza kadiri dunia inavyosonga: mipito ya satelaiti, kuvurugwa kwa GPS, meli zisizoonekana zinazoashiriwa kutokana na mapengo ya AIS, makundi ya maandamano na arifa za ving'ora vya ulinzi wa raia. Nyingi zinaweza kuwashwa kutoka kwenye menyu ya safu au paleti ya ⌘K.",
       "cta": "Anza saa"
     },
     "depth": {

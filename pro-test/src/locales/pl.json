@@ -584,7 +584,7 @@
       "f4Title": "Wybierz swój obiektyw",
       "f4Desc": "Świat, Tech, Finanse, Surowce, Energia lub Happy — ten sam silnik, sześć wyspecjalizowanych monitorów, jeden klik dalej.",
       "f5Title": "Widziałeś może jedną dziesiątą",
-      "f5Desc": "Gdy mapa się otwiera, {{defaultOnLayers}} z {{mapLayers}} typów warstw mapy, około {{defaultOnLayerPct}}%, jest włączonych. Pozostałe pojawiają się w miarę zmian na świecie: przeloty satelitów, zagłuszanie GPS, ciemne statki oznaczone na podstawie luk w AIS, skupiska protestów i alarmy syren obrony cywilnej. Każdy jest dostępny jednym kliknięciem w menu warstw lub w palecie ⌘K.",
+      "f5Desc": "Po otwarciu mapy na komputerze włączonych jest {{defaultOnLayers}} z {{mapLayers}} typów warstw mapy, około {{defaultOnLayerPct}}%. Pozostałe pojawiają się wraz z ruchem świata: przeloty satelitów, zagłuszanie GPS, ciemne statki oznaczane na podstawie luk AIS, skupiska protestów i alarmy syren obrony cywilnej. Większość można włączyć z menu warstw lub palety ⌘K.",
       "cta": "Uruchom licznik"
     },
     "depth": {

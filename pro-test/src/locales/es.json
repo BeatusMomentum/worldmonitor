@@ -584,7 +584,7 @@
       "f4Title": "Elige tu lente",
       "f4Desc": "Mundo, Tecnología, Finanzas, Materias Primas, Energía o Positivo — el mismo motor, seis monitores personalizados, a un clic de distancia.",
       "f5Title": "Has visto quizás una décima parte",
-      "f5Desc": "Cuando se abre el mapa, {{defaultOnLayers}} de sus {{mapLayers}} tipos de capas del mapa, aproximadamente {{defaultOnLayerPct}}%, están activadas. El resto aparece conforme el mundo cambia: pasos de satélites, interferencia GPS, buques oscuros marcados a partir de brechas de AIS, clusters de protestas y alertas de sirenas de defensa civil. Cada uno está a un clic en el menú de capas o en la paleta ⌘K.",
+      "f5Desc": "Cuando el mapa se abre en desktop, {{defaultOnLayers}} de sus {{mapLayers}} tipos de capas de mapa, aproximadamente {{defaultOnLayerPct}}%, están activadas. El resto aparece según el mundo se mueve: pases de satélites, interferencia GPS, buques oscuros marcados desde brechas de AIS, clusters de protestas y alertas de sirenas de defensa civil. La mayoría se puede activar desde el menú de capas o la paleta ⌘K.",
       "cta": "Inicia el cronómetro"
     },
     "depth": {

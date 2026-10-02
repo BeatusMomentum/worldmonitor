@@ -584,7 +584,7 @@
       "f4Title": "選擇你的視角",
       "f4Desc": "World、Tech、Finance、Commodity、Energy或Happy——同一引擎、六個專項監測、一鍵切換。",
       "f5Title": "你可能只看到了十分之一",
-      "f5Desc": "地圖開啟時，其{{mapLayers}}種地圖圖層型別中有{{defaultOnLayers}}種處於啟用狀態，約佔{{defaultOnLayerPct}}%。其餘圖層會隨著世界變化而顯示：衛星過境、GPS干擾、根據AIS間隙標記的暗船、抗議叢集和民防警報器警報。每一種都可在圖層選單或⌘K調板中一鍵存取。",
+      "f5Desc": "地圖在桌面端開啟時，其{{mapLayers}}個地圖圖層型別中的{{defaultOnLayers}}個（約{{defaultOnLayerPct}}%）被啟用。其餘圖層會隨著世界變化而浮現：衛星過境、GPS干擾、AIS訊號缺口標記的暗船、抗議叢集和民防警笛警報。大多數圖層可從圖層選單或⌘K快捷板啟用。",
       "cta": "開始計時"
     },
     "depth": {
