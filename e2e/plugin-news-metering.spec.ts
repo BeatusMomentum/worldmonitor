@@ -1,0 +1,147 @@
+import { test, expect, type Page } from '@playwright/test';
+import { readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { COUNTRY_RISK_APP_HTML } from '../api/mcp/ui/country-risk-app';
+
+test.use({ serviceWorkers: 'block' });
+type HostCall = { name: string; arguments: Record<string, unknown> };
+async function installNewsHost(page: Page, deniedInitially = false) {
+  const calls: HostCall[] = [];
+  let units = 0;
+  let denied = deniedInitially;
+  let failHazards = false;
+  const successfulRefreshes = new Set<string>();
+  const article = { title: 'Controlled earthquake report in Japan', source: 'Fixture publisher', link: 'https://example.com/news', publishedAt: Date.now(), location: { latitude: 35, longitude: 139 }, isAlert: true };
+  await page.route('**/plugin/assets/**', route => route.fulfill({ path: join(process.cwd(), 'dist/plugin/assets', new URL(route.request().url()).pathname.split('/').at(-1)!), headers: { 'Access-Control-Allow-Origin': '*' } }));
+  await page.route('**/data/*.geojson', route => route.fulfill({ path: join(process.cwd(), 'public/data', new URL(route.request().url()).pathname.split('/').at(-1)!), headers: { 'Access-Control-Allow-Origin': '*' } }));
+  await page.route('**/data/countries-*m.json', route => route.fulfill({ path: join(process.cwd(), 'public/data', new URL(route.request().url()).pathname.split('/').at(-1)!), headers: { 'Access-Control-Allow-Origin': '*' } }));
+  await page.route('**/news-host-test', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><title>News plugin metering acceptance</title><h1>Built news plugin — controlled host and data</h1><p>Checks rendering and request reuse. Does not test live OAuth, ChatGPT installation or source freshness.</p><iframe title="WorldMonitor news and maps" sandbox="allow-scripts" style="width:100%;height:1050px;border:0"></iframe>' }));
+  await page.exposeFunction('newsHost', async (method: string, params: HostCall) => {
+    if (method === 'ui/initialize') return { hostCapabilities: { serverTools: {}, updateModelContext: {} }, hostContext: { theme: 'dark' } };
+    if (method !== 'tools/call') return {};
+    calls.push(params);
+    if (params.name === 'open_news_dashboard') {
+      if (denied) return { isError: true, content: [{ type: 'text', text: 'Daily MCP quota exceeded. Resets at next UTC midnight.' }] };
+      const id = String(params.arguments.request_id ?? 'initial');
+      if (!successfulRefreshes.has(id)) { units++; successfulRefreshes.add(id); }
+      const { refresh: _refresh, request_id: _id, ...requestedView } = params.arguments;
+      return { structuredContent: { categories: { world: { items: [article] } }, coverage: { state: 'complete', servedStale: false }, requestedView, panelRequest: { panel: 'news', token: `news.controlled-${units}`, expiresAt: new Date(Date.now() + 300000).toISOString(), reused: false, usage: { used: units, limit: 50, remaining: 50 - units, resetsAt: '2026-10-03T00:00:00.000Z', unit: 'requests' } } } };
+    }
+    if (params.name === 'get_natural_disasters') {
+      if (failHazards) return { isError: true };
+      const quake = { id: 'controlled-quake', place: 'Japan fixture', magnitude: 5, depthKm: 10, location: { latitude: 35, longitude: 139 }, occurredAt: Date.now(), sourceUrl: 'https://example.com/quake', source: 'Controlled USGS', category: 'earthquake' };
+      const fire = { id: 'controlled-fire', location: { latitude: 30, longitude: 35 }, detectedAt: Date.now(), brightness: 350, frp: 12, confidence: 'FIRE_CONFIDENCE_HIGH', region: 'Fixture', dayNight: 'D' };
+      return { structuredContent: { data: { earthquakes: { earthquakes: [quake] }, events: { dataAvailable: true, events: [] }, fires: { dataAvailable: true, fireDetections: [fire] } } } };
+    }
+    throw new Error(`Unexpected tool: ${params.name}`);
+  });
+  await page.goto('/news-host-test');
+  const html = await readFile(join(process.cwd(), 'dist/plugin/plugin.html'), 'utf8');
+  await page.evaluate(html => {
+    const frame = document.querySelector('iframe')!;
+    const host = (window as unknown as { newsHost: (method: string, params: object) => Promise<object> }).newsHost;
+    window.addEventListener('message', async event => {
+      if (event.source !== frame.contentWindow || event.data?.jsonrpc !== '2.0' || !event.data.id) return;
+      const result = await host(event.data.method, event.data.params);
+      frame.contentWindow!.postMessage({ jsonrpc: '2.0', id: event.data.id, result }, '*');
+      if (event.data.method === 'ui/initialize') {
+        const args = { map_layers: ['natural'] };
+        frame.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-input', params: { arguments: args } }, '*');
+        const result = await host('tools/call', { name: 'open_news_dashboard', arguments: args });
+        frame.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: result }, '*');
+      }
+    });
+    frame.srcdoc = html.replace('<head>', `<head><base href="${location.origin}/">`);
+  }, html);
+  return { calls, get units() { return units; }, deny: () => { denied = true; }, failHazards: () => { failHazards = true; }, recoverHazards: () => { failHazards = false; } };
+}
+
+test('news and map hydration share one request, toggles reuse data and refresh charges once', async ({ page }, info) => {
+  const host = await installNewsHost(page);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#pluginUsage')).toContainText('49 of 50 requests remaining');
+  await expect(frame.locator('#pluginMapStatus')).toContainText('earthquakes: 1 valid');
+  await expect(frame.locator('#panelsGrid')).toContainText('Controlled earthquake report in Japan');
+  expect(host.calls.map(call => call.name)).toEqual(['open_news_dashboard', 'get_natural_disasters']);
+  expect(host.calls[1]?.arguments.panel_request).toBe('news.controlled-1');
+  expect(host.units).toBe(1);
+  const natural = frame.getByRole('checkbox', { name: 'Natural Events' });
+  await natural.uncheck();
+  await natural.check();
+  await expect(frame.locator('#pluginMapStatus')).toContainText('earthquakes: 1 valid');
+  expect(host.calls).toHaveLength(2);
+  const fires = frame.getByRole('checkbox', { name: 'Fires', exact: true });
+  await fires.check();
+  await expect(frame.locator('#pluginMapStatus')).toContainText('fires: 1 valid');
+  expect(host.calls).toHaveLength(3);
+  expect(host.units).toBe(1);
+  await fires.uncheck();
+  await fires.check();
+  await expect(frame.locator('#pluginMapStatus')).toContainText('fires: 1 valid');
+  expect(host.calls).toHaveLength(3);
+  await frame.getByRole('button', { name: 'Refresh map data', exact: true }).click();
+  await expect(frame.locator('#pluginUsage')).toContainText('48 of 50 requests remaining');
+  await expect.poll(() => host.calls.length).toBe(5);
+  expect(host.calls.at(-1)?.arguments.panel_request).toBe('news.controlled-2');
+  expect(host.units).toBe(2);
+  await expect(frame.locator('#mapContainer path.country').first()).toBeAttached();
+  await page.screenshot({ path: info.outputPath('news-plugin-desktop.png'), fullPage: true });
+  await page.setViewportSize({ width: 430, height: 1500 });
+  await page.locator('iframe').evaluate(element => { (element as HTMLIFrameElement).style.height = '1300px'; });
+  await frame.locator('#panelsGrid').scrollIntoViewIfNeeded();
+  await expect(frame.getByText('Controlled earthquake report in Japan', { exact: true })).toBeVisible();
+  await page.screenshot({ path: info.outputPath('news-plugin-mobile.png'), fullPage: true });
+  host.deny();
+  await frame.getByRole('button', { name: 'Refresh news', exact: true }).click();
+  await expect(frame.locator('#pluginStatus')).toContainText('Daily MCP quota exceeded');
+  await expect(frame.locator('#panelsGrid')).toContainText('Controlled earthquake report in Japan');
+  expect(host.calls).toHaveLength(6);
+  expect(host.units).toBe(2);
+  await writeFile(info.outputPath('news-request-cost.json'), JSON.stringify({ surface: 'built opaque iframe, controlled host', initialCalls: 2, initialUnits: 1, repeatLayerCalls: 0, newLayerCalls: 1, newLayerUnits: 0, refreshCalls: 2, refreshUnits: 1, deniedRefreshHazardCalls: 0 }, null, 2));
+});
+
+test('initial quota denial starts no map loads and displays the host reason', async ({ page }) => {
+  const host = await installNewsHost(page, true);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#pluginStatus')).toContainText('Daily MCP quota exceeded');
+  await expect(frame.locator('#pluginUsage')).toBeHidden();
+  expect(host.calls.map(call => call.name)).toEqual(['open_news_dashboard']);
+  expect(host.units).toBe(0);
+});
+
+test('a failed map read is retried under the paid request', async ({ page }) => {
+  const host = await installNewsHost(page);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#pluginMapStatus')).toContainText('earthquakes: 1 valid');
+  host.failHazards();
+  await frame.getByRole('checkbox', { name: 'Fires', exact: true }).check();
+  await expect(frame.locator('#pluginMapStatus')).toContainText('Hazard access was denied');
+  host.recoverHazards();
+  await frame.getByRole('checkbox', { name: 'Fires', exact: true }).check();
+  await expect(frame.locator('#pluginMapStatus')).toContainText('fires: 1 valid');
+  expect(host.calls.filter(call => call.name === 'get_natural_disasters')).toHaveLength(3);
+  expect(host.units).toBe(1);
+});
+
+test('single-result panels show their paid usage notice without more data calls', async ({ page }, info) => {
+  await page.route('**/single-panel-host-test', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><h1>Single-result panel — controlled host and data</h1><iframe title="Country risk panel" sandbox="allow-scripts" style="width:100%;height:600px;border:0"></iframe>' }));
+  await page.goto('/single-panel-host-test');
+  await page.evaluate(html => {
+    const frame = document.querySelector('iframe')!;
+    window.addEventListener('message', event => {
+      if (event.source !== frame.contentWindow || event.data?.method !== 'ui/initialize') return;
+      frame.contentWindow!.postMessage({ jsonrpc: '2.0', id: event.data.id, result: { hostContext: { theme: 'dark' } } }, '*');
+      frame.contentWindow!.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: {
+        structuredContent: { countryCode: 'US', countryName: 'United States (controlled data)', cii: { combinedScore: 32, components: { unrest: 20, conflict: 30, security: 40, information: 38 } } },
+        _meta: { 'worldmonitor/usage': { used: 1, limit: 50, remaining: 49, resetsAt: '2026-10-03T00:00:00.000Z', unit: 'requests' } },
+      } }, '*');
+    });
+    frame.srcdoc = html;
+  }, COUNTRY_RISK_APP_HTML);
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('#panel-usage')).toContainText('49 of 50 requests remaining');
+  await expect(frame.locator('#country')).toContainText('United States');
+  await page.screenshot({ path: info.outputPath('single-panel-usage-desktop.png'), fullPage: true });
+  await page.setViewportSize({ width: 430, height: 800 });
+  await page.screenshot({ path: info.outputPath('single-panel-usage-mobile.png'), fullPage: true });
+});

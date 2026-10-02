@@ -20,9 +20,16 @@ import { preloadCountryGeometry } from '@/services/country-geometry';
 import { initI18n } from '@/services/i18n';
 import { LAYER_REGISTRY } from '@/config/map-layer-definitions';
 import { loadPluginHazardSnapshot, type PluginHazardSnapshot } from '@/services/plugin-map-snapshot';
+import { newsPanelAdmissionSchema, type NewsPanelAdmission } from '../shared/panel-admission';
 
 const panels = new Map<string, NewsPanel>();
 const status = document.getElementById('pluginStatus')!;
+const usageNotice = document.getElementById('pluginUsage')!;
+let admission: NewsPanelAdmission | undefined;
+let hostView: unknown;
+let refreshing: Promise<void> | undefined;
+let refreshAttempt: { id: string; startedAt: number } | undefined;
+const hazardCache = new Map<string, Promise<PluginHazardSnapshot>>();
 const grid = document.getElementById('panelsGrid')!;
 let nextId = 1;
 let map: MapContainer;
@@ -60,11 +67,11 @@ async function analyze(args: object): Promise<{ summary: string; model: string }
   return { summary: data.summary, model: data.model ?? '' };
 }
 
-function renderResult(result: unknown): void {
+async function renderResult(result: unknown): Promise<void> {
   if (!result || typeof result !== 'object') return;
-  const response = result as { isError?: boolean; structuredContent?: ListFeedDigestResponse & { requestedView?: unknown } };
+  const response = result as { isError?: boolean; content?: Array<{ text?: string }>; structuredContent?: ListFeedDigestResponse & { requestedView?: unknown; panelRequest?: unknown } };
   if (response.isError) {
-    status.textContent = 'News refresh failed. Previously loaded news remains visible.';
+    status.textContent = response.content?.find(item => item.text)?.text ?? 'News refresh failed. Previously loaded news remains visible.';
     for (const panel of panels.values()) panel.setRefreshDegraded(true);
     return;
   }
@@ -73,14 +80,40 @@ function renderResult(result: unknown): void {
     status.textContent = 'News data is unavailable. Previously loaded news remains visible.';
     return;
   }
+  const nextAdmission = data.panelRequest === undefined ? undefined : newsPanelAdmissionSchema.parse(data.panelRequest);
+  if (!nextAdmission || nextAdmission.token !== admission?.token) hazardCache.clear();
+  admission = nextAdmission;
+  showUsage();
   digest = data;
   renderDigest();
-  if (data.requestedView) {
-    void applyView(data.requestedView).catch(error => {
+  if (data.requestedView ?? hostView) {
+    await applyView(data.requestedView ?? hostView).catch(error => {
       status.textContent = 'The requested view could not be applied. Showing news with the previous filters.';
       mapStatus.textContent = error instanceof Error ? error.message : 'The requested map view is unavailable.';
     });
   }
+}
+
+function showUsage(): void {
+  usageNotice.hidden = !admission;
+  if (!admission) return;
+  const { remaining, limit, resetsAt } = admission.usage;
+  usageNotice.textContent = `${remaining === null ? 'Unlimited allowance' : `${remaining} of ${limit} requests remaining`}, at the last dashboard request. Resets ${new Date(resetsAt).toLocaleString()}. Opening this dashboard uses 1 request; its news panels and map loads are included. Refresh uses 1 new request. AI summaries and translations are separate requests.`;
+}
+
+function refreshDashboard(): Promise<void> {
+  if (refreshing) return refreshing;
+  if (!refreshAttempt || Date.now() - refreshAttempt.startedAt >= 300_000) refreshAttempt = { id: crypto.randomUUID(), startedAt: Date.now() };
+  refreshing = (async () => {
+    const result = await request('tools/call', { name: 'open_news_dashboard', arguments: { ...view, refresh: true, request_id: refreshAttempt!.id } });
+    if (result && typeof result === 'object' && 'isError' in result && result.isError) {
+      await renderResult(result);
+      return;
+    }
+    await renderResult(result);
+    refreshAttempt = undefined;
+  })().finally(() => { refreshing = undefined; });
+  return refreshing;
 }
 
 function renderDigest(): void {
@@ -157,8 +190,16 @@ async function updateView(next: PluginNewsView, reset: boolean): Promise<object>
   const selectedLayers = intended.map_layers ?? [];
   let snapshot: PluginHazardSnapshot | undefined;
   if (next.map_layers?.some(layer => layer === 'natural' || layer === 'fires')) {
+    if (!digest) throw new Error('Wait for the dashboard response before loading map data.');
     if (!serverTools) throw new Error('Hazard snapshots are unavailable in this host.');
-    snapshot = await loadPluginHazardSnapshot(selectedLayers, args => request('tools/call', { name: 'get_natural_disasters', arguments: args }));
+    const key = selectedLayers.filter(layer => layer === 'natural' || layer === 'fires').sort().join(',');
+    let loaded = hazardCache.get(key);
+    if (!loaded) {
+      loaded = loadPluginHazardSnapshot(selectedLayers, args => request('tools/call', { name: 'get_natural_disasters', arguments: { ...args, ...(admission ? { panel_request: admission.token } : {}) } }));
+      hazardCache.set(key, loaded);
+      void loaded.catch(() => { if (hazardCache.get(key) === loaded) hazardCache.delete(key); });
+    }
+    snapshot = await loaded;
   }
   let renderer: object | undefined;
   if (next.renderer) {
@@ -267,7 +308,12 @@ async function start(): Promise<void> {
   refreshMap.type = 'button';
   refreshMap.className = 'search-btn';
   refreshMap.textContent = 'Refresh map data';
-  refreshMap.addEventListener('click', () => { void applyView({ map_layers: view.map_layers ?? [] }).catch(error => { mapStatus.textContent = error instanceof Error ? error.message : 'Map refresh failed. Previous map data remains visible.'; }); });
+  refreshMap.addEventListener('click', async () => {
+    refreshMap.disabled = true;
+    try { await refreshDashboard(); }
+    catch (error) { mapStatus.textContent = error instanceof Error ? error.message : 'Map refresh failed. Previous map data remains visible.'; }
+    finally { refreshMap.disabled = false; }
+  });
   layerControls.appendChild(refreshMap);
   mapStatus = document.createElement('div');
   mapStatus.id = 'pluginMapStatus';
@@ -343,10 +389,9 @@ async function start(): Promise<void> {
         .catch(error => send({ id: message.id, result: { isError: true, content: [{ type: 'text', text: error instanceof Error ? error.message : 'View action failed' }] } }));
     }
     if (message.method === 'ui/notifications/tool-input') {
-      const input = Object.fromEntries(Object.entries(message.params?.arguments ?? {}).filter(([key]) => key !== 'jmespath'));
-      void applyView(input).catch(() => { status.textContent = 'The requested view could not be applied.'; });
+      hostView = Object.fromEntries(Object.entries(message.params?.arguments ?? {}).filter(([key]) => !['jmespath', 'refresh', 'request_id'].includes(key)));
     }
-    if (message.method === 'ui/notifications/tool-result') renderResult(message.params);
+    if (message.method === 'ui/notifications/tool-result') void renderResult(message.params).catch(() => { status.textContent = 'The dashboard response is invalid. Previously loaded news remains visible.'; });
 
     if (message.method === 'ui/notifications/host-context-changed' && ['light', 'dark'].includes(message.params?.theme)) document.documentElement.dataset.theme = message.params.theme;
   });
@@ -371,8 +416,8 @@ async function start(): Promise<void> {
   refresh.addEventListener('click', async () => {
     if (!serverTools) return;
     refresh.disabled = true;
-    try { renderResult(await request('tools/call', { name: 'open_news_dashboard', arguments: {} })); }
-    catch { status.textContent = 'News refresh failed. Previously loaded news remains visible.'; }
+    try { await refreshDashboard(); }
+    catch (error) { status.textContent = error instanceof Error ? error.message : 'News refresh failed. Previously loaded news remains visible.'; }
     finally { refresh.disabled = false; }
   });
   document.getElementById('pluginActions')!.appendChild(refresh);
