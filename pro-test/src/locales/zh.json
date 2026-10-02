@@ -584,7 +584,7 @@
       "f4Title": "选择你的视角",
       "f4Desc": "World、Tech、Finance、Commodity、Energy或Happy——同一引擎、六个专项监测、一键切换。",
       "f5Title": "你可能只看到了十分之一",
-      "f5Desc": "地图在桌面端打开时，其{{mapLayers}}个地图图层类型中的{{defaultOnLayers}}个（约{{defaultOnLayerPct}}%）被激活。其余图层会随着世界变化而浮现：卫星过境、GPS干扰、AIS信号缺口标记的暗船、抗议集群和民防警报警报。大多数图层可从图层菜单或⌘K快捷板启用。",
+      "f5Desc": "地图在桌面端打开时，其{{mapLayers}}个地图图层类型中的{{defaultOnLayers}}个（约{{defaultOnLayerPct}}%）被激活。其余图层会随着世界变化而浮现：卫星过境、GPS干扰、AIS信号缺口标记的暗船、抗议集群和民防警笛警报。大多数图层可从图层菜单或⌘K快捷板启用。",
       "cta": "开始计时"
     },
     "depth": {
