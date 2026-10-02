@@ -18,7 +18,10 @@ function readJson(path) {
 }
 
 const schema = readJson('./fixtures/mcp-server-card.schema.json');
-const ajv = new Ajv2020({ strict: false, allErrors: true, validateFormats: false });
+// The schema's only format is `uri`; ajv-formats is not a dependency, so
+// register it with the WHATWG URL parser.
+const ajv = new Ajv2020({ strict: false, allErrors: true });
+ajv.addFormat('uri', (value) => URL.canParse(value));
 const validate = ajv.compile({ ...schema, $ref: '#/$defs/ServerCard' });
 
 describe('MCP server card schema conformance', () => {
