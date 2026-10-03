@@ -5,6 +5,12 @@ Inspected application source: `958c6c7826e63593647946b26559d6b6cdbc7b08`.
 Owner: WorldMonitor dependency maintainers. Each decision expires after
 `2026-10-10T00:00:00Z` and remains an explicit audit warning.
 
+Each decision is bound to the SHA256 of its exact reviewed lockfile. Any lockfile
+change, including a new path or parent using the same advisory ID, fails the
+decision until caller reachability is reviewed again. This also blocks unrelated
+lockfile edits deliberately. The fingerprint does not prove source reachability;
+the source-change conditions below still require a new review.
+
 These are bounded caller decisions. The packages remain vulnerable upstream.
 No audit gate, severity threshold, grace period or unrelated advisory is changed.
 
@@ -35,7 +41,7 @@ checked with `npm ls --package-lock-only`, including production-only root reads.
 - Re-review immediately if a Node pattern service, Metro/Jest runtime, shared
   HTTP response cache, authenticated remote-image input or Astro server adapter
   is added. The current caller evidence would no longer justify the decision.
-- Expiry and a stale advisory match fail the existing audit. The focused
+- Expiry, a stale advisory match or a changed/missing fingerprint fail the audit. The focused
   regression requires a visible warning while each decision is active and a
   failure after expiry or removal of its matching advisory.
 - Other advisories retain their existing blocking behavior. Fresh audits must
