@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { load as loadYaml } from 'js-yaml';
 import { getFredSeries } from '../server/worldmonitor/economic/v1/get-fred-series';
 import { ALLOWED_FRED_SERIES } from '../server/worldmonitor/economic/v1/_fred-shared';
 import { ValidationError } from '../src/generated/server/worldmonitor/economic/v1/service_server';
@@ -20,11 +21,16 @@ test('an unsupported series ID is rejected with the supported IDs in the message
 });
 
 test('published OpenAPI lists every supported FRED series ID', () => {
-  for (const file of ['EconomicService.openapi.json', 'EconomicService.openapi.yaml', 'worldmonitor.openapi.yaml']) {
-    const spec = readFileSync(new URL(`../docs/api/${file}`, import.meta.url), 'utf8');
-    for (const id of SUPPORTED) assert.match(spec, new RegExp(`\\b${id}\\b`), `${file} is missing ${id}`);
+  const specs = {
+    'EconomicService.openapi.json': JSON.parse,
+    'EconomicService.openapi.yaml': loadYaml,
+    'worldmonitor.openapi.yaml': loadYaml,
+  };
+  for (const [file, parse] of Object.entries(specs)) {
+    const spec = parse(readFileSync(new URL(`../docs/api/${file}`, import.meta.url), 'utf8')) as {
+      paths: Record<string, { get: { parameters: { name: string; schema: { enum?: string[] } }[] } }>;
+    };
+    const param = spec.paths['/api/economic/v1/get-fred-series']!.get.parameters.find(p => p.name === 'series_id');
+    assert.deepEqual(param?.schema.enum, SUPPORTED, file);
   }
-  const json = JSON.parse(readFileSync(new URL('../docs/api/EconomicService.openapi.json', import.meta.url), 'utf8'));
-  const param = json.paths['/api/economic/v1/get-fred-series'].get.parameters.find((p: { name: string }) => p.name === 'series_id');
-  assert.deepEqual(param.schema.enum, SUPPORTED);
 });
