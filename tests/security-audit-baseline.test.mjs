@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { createRequire } from 'node:module';
@@ -339,10 +340,15 @@ describe('baseline entry validation', () => {
       const args = {
         findings: [finding(id)], lockfile, presentAdvisoryIds: new Set([id]),
         introducedIds: new Set(), publishedAt: new Map(), now: Date.parse('2026-10-03T00:00:00Z'),
+        lockfileSha256: createHash('sha256').update(readFileSync(new URL(`../${lockfile}`, import.meta.url))).digest('hex'),
       };
       const live = formatAuditReport(classifyAudit(args));
       assert.equal(live.failed, false);
       assert.ok(live.info.some(line => line.includes('::warning') && line.includes(id)));
+      const changed = formatAuditReport(classifyAudit({ ...args, lockfileSha256: '0'.repeat(64) }));
+      assert.equal(changed.failed, true, `${lockfile} must reject a changed dependency tree even for an inherited advisory ID`);
+      assert.ok(changed.errors.some(line => line.includes('reviewed lockfile')));
+      assert.equal(formatAuditReport(classifyAudit({ ...args, lockfileSha256: undefined })).failed, true);
       const expired = formatAuditReport(classifyAudit({ ...args, now: Date.parse(entry.expiresAt) + 1 }));
       assert.equal(expired.failed, true);
       const stale = formatAuditReport(classifyAudit({ ...args, findings: [], presentAdvisoryIds: new Set() }));
@@ -352,6 +358,13 @@ describe('baseline entry validation', () => {
 
   it('accepts the baseline this repo actually ships', () => {
     assert.equal(validateBaselineEntries(), true);
+  });
+
+  it('requires a reviewed lockfile fingerprint for every caller decision', () => {
+    const entry = { id: OLD_ADVISORY, reason: 'caller evidence scoped to the inspected dependency tree', expiresAt: iso(NOW + DAY) };
+    for (const lockfileSha256 of [undefined, '', 'bad', '0'.repeat(63)]) {
+      assert.throws(() => validateBaselineEntries({ [LOCK]: [{ ...entry, lockfileSha256 }] }), /lockfileSha256/);
+    }
   });
 
   it('rejects a suppression with no stated reason', () => {
