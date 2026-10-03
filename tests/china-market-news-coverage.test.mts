@@ -133,6 +133,10 @@ describe('China A/H-share market coverage (#5272)', () => {
 });
 
 describe('China client/server news digest parity (#5272)', () => {
+  it('MIIT reads the official listing adapter without depending on Google indexing', () => {
+    const feed = VARIANT_FEEDS.full!.asia!.find((entry) => entry.name === 'MIIT (China)');
+    assert.equal(feed?.url, 'https://api.worldmonitor.app/api/miit-news');
+  });
   const expectedMembership = new Map<string, { variant: string; category: string }>([
     ['Xinhua', { variant: 'full', category: 'asia' }],
     ['MIIT (China)', { variant: 'full', category: 'asia' }],
