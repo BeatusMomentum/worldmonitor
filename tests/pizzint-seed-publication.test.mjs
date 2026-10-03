@@ -417,12 +417,18 @@ test('missing primary values and failed fallback preserve the expired live obser
   assert.equal(classifyPizzint(run.state).status, 'STALE_SEED');
 });
 
-test('a valid primary reading does not poll BestTime', async () => {
+test('a valid primary reading beside a null reading does not poll BestTime', async () => {
   const run = harness();
+  run.state.source = { success: true, data: [validResponse.data[0], {
+    ...validResponse.data[0], place_id: 'missing-reading', current_popularity: null,
+  }] };
   run.state.env.BESTTIME_API_KEY_PRIVATE = BESTTIME_KEY;
   await run.seed();
   assert.equal(run.state.besttimeCalls.length, 0);
-  assert.equal(run.state.cache.get(payloadKey).data.data.pizzint.locations[0].dataSource, '');
+  const locations = run.state.cache.get(payloadKey).data.data.pizzint.locations;
+  assert.equal(locations[0].currentPopularity, 75);
+  assert.equal(locations[0].dataSource, '');
+  assert.equal(locations[1].noLiveSignal, true);
 });
 
 test('normal Sunday lunch publishes DEFCON 5 even when a venue is 100% busy', async () => {
