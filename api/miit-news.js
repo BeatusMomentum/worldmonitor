@@ -24,6 +24,15 @@ function cdata(value) {
   return `<![CDATA[${value.replace(XML_CONTROLS, '').split(']]>').join(']]]]><![CDATA[>')}]]>`;
 }
 
+function listingText(value) {
+  let previous;
+  do {
+    previous = value;
+    value = value.replace(/<[^<>]*>/g, '');
+  } while (value !== previous);
+  return value;
+}
+
 export function parseMiitNews(html, nowMs = Date.now()) {
   const items = new Map();
   for (const match of html.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)) {
@@ -44,7 +53,7 @@ export function parseMiitNews(html, nowMs = Date.now()) {
     url.search = '';
     url.hash = '';
     const title = decodeText(anchor[1].match(/\stitle\s*=\s*(["'])(.*?)\1/i)?.[2]
-      ?? anchor[2].replace(/<[^>]*>/g, ''));
+      ?? listingText(anchor[2]));
     if (!title || items.has(url.href)) continue;
     items.set(url.href, { title, link: url.href, date: date.toISOString() });
   }

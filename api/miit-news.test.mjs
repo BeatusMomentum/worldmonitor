@@ -53,6 +53,11 @@ test('MIIT titles decode source entities and cannot terminate their RSS text sec
   assert.doesNotMatch(rss, /\]\]><script>/);
 });
 
+test('fallback listing titles remove markup recreated by nested malformed tags', () => {
+  const html = `<li><span>2026-09-30</span><a href="${ARTICLE}"><scr<script>ipt>Notice</script></a></li>`;
+  assert.equal(parseMiitNews(html, NOW)[0].title, 'Notice');
+});
+
 test('MIIT endpoint serves official RSS with original dates', async () => {
   const calls = [];
   globalThis.fetch = async (url, options) => {
