@@ -34,10 +34,22 @@ const DAY_MS = 86_400_000;
  * all, FAILS the gate. Suppressions are leases, not grants.
  */
 export const BASELINE_ADVISORIES_BY_LOCKFILE = {
-  'package-lock.json': [],
+  'package-lock.json': [{
+    id: 'GHSA-vfj7-8cjw-p6xm',
+    reason: 'No patched braces release exists on npm (latest remains 3.0.3). Production inclusion is through Clerk/Solana React Native Metro peer tooling; the Vite browser bundle does not ship braces, micromatch, Metro, or Jest. Inspected API, server, CLI, and application sources do not pass untrusted brace patterns to those walkers. Markdown lint globs are repository-controlled. Remove this lease when braces > 3.0.3 is published.',
+    expiresAt: '2026-11-03T00:00:00Z',
+  }],
   'consumer-prices-core/package-lock.json': [],
-  'blog-site/package-lock.json': [],
-  'pro-test/package-lock.json': [],
+  'blog-site/package-lock.json': [{
+    id: 'GHSA-ch52-4w7c-c8xp',
+    reason: 'No patched http-cache-semantics release exists on npm (latest remains 4.2.0). Astro builds a static blog with no server adapter. Build-time remote-image CachePolicy callers receive no incoming client max-stale directive or user cookie, and the deployed blog does not serve a shared user-response cache. Remove this lease when http-cache-semantics > 4.2.0 is published.',
+    expiresAt: '2026-11-03T00:00:00Z',
+  }],
+  'pro-test/package-lock.json': [{
+    id: 'GHSA-vfj7-8cjw-p6xm',
+    reason: 'No patched braces release exists on npm (latest remains 3.0.3). The Pro lockfile pulls braces through Clerk/Solana React Native Metro peer tooling. The shipped Vite browser bundle does not include braces, micromatch, Metro, or Jest, and the Pro site has no Node pattern endpoint. Remove this lease when braces > 3.0.3 is published.',
+    expiresAt: '2026-11-03T00:00:00Z',
+  }],
   'scripts/package-lock.json': [],
   'docker/runtime-package-lock.json': [],
 };
