@@ -634,7 +634,6 @@ describe('npm audit failure reporting', () => {
 describe('Dependabot image-size and fast-uri remediation', () => {
   for (const lockPath of ['package-lock.json', 'pro-test/package-lock.json']) {
     it(`excludes vulnerable image-size copies from ${lockPath}`, () => {
-      assert.deepEqual(baselineEntriesFor(lockPath), []);
       const entries = Object.entries(readRepoJson(lockPath).packages)
         .filter(([path]) => path.endsWith('/image-size'));
       assert.deepEqual(entries, [], 'Metro must use its upstream image parser');

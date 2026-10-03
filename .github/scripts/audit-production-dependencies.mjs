@@ -34,10 +34,22 @@ const DAY_MS = 86_400_000;
  * all, FAILS the gate. Suppressions are leases, not grants.
  */
 export const BASELINE_ADVISORIES_BY_LOCKFILE = {
-  'package-lock.json': [],
+  'package-lock.json': [{
+    id: 'GHSA-vfj7-8cjw-p6xm',
+    reason: 'No patched braces release exists. Production inclusion is through Clerk/Solana React Native peer tooling; the Vite browser bundle excludes braces, micromatch, Metro and Jest. CLI markdown globs are repository-controlled. Caller evidence and removal conditions: docs/security/dependency-dispositions-2026-10-02.md.',
+    expiresAt: '2026-10-10T00:00:00Z',
+  }],
   'consumer-prices-core/package-lock.json': [],
-  'blog-site/package-lock.json': [],
-  'pro-test/package-lock.json': [],
+  'blog-site/package-lock.json': [{
+    id: 'GHSA-ch52-4w7c-c8xp',
+    reason: 'No patched http-cache-semantics release exists. Astro generates a static blog with no server adapter. Its inspected build-time remote-image caller creates requests without client max-stale directives or user cookies; no cross-user HTTP cache is served. Caller evidence and removal conditions: docs/security/dependency-dispositions-2026-10-02.md.',
+    expiresAt: '2026-10-10T00:00:00Z',
+  }],
+  'pro-test/package-lock.json': [{
+    id: 'GHSA-vfj7-8cjw-p6xm',
+    reason: 'No patched braces release exists. The dependency is under Clerk/Solana React Native peer Metro tooling. The shipped Vite browser bundle excludes braces, micromatch, Metro and Jest; the Pro site has no Node pattern endpoint. Caller evidence and removal conditions: docs/security/dependency-dispositions-2026-10-02.md.',
+    expiresAt: '2026-10-10T00:00:00Z',
+  }],
   'scripts/package-lock.json': [],
   'docker/runtime-package-lock.json': [],
 };
