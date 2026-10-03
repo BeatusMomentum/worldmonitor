@@ -144,6 +144,9 @@ test('cached country resource loads the current compiled panel after its old ass
   expect(requests.some(url => url.endsWith('/country-removed.js'))).toBe(false);
   expect(host.admissions).toBe(1);
   await page.screenshot({ path: info.outputPath('cached-country-current-build.png'), fullPage: true });
+  await page.setViewportSize({ width: 430, height: 1200 });
+  await expect(frame.locator('.cdp-country-name')).toHaveText('United States');
+  await page.screenshot({ path: info.outputPath('cached-country-current-build-mobile.png'), fullPage: true });
 });
 
 test('country military observations render under one allocation and survive an AIS outage', async ({ page }, info) => {
