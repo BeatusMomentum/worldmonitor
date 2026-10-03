@@ -2,9 +2,11 @@
 /**
  * Seed script: World Bank Tech Readiness indicators → Redis
  *
- * Fetches 4 WB indicators for all countries, computes rankings identical to
- * getTechReadinessRankings() in src/services/economic/index.ts, and stores
- * the result under economic:worldbank-techreadiness:v1 for bootstrap hydration.
+ * Fetches WB indicators for all countries, computes tech-readiness rankings
+ * identical to getTechReadinessRankings() in src/services/economic/index.ts,
+ * stores economic:worldbank-techreadiness:v1 for bootstrap hydration, and
+ * writes economic:worldbank:v2 RPC snapshots the Edge handler reads when
+ * api.worldbank.org is unreachable.
  *
  * Usage:
  *   node scripts/seed-wb-indicators.mjs [--env production|preview|development] [--sha <sha>]
@@ -14,6 +16,13 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { loadEnvFile } from './_seed-utils.mjs';
 import wbTechProjection from './_wb-tech-readiness-projection.cjs';
+import {
+  WORLD_BANK_CATALOGUE_INDICATORS,
+  WORLD_BANK_DEFAULT_CACHE_COUNTRY,
+  WORLD_BANK_LOOKBACKS,
+  worldBankRpcCacheCommands,
+  worldBankRpcCacheKey,
+} from './shared/world-bank-rpc-cache.js';
 
 
 const BOOTSTRAP_KEY = 'economic:worldbank-techreadiness:v1';
@@ -130,10 +139,9 @@ async function redisPipeline(redisUrl, token, commands) {
 // ---------------------------------------------------------------------------
 
 /**
- * Fetch all pages of a WB indicator and return latestByCountry map.
- * latestByCountry[iso3] = { value: number, name: string, year: number }
+ * Fetch all pages of a WB indicator and return raw entries.
  */
-async function fetchWbIndicator(indicatorId, dateRange) {
+async function fetchWbPages(indicatorId, dateRange) {
   const baseUrl = `https://api.worldbank.org/v2/country/all/indicator/${indicatorId}`;
   const perPage = 1000;
   let page = 1;
@@ -161,25 +169,61 @@ async function fetchWbIndicator(indicatorId, dateRange) {
     page++;
   }
 
-  // Build latestByCountry: keep most recent non-null value per ISO3 code
-  const latestByCountry = {};
+  return allEntries;
+}
 
-  for (const entry of allEntries) {
-    if (entry.value === null || entry.value === undefined) continue;
-    const iso3 = entry.countryiso3code;
-    if (!iso3 || iso3.length !== 3) continue; // skip entries with missing or malformed country codes
-
+function recordsFromWbEntries(indicatorId, entries) {
+  const named = entries.find((entry) => entry?.indicator?.value)?.indicator?.value;
+  const indicatorName = named || indicatorId;
+  const records = [];
+  for (const entry of entries) {
+    if (!entry?.countryiso3code || entry.value === null || entry.value === undefined) continue;
     const year = parseInt(entry.date, 10);
-    if (!latestByCountry[iso3] || year > latestByCountry[iso3].year) {
-      latestByCountry[iso3] = {
-        value: entry.value,
-        name: entry.country?.value || iso3,
-        year,
+    if (!Number.isFinite(year) || year <= 0) continue;
+    records.push({
+      countryCode: entry.countryiso3code,
+      countryName: entry.country?.value || '',
+      indicatorCode: indicatorId,
+      indicatorName,
+      year,
+      value: entry.value,
+    });
+  }
+  return records;
+}
+
+function latestByCountryFromRecords(records) {
+  const latestByCountry = {};
+  for (const record of records) {
+    if (!record.countryCode || record.countryCode.length !== 3) continue;
+    const previous = latestByCountry[record.countryCode];
+    if (!previous || record.year > previous.year) {
+      latestByCountry[record.countryCode] = {
+        value: record.value,
+        name: record.countryName || record.countryCode,
+        year: record.year,
       };
     }
   }
-
   return latestByCountry;
+}
+
+/**
+ * Fetch all pages of a WB indicator and return latestByCountry map.
+ * latestByCountry[iso3] = { value: number, name: string, year: number }
+ */
+async function fetchWbIndicator(indicatorId, dateRange) {
+  const records = recordsFromWbEntries(indicatorId, await fetchWbPages(indicatorId, dateRange));
+  return { latestByCountry: latestByCountryFromRecords(records), records };
+}
+
+function rpcCacheKeys(prefix, indicatorId, currentYear) {
+  const keys = [];
+  for (const years of WORLD_BANK_LOOKBACKS) {
+    keys.push(`${prefix}${worldBankRpcCacheKey(indicatorId, 'all', years, currentYear)}`);
+    keys.push(`${prefix}${worldBankRpcCacheKey(indicatorId, WORLD_BANK_DEFAULT_CACHE_COUNTRY, years, currentYear)}`);
+  }
+  return keys;
 }
 
 // ---------------------------------------------------------------------------
@@ -382,20 +426,27 @@ async function main() {
   console.log(`  Prefix:       ${prefix || '(none — production)'}`);
   console.log(`  Redis URL:    ${redisUrl}`);
   console.log(`  Redis Token:  ${maskToken(redisToken)}`);
-  console.log(`  Keys: ${fullKey}, ${progressKey}, ${renewableKey}`);
+  console.log(`  Keys: ${fullKey}, ${progressKey}, ${renewableKey}, plus ${WORLD_BANK_CATALOGUE_INDICATORS.length} RPC catalogue snapshots`);
   console.log(`  TTL:          ${TTL_SECONDS}s (7 days)`);
   console.log();
 
   const t0 = Date.now();
 
+  const currentYear = new Date().getFullYear();
+  const rpcDateRange = `${currentYear - 30}:${currentYear}`;
+  const seriesByIndicator = new Map();
+
   // ── 1. Tech Readiness rankings ──
   console.log('── Tech Readiness ──');
   const indicatorData = {};
   for (const { key, id, dateRange } of INDICATORS) {
-    console.log(`Fetching indicator: ${id} (${dateRange})`);
-    indicatorData[key] = await fetchWbIndicator(id, dateRange);
-    const count = Object.keys(indicatorData[key]).length;
-    console.log(`  → ${count} countries with non-null data\n`);
+    const seriesRange = dateRange || rpcDateRange;
+    console.log(`Fetching indicator: ${id} (${seriesRange})`);
+    const fetched = await fetchWbIndicator(id, seriesRange);
+    indicatorData[key] = fetched.latestByCountry;
+    seriesByIndicator.set(id, fetched.records);
+    const count = Object.keys(fetched.latestByCountry).length;
+    console.log(`  → ${count} countries with non-null data (${fetched.records.length} yearly rows)\n`);
   }
 
   const rankings = computeRankings(indicatorData);
@@ -414,8 +465,19 @@ async function main() {
   console.log(`  → Global: ${renewableData.globalPercentage}% (${renewableData.globalYear})`);
   console.log(`  → ${renewableData.regions.length} regions\n`);
 
-  const fetchElapsed = ((Date.now() - t0) / 1000).toFixed(1);
-  console.log(`All data fetched in ${fetchElapsed}s\n`);
+  // ── 4. RPC catalogue snapshots (same keys the Edge handler reads) ──
+  console.log('── RPC catalogue snapshots ──');
+  for (const indicatorId of WORLD_BANK_CATALOGUE_INDICATORS) {
+    if (seriesByIndicator.has(indicatorId)) continue;
+    console.log(`Fetching catalogue indicator: ${indicatorId} (${rpcDateRange})`);
+    try {
+      const fetched = await fetchWbIndicator(indicatorId, rpcDateRange);
+      seriesByIndicator.set(indicatorId, fetched.records);
+      console.log(`  → ${fetched.records.length} yearly rows\n`);
+    } catch (err) {
+      console.warn(`  → skipped ${indicatorId}: ${err.message}\n`);
+    }
+  }
 
   // Validate
   if (rankings.length === 0) {
@@ -440,6 +502,11 @@ async function main() {
           ['EXPIRE', renewableKey, String(TTL_SECONDS)],
           ['EXPIRE', `seed-meta:${RENEWABLE_KEY}`, String(TTL_SECONDS + 3600)],
         ];
+        for (const indicatorId of WORLD_BANK_CATALOGUE_INDICATORS) {
+          for (const key of rpcCacheKeys(prefix, indicatorId, currentYear)) {
+            extendPipeline.push(['EXPIRE', key, String(TTL_SECONDS)]);
+          }
+        }
         await redisPipeline(redisUrl, redisToken, extendPipeline);
         console.log('TTLs extended. Exiting without overwriting.');
         process.exit(0);
@@ -464,8 +531,20 @@ async function main() {
     pipeline.push(['SET', `seed-meta:${RENEWABLE_KEY}`, JSON.stringify({ fetchedAt: Date.now(), recordCount: renewableData.historicalData.length }), 'EX', metaTtl]);
   }
 
-  console.log(`Writing ${pipeline.length} keys to Redis...`);
+  console.log(`Writing ${pipeline.length} bootstrap keys to Redis...`);
   await redisPipeline(redisUrl, redisToken, pipeline);
+
+  const rpcKeys = [];
+  for (const [indicatorId, records] of seriesByIndicator) {
+    const commands = worldBankRpcCacheCommands(prefix, indicatorId, records, currentYear, TTL_SECONDS);
+    if (commands.length === 0) {
+      console.warn(`  → no RPC rows for ${indicatorId}, skipping cache write`);
+      continue;
+    }
+    rpcKeys.push(...commands.map((command) => command[1]));
+    console.log(`Writing ${commands.length} RPC cache keys for ${indicatorId}...`);
+    await redisPipeline(redisUrl, redisToken, commands);
+  }
 
   // Verify
   console.log('Verifying...');
@@ -488,6 +567,16 @@ async function main() {
   if (verifyResp[2]?.result) {
     const r = JSON.parse(verifyResp[2].result);
     console.log(`  ✓ renewableEnergy: ${r.regions?.length || 0} regions, global=${r.globalPercentage}%`);
+  }
+
+  if (rpcKeys.length > 0) {
+    const sampleKey = rpcKeys.find((key) => key.includes(':all:5:')) || rpcKeys[0];
+    const rpcVerify = await redisPipeline(redisUrl, redisToken, [['GET', sampleKey]]);
+    const samplePayload = rpcVerify[0]?.result ? JSON.parse(rpcVerify[0].result) : null;
+    if (!Array.isArray(samplePayload?.data) || samplePayload.data.length === 0) {
+      throw new Error(`Verification failed: RPC sample ${sampleKey} missing or empty`);
+    }
+    console.log(`  ✓ RPC sample ${sampleKey}: ${samplePayload.data.length} rows (${rpcKeys.length} keys)`);
   }
 
   const total = ((Date.now() - t0) / 1000).toFixed(1);
