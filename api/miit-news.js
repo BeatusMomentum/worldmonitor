@@ -73,7 +73,7 @@ export default async function handler(req, ctx) {
     if (!items) {
       const response = await fetch(SOURCE_URL, {
         headers: { 'User-Agent': 'WorldMonitor/1.0 (+https://worldmonitor.app)', Accept: 'text/html' },
-        redirect: 'error',
+        redirect: 'manual',
         signal: AbortSignal.timeout(10000),
       });
       if (!response.ok) throw new Error(`MIIT HTTP ${response.status}`);

@@ -65,12 +65,12 @@ test('MIIT endpoint serves official RSS with original dates', async () => {
   assert.equal(response.headers.get('Content-Type'), 'application/rss+xml; charset=utf-8');
   assert.match(await response.text(), /Tue, 29 Sep 2026 16:00:00 GMT/);
   assert.equal(calls.length, 1);
-  assert.equal(calls[0].options.redirect, 'error');
+  assert.equal(calls[0].options.redirect, 'manual');
   assert.ok(calls[0].options.headers['User-Agent']);
 });
 
 test('upstream failure or empty parsing fails without minting a healthy RSS feed', async () => {
-  for (const upstream of [new Response('failure', { status: 503 }), new Response('<html>challenge</html>')]) {
+  for (const upstream of [new Response('failure', { status: 503 }), new Response(null, { status: 302, headers: { Location: 'https://foreign.example' } }), new Response('<html>challenge</html>')]) {
     globalThis.fetch = async (url) => {
       if (url !== 'https://www.miit.gov.cn/') throw new Error('Cache unavailable');
       return upstream;
