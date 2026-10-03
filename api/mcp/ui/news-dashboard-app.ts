@@ -1,6 +1,6 @@
 import { rpcError, rpcOk } from '../rpc';
 import { UI_RESOURCE_MIME_TYPE } from './shell';
-import { buildPluginShell } from './plugin-loader';
+import { buildPluginShell } from './_plugin-loader';
 
 export const COUNTRY_VIEW_UI_URI = 'ui://worldmonitor/country-view-v2.html';
 export const NEWS_DASHBOARD_UI_URI = 'ui://worldmonitor/news-dashboard-v2.html';
