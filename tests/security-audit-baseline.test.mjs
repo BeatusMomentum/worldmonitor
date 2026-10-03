@@ -327,6 +327,38 @@ describe('baseline rot', () => {
 });
 
 describe('baseline entry validation', () => {
+  it('leases the unpatched braces and http-cache-semantics findings until an upstream release exists', () => {
+    const decisions = [
+      ['package-lock.json', 'GHSA-vfj7-8cjw-p6xm'],
+      ['pro-test/package-lock.json', 'GHSA-vfj7-8cjw-p6xm'],
+      ['blog-site/package-lock.json', 'GHSA-ch52-4w7c-c8xp'],
+    ];
+    for (const [lockfile, id] of decisions) {
+      const entry = baselineEntriesFor(lockfile).find((item) => item.id === id);
+      assert.ok(entry, `${lockfile} has no bounded caller decision for ${id}`);
+      const now = Date.parse('2026-10-03T00:00:00Z');
+      const args = {
+        findings: [finding(id)],
+        lockfile,
+        presentAdvisoryIds: new Set([id]),
+        introducedIds: new Set(),
+        publishedAt: new Map(),
+        now,
+      };
+      const live = formatAuditReport(classifyAudit(args), { now });
+      assert.equal(live.failed, false);
+      assert.ok(live.info.some((line) => line.includes('::warning') && line.includes(id)));
+      const expiredNow = Date.parse(entry.expiresAt) + 1;
+      const expired = formatAuditReport(classifyAudit({ ...args, now: expiredNow }), { now: expiredNow });
+      assert.equal(expired.failed, true);
+      const stale = formatAuditReport(
+        classifyAudit({ ...args, findings: [], presentAdvisoryIds: new Set() }),
+        { now },
+      );
+      assert.equal(stale.failed, true);
+    }
+  });
+
   it('accepts the baseline this repo actually ships', () => {
     assert.equal(validateBaselineEntries(), true);
   });
