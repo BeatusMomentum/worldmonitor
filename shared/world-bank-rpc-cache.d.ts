@@ -7,6 +7,8 @@ export const WORLD_BANK_CATALOGUE_INDICATORS: readonly string[];
 
 export interface WorldBankCountryRecord {
   countryCode: string;
+  /** Provider country.id retained for ISO2 aliases absent from the local table. Seed-only. */
+  countryIso2?: string;
   countryName: string;
   indicatorCode: string;
   indicatorName: string;

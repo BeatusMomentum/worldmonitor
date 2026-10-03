@@ -14,12 +14,11 @@
 
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { loadEnvFile } from './_seed-utils.mjs';
+import { loadEnvFile, writeExtraKeyWithMetaAtomically } from './_seed-utils.mjs';
 import wbTechProjection from './_wb-tech-readiness-projection.cjs';
 import {
   WORLD_BANK_CATALOGUE_INDICATORS,
-  WORLD_BANK_DEFAULT_CACHE_COUNTRY,
-  WORLD_BANK_LOOKBACKS,
+  filterWorldBankRecords,
   worldBankRpcCacheCommands,
   worldBankRpcCacheKey,
 } from './shared/world-bank-rpc-cache.js';
@@ -182,6 +181,7 @@ function recordsFromWbEntries(indicatorId, entries) {
     if (!Number.isFinite(year) || year <= 0) continue;
     records.push({
       countryCode: entry.countryiso3code,
+      countryIso2: entry.country?.id,
       countryName: entry.country?.value || '',
       indicatorCode: indicatorId,
       indicatorName,
@@ -215,15 +215,6 @@ function latestByCountryFromRecords(records) {
 async function fetchWbIndicator(indicatorId, dateRange) {
   const records = recordsFromWbEntries(indicatorId, await fetchWbPages(indicatorId, dateRange));
   return { latestByCountry: latestByCountryFromRecords(records), records };
-}
-
-function rpcCacheKeys(prefix, indicatorId, currentYear) {
-  const keys = [];
-  for (const years of WORLD_BANK_LOOKBACKS) {
-    keys.push(`${prefix}${worldBankRpcCacheKey(indicatorId, 'all', years, currentYear)}`);
-    keys.push(`${prefix}${worldBankRpcCacheKey(indicatorId, WORLD_BANK_DEFAULT_CACHE_COUNTRY, years, currentYear)}`);
-  }
-  return keys;
 }
 
 // ---------------------------------------------------------------------------
@@ -440,10 +431,12 @@ async function main() {
   console.log('── Tech Readiness ──');
   const indicatorData = {};
   for (const { key, id, dateRange } of INDICATORS) {
-    const seriesRange = dateRange || rpcDateRange;
-    console.log(`Fetching indicator: ${id} (${seriesRange})`);
-    const fetched = await fetchWbIndicator(id, seriesRange);
-    indicatorData[key] = fetched.latestByCountry;
+    console.log(`Fetching indicator: ${id} (${rpcDateRange})`);
+    const fetched = await fetchWbIndicator(id, rpcDateRange);
+    const [rankingStart, rankingEnd] = dateRange.split(':').map(Number);
+    indicatorData[key] = latestByCountryFromRecords(
+      fetched.records.filter(record => record.year >= rankingStart && record.year <= rankingEnd),
+    );
     seriesByIndicator.set(id, fetched.records);
     const count = Object.keys(fetched.latestByCountry).length;
     console.log(`  → ${count} countries with non-null data (${fetched.records.length} yearly rows)\n`);
@@ -486,6 +479,7 @@ async function main() {
   }
 
   // Percentage-drop guard: if new count < 50% of prior count, extend TTLs instead of overwriting
+  let preserveRankings = false;
   try {
     const priorMetaResp = await redisPipeline(redisUrl, redisToken, [
       ['GET', `seed-meta:${BOOTSTRAP_KEY}`],
@@ -502,14 +496,9 @@ async function main() {
           ['EXPIRE', renewableKey, String(TTL_SECONDS)],
           ['EXPIRE', `seed-meta:${RENEWABLE_KEY}`, String(TTL_SECONDS + 3600)],
         ];
-        for (const indicatorId of WORLD_BANK_CATALOGUE_INDICATORS) {
-          for (const key of rpcCacheKeys(prefix, indicatorId, currentYear)) {
-            extendPipeline.push(['EXPIRE', key, String(TTL_SECONDS)]);
-          }
-        }
         await redisPipeline(redisUrl, redisToken, extendPipeline);
-        console.log('TTLs extended. Exiting without overwriting.');
-        process.exit(0);
+        preserveRankings = true;
+        console.log('Bootstrap TTLs extended; RPC snapshots will still be published.');
       }
     }
   } catch (err) {
@@ -531,19 +520,30 @@ async function main() {
     pipeline.push(['SET', `seed-meta:${RENEWABLE_KEY}`, JSON.stringify({ fetchedAt: Date.now(), recordCount: renewableData.historicalData.length }), 'EX', metaTtl]);
   }
 
-  console.log(`Writing ${pipeline.length} bootstrap keys to Redis...`);
-  await redisPipeline(redisUrl, redisToken, pipeline);
+  if (!preserveRankings) {
+    console.log(`Writing ${pipeline.length} bootstrap keys to Redis...`);
+    await redisPipeline(redisUrl, redisToken, pipeline);
+  }
 
-  const rpcKeys = [];
   for (const [indicatorId, records] of seriesByIndicator) {
     const commands = worldBankRpcCacheCommands(prefix, indicatorId, records, currentYear, TTL_SECONDS);
     if (commands.length === 0) {
       console.warn(`  → no RPC rows for ${indicatorId}, skipping cache write`);
       continue;
     }
-    rpcKeys.push(...commands.map((command) => command[1]));
     console.log(`Writing ${commands.length} RPC cache keys for ${indicatorId}...`);
-    await redisPipeline(redisUrl, redisToken, commands);
+    for (const command of commands) {
+      const key = command[1];
+      const payload = JSON.parse(command[2]);
+      await writeExtraKeyWithMetaAtomically({
+        key,
+        data: payload,
+        ttlSeconds: TTL_SECONDS,
+        recordCount: payload.data.length,
+        metaKey: `seed-meta:${key}`,
+        metaTtlSeconds: TTL_SECONDS + 3600,
+      });
+    }
   }
 
   // Verify
@@ -569,15 +569,26 @@ async function main() {
     console.log(`  ✓ renewableEnergy: ${r.regions?.length || 0} regions, global=${r.globalPercentage}%`);
   }
 
-  if (rpcKeys.length > 0) {
-    const sampleKey = rpcKeys.find((key) => key.includes(':all:5:')) || rpcKeys[0];
-    const rpcVerify = await redisPipeline(redisUrl, redisToken, [['GET', sampleKey]]);
-    const samplePayload = rpcVerify[0]?.result ? JSON.parse(rpcVerify[0].result) : null;
-    if (!Array.isArray(samplePayload?.data) || samplePayload.data.length === 0) {
-      throw new Error(`Verification failed: RPC sample ${sampleKey} missing or empty`);
-    }
-    console.log(`  ✓ RPC sample ${sampleKey}: ${samplePayload.data.length} rows (${rpcKeys.length} keys)`);
+  const missingIndicators = [];
+  for (const indicatorId of WORLD_BANK_CATALOGUE_INDICATORS) {
+    const keys = [currentYear, currentYear - 1].map(year =>
+      `${prefix}${worldBankRpcCacheKey(indicatorId, 'all', 30, year)}`);
+    const snapshots = await redisPipeline(redisUrl, redisToken, keys.map(key => ['GET', key]));
+    const usable = snapshots.some(snapshot => {
+      try {
+        const payload = JSON.parse(snapshot?.result);
+        return filterWorldBankRecords(payload?.data, 'all', 30, currentYear)
+          .some(record => record.indicatorCode === indicatorId);
+      } catch {
+        return false;
+      }
+    });
+    if (!usable) missingIndicators.push(indicatorId);
   }
+  if (missingIndicators.length > 0) {
+    throw new Error(`Verification failed: RPC snapshots missing for ${missingIndicators.join(', ')}`);
+  }
+  console.log(`  ✓ RPC coverage: ${WORLD_BANK_CATALOGUE_INDICATORS.length} indicators`);
 
   const total = ((Date.now() - t0) / 1000).toFixed(1);
   console.log(`\n=== Done in ${total}s ===`);
@@ -586,6 +597,6 @@ async function main() {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(err => {
     console.error('\nFATAL:', err.message || err);
-    process.exit(0); // graceful for cron
+    process.exit(1);
   });
 }

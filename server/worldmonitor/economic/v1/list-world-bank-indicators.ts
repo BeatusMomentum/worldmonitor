@@ -52,6 +52,15 @@ function normalizeCountries(raw: string): string | null {
   return [...new Set(countries)].sort().join(';');
 }
 
+function rpcResponse(records: WorldBankCountryData[]): ListWorldBankIndicatorsResponse {
+  return {
+    data: records.map(({ countryCode, countryName, indicatorCode, indicatorName, year, value }) => ({
+      countryCode, countryName, indicatorCode, indicatorName, year, value,
+    })),
+    pagination: undefined,
+  };
+}
+
 function seededResponse(
   records: unknown,
   country: string,
@@ -59,10 +68,7 @@ function seededResponse(
   currentYear: number,
 ): ListWorldBankIndicatorsResponse | null {
   if (!Array.isArray(records)) return null;
-  return {
-    data: filterWorldBankRecords(records, country || WORLD_BANK_DEFAULT_CACHE_COUNTRY, years, currentYear),
-    pagination: undefined,
-  };
+  return rpcResponse(filterWorldBankRecords(records, country || WORLD_BANK_DEFAULT_CACHE_COUNTRY, years, currentYear));
 }
 
 async function readSeededWorldBankResponse(
@@ -73,18 +79,20 @@ async function readSeededWorldBankResponse(
 ): Promise<ListWorldBankIndicatorsResponse | null> {
   const lookbacks = [years, ...WORLD_BANK_LOOKBACKS.filter(lookback => lookback > years)];
   let emptySeed: ListWorldBankIndicatorsResponse | null = null;
-  for (const lookback of lookbacks) {
-    const seeded = await readCachedJson(worldBankRpcCacheKey(indicator, 'all', lookback, currentYear));
-    if (seeded.status === 'error') {
-      logCacheReadErrorForSeed(seeded.error);
-      continue;
+  for (const snapshotYear of [currentYear, currentYear - 1]) {
+    for (const lookback of lookbacks) {
+      const seeded = await readCachedJson(worldBankRpcCacheKey(indicator, 'all', lookback, snapshotYear));
+      if (seeded.status === 'error') {
+        logCacheReadErrorForSeed(seeded.error);
+        continue;
+      }
+      if (seeded.status !== 'hit' || !seeded.value || typeof seeded.value !== 'object') continue;
+      const payload = seeded.value as { data?: unknown };
+      const response = seededResponse(payload.data, country, years, currentYear);
+      if (!response) continue;
+      if (response.data.length > 0) return response;
+      emptySeed = response;
     }
-    if (seeded.status !== 'hit' || !seeded.value || typeof seeded.value !== 'object') continue;
-    const payload = seeded.value as { data?: unknown };
-    const response = seededResponse(payload.data, country, years, currentYear);
-    if (!response) continue;
-    if (response.data.length > 0) return response;
-    emptySeed = response;
   }
   return emptySeed;
 }
@@ -176,7 +184,7 @@ export async function listWorldBankIndicators(
         return { data, pagination: undefined };
       }, 120, { cacheFailures: false });
       if (!result.data || !Array.isArray(result.data.data)) throw new SeedUnavailableError(cacheKey);
-      return result.data;
+      return rpcResponse(result.data.data);
     } catch {
       const seeded = await readSeededWorldBankResponse(req.indicatorCode, country, years, currentYear);
       if (seeded) return seeded;

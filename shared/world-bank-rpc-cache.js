@@ -59,6 +59,7 @@ export function isWorldBankCountryRecord(value) {
   if (!value || typeof value !== 'object') return false;
   const record = value;
   return typeof record.countryCode === 'string'
+    && (record.countryIso2 === undefined || typeof record.countryIso2 === 'string')
     && typeof record.countryName === 'string'
     && typeof record.indicatorCode === 'string'
     && typeof record.indicatorName === 'string'
@@ -81,7 +82,7 @@ export function filterWorldBankRecords(records, country, years, currentYear) {
   return records.filter((record) => {
     if (!isWorldBankCountryRecord(record)) return false;
     if (record.year < minYear || record.year > currentYear) return false;
-    if (allowed && !allowed.has(record.countryCode)) return false;
+    if (allowed && !allowed.has(record.countryCode) && !allowed.has(record.countryIso2)) return false;
     return true;
   });
 }
