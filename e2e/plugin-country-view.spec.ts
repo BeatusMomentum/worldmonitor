@@ -184,7 +184,7 @@ test('country territory counts honor loaded polygons instead of neighboring boun
   await expect(grid).toContainText('Foreign Flights0');
   await expect(grid).toContainText('Naval Vessels0');
   await expect(grid).toContainText('Foreign PresenceUnknown');
-  await expect.poll(() => host.contexts.at(-1)?.sections.find(section => section.section === 'military')?.renderedText).toContain('Foreign Flights0');
+  await expect.poll(() => host.contexts.at(-1)?.sections.find(section => section.section === 'military')?.renderedText).toMatch(/Foreign Flights\s*0/);
   expect(host.admissions).toBe(2);
   await frame.getByRole('button', { name: 'Overview', exact: true }).click();
   await frame.getByRole('button', { name: 'Security', exact: true }).click();
