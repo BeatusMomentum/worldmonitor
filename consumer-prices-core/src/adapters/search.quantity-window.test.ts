@@ -37,6 +37,8 @@ describe('basket quantity window in extraction', () => {
     });
     const schema = extract.mock.calls[0][1] as ExtractSchema;
     expect(schema.prompt).toContain('between 800g and 1200g');
+    expect(schema.prompt).toContain('Convert equivalent displayed units to g before comparing the quantity');
+    expect(schema.prompt).toContain('an incompatible measurement type');
     expect(schema.prompt).toContain('Keep the requested pack count of 1');
     expect(schema.prompt).toContain('a different pack count, or a bulk case, return null for price');
     expect(schema.prompt).not.toContain('The product MUST be 1kg');

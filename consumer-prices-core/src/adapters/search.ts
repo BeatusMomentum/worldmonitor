@@ -422,7 +422,7 @@ export class SearchAdapter implements RetailerAdapter {
     const canonicalSize = parseSize(canonicalName);
     const { minBaseQty, maxBaseQty, baseUnit } = itemConstraints ?? {};
     const quantityWindow = canonicalSize && canonicalSize.baseUnit === baseUnit && minBaseQty != null && maxBaseQty != null
-      ? ` The total product quantity must be between ${minBaseQty}${baseUnit} and ${maxBaseQty}${baseUnit}. Keep the requested pack count of ${canonicalSize.packCount}. If the page shows a quantity outside this range, a different unit, a different pack count, or a bulk case, return null for price.`
+      ? ` The total product quantity must be between ${minBaseQty}${baseUnit} and ${maxBaseQty}${baseUnit}. Convert equivalent displayed units to ${baseUnit} before comparing the quantity. Keep the requested pack count of ${canonicalSize.packCount}. If the page shows a quantity outside this range, an incompatible measurement type, a different pack count, or a bulk case, return null for price.`
       : sizeHint
         ? ` The product MUST be ${sizeHint}. If the page shows a different size, pack count, or bulk case, return null for price.`
         : '';
