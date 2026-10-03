@@ -25,33 +25,34 @@ const DAY_MS = 86_400_000;
 /**
  * Accepted-risk suppressions, per lockfile.
  *
- * Every entry MUST carry `reason` (why this is not exploitable here) and
- * `expiresAt` (when the reasoning must be re-checked). validateBaselineEntries()
- * enforces both, so a suppression cannot be added without a justification or an
- * end date — the two things the previous flat `['GHSA-…']` array let authors
- * skip, which is how three dead entries accumulated under pro-test.
+ * Every entry MUST carry `reason` (why this is not exploitable here),
+ * `expiresAt` (when the reasoning must be re-checked), and `lockfileSha256`
+ * (the reviewed lockfile). validateBaselineEntries() enforces all three.
+ * A later lockfile change — including a new path or parent for the same GHSA —
+ * fails the lease until caller reachability is reviewed again.
  *
- * An entry that outlives `expiresAt`, or whose advisory stops being reported at
- * all, FAILS the gate. Suppressions are leases, not grants.
+ * An entry that outlives `expiresAt`, whose advisory stops being reported, or
+ * whose lockfile no longer matches, FAILS the gate. Suppressions are leases,
+ * not grants.
  */
 export const BASELINE_ADVISORIES_BY_LOCKFILE = {
   'package-lock.json': [{
     id: 'GHSA-vfj7-8cjw-p6xm',
-    reason: 'No patched braces release exists. Production inclusion is through Clerk/Solana React Native peer tooling; the Vite browser bundle excludes braces, micromatch, Metro and Jest. CLI markdown globs are repository-controlled. Caller evidence and removal conditions: docs/security/dependency-dispositions-2026-10-02.md.',
-    expiresAt: '2026-10-10T00:00:00Z',
+    reason: 'No patched braces release exists on npm (latest remains 3.0.3). Production inclusion is through Clerk/Solana React Native Metro peer tooling; the Vite browser bundle does not ship braces, micromatch, Metro, or Jest. Inspected API, server, CLI, and application sources do not pass untrusted brace patterns to those walkers. Markdown lint globs are repository-controlled. Caller evidence and removal conditions: docs/security/dependency-dispositions-2026-10-02.md.',
+    expiresAt: '2026-11-03T00:00:00Z',
     lockfileSha256: 'c69d7459919ab51958835da8d11d1ed86d2205baa68b20394376da985ae755a1',
   }],
   'consumer-prices-core/package-lock.json': [],
   'blog-site/package-lock.json': [{
     id: 'GHSA-ch52-4w7c-c8xp',
-    reason: 'No patched http-cache-semantics release exists. Astro generates a static blog with no server adapter. Its inspected build-time remote-image caller creates requests without client max-stale directives or user cookies; no cross-user HTTP cache is served. Caller evidence and removal conditions: docs/security/dependency-dispositions-2026-10-02.md.',
-    expiresAt: '2026-10-10T00:00:00Z',
+    reason: 'No patched http-cache-semantics release exists on npm (latest remains 4.2.0). Astro builds a static blog with no server adapter. Build-time remote-image CachePolicy callers receive no incoming client max-stale directive or user cookie, and the deployed blog does not serve a shared user-response cache. Caller evidence and removal conditions: docs/security/dependency-dispositions-2026-10-02.md.',
+    expiresAt: '2026-11-03T00:00:00Z',
     lockfileSha256: '9a23f7e02febd7708e7b61bee88343c6765e972db7863ae34d875dcf7ffbeee4',
   }],
   'pro-test/package-lock.json': [{
     id: 'GHSA-vfj7-8cjw-p6xm',
-    reason: 'No patched braces release exists. The dependency is under Clerk/Solana React Native peer Metro tooling. The shipped Vite browser bundle excludes braces, micromatch, Metro and Jest; the Pro site has no Node pattern endpoint. Caller evidence and removal conditions: docs/security/dependency-dispositions-2026-10-02.md.',
-    expiresAt: '2026-10-10T00:00:00Z',
+    reason: 'No patched braces release exists on npm (latest remains 3.0.3). The Pro lockfile pulls braces through Clerk/Solana React Native Metro peer tooling. The shipped Vite browser bundle does not include braces, micromatch, Metro, or Jest, and the Pro site has no Node pattern endpoint. Caller evidence and removal conditions: docs/security/dependency-dispositions-2026-10-02.md.',
+    expiresAt: '2026-11-03T00:00:00Z',
     lockfileSha256: '5f6e1022d23980b394d12baaa47013b85f67f431015676df39ed3c460e91eb60',
   }],
   'scripts/package-lock.json': [],
@@ -160,6 +161,7 @@ export function collectStaleBaselineEntries(report, lockfile) {
  * Sort every high+ finding into exactly one verdict.
  *
  *   baselined, unexpired          -> suppressed  (info)
+ *   baselined, lockfile mismatch  -> blocking    ("re-review caller reachability")
  *   baselined, past expiresAt     -> blocking    ("re-review the suppression")
  *   introduced by THIS change     -> blocking    (the author can fix it)
  *   inherited, inside grace       -> deferred    (warn + countdown)
