@@ -76,7 +76,15 @@ const BOOT_SCRIPT = String.raw`async function(config) {
       })));
       document.body.className = current.body.className;
       document.body.replaceChildren(...current.body.childNodes);
-      await import(entry);
+      document.documentElement.dataset.wmPluginManagedBoot = 'true';
+      let timeout;
+      try {
+        await Promise.race([
+          import(entry),
+          new Promise((resolve, reject) => { timeout = setTimeout(() => reject(new Error('Panel module timed out')), 10000); }),
+        ]);
+      } finally { clearTimeout(timeout); }
+      document.dispatchEvent(new Event('wm-plugin-mount'));
     } catch { showFailure(); }
   };
   await load();

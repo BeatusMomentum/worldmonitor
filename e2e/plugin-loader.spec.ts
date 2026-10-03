@@ -19,7 +19,7 @@ for (const entry of ['country.html', 'plugin.html'] as const) {
     page.on('request', request => requests.push(request.url()));
     let version = 'A';
     await page.route(`${origin}/plugin/${entry}`, route => route.fulfill({ headers, contentType: 'text/html', body: currentHtml(root, version) }));
-    await page.route(`${origin}/plugin/assets/**`, route => route.fulfill({ headers, contentType: route.request().url().endsWith('.css') ? 'text/css' : 'application/javascript', body: route.request().url().endsWith('.css') ? 'main{color:rgb(1,2,3)}' : `document.getElementById('${root}').textContent='Current ${version} panel';` }));
+    await page.route(`${origin}/plugin/assets/**`, route => route.fulfill({ headers, contentType: route.request().url().endsWith('.css') ? 'text/css' : 'application/javascript', body: route.request().url().endsWith('.css') ? 'main{color:rgb(1,2,3)}' : `function mountPlugin(){document.getElementById('${root}').textContent='Current ${version} panel';}document.addEventListener('wm-plugin-mount',mountPlugin,{once:true});` }));
     const frame = await mount(page, shell);
     await expect(frame.locator('main')).toHaveText('Current A panel');
     version = 'B';
@@ -41,7 +41,7 @@ for (const failure of ['document', 'module', 'style'] as const) {
     });
     await page.route(`${origin}/plugin/assets/**`, route => {
       const css = route.request().url().endsWith('.css');
-      return route.fulfill({ headers, status: failed && ((failure === 'style' && css) || (failure === 'module' && !css)) ? 404 : 200, contentType: css ? 'text/css' : 'application/javascript', body: css ? 'main{padding:24px}' : "document.getElementById('countryRoot').textContent='Recovered current panel';" });
+      return route.fulfill({ headers, status: failed && ((failure === 'style' && css) || (failure === 'module' && !css)) ? 404 : 200, contentType: css ? 'text/css' : 'application/javascript', body: css ? 'main{padding:24px}' : "function mountPlugin(){document.getElementById('countryRoot').textContent='Recovered current panel';}document.addEventListener('wm-plugin-mount',mountPlugin,{once:true});" });
     });
     const frame = await mount(page, buildPluginShell({ origin, entry: 'country.html', root: 'countryRoot' }));
     await expect(frame.getByRole('status')).toContainText('could not load');
@@ -80,7 +80,7 @@ test('a stalled module reaches retry and a late import cannot mount the abandone
   await page.route(`${origin}/plugin/assets/**`, async route => {
     const css = route.request().url().endsWith('.css');
     if (!css && stalled) await blocked;
-    await route.fulfill({ headers, contentType: css ? 'text/css' : 'application/javascript', body: css ? 'main{color:#eee}' : `parent.postMessage({moduleEvaluated:true},'*');export function mountPlugin(){document.getElementById('${root}').textContent='Current mounted panel';parent.postMessage({moduleMounted:true},'*');}if(document.documentElement.dataset.wmPluginManagedBoot!=='true')mountPlugin();` });
+    await route.fulfill({ headers, contentType: css ? 'text/css' : 'application/javascript', body: css ? 'main{color:#eee}' : `parent.postMessage({moduleEvaluated:true},'*');function mountPlugin(){document.getElementById('${root}').textContent='Current mounted panel';parent.postMessage({moduleMounted:true},'*');}if(document.documentElement.dataset.wmPluginManagedBoot==='true')document.addEventListener('wm-plugin-mount',mountPlugin,{once:true});else mountPlugin();` });
   });
   await page.setContent('<iframe sandbox="allow-scripts" style="width:100%;height:600px"></iframe>');
   await page.evaluate(() => {
