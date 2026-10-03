@@ -173,9 +173,9 @@ test('seeded default key is served without a live fetch', async () => {
   const currentYear = new Date().getFullYear();
   providerStatus = 503;
   cache.set(worldBankRpcCacheKey(indicator, '__default__', 5, currentYear), JSON.stringify({
-    data: [seededRow('USA')],
+    data: [{ ...seededRow('USA'), countryIso2: 'US' }],
   }));
-  expect((await request()).data[0]?.countryCode).toBe('USA');
+  expect((await request()).data).toEqual([seededRow('USA')]);
   expect(providerUrls).toHaveLength(0);
   expect(writes).toHaveLength(0);
 });
@@ -204,5 +204,47 @@ test('falls back to a longer seeded lookback without caching the live 503', asyn
     data: [seededRow('USA', currentYear - 1)],
     pagination: undefined,
   });
+  expect(writes).toHaveLength(0);
+});
+
+test('serves a provider ISO2 alias absent from the local country table without exposing seed-only fields', async () => {
+  const currentYear = new Date().getFullYear();
+  providerStatus = 503;
+  cache.set(worldBankRpcCacheKey(indicator, 'all', 5, currentYear), JSON.stringify({
+    data: [{ ...seededRow('CHI'), countryIso2: 'JG' }, seededRow('USA')],
+  }));
+  expect(await request({ countryCode: 'JG' })).toEqual({
+    data: [seededRow('CHI')], pagination: undefined,
+  });
+  expect(writes).toHaveLength(0);
+});
+
+test('uses an unexpired prior-year snapshot after rollover and filters to the current request window', async () => {
+  vi.useFakeTimers();
+  try {
+    vi.setSystemTime(new Date('2027-01-01T12:00:00Z'));
+    providerStatus = 503;
+    cache.set(worldBankRpcCacheKey(indicator, 'all', 30, 2026), JSON.stringify({
+      data: [seededRow('USA', 2026), seededRow('USA', 2021)],
+    }));
+    expect(await request({ countryCode: 'US', year: 5 })).toEqual({
+      data: [seededRow('USA', 2026)], pagination: undefined,
+    });
+    expect(writes).toHaveLength(0);
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
+test('prefers current-year observations over an older snapshot', async () => {
+  const currentYear = new Date().getFullYear();
+  providerStatus = 503;
+  cache.set(worldBankRpcCacheKey(indicator, 'all', 30, currentYear), JSON.stringify({
+    data: [seededRow('USA', currentYear - 1)],
+  }));
+  cache.set(worldBankRpcCacheKey(indicator, 'all', 5, currentYear - 1), JSON.stringify({
+    data: [seededRow('USA', currentYear - 2)],
+  }));
+  expect((await request()).data).toEqual([seededRow('USA', currentYear - 1)]);
   expect(writes).toHaveLength(0);
 });
