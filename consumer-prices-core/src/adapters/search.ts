@@ -419,9 +419,14 @@ export class SearchAdapter implements RetailerAdapter {
     itemConstraints?: ItemConstraints,
   ): Promise<ExtractionAttempt> {
     const sizeHint = extractSizeHint(canonicalName);
-    const sizeClause = sizeHint
-      ? ` You are looking for "${canonicalName}". The product MUST be ${sizeHint}. If the page shows a different size, pack count, or bulk case, return null for price.`
-      : ` You are looking for "${canonicalName}".`;
+    const canonicalSize = parseSize(canonicalName);
+    const { minBaseQty, maxBaseQty, baseUnit } = itemConstraints ?? {};
+    const quantityWindow = canonicalSize && canonicalSize.baseUnit === baseUnit && minBaseQty != null && maxBaseQty != null
+      ? ` The total product quantity must be between ${minBaseQty}${baseUnit} and ${maxBaseQty}${baseUnit}. If the page shows a quantity outside this range or a different unit, return null for price.`
+      : sizeHint
+        ? ` The product MUST be ${sizeHint}. If the page shows a different size, pack count, or bulk case, return null for price.`
+        : '';
+    const sizeClause = ` You are looking for "${canonicalName}".${quantityWindow}`;
 
     const extractSchema = {
       // No numeric example here, deliberately. A worked example ("combine them
