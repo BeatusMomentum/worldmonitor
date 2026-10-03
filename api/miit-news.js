@@ -91,7 +91,11 @@ export default async function handler(req, ctx) {
       },
     });
   } catch (error) {
-    captureSilentError(error, { tags: { route: 'api/miit-news', step: 'listing' }, ctx });
+    captureSilentError(error, {
+      tags: { route: 'api/miit-news', step: 'listing' },
+      fingerprint: ['api/miit-news', 'listing', error instanceof Error ? error.name : 'Error'],
+      ctx,
+    });
     return jsonResponse({ error: 'MIIT official news unavailable' }, 502, {
       ...cors, 'Cache-Control': 'no-store',
     });
