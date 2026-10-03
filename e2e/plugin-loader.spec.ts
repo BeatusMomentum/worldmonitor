@@ -69,3 +69,40 @@ for (const [index, html] of [
     expect(assets).toEqual([]);
   });
 }
+
+test('a stalled module reaches retry and a late import cannot mount the abandoned panel', async ({ page }) => {
+  await page.clock.install();
+  const root = 'countryRoot';
+  let stalled = true;
+  let release: () => void = () => {};
+  const blocked = new Promise<void>(resolve => { release = resolve; });
+  await page.route(`${origin}/plugin/country.html`, route => route.fulfill({ headers, contentType: 'text/html', body: currentHtml(root, 'stall') }));
+  await page.route(`${origin}/plugin/assets/**`, async route => {
+    const css = route.request().url().endsWith('.css');
+    if (!css && stalled) await blocked;
+    await route.fulfill({ headers, contentType: css ? 'text/css' : 'application/javascript', body: css ? 'main{color:#eee}' : `parent.postMessage({moduleEvaluated:true},'*');export function mountPlugin(){document.getElementById('${root}').textContent='Current mounted panel';parent.postMessage({moduleMounted:true},'*');}if(document.documentElement.dataset.wmPluginManagedBoot!=='true')mountPlugin();` });
+  });
+  await page.setContent('<iframe sandbox="allow-scripts" style="width:100%;height:600px"></iframe>');
+  await page.evaluate(() => {
+    Object.assign(window, { moduleMounts: 0, moduleLoads: 0 });
+    window.addEventListener('message', event => {
+      if (event.source !== document.querySelector('iframe')!.contentWindow) return;
+      const counts = window as unknown as { moduleLoads: number; moduleMounts: number };
+      if (event.data?.moduleEvaluated) counts.moduleLoads++;
+      if (event.data?.moduleMounted) counts.moduleMounts++;
+    });
+  });
+  await page.locator('iframe').evaluate((frame, html) => { (frame as HTMLIFrameElement).srcdoc = html; }, buildPluginShell({ origin, entry: 'country.html', root }));
+  const frame = page.frameLocator('iframe');
+  await expect(frame.locator('main')).toHaveText('Loading current panel');
+  await page.clock.fastForward(11000);
+  await expect(frame.getByRole('button', { name: 'Retry interface' })).toBeVisible({ timeout: 2000 });
+  stalled = false;
+  release();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { moduleLoads: number }).moduleLoads)).toBe(1);
+  expect(await page.evaluate(() => (window as unknown as { moduleMounts: number }).moduleMounts)).toBe(0);
+  await expect(frame.getByRole('status')).toContainText('could not load');
+  await frame.getByRole('button', { name: 'Retry interface' }).click();
+  await expect(frame.locator('main')).toHaveText('Current mounted panel');
+  expect(await page.evaluate(() => (window as unknown as { moduleMounts: number }).moduleMounts)).toBe(1);
+});
