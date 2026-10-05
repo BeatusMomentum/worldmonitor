@@ -2303,6 +2303,19 @@ curl -s https://worldmonitor.app/mcp \
 
 ## 元工具
 
+### `get_mcp_allowance`
+
+读取当前已验证账户的现有额度快照。客户端不支持 `worldmonitor://account/mcp-allowance` 资源读取时，请调用此工具。
+
+**工具专用参数：** 无。只接受通用可选的 `jmespath` 投影，在分配前拒绝账户选择器、`summary` 及 `panel_request`。
+
+**响应：** `{ access, used, limit, remaining, resetsAt, requestWindows, sharedWithRestApi }`。免费账户还获得请求窗口的使用量、上限、剩余数、空闲间隔、活动状态和到期时间。无限额度的 `limit` 与 `remaining` 为 `null`。计数器不可读取或格式错误时返回错误，而不是成功的零使用量快照。文本和 `structuredContent` 沿用普通工具的投影协议。
+
+- **访问：** `free-account`。要求已验证、绑定用户的 OAuth 或 `wm_…` 凭据，并保留现有权益检查。匿名和运营方凭据无法读取账户快照。
+- **配额：** 不预留每日额度、免费账户调用或窗口、面板分配或内部读取次数。每日额度耗尽后仍可读取；两种凭据共享账户每分钟 192 次的协议限流。
+- **API 共享：** `sharedWithRestApi` 表示计数器是否包含 REST 请求。影子模式的 API 计数器仍使用已售 API 上限。账户总数不能识别具体调用者。
+- **API 端点：** 无。工具与账户资源共用一个强制执行计数器读取器。响应为 `no-store`。
+
 ### `describe_tool`
 
 按名称返回任何其他工具的完整未压缩定义。当压缩的 `tools/list` 条目对行为或参数语义存在歧义时使用 — 自 v1.5.0 起，`tools/list` 返回每个工具的 `description`，截断为第一句（≤120 UTF-8 字节）；`describe_tool` 返回完整的长格式文本以及相同的 `inputSchema`（每个属性的完整描述）。

@@ -11,6 +11,7 @@ import { isAppOwnedRedisKey } from '../_redis-key-ownership.js';
 // @ts-expect-error — JS module, no declaration file
 import { captureSilentError } from '../_sentry-edge.js';
 import { secondsUntilUtcMidnight } from '../../server/_shared/pro-mcp-token';
+import { readAccountAllowance } from './_account-allowance';
 import { applyPerMinuteLimit, getMcpBillingVerificationDenial, wwwAuthHeader } from './auth';
 import { BillingDenialError, RpcValidationError, ToolBackoffError } from './billing-denial';
 import {
@@ -411,9 +412,9 @@ export async function dispatchToolsCall(
   const dedicatedPanel = !freeAccountAllowance && budget?.allowance !== 'api'
     && (context.kind === 'pro' || context.kind === 'user_key');
   const deferredBurst = toolBurstPerMinute !== undefined && dedicatedPanel && typeof p?.name === 'string' && p.arguments?.panel_request !== undefined
-    && p.name !== 'open_country_brief' && p.name !== 'open_news_dashboard';
+    && p.name !== 'open_country_brief' && p.name !== 'open_news_dashboard' && p.name !== 'get_mcp_allowance';
   if (toolBurstPerMinute !== undefined && !deferredBurst) {
-    const limited = await applyPerMinuteLimit(context, corsHeaders, toolBurstPerMinute, id);
+    const limited = await applyPerMinuteLimit(context, corsHeaders, toolBurstPerMinute, id, p?.name === 'get_mcp_allowance' ? { kind: 'protocol' } : undefined);
     if (limited) return limited;
   }
   if (!p || typeof p.name !== 'string') {
@@ -446,6 +447,16 @@ export async function dispatchToolsCall(
       // omitted rather than emitted with a wrong URL.
       wwwAuthenticate: resourceMetadataUrl,
     });
+  }
+
+  if (tool.name === 'get_mcp_allowance') {
+    if (context.kind !== 'pro' && context.kind !== 'user_key') {
+      return rpcError(id, -32002, 'Account allowance status requires a user-bound credential.', corsHeaders);
+    }
+    if (Object.keys(p.arguments ?? {}).some(key => key !== 'jmespath')
+      || (p.arguments?.jmespath !== undefined && typeof p.arguments.jmespath !== 'string')) {
+      return rpcError(id, -32602, 'Allowance status accepts only the optional jmespath projection.', corsHeaders);
+    }
   }
 
   // Credentialed INCR-first reservation. Both cache-only AND RPC tools count
@@ -758,6 +769,13 @@ export async function dispatchToolsCall(
     } else {
       execution = createMcpToolExecutionContext(req.url);
       execution.panelRequest = panelRequest;
+      if (tool.name === 'get_mcp_allowance' && (context.kind === 'pro' || context.kind === 'user_key')) {
+        execution.readAccountAllowance = async () => {
+          const allowance = await readAccountAllowance(context, deps, budget, freeAccountAllowance);
+          if (!allowance) throw new Error('Allowance status is temporarily unavailable.');
+          return allowance;
+        };
+      }
       if (panelRead?.panel === 'forecasts') execution.panelScope = 'forecasts';
       if (tool._execute) result = await tool._execute(
         dedicatedPanel && (tool.name === 'get_country_brief' || tool.name === 'get_country_risk') ? sourceArguments : callArguments,
@@ -846,8 +864,8 @@ export async function dispatchToolsCall(
     // is bytes on the wire, and a projection that only fits by shedding its
     // attribution is not a projection we can serve.
     const textBytes = utf8ByteLength(text);
-    const budget = tool._outputBudgetBytes;
-    const budgetExceeded = textBytes > budget;
+    const outputBudget = tool._outputBudgetBytes;
+    const budgetExceeded = textBytes > outputBudget;
     if (telemetryEnabled()) {
       let bytesPre: number;
       if (jmespathUsed) {
@@ -888,7 +906,7 @@ export async function dispatchToolsCall(
         : 'Response exceeds tool output budget. Use the jmespath argument to project only the fields you need, or apply filters to narrow the result set.';
       const envelope = {
         _budget_exceeded: true,
-        budget_bytes: budget,
+        budget_bytes: outputBudget,
         actual_bytes: textBytes,
         hint,
       };
