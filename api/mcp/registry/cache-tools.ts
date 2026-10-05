@@ -1753,7 +1753,7 @@ export const CACHE_TOOLS: ToolDef[] = [
     name: 'get_prediction_markets',
     _uiResourceUri: PREDICTION_MARKETS_UI_URI,
     _outputBudgetBytes: 131072,
-    description: 'Prediction markets: geopolitical/elections, tagged tech (AI/crypto/science), finance/economics or untagged fallback. Contracts include current probabilities. Kalshi currently supplies no classifier tags, so source=kalshi with category=tech returns no records and other non-geopolitical Kalshi records fall back to finance.',
+    description: 'Prediction markets: geopolitical/elections, tagged tech (AI/crypto/science), finance/economics or untagged fallback. Contracts include current probabilities. Kalshi currently supplies no classifier tags, so source=kalshi with category=tech returns no records and other non-geopolitical Kalshi records fall back to finance. Dedicated paid connections use one panel allocation across openings and filters. Explicit refresh with a request_id starts one new allocation; the same ID retries it. API allowances retain per-tool billing.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -1765,6 +1765,9 @@ export const CACHE_TOOLS: ToolDef[] = [
         query: { type: 'string', description: 'Keep only markets whose title contains this text (case-insensitive).' },
         source: { type: 'string', enum: ['kalshi', 'polymarket'], description: 'Filter to one prediction-market source. Kalshi currently provides no classifier tags, so source=kalshi with category=tech returns no records.' },
         limit: { type: 'number', description: 'Cap each category bucket to at most this many markets (default 30, pass 0 for no cap).' },
+        panel_request: { type: 'string', description: 'Paid prediction panel receipt. Reuse for internal curated reads without another daily allocation.' },
+        refresh: { type: 'boolean', description: 'Paid panel only. Start a new allocation with request_id; retry the same ID to reuse it.' },
+        request_id: { type: 'string', format: 'uuid', description: 'Paid refresh identifier. Required when refresh is true.' },
       },
       required: [],
     },
@@ -1792,11 +1795,14 @@ export const CACHE_TOOLS: ToolDef[] = [
     }),
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     _postFilter: (data, params) => {
+      const buckets = ['geopolitical', 'tech', 'finance'];
+      const bootstrap = data['markets-bootstrap'];
+      if (!bootstrap || typeof bootstrap !== 'object' || Array.isArray(bootstrap)
+        || !buckets.every(bucket => Array.isArray((bootstrap as Record<string, unknown>)[bucket]))) return data;
       const category = argStr(params.category);
       const query = argStr(params.query);
       const source = argStr(params.source);
       const limit = (argNum(params.limit) ?? DEFAULT_LIST_LIMIT);
-      const buckets = ['geopolitical', 'tech', 'finance'];
       for (const b of buckets) {
         if (query) narrowNested(data, 'markets-bootstrap', b, (m) => ciIncludes(m.title, query));
         if (source) narrowNested(data, 'markets-bootstrap', b, (m) => argStr(m.source) === source);
