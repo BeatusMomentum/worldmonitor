@@ -40,7 +40,8 @@ export const UI_RESOURCE_MIME_TYPE = SHELL_UI_MIME_TYPE;
 // def as the single-source-of-truth `_uiResourceUri`, so the tool linkage and
 // the registered resource can never drift.
 export const COUNTRY_RISK_UI_URI = 'ui://worldmonitor/country-risk.html';
-export const WORLD_BRIEF_UI_URI = 'ui://worldmonitor/world-brief.html';
+export const WORLD_BRIEF_UI_URI = 'ui://worldmonitor/world-brief-v2.html';
+const LEGACY_WORLD_BRIEF_UI_URI = 'ui://worldmonitor/world-brief.html';
 export const COUNTRY_BRIEF_UI_URI = 'ui://worldmonitor/country-brief.html';
 export const MARKET_RADAR_UI_URI = 'ui://worldmonitor/market-radar-v3.html';
 export const CHOKEPOINT_MONITOR_UI_URI = 'ui://worldmonitor/chokepoint-monitor-v2.html';
@@ -177,7 +178,7 @@ export const UI_RESOURCE_REGISTRY: UiResourceDef[] = [
 const UI_RESOURCE_BY_URI = new Map(UI_RESOURCE_REGISTRY.map((r) => [r.uri, r]));
 
 export function isUiResourceUri(uri: string): boolean {
-  return uri === LEGACY_CHOKEPOINT_MONITOR_UI_URI || uri === LEGACY_NEWS_INTELLIGENCE_UI_URI || uri === LEGACY_CONFLICT_EVENTS_UI_URI || uri === LEGACY_NATURAL_DISASTERS_UI_URI || uri === PREVIOUS_PREDICTION_MARKETS_UI_URI || uri === LEGACY_PREDICTION_MARKETS_UI_URI || uri === PREVIOUS_FORECASTS_UI_URI || uri === LEGACY_FORECASTS_UI_URI || uri === PREVIOUS_MARKET_RADAR_UI_URI || uri === PREVIOUS_COUNTRY_VIEW_UI_URI || uri === PREVIOUS_NEWS_DASHBOARD_UI_URI || uri === LEGACY_MARKET_RADAR_UI_URI || uri === COUNTRY_VIEW_UI_URI || uri === NEWS_DASHBOARD_UI_URI || uri === LEGACY_COUNTRY_VIEW_UI_URI || uri === LEGACY_NEWS_DASHBOARD_UI_URI || UI_RESOURCE_BY_URI.has(uri);
+  return uri === LEGACY_WORLD_BRIEF_UI_URI || uri === LEGACY_CHOKEPOINT_MONITOR_UI_URI || uri === LEGACY_NEWS_INTELLIGENCE_UI_URI || uri === LEGACY_CONFLICT_EVENTS_UI_URI || uri === LEGACY_NATURAL_DISASTERS_UI_URI || uri === PREVIOUS_PREDICTION_MARKETS_UI_URI || uri === LEGACY_PREDICTION_MARKETS_UI_URI || uri === PREVIOUS_FORECASTS_UI_URI || uri === LEGACY_FORECASTS_UI_URI || uri === PREVIOUS_MARKET_RADAR_UI_URI || uri === PREVIOUS_COUNTRY_VIEW_UI_URI || uri === PREVIOUS_NEWS_DASHBOARD_UI_URI || uri === LEGACY_MARKET_RADAR_UI_URI || uri === COUNTRY_VIEW_UI_URI || uri === NEWS_DASHBOARD_UI_URI || uri === LEGACY_COUNTRY_VIEW_UI_URI || uri === LEGACY_NEWS_DASHBOARD_UI_URI || UI_RESOURCE_BY_URI.has(uri);
 }
 
 // resources/list public shape — {uri, name, description, mimeType} plus the
@@ -211,7 +212,8 @@ export async function buildUiResourceRead(
   if (uri === MARKET_RADAR_UI_URI || uri === PREVIOUS_MARKET_RADAR_UI_URI || uri === LEGACY_MARKET_RADAR_UI_URI) return readMarketRadar(id, corsHeaders, uri);
   if (uri === COUNTRY_VIEW_UI_URI || uri === PREVIOUS_COUNTRY_VIEW_UI_URI || uri === LEGACY_COUNTRY_VIEW_UI_URI) return readCountryView(id, corsHeaders, uri);
   if (uri === NEWS_DASHBOARD_UI_URI || uri === PREVIOUS_NEWS_DASHBOARD_UI_URI || uri === LEGACY_NEWS_DASHBOARD_UI_URI) return readNewsDashboard(id, corsHeaders, uri);
-  const canonicalUri = uri === LEGACY_CHOKEPOINT_MONITOR_UI_URI ? CHOKEPOINT_MONITOR_UI_URI
+  const canonicalUri = uri === LEGACY_WORLD_BRIEF_UI_URI ? WORLD_BRIEF_UI_URI
+    : uri === LEGACY_CHOKEPOINT_MONITOR_UI_URI ? CHOKEPOINT_MONITOR_UI_URI
     : uri === LEGACY_NEWS_INTELLIGENCE_UI_URI ? NEWS_INTELLIGENCE_UI_URI
     : uri === LEGACY_CONFLICT_EVENTS_UI_URI ? CONFLICT_EVENTS_UI_URI
     : uri === LEGACY_NATURAL_DISASTERS_UI_URI ? NATURAL_DISASTERS_UI_URI
