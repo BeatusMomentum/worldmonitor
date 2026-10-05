@@ -1,14 +1,15 @@
 import { test, expect, type Page } from '@playwright/test';
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { COUNTRY_RISK_APP_HTML } from '../api/mcp/ui/country-risk-app';
 import { buildPluginShell } from '../api/mcp/ui/_plugin-loader';
 
 test.use({ serviceWorkers: 'block' });
 type HostCall = { name: string; arguments: Record<string, unknown> };
+type ViewReceipt = { applied?: boolean; view?: { renderer?: string; source?: string; map_layers?: string[] }; center: { lat: number; lon: number } | null; map: { zoom: number }; renderer?: { mode: string }; viewport?: { settled: boolean; interruptedBy: string } };
 type NewsInteraction = { kind: string; link: string; title: string; source: string; displayLabel: string };
 type NewsContext = { latestInteraction?: NewsInteraction | null; view: Record<string, unknown>; categoryLabel?: string };
-async function installNewsHost(page: Page, deniedInitially = false, serverTools = true, fixture: boolean | string[] = false, modelContext = true) {
+async function installNewsHost(page: Page, deniedInitially = false, serverTools = true, fixture: boolean | string[] = false, modelContext = true, observeCamera = false) {
   const selectionFixture = fixture === true;
   const categoryIds = Array.isArray(fixture) ? fixture : ['world'];
   const calls: HostCall[] = [];
@@ -17,6 +18,7 @@ async function installNewsHost(page: Page, deniedInitially = false, serverTools 
   let snapshot: Record<string, unknown> = {};
   let units = 0;
   let viewUpdates = 0;
+  const viewReceipts: ViewReceipt[] = [];
   let denied = deniedInitially;
   let failHazards = false;
   let delayRefresh = false;
@@ -28,7 +30,35 @@ async function installNewsHost(page: Page, deniedInitially = false, serverTools 
   const successfulRefreshes = new Set<string>();
   const article = { title: 'Controlled earthquake report in Japan', source: 'Fixture publisher', link: 'https://example.com/news', publishedAt: Date.now(), location: { latitude: 35, longitude: 139 }, isAlert: true };
   let articles = selectionFixture ? [article, { ...article, source: 'Second publisher', link: 'https://example.com/second', location: { latitude: 35, longitude: 70 } }, { ...article, title: 'Tokyo earthquake controlled report', source: 'Approximate publisher', link: 'https://example.com/approximate', location: undefined }, { ...article, title: 'Alternate loaded headline in Brazil', source: 'Repeated URL publisher', link: 'https://example.com/second', location: { latitude: -15, longitude: -47 } }, { ...article, source: 'Same URL publisher', link: 'https://example.com/second', location: { latitude: 30, longitude: 31 } }] : [article];
-  await page.route('**/plugin/assets/**', route => route.fulfill({ path: join(process.cwd(), 'dist/plugin/assets', new URL(route.request().url()).pathname.split('/').at(-1)!), headers: { 'Access-Control-Allow-Origin': '*' } }));
+  await page.route('**/plugin/assets/**', async route => {
+    const assetName = new URL(route.request().url()).pathname.split('/').at(-1)!;
+    const path = join(process.cwd(), 'dist/plugin/assets', assetName);
+    const headers = { 'Access-Control-Allow-Origin': '*' };
+    if (!observeCamera || !assetName.startsWith('GlobeMap-')) return route.fulfill({ path, headers });
+    const source = await readFile(path, 'utf8');
+    const exportedClass = source.match(/export\s*\{\s*([$\w]+)\s+as\s+GlobeMap/)?.[1];
+    expect(exportedClass).toBeTruthy();
+    // Observe the real compiled movement without changing its target or timing.
+    const observation = `
+      const originalSetCenter = ${exportedClass}.prototype.setCenter;
+      ${exportedClass}.prototype.setCenter = function(...args) {
+        globalThis.__newsCamera = this;
+        return originalSetCenter.apply(this, args);
+      };
+      const originalSettlement = ${exportedClass}.prototype.whenViewportSettled;
+      ${exportedClass}.prototype.whenViewportSettled = async function() {
+        const settled = await originalSettlement.call(this);
+        if (!settled) globalThis.__newsInterruptionObserved = true;
+        return settled;
+      };
+      const originalGetCenter = ${exportedClass}.prototype.getCenter;
+      ${exportedClass}.prototype.getCenter = function() {
+        const center = originalGetCenter.call(this);
+        if (globalThis.__newsInterruptionObserved) globalThis.__newsInterruptedCenter = center;
+        return center;
+      };`;
+    return route.fulfill({ body: source + observation, contentType: 'text/javascript', headers });
+  });
   await page.route('**/plugin/plugin.html', route => route.fulfill({ path: join(process.cwd(), 'dist/plugin/plugin.html'), headers: { 'Access-Control-Allow-Origin': '*' } }));
   await page.route('**/data/*.geojson', route => route.fulfill({ path: join(process.cwd(), 'public/data', new URL(route.request().url()).pathname.split('/').at(-1)!), headers: { 'Access-Control-Allow-Origin': '*' } }));
   await page.route('**/data/countries-*m.json', route => route.fulfill({ path: join(process.cwd(), 'public/data', new URL(route.request().url()).pathname.split('/').at(-1)!), headers: { 'Access-Control-Allow-Origin': '*' } }));
@@ -38,7 +68,9 @@ async function installNewsHost(page: Page, deniedInitially = false, serverTools 
     if (method === 'ui/initialize') return { hostCapabilities: { ...(serverTools ? { serverTools: {} } : {}), ...(modelContext ? { updateModelContext: {} } : {}) }, hostContext: { theme: 'dark' } };
     if (method === 'ui/update-model-context') {
       viewUpdates++;
-      contexts.push(JSON.parse((params as unknown as { content: Array<{ text: string }> }).content[0]!.text));
+      const receipt = JSON.parse((params as unknown as { content: Array<{ text: string }> }).content[0]!.text);
+      contexts.push(receipt);
+      viewReceipts.push(receipt as ViewReceipt);
     }
     if (method !== 'tools/call') return {};
     calls.push(params);
@@ -78,7 +110,7 @@ async function installNewsHost(page: Page, deniedInitially = false, serverTools 
     });
     frame.srcdoc = html.replace('<head>', `<head><base href="${location.origin}/">`);
   }, html);
-  return { calls, contexts, methods, get snapshot() { return snapshot; }, removeSecondArticle: () => { articles = [article]; }, get units() { return units; }, get viewUpdates() { return viewUpdates; }, deny: () => { denied = true; }, delayRefresh: () => { delayRefresh = true; }, releaseRefresh, delayHazards: () => { delayHazards = true; }, releaseHazards, failHazards: () => { failHazards = true; }, recoverHazards: () => { failHazards = false; } };
+  return { calls, contexts, methods, viewReceipts, get snapshot() { return snapshot; }, removeSecondArticle: () => { articles = [article]; }, get units() { return units; }, get viewUpdates() { return viewUpdates; }, deny: () => { denied = true; }, delayRefresh: () => { delayRefresh = true; }, releaseRefresh, delayHazards: () => { delayHazards = true; }, releaseHazards, failHazards: () => { failHazards = true; }, recoverHazards: () => { failHazards = false; } };
 }
 
 async function newsAction(page: Page, name: string, args: object) {
@@ -523,3 +555,148 @@ test('narrow news cards select the initial renderer from input capabilities', as
     }
   }
 });
+
+for (const mobile of [false, true]) {
+  test.describe(mobile ? 'phone camera settlement' : 'desktop camera settlement', () => {
+    test.use({ viewport: mobile ? { width: 390, height: 1200 } : { width: 1280, height: 720 }, hasTouch: mobile, isMobile: mobile });
+    for (const gesture of ['drag', 'wheel'] as const) {
+      test(`a human ${gesture} during renderer transfer reports the effective camera without applying remaining view changes`, async ({ page }, info) => {
+        await page.route(/^https:\/\/(tiles\.openfreemap\.org\/styles\/|basemaps\.cartocdn\.com\/gl\/)/, route => route.fulfill({
+          json: { version: 8, sources: {}, layers: [{ id: 'background', type: 'background', paint: { 'background-color': '#111111' } }] },
+          headers: { 'Access-Control-Allow-Origin': '*' },
+        }));
+        await page.addInitScript(() => {
+          const getExtension = WebGL2RenderingContext.prototype.getExtension;
+          WebGL2RenderingContext.prototype.getExtension = function (name) {
+            return name === 'WEBGL_debug_renderer_info' ? null : Reflect.apply(getExtension, this, [name]);
+          };
+        });
+        const host = await installNewsHost(page, false, true, false, true, true);
+        const frame = page.frameLocator('iframe');
+        await expect(frame.locator('#panelsGrid')).toContainText('Controlled earthquake report in Japan');
+        const action = (name: string, args: Record<string, unknown>) => page.evaluate(({ name, args }) => new Promise<{ isError?: boolean; structuredContent?: ViewReceipt }>(resolve => {
+          const frame = document.querySelector('iframe')!;
+          const id = crypto.randomUUID();
+          const listener = (event: MessageEvent) => {
+            if (event.source !== frame.contentWindow || event.data?.id !== id) return;
+            window.removeEventListener('message', listener);
+            resolve(event.data.result);
+          };
+          window.addEventListener('message', listener);
+          frame.contentWindow!.postMessage({ jsonrpc: '2.0', id, method: 'tools/call', params: { name, arguments: args } }, '*');
+        }), { name, args });
+        expect((await action('focus_news_article', { link: 'https://example.com/news' })).isError).not.toBe(true);
+        const callsBefore = host.calls.length;
+        const pending = action('apply_news_view', { renderer: 'globe', source: 'Unapplied publisher', map_latitude: -20, map_longitude: 50, map_zoom: 8, map_layers: [] });
+        await expect.poll(() => frame.locator('body').evaluate(() => Boolean((window as unknown as { __newsCamera?: { viewportTarget?: object } }).__newsCamera?.viewportTarget))).toBe(true);
+        const bounds = await frame.locator('#mapContainer canvas').first().boundingBox();
+        expect(bounds).not.toBeNull();
+        await page.mouse.move(bounds!.x + bounds!.width / 2, bounds!.y + bounds!.height / 2);
+        if (gesture === 'wheel') await page.mouse.wheel(0, -400);
+        else {
+          await page.mouse.down();
+          await page.mouse.move(bounds!.x + bounds!.width / 2 + 100, bounds!.y + bounds!.height / 2 + 25, { steps: 10 });
+          await page.mouse.up();
+        }
+        const result = await pending;
+        expect(result.isError).not.toBe(true);
+        const receipt = result.structuredContent!;
+        expect(receipt.applied).toBe(false);
+        expect(receipt.viewport).toEqual({ settled: false, interruptedBy: 'human' });
+        expect(receipt.renderer?.mode).toBe('globe');
+        expect(receipt.view?.renderer).toBe('globe');
+        expect(receipt.view?.source).toBeUndefined();
+        expect(receipt.view?.map_layers).toEqual(['natural']);
+        const effectiveCenter = await frame.locator('body').evaluate(() => (window as unknown as { __newsInterruptedCenter: { lat: number; lon: number } }).__newsInterruptedCenter);
+        expect(receipt.center?.lat).toBeCloseTo(effectiveCenter.lat, 4);
+        expect(receipt.center?.lon).toBeCloseTo(effectiveCenter.lon, 4);
+        await expect(frame.locator('#mapContainer')).toHaveClass(/globe-mode/);
+        await expect(frame.locator('#mapDimensionToggle [data-mode="globe"]')).toHaveClass(/active/);
+        await expect(frame.getByRole('combobox', { name: 'News source' })).toHaveValue('');
+        await expect(frame.locator('#panelsGrid')).toContainText('Controlled earthquake report in Japan');
+        expect(host.calls).toHaveLength(callsBefore);
+        await writeFile(info.outputPath('human-interruption-receipt.json'), JSON.stringify({ receipt, effectiveCenter, hostCalls: host.calls.length }, null, 2));
+        await page.screenshot({ path: info.outputPath('human-interruption.png'), fullPage: true });
+      });
+    }
+    test('renderer-only news actions preserve the focused camera in their receipts and immediate return to flat', async ({ page }, info) => {
+      await page.route(/^https:\/\/(tiles\.openfreemap\.org\/styles\/|basemaps\.cartocdn\.com\/gl\/)/, route => route.fulfill({
+        json: { version: 8, sources: {}, layers: [{ id: 'background', type: 'background', paint: { 'background-color': '#111111' } }] },
+        headers: { 'Access-Control-Allow-Origin': '*' },
+      }));
+      await page.addInitScript(() => {
+        const getExtension = WebGL2RenderingContext.prototype.getExtension;
+        WebGL2RenderingContext.prototype.getExtension = function (name) {
+          return name === 'WEBGL_debug_renderer_info' ? null : Reflect.apply(getExtension, this, [name]);
+        };
+      });
+      const host = await installNewsHost(page);
+      const frame = page.frameLocator('iframe');
+      await expect(frame.locator('#panelsGrid')).toContainText('Controlled earthquake report in Japan');
+      await expect(frame.locator('#mapContainer')).toHaveClass(mobile ? /svg-mode/ : /deckgl-mode/);
+      const actions = (commands: Array<{ name: string; args: Record<string, unknown> }>) => page.evaluate(async commands => {
+        const frame = document.querySelector('iframe')!;
+        const receipts: Array<{ isError?: boolean; structuredContent?: ViewReceipt; observedAt: number }> = [];
+        for (const { name, args } of commands) {
+          receipts.push(await new Promise(resolve => {
+            const id = crypto.randomUUID();
+            const listener = (event: MessageEvent) => {
+              if (event.source !== frame.contentWindow || event.data?.id !== id) return;
+              window.removeEventListener('message', listener);
+              resolve({ ...event.data.result, observedAt: performance.now() });
+            };
+            window.addEventListener('message', listener);
+            frame.contentWindow!.postMessage({ jsonrpc: '2.0', id, method: 'tools/call', params: { name, arguments: args } }, '*');
+          }));
+        }
+        return receipts;
+      }, commands);
+      const action = async (name: string, args: Record<string, unknown>) => (await actions([{ name, args }]))[0]!;
+      expect((await action('focus_news_article', { link: 'https://example.com/news' })).isError).not.toBe(true);
+      expect(host.viewReceipts.at(-1)?.center?.lat).toBeCloseTo(35, 4);
+      expect(host.viewReceipts.at(-1)?.center?.lon).toBeCloseTo(139, 4);
+      const callsBeforeSwitch = host.calls.length;
+      const [globeResult, capturedResult, flatResult] = await actions([
+        { name: 'apply_news_view', args: { renderer: 'globe' } },
+        { name: 'apply_news_view', args: {} },
+        { name: 'apply_news_view', args: { renderer: 'flat' } },
+      ]);
+      expect([globeResult, capturedResult, flatResult].every(result => !result!.isError)).toBe(true);
+      const globe = globeResult!.structuredContent!;
+      const captured = capturedResult!.structuredContent!;
+      const flat = flatResult!.structuredContent!;
+      expect(globe.center?.lat).toBeCloseTo(35, 4);
+      expect(globe.center?.lon).toBeCloseTo(139, 4);
+      expect(flat.center?.lat).toBeCloseTo(captured.center!.lat, 4);
+      // GlobeMap restores idle OrbitControls autoRotateSpeed=0.3 after settlement.
+      // That is 1.8 degrees/second; allow its bounded motion during this cycle.
+      expect(Math.abs(flat.center!.lon - captured.center!.lon)).toBeLessThanOrEqual(0.03 + 1.8 * (flatResult!.observedAt - capturedResult!.observedAt) / 1000);
+      expect(host.calls).toHaveLength(callsBeforeSwitch);
+      await writeFile(info.outputPath('renderer-camera-receipts.json'), JSON.stringify({ globe, captured, flat, callsBeforeSwitch, callsAfterSwitch: host.calls.length }, null, 2));
+      await page.screenshot({ path: info.outputPath('immediate-return-to-flat.png'), fullPage: true });
+      if (!mobile) {
+        await frame.locator('#mapDimensionToggle [data-mode="globe"]').click();
+        await expect.poll(() => host.viewReceipts.at(-1)?.renderer?.mode).toBe('globe');
+        const canvas = frame.locator('#mapContainer canvas').first();
+        const bounds = await canvas.boundingBox();
+        expect(bounds).not.toBeNull();
+        await page.mouse.move(bounds!.x + bounds!.width / 2, bounds!.y + bounds!.height / 2);
+        await page.mouse.down();
+        await page.mouse.move(bounds!.x + bounds!.width / 2 + 140, bounds!.y + bounds!.height / 2 + 25, { steps: 10 });
+        await page.mouse.up();
+        await page.mouse.wheel(0, -400);
+        expect((await action('apply_news_view', {})).isError).not.toBe(true);
+        const humanCenter = host.viewReceipts.at(-1)!.center!;
+        expect(Math.abs(humanCenter.lon - 139)).toBeGreaterThan(1);
+        await expect.poll(async () => { await action('apply_news_view', {}); return host.viewReceipts.at(-1)!.map.zoom; }).toBeGreaterThan(4);
+        await frame.locator('#mapDimensionToggle [data-mode="flat"]').click();
+        await expect.poll(() => host.viewReceipts.at(-1)?.renderer?.mode).toBe('flat');
+        // OrbitControls damping can continue after mouseup. The handoff must
+        // keep the human-moved camera rather than replaying the article target.
+        expect(Math.abs(host.viewReceipts.at(-1)!.center!.lon - 139)).toBeGreaterThan(1);
+        expect(host.viewReceipts.at(-1)!.map.zoom).toBeGreaterThan(4);
+        expect(host.calls).toHaveLength(callsBeforeSwitch);
+      }
+    });
+  });
+}
