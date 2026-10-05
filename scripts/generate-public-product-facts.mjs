@@ -363,6 +363,9 @@ transform('public/.well-known/mcp/server-card.json', (source) => {
   ).replace(
     /get_forecast_predictions → forecasts(?:-v\d+)?\.html/,
     'get_forecast_predictions → forecasts-v3.html',
+  ).replace(
+    /get_chokepoint_status → chokepoint-monitor(?:-v\d+)?\.html/,
+    'get_chokepoint_status → chokepoint-monitor-v2.html',
   );
   card.metadata.mcpApps.uiResources = UI_RESOURCE_LIST_RESPONSE.map(resource => resource.uri);
   card.tools = TOOL_REGISTRY.map((tool) => ({
