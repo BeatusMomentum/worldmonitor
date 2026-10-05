@@ -1,6 +1,7 @@
+import { isCountryDirectOriginalReusable } from './_country-direct-snapshot';
 import { countryActivityQueries } from '../../shared/country-activity-query';
 import { z } from 'zod';
-import { countryReaderSchema, COUNTRY_READERS, countryViewSchema, type PanelAdmission } from '../../shared/country-brief-host';
+import { countryReaderSchema, COUNTRY_READERS, countryViewSchema, normalizeCountryDirectRead, type PanelAdmission } from '../../shared/country-brief-host';
 import { resolveCountryCode } from '../../shared/country-code-resolve';
 import { chokepointPanelReadSchema, chokepointPanelViewSchema, conflictPanelReadSchema, conflictPanelViewSchema, disasterPanelReadSchema, disasterPanelViewSchema, forecastCaseReadSchema, forecastPanelReadSchema, forecastPanelViewSchema, marketPanelReadSchema, marketPanelViewSchema, newsIntelligencePanelReadSchema, newsIntelligencePanelViewSchema, predictionPanelReadSchema, predictionPanelViewSchema, worldBriefPanelReadSchema, worldBriefPanelViewSchema, type ChokepointPanelAdmission, type ConflictPanelAdmission, type DisasterPanelAdmission, type ForecastPanelAdmission, type MarketPanelAdmission, type NewsIntelligencePanelAdmission, type NewsPanelAdmission, type PredictionPanelAdmission, type WorldBriefPanelAdmission } from '../../shared/panel-admission';
 import { parseNewsDashboardRequest } from '../../shared/plugin-news-view';
@@ -191,9 +192,14 @@ function checkReadScope(name: string, args: Record<string, unknown>, country: st
     if (name !== 'get_natural_disasters' || !snapshot.safeParse(args).success) throw new PanelRequestError('Panel request only covers dashboard news and bounded map snapshots.', 'invalid');
     return;
   }
-  if (name === 'get_country_brief' || name === 'get_country_coverage') {
+  if (name === 'get_country_brief' || name === 'get_country_risk') {
+    const normalized = normalizeCountryDirectRead(name, args);
+    if (!normalized || normalized.country_code !== country) throw new PanelRequestError('Panel request does not cover this country or analysis.', 'invalid');
+    return;
+  }
+  if (name === 'get_country_coverage') {
     const allowed = z.object({ country_code: z.string() }).strict().safeParse(args);
-    if (!allowed.success || resolveCountryCode(allowed.data.country_code) !== country) throw new PanelRequestError('Panel request does not cover this country or analysis.', 'invalid');
+    if (!allowed.success || resolveCountryCode(allowed.data.country_code) !== country) throw new PanelRequestError('Panel request does not cover this country.', 'invalid');
     return;
   }
   if (name !== 'get_country_brief_section') throw new PanelRequestError('Panel request does not cover this tool.', 'invalid');
@@ -249,7 +255,7 @@ export async function authorizePanelRead(context: McpAuthContext, pipeline: Pipe
           ? disasterPanelReadSchema.parse(args)
           : scope.panel === 'forecasts' && name === 'get_forecast_predictions'
             ? forecastPanelReadSchema.parse(args)
-            : args;
+            : (name === 'get_country_brief' || name === 'get_country_risk') ? normalizeCountryDirectRead(name, args)! : args;
   const digest = await crypto.subtle.digest('SHA-256', encoder.encode(JSON.stringify([name, canonicalArguments(cacheArguments)])));
   const hash = Array.from(new Uint8Array(digest), value => value.toString(16).padStart(2, '0')).join('');
   const cacheKey = `${key}:data:${hash}`;
@@ -261,8 +267,10 @@ export async function authorizePanelRead(context: McpAuthContext, pipeline: Pipe
     const raw = results[1]?.result;
     if (typeof raw === 'string' && encoder.encode(raw).length <= cacheBudget) {
       let parsed: unknown;
-      try { parsed = JSON.parse(raw); } catch (error) { if (name !== 'get_natural_disasters' && name !== 'get_news_intelligence' && name !== 'get_chokepoint_status' && name !== 'get_world_brief') throw error; }
-      if (name === 'get_world_brief') {
+      try { parsed = JSON.parse(raw); } catch (error) { if (name !== 'get_natural_disasters' && name !== 'get_news_intelligence' && name !== 'get_chokepoint_status' && name !== 'get_world_brief' && name !== 'get_country_brief' && name !== 'get_country_risk') throw error; }
+      if (name === 'get_country_brief' || name === 'get_country_risk') {
+        if (isCountryDirectOriginalReusable(name, parsed, scope.panel, Date.now())) cached = parsed;
+      } else if (name === 'get_world_brief') {
         cached = readWorldBriefCache(parsed, Date.now(), scope.expires);
       } else if (name === 'get_chokepoint_status') {
         if (validChokepointCache(parsed, args, Date.now(), scope.expires)) cached = parsed.value;
@@ -328,6 +336,7 @@ export async function authorizePanelRead(context: McpAuthContext, pipeline: Pipe
     },
     save: async (value: unknown) => {
       if (name === 'get_world_brief' || name === 'get_natural_disasters' || name === 'get_news_intelligence' || name === 'get_chokepoint_status') return;
+      if ((name === 'get_country_brief' || name === 'get_country_risk') && !isCountryDirectOriginalReusable(name, value, scope.panel, Date.now())) return;
       if (scope.panel === 'conflicts' && !isConflictPanelSnapshotCacheable(value)) return;
       if (scope.panel === 'predictions' && (!value || typeof value !== 'object' || Array.isArray(value))) return;
       if (name === 'get_forecast_theaters') {
