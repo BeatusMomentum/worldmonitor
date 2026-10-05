@@ -428,7 +428,7 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
       'worldmonitor://seed-meta/freshness',
       'ui://worldmonitor/country-risk-v2.html',
       'ui://worldmonitor/world-brief-v2.html',
-      'ui://worldmonitor/country-brief.html',
+      'ui://worldmonitor/country-brief-v2.html',
       'ui://worldmonitor/market-radar-v3.html',
       'ui://worldmonitor/chokepoint-monitor-v2.html',
       'ui://worldmonitor/news-intelligence-v2.html',
@@ -615,6 +615,37 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
       assert.ok(linkedByTools.has(uri),
         `ui:// resource "${uri}" is advertised but no tool references it via _uiResourceUri`);
     }
+  });
+
+  it('advertises Country Brief v2 and keeps the original URI as a private, quota-free read alias', async () => {
+    const current = 'ui://worldmonitor/country-brief-v2.html';
+    const legacy = 'ui://worldmonitor/country-brief.html';
+    const tool = TOOL_REGISTRY.find(tool => tool.name === 'get_country_brief');
+    assert.equal(tool._uiResourceUri, current);
+    const listed = (await (await handler(anonReq({ jsonrpc: '2.0', id: 2, method: 'resources/list' }))).json()).result.resources;
+    assert.ok(listed.some(resource => resource.uri === current));
+    assert.ok(!listed.some(resource => resource.uri === legacy));
+    const { deps, pipe } = makeProDeps();
+    const bodies = [];
+    let reads = 0;
+    const mockFetch = globalThis.fetch;
+    globalThis.fetch = async (...args) => {
+      if (/\/get\/|\/api\//.test(String(args[0]))) reads++;
+      return mockFetch(...args);
+    };
+    for (const uri of [current, legacy]) {
+      for (const request of [anonReq(readBody(uri)), proReq('POST', readBody(uri))]) {
+        const response = await mcpHandler(request, deps);
+        assert.equal(response.status, 200);
+        const body = await response.json();
+        assert.equal(body.error, undefined);
+        assert.equal(body.result.contents[0].uri, uri);
+        bodies.push(body.result.contents[0]);
+      }
+    }
+    assert.ok(bodies.every(body => body.text === bodies[0].text && body.mimeType === bodies[0].mimeType));
+    assert.equal(pipe.count, 0);
+    assert.equal(reads, 0);
   });
 
   // -------------------------------------------------------------------------
