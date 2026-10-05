@@ -47,7 +47,8 @@ export const CHOKEPOINT_MONITOR_UI_URI = 'ui://worldmonitor/chokepoint-monitor.h
 export const NEWS_INTELLIGENCE_UI_URI = 'ui://worldmonitor/news-intelligence.html';
 export const CONFLICT_EVENTS_UI_URI = 'ui://worldmonitor/conflict-events.html';
 export const NATURAL_DISASTERS_UI_URI = 'ui://worldmonitor/natural-disasters.html';
-export const PREDICTION_MARKETS_UI_URI = 'ui://worldmonitor/prediction-markets.html';
+export const PREDICTION_MARKETS_UI_URI = 'ui://worldmonitor/prediction-markets-v2.html';
+const LEGACY_PREDICTION_MARKETS_UI_URI = 'ui://worldmonitor/prediction-markets.html';
 export const FORECASTS_UI_URI = 'ui://worldmonitor/forecasts-v3.html';
 const PREVIOUS_FORECASTS_UI_URI = 'ui://worldmonitor/forecasts-v2.html';
 const LEGACY_FORECASTS_UI_URI = 'ui://worldmonitor/forecasts.html';
@@ -171,7 +172,7 @@ export const UI_RESOURCE_REGISTRY: UiResourceDef[] = [
 const UI_RESOURCE_BY_URI = new Map(UI_RESOURCE_REGISTRY.map((r) => [r.uri, r]));
 
 export function isUiResourceUri(uri: string): boolean {
-  return uri === PREVIOUS_FORECASTS_UI_URI || uri === LEGACY_FORECASTS_UI_URI || uri === PREVIOUS_MARKET_RADAR_UI_URI || uri === PREVIOUS_COUNTRY_VIEW_UI_URI || uri === PREVIOUS_NEWS_DASHBOARD_UI_URI || uri === LEGACY_MARKET_RADAR_UI_URI || uri === COUNTRY_VIEW_UI_URI || uri === NEWS_DASHBOARD_UI_URI || uri === LEGACY_COUNTRY_VIEW_UI_URI || uri === LEGACY_NEWS_DASHBOARD_UI_URI || UI_RESOURCE_BY_URI.has(uri);
+  return uri === LEGACY_PREDICTION_MARKETS_UI_URI || uri === PREVIOUS_FORECASTS_UI_URI || uri === LEGACY_FORECASTS_UI_URI || uri === PREVIOUS_MARKET_RADAR_UI_URI || uri === PREVIOUS_COUNTRY_VIEW_UI_URI || uri === PREVIOUS_NEWS_DASHBOARD_UI_URI || uri === LEGACY_MARKET_RADAR_UI_URI || uri === COUNTRY_VIEW_UI_URI || uri === NEWS_DASHBOARD_UI_URI || uri === LEGACY_COUNTRY_VIEW_UI_URI || uri === LEGACY_NEWS_DASHBOARD_UI_URI || UI_RESOURCE_BY_URI.has(uri);
 }
 
 // resources/list public shape — {uri, name, description, mimeType} plus the
@@ -205,7 +206,10 @@ export async function buildUiResourceRead(
   if (uri === MARKET_RADAR_UI_URI || uri === PREVIOUS_MARKET_RADAR_UI_URI || uri === LEGACY_MARKET_RADAR_UI_URI) return readMarketRadar(id, corsHeaders, uri);
   if (uri === COUNTRY_VIEW_UI_URI || uri === PREVIOUS_COUNTRY_VIEW_UI_URI || uri === LEGACY_COUNTRY_VIEW_UI_URI) return readCountryView(id, corsHeaders, uri);
   if (uri === NEWS_DASHBOARD_UI_URI || uri === PREVIOUS_NEWS_DASHBOARD_UI_URI || uri === LEGACY_NEWS_DASHBOARD_UI_URI) return readNewsDashboard(id, corsHeaders, uri);
-  const def = UI_RESOURCE_BY_URI.get(uri === LEGACY_FORECASTS_UI_URI || uri === PREVIOUS_FORECASTS_UI_URI ? FORECASTS_UI_URI : uri);
+  const canonicalUri = uri === LEGACY_PREDICTION_MARKETS_UI_URI ? PREDICTION_MARKETS_UI_URI
+    : uri === LEGACY_FORECASTS_UI_URI || uri === PREVIOUS_FORECASTS_UI_URI ? FORECASTS_UI_URI
+      : uri;
+  const def = UI_RESOURCE_BY_URI.get(canonicalUri);
   if (!def) {
     // Unreachable in practice — the handler only routes here after
     // isUiResourceUri(uri) is true — but fail closed with a spec -32602.
@@ -213,7 +217,7 @@ export async function buildUiResourceRead(
   }
   return rpcOk(
     id,
-    { contents: [{ uri, mimeType: def.mimeType, text: def.html, _meta: def._meta }] },
+    { contents: [{ uri: uri === LEGACY_PREDICTION_MARKETS_UI_URI ? def.uri : uri, mimeType: def.mimeType, text: def.html, _meta: def._meta }] },
     corsHeaders,
   );
 }
