@@ -350,7 +350,7 @@ transform('public/.well-known/mcp/server-card.json', (source) => {
     'get_market_data → market-radar-v3.html',
   ).replace(
     /get_country_brief → country-brief(?:-v\d+)?\.html/,
-    'get_country_brief → country-brief-v2.html',
+    'get_country_brief → country-brief-v3.html',
   ).replace(
     /get_natural_disasters → natural-disasters(?:-v\d+)?\.html/,
     `get_natural_disasters → ${disasterFilename}`,

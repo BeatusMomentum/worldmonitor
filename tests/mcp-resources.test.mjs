@@ -428,7 +428,7 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
       'worldmonitor://seed-meta/freshness',
       'ui://worldmonitor/country-risk-v2.html',
       'ui://worldmonitor/world-brief-v2.html',
-      'ui://worldmonitor/country-brief-v2.html',
+      'ui://worldmonitor/country-brief-v3.html',
       'ui://worldmonitor/market-radar-v3.html',
       'ui://worldmonitor/chokepoint-monitor-v2.html',
       'ui://worldmonitor/news-intelligence-v2.html',
@@ -617,14 +617,16 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
     }
   });
 
-  it('advertises Country Brief v2 and keeps the original URI as a private, quota-free read alias', async () => {
-    const current = 'ui://worldmonitor/country-brief-v2.html';
+  it('advertises Country Brief v3 and keeps prior URIs as a private, quota-free read alias', async () => {
+    const current = 'ui://worldmonitor/country-brief-v3.html';
     const legacy = 'ui://worldmonitor/country-brief.html';
+    const previous = 'ui://worldmonitor/country-brief-v2.html';
     const tool = TOOL_REGISTRY.find(tool => tool.name === 'get_country_brief');
     assert.equal(tool._uiResourceUri, current);
     const listed = (await (await handler(anonReq({ jsonrpc: '2.0', id: 2, method: 'resources/list' }))).json()).result.resources;
     assert.ok(listed.some(resource => resource.uri === current));
     assert.ok(!listed.some(resource => resource.uri === legacy));
+    assert.ok(!listed.some(resource => resource.uri === previous));
     const { deps, pipe } = makeProDeps();
     const bodies = [];
     let reads = 0;
@@ -633,7 +635,7 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
       if (/\/get\/|\/api\//.test(String(args[0]))) reads++;
       return mockFetch(...args);
     };
-    for (const uri of [current, legacy]) {
+    for (const uri of [current, previous, legacy]) {
       for (const request of [anonReq(readBody(uri)), proReq('POST', readBody(uri))]) {
         const response = await mcpHandler(request, deps);
         assert.equal(response.status, 200);
