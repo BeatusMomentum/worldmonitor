@@ -433,7 +433,7 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
       'ui://worldmonitor/chokepoint-monitor.html',
       'ui://worldmonitor/news-intelligence.html',
       'ui://worldmonitor/conflict-events-v2.html',
-      'ui://worldmonitor/natural-disasters.html',
+      'ui://worldmonitor/natural-disasters-v2.html',
       'ui://worldmonitor/prediction-markets-v3.html',
       'ui://worldmonitor/forecasts-v3.html',
       'ui://worldmonitor/news-dashboard-v3.html',
@@ -802,6 +802,71 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
       summaryView.sendToolResult(entry.summary);
       const summaryText = summaryView.text(entry.hostId);
       for (const token of entry.summaryTokens) assert.match(summaryText, token, `${entry.uri}: summary sample token ${token}`);
+    }
+  });
+
+  it('Natural Disasters advertises v2 and keeps the original URI as a private data-free alias', async () => {
+    const advertised = UI_RESOURCE_REGISTRY.find((resource) => resource.name === 'Natural Disasters (interactive)');
+    assert.equal(advertised.uri, 'ui://worldmonitor/natural-disasters-v2.html');
+    assert.equal(UI_RESOURCE_REGISTRY.some((resource) => resource.uri === 'ui://worldmonitor/natural-disasters.html'), false);
+    const original = await handler(anonReq(readBody('ui://worldmonitor/natural-disasters.html')));
+    const current = await handler(anonReq(readBody(advertised.uri)));
+    const originalContent = (await original.json()).result.contents[0];
+    const currentContent = (await current.json()).result.contents[0];
+    assert.equal(originalContent.uri, 'ui://worldmonitor/natural-disasters.html');
+    assert.equal(currentContent.uri, advertised.uri);
+    assert.equal(originalContent.text, currentContent.text);
+    assert.deepEqual(originalContent._meta, currentContent._meta);
+  });
+
+  for (const [name, project, summarize] of [
+    ['full envelope', false, false],
+    ['summary projection', true, true],
+    ['whole-envelope projection', true, false],
+    ['summary whole-envelope projection', true, true],
+  ]) {
+    it(`Natural Disasters preserves hazard rows and freshness for ${name}`, async () => {
+      const res = await handler(envKeyReq(readBody('ui://worldmonitor/natural-disasters.html')));
+      const view = mountWidgetHtml((await res.json()).result.contents[0].text);
+      const quakes = [{ place: 'Observed zero quake', magnitude: 0, occurredAt: 0 }, { place: 'Missing quake' }];
+      const fires = [{ region: 'Observed zero fire', brightness: 0 }, { region: 'Missing fire' }];
+      const envelope = {
+        cached_at: '2026-10-03T16:00:00Z', stale: true,
+        data: {
+          earthquakes: { earthquakes: summarize ? { count: 8, sample: quakes } : quakes },
+          fires: { fireDetections: summarize ? { count: 7, sample: fires } : fires },
+        },
+      };
+      view.sendToolResult(project ? { projection: envelope } : envelope);
+      assert.equal(view.nodes('groups').filter((node) => node.className === 'drow').length, 4);
+      assert.match(view.text('groups'), /M0\.0Observed zero quake1970-01-01/);
+      assert.match(view.text('groups'), /—Missing quake/);
+      assert.match(view.text('groups'), /Observed zero firebrightness 0/);
+      assert.doesNotMatch(view.text('groups'), /Missing firebrightness/);
+      assert.equal(view.text('foot'), 'Snapshot: 2026-10-03T16:00:00Z (stale)');
+      assert.equal(view.posted.some((message) => ['tools/call', 'ui/call-tool'].includes(message.method)), false);
+
+      view.sendToolResult({ projection: { cached_at: '2026-10-04T00:00:00Z', stale: false, data: {
+        earthquakes: { earthquakes: [] }, fires: { fireDetections: [] },
+      } } });
+      assert.match(view.text('groups'), /No natural-hazard events available\./);
+      assert.doesNotMatch(view.text('groups'), /Observed zero|unavailable/);
+      assert.equal(view.text('foot'), 'Snapshot: 2026-10-04T00:00:00Z');
+    });
+  }
+
+  it('Natural Disasters preserves direct data maps and rejects unsupported projection shapes', async () => {
+    const res = await handler(envKeyReq(readBody('ui://worldmonitor/natural-disasters.html')));
+    const view = mountWidgetHtml((await res.json()).result.contents[0].text);
+    view.sendToolResult({ fires: { fireDetections: [{ region: 'Direct fire' }] } });
+    assert.match(view.text('groups'), /Direct fire/);
+    assert.match(view.text('groups'), /Earthquake data is temporarily unavailable/);
+    for (const projection of [null, 'Direct fire', ['Direct fire'], { places: ['Direct fire'] }]) {
+      view.sendToolResult({ projection });
+      assert.equal(view.nodes('groups').filter((node) => node.className === 'drow').length, 0);
+      assert.match(view.text('groups'), /Earthquake data is temporarily unavailable/);
+      assert.match(view.text('groups'), /Wildfire data is temporarily unavailable/);
+      assert.equal(view.text('foot'), '');
     }
   });
 
