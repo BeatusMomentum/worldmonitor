@@ -155,6 +155,11 @@ describe('ForecastPanel reliability badge', () => {
     // A block link spans the label column; fit-content keeps blank space beside it unclickable.
     expect(rule).toMatch(/width:\s*fit-content/);
     expect(rule).toMatch(/max-width:\s*100%/);
+    // Size containment gives the badge a zero intrinsic width, so fit-content collapses it to 0px.
+    expect(rule).not.toMatch(/contain:/);
+    // Without it the 1fr label track grows to the badge's nowrap width and pushes the other columns out.
+    const label = css.match(/\.fc-prob-label\s*\{[^}]*\}/)?.[0] ?? '';
+    expect(label).toMatch(/min-width:\s*0/);
   });
 
   it('treats a non-integer yesCount as unmeasured, matching the /accuracy/ table', async () => {
