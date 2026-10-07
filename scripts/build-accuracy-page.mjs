@@ -613,6 +613,9 @@ function coverageSentence(state) {
       : ' Nothing in this window has been scored yet.';
     return `The headline cohort has no scored forecast in this window, so it carries no Brier score.${excluded} The breakdowns below are still real measurements.`;
   }
+  if (skill.count < INTERVAL_MIN_SAMPLE) {
+    return `The headline cohort has ${formatCount(skill.count)} scored forecasts. That is fewer than the ${formatCount(INTERVAL_MIN_SAMPLE)} the domain table needs before it publishes a score, so read the headline score as a small sample.`;
+  }
   return `The headline cohort has ${formatCount(skill.count)} scored forecasts, enough to publish a score.`;
 }
 

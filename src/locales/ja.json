@@ -2390,6 +2390,9 @@
           "judge_disagreement": "判定者の意見が異なります",
           "judge_retry_exhausted": "判定者が判定を下しませんでした",
           "withheld_unpublished": "この種類の予測は現在公開されていません",
+          "resolver_envelope_bug": "正しく読み取れなかったデータフィードで採点されました",
+          "market_price_not_outcome": "フィードが示したのは市場価格で、市場の決着結果ではありませんでした",
+          "judged_evidence_unreliable": "審査員の根拠資料を修正するまで採点対象外",
           "other": "結果を確定できませんでした"
         }
       },

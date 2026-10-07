@@ -2420,6 +2420,9 @@
           "judge_disagreement": "Rozhodčí se neshodli",
           "judge_retry_exhausted": "Rozhodčí nevydali rozhodnutí",
           "withheld_unpublished": "Tento druh předpovědi se již nezveřejňuje",
+          "resolver_envelope_bug": "Vyhodnoceno podle zdroje dat, který jsme nedokázali správně přečíst",
+          "market_price_not_outcome": "Zdroj ukazoval tržní cenu, ne to, jak byl trh rozhodnut",
+          "judged_evidence_unreliable": "Vyřazeno z hodnocení, dokud se neopraví podklady pro hodnotitele",
           "other": "Nelze vyřešit"
         }
       },

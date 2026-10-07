@@ -18,7 +18,7 @@ import { CHROME_UA, getRedisCredentials, loadEnvFile, redisCommand, runSeed } fr
 import { unwrapEnvelope } from './_seed-envelope-source.mjs';
 import { resolveR2StorageConfig, putR2JsonObject } from './_r2-storage.mjs';
 import { parseMetricKey, resolveHardSpec, resolveHorizonSpec, extractMetricValue, extractMetricObservation, selectResolutionFeed, shapeResolutionFeeds, MARKET_SETTLEMENT_FEED_KEY } from './_forecast-resolution-eval.mjs';
-import { CONFLICT_COUNT_FEED_AVAILABLE, UNREST_COUNT_FEED_AVAILABLE, CONFLICT_COUNT_SOURCE_FEED, UNREST_COUNT_SOURCE_FEED, scoredHorizonKeys } from './_forecast-resolution.mjs';
+import { CONFLICT_COUNT_FEED_AVAILABLE, UNREST_COUNT_FEED_AVAILABLE, CONFLICT_COUNT_SOURCE_FEED, CYBER_COUNT_SOURCE_FEED, UNREST_COUNT_SOURCE_FEED, scoredHorizonKeys } from './_forecast-resolution.mjs';
 import { buildFamilyOutcomes, buildPublicReceipts, computeScorecard, DEFAULT_ROLLING_WINDOW_DAYS, isHorizonEntry, isPublishedOriginEntry, isWithheldEntry } from './_forecast-scorecard.mjs';
 import { evaluateCalibrationShadow, resolveCalibrationMapForRun } from './_forecast-calibration.mjs';
 import { BETS_HISTORY_KEY } from './_forecast-bets-keys.mjs';
@@ -209,6 +209,7 @@ function promoteBetEngineEnabled() {
 
 export function processResolutionCycle(existingLedger, historySnapshots, feedsByKey, nowMs, options = {}) {
   const ingested = ingestHistory(existingLedger, historySnapshots, nowMs);
+  voidEnvelopeBugResolutions(ingested, nowMs);
   samplePendingEntries(ingested, feedsByKey, nowMs);
   const receipts = resolveDueEntries(ingested, feedsByKey, nowMs);
   // Drop terminal entries that are already receipted to R2 and outside the
@@ -222,12 +223,27 @@ export function processResolutionCycle(existingLedger, historySnapshots, feedsBy
 
 export async function processResolutionCycleWithJudges(existingLedger, historySnapshots, feedsByKey, newsArchive, nowMs, options = {}) {
   const ingested = ingestHistory(existingLedger, historySnapshots, nowMs);
+  voidEnvelopeBugResolutions(ingested, nowMs);
   samplePendingEntries(ingested, feedsByKey, nowMs);
   const receipts = resolveDueEntries(ingested, feedsByKey, nowMs);
   receipts.push(...await resolvePendingJudgedEntries(ingested, newsArchive, nowMs, options));
   const ledger = pruneArchivedTerminalEntries(ingested, nowMs);
   const scorecard = buildScorecard(ledger, nowMs, options.calibrationMap ?? null);
   return { ledger, receipts, scorecard };
+}
+
+// The judges' archive held 0 to 2 on-subject items for cyber rows and the
+// pair never ruled NO, so a judged cyber score could only be an unsupported
+// YES (#5233). Phase 2 of #8990 flips this once the evidence is fixed; the
+// dedicated reason lets it find the rows held out meanwhile.
+export const CYBER_JUDGING_HELD = true;
+export const JUDGED_EVIDENCE_UNRELIABLE_REASON = 'judged_evidence_unreliable';
+
+function isHeldCyberJudgedEntry(entry, nowMs) {
+  return CYBER_JUDGING_HELD
+    && entry?.status === 'pending-judge'
+    && entry.domain === 'cyber'
+    && Number(entry.deadline ?? entry.spec?.deadline) <= nowMs;
 }
 
 export async function resolvePendingJudgedEntries(ledger, newsArchive, nowMs, options = {}) {
@@ -246,11 +262,15 @@ export async function resolvePendingJudgedEntries(ledger, newsArchive, nowMs, op
   const backoffPolicy = resolveJudgedBackoffPolicy(options);
   let attempted = 0;
 
-  // Withheld buckets (#5234) have no checkable question and no published
-  // figure counts them, so they seal without a judge call or a budget slot.
+  // Withheld buckets (#5234) and held cyber rows (#5233) seal without a judge
+  // call or a budget slot.
   for (const [key, entry] of Object.entries(ledger)) {
-    if (entry?.status !== 'pending-judge' || !isWithheldEntry(entry)) continue;
-    const result = resolvedJudgedResult('VOID', 'withheld_unpublished', entry, [], [], nowMs);
+    const reason = entry?.status !== 'pending-judge' ? null
+      : isWithheldEntry(entry) ? 'withheld_unpublished'
+        : isHeldCyberJudgedEntry(entry, nowMs) ? JUDGED_EVIDENCE_UNRELIABLE_REASON
+          : null;
+    if (!reason) continue;
+    const result = resolvedJudgedResult('VOID', reason, entry, [], [], nowMs);
     recordJudgedTerminalAttempt(entry, result, nowMs);
     result.evidence = pruneUndefined({
       ...result.evidence,
@@ -1489,6 +1509,8 @@ function migratePendingCountFeedKeys(ledger) {
 const UNAVAILABLE_COUNT_FEED_MIGRATIONS = [
   { feed: CONFLICT_COUNT_SOURCE_FEED, available: () => CONFLICT_COUNT_FEED_AVAILABLE, buildQuestion: buildConflictJudgedQuestionForEntry },
   { feed: UNREST_COUNT_SOURCE_FEED, available: () => UNREST_COUNT_FEED_AVAILABLE, buildQuestion: buildUnrestJudgedQuestionForEntry },
+  // The cyber feed is populated but cannot answer a 7-day count (#5233).
+  { feed: CYBER_COUNT_SOURCE_FEED, available: () => false, buildQuestion: buildCyberJudgedQuestionForEntry },
 ];
 
 function migratePendingCountEntryToJudged(entry) {
@@ -1521,6 +1543,13 @@ function buildConflictJudgedQuestionForEntry(entry) {
   const region = entry.region || 'unspecified region';
   const horizon = entry.timeHorizon || 'unspecified horizon';
   return `Within the ${horizon} horizon, did ${region} experience a materially escalated level of armed conflict versus its recent baseline, consistent with "${title}"?`;
+}
+
+function buildCyberJudgedQuestionForEntry(entry) {
+  const title = entry.title || '(untitled forecast)';
+  const region = entry.region || 'unspecified region';
+  const horizon = entry.timeHorizon || 'unspecified horizon';
+  return `Within the ${horizon} horizon, did ${region} see materially elevated malicious cyber activity versus its recent baseline, consistent with "${title}"?`;
 }
 
 function buildUnrestJudgedQuestionForEntry(entry) {
@@ -1572,10 +1601,47 @@ export function resolveDueEntries(ledger, feedsByKey, nowMs) {
     entry.outcome = result.outcome;
     entry.resolvedAt = nowMs;
     entry.sealedAt = nowMs;
-    entry.evidence = result.evidence;
+    entry.evidence = isHorizonEntry(entry) ? result.evidence : { ...result.evidence, envelopeAware: true };
     receipts.push({ key, entry: cloneJson(entry), resolvedAt: nowMs });
   }
   return receipts;
+}
+
+// Until #5233 the resolver read these contract-mode feeds as raw seed
+// envelopes, found no records, and scored every count() and present() as 0.
+// Those outcomes measured the reader, not the world. A row is mis-resolved when
+// it carries that zero and lacks the envelopeAware stamp the fixed reader puts
+// on every hard resolution; a genuine zero read after the fix keeps its outcome.
+// Re-running is a no-op: a voided row is no longer YES or NO.
+export const ENVELOPE_BUG_VOID_REASON = 'resolver_envelope_bug';
+const ENVELOPE_BUG_FEEDS = new Set(['cyber:threats-bootstrap:v2', 'infra:outages:v1']);
+
+function isEnvelopeBugResolution(entry) {
+  return entry?.status === 'resolved'
+    && (entry.outcome === 'YES' || entry.outcome === 'NO')
+    && entry.spec?.kind === 'hard'
+    && !isHorizonEntry(entry)
+    && ENVELOPE_BUG_FEEDS.has(entry.spec.sourceFeed)
+    && entry.evidence?.metricValue === 0
+    && entry.evidence?.envelopeAware !== true;
+}
+
+export function voidEnvelopeBugResolutions(ledger, nowMs) {
+  let voided = 0;
+  for (const entry of Object.values(ledger)) {
+    if (!isEnvelopeBugResolution(entry)) continue;
+    entry.evidence = {
+      reason: ENVELOPE_BUG_VOID_REASON,
+      metricKey: entry.spec.metricKey,
+      resolvedAt: entry.resolvedAt,
+      supersededOutcome: entry.outcome,
+      supersededEvidence: entry.evidence,
+      voidedAt: nowMs,
+    };
+    entry.outcome = 'VOID';
+    voided += 1;
+  }
+  return voided;
 }
 
 export function collectUnarchivedReceipts(ledger) {
@@ -2388,6 +2454,9 @@ async function dryRun() {
     readBetsHistory(200).catch(() => []),
   ]);
   const preLedger = ingestHistory(existingLedger || {}, [...history, ...betsHistory], nowMs);
+  // The live run fits the calibration map after the cycle has voided these
+  // rows; the preview must fit the same ledger.
+  voidEnvelopeBugResolutions(preLedger, nowMs);
   const feeds = await readResolutionFeeds(preLedger);
   const judgedOptions = { ...buildLiveJudgedOptions(nowMs), persistRecoveredCoverage: false };
   const judgedArchive = await readJudgedNewsArchiveForLedger(preLedger, nowMs, judgedOptions);

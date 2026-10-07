@@ -183,15 +183,16 @@ export const SIGNAL_TO_HARD_FAMILY = {
 
 // Domains whose forecasts are ALWAYS judged (R3), regardless of what signals
 // they carry. Domain is the claim's SUBJECT; signals are only evidence.
-// Political unrest and cyber concentration now have country/date feeds with a
-// direct count metric. Military still lacks a stable theater id, while the
-// legacy infrastructure family only measured outage presence rather than its
-// claimed cascade risk (#5330). Keep both judged until they carry a crisp,
-// claim-aligned metric identity.
+// Military still lacks a stable theater id, while the legacy infrastructure
+// family only measured outage presence rather than its claimed cascade risk
+// (#5330). Cyber's feed keeps country-bearing records for under a day, so a
+// 7-day count read once daily measures the deadline's hour, not the window
+// (#5233). Keep all three judged until they carry a crisp, claim-aligned metric
+// identity.
 // This gate is checked AFTER the state_derived origin check and the
 // prediction_market exemption, and BEFORE the general SIGNAL_TO_HARD_FAMILY
 // lookup.
-export const JUDGED_DOMAINS = new Set(['infrastructure', 'military']);
+export const JUDGED_DOMAINS = new Set(['infrastructure', 'military', 'cyber']);
 
 // Which hard families a forecast's DOMAIN permits (R3, by-domain constraint).
 // Domain is the claim's SUBJECT; signals are only evidence. A market-domain
@@ -524,6 +525,9 @@ function deriveHardMetrics(pred, family, inputs, options = {}) {
         window: FAMILY_WINDOW[family],
       };
     }
+    // Unreachable for emission while cyber is in JUDGED_DOMAINS (#5233); kept
+    // for the judged question's threshold and for the per-cycle accumulation
+    // that would let a hard cyber count return.
     case 'cyber': {
       const tally = firstFiniteSignalCount(pred, new Set(['cyber']));
       if (!Number.isFinite(tally)) return null;
@@ -656,6 +660,12 @@ function buildQuestion(pred) {
   }
   if (domain === 'political') {
     return `Within the ${horizon} horizon, did ${region} experience a materially elevated level of civil unrest or political instability versus its recent baseline, consistent with "${title}"?`;
+  }
+  if (domain === 'cyber') {
+    const metrics = deriveHardMetrics(pred, 'cyber', {});
+    if (metrics) {
+      return `Within the ${horizon} horizon after this forecast, did public threat-intelligence sources report at least ${metrics.threshold} new malicious cyber threat indicators (malware hosts, command-and-control servers, phishing or scanning IPs) attributed to ${region}?`;
+    }
   }
   return `Will "${title}" (${domain}, ${region}) resolve YES within its ${horizon} horizon?`;
 }
