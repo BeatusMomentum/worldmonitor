@@ -13,6 +13,7 @@ import {
   RECEIPT_VOID_REASON_LABELS,
   buildPublicReceipts,
   computeScorecard,
+  isWithheldEntry,
   wilsonInterval,
 } from '../scripts/_forecast-scorecard.mjs';
 import { PROJECTION_HORIZONS } from '../scripts/_forecast-resolution.mjs';
@@ -129,6 +130,54 @@ describe('computeScorecard', () => {
     // The cohort's base rate is yesCount / count. The synthetic YES (c) must
     // not leak in, or the headline would be compared against the wrong null.
     assert.equal(scorecard.skill.yesCount, 1);
+  });
+
+  it('drops withheld state-derived market buckets from every published figure but keeps energy and freight (#5234)', () => {
+    const stateDerived = (title, domain, outcome) => resolved({
+      title, domain, outcome, probability: 0.6, generationOrigin: 'state_derived',
+    });
+    const ledger = {
+      a: resolved({ probability: 0.8, outcome: 'YES', generationOrigin: 'detector' }),
+      b: resolved({ probability: 0.3, outcome: 'VOID', generationOrigin: 'detector' }),
+      sov: stateDerived('Sovereign risk repricing from Iran security escalation state', 'market', 'VOID'),
+      sovYes: stateDerived('Sovereign risk repricing from Gulf maritime disruption state', 'market', 'YES'),
+      fx: stateDerived('FX stress from Americas governance pressure state', 'market', 'VOID'),
+      rates: stateDerived('Inflation and rates pressure from Red Sea maritime disruption state', 'market', 'VOID'),
+      ratesPending: { ...stateDerived('Inflation and rates pressure from Andes state', 'market'), status: 'pending-judge', outcome: undefined },
+      energy: stateDerived('Energy repricing risk from Red Sea maritime disruption state', 'market', 'VOID'),
+      freight: stateDerived('Supply chain disruption risk from Red Sea maritime disruption state', 'supply_chain', 'YES'),
+    };
+
+    const scorecard = computeScorecard(ledger, NOW);
+
+    assert.equal(scorecard.totals.entries, 4);
+    assert.equal(scorecard.totals.resolved, 4);
+    assert.equal(scorecard.totals.void, 2);
+    assert.equal(scorecard.totals.voidRate, 0.5);
+    assert.equal(scorecard.totals.pendingJudge, 0);
+    assert.equal(scorecard.overall.count, 2);
+    const stateRow = scorecard.byGenerationOrigin.find((row) => row.generationOrigin === 'state_derived');
+    assert.equal(stateRow.resolved, 2);
+    assert.equal(scorecard.skill.count, 1);
+    assert.ok(Object.hasOwn(ledger, 'sov'), 'ledger rows are not deleted');
+  });
+
+  it('withholds by stored bucket id first and by title only for legacy rows, including unattributed ones (#5234)', () => {
+    const ledger = {
+      a: resolved({ outcome: 'YES', generationOrigin: 'detector' }),
+      byBucket: resolved({ outcome: 'VOID', generationOrigin: 'state_derived', stateBucketId: 'rates_inflation', title: 'Retitled pressure from Andes state' }),
+      energyBucket: resolved({ outcome: 'VOID', generationOrigin: 'state_derived', stateBucketId: 'energy', title: 'FX stress from Andes state' }),
+      legacyUnknown: resolved({ outcome: 'VOID', generationOrigin: undefined, title: 'FX stress from Americas governance pressure state' }),
+      detectorTitle: resolved({ outcome: 'VOID', generationOrigin: 'detector', title: 'FX stress from a detector' }),
+    };
+
+    const scorecard = computeScorecard(ledger, NOW);
+
+    const withheld = Object.fromEntries(Object.entries(ledger).map(([key, entry]) => [key, isWithheldEntry(entry)]));
+    assert.deepEqual(withheld, { a: false, byBucket: true, energyBucket: false, legacyUnknown: true, detectorTitle: false });
+    assert.equal(scorecard.totals.resolved, 3);
+    assert.equal(scorecard.totals.void, 2);
+    assert.equal(scorecard.byGenerationOrigin.some((row) => row.generationOrigin === 'unknown'), false);
   });
 
   it('holds entries with no recorded origin out of the headline but keeps them in overall and byGenerationOrigin', () => {
