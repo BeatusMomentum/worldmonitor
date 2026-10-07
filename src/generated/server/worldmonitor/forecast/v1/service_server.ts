@@ -32,6 +32,7 @@ export interface Forecast {
   createdAt: number;
   updatedAt: number;
   perspectives?: Perspectives;
+  /** @deprecated */
   projections?: Projections;
   caseFile?: ForecastCase;
   simulationAdjustment: number;

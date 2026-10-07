@@ -53,16 +53,12 @@ message ResolutionSpec {
   optional string question = 9;
 }
 
-// Bounded presentation-path probabilities from domain curves.
-// Market forecasts are peak-anchored, so the value at the forecast's own
-// time_horizon can differ from the headline probability;
-// non-market forecasts preserve their emitted horizon as anchor.
+// Deprecated (#8967): newly seeded payloads omit it; a payload cached
+// before the change may carry it until the next seed-forecasts run. The
+// seeder keeps these unscored horizon curves internal for horizon scoring.
 message Projections {
-  // Projected 24-hour probability.
   double h24 = 1;
-  // Projected 7-day probability.
   double d7 = 2;
-  // Projected 30-day probability.
   double d30 = 3;
 }
 
@@ -142,7 +138,10 @@ message Forecast {
   int64 created_at = 14 [(sebuf.http.int64_encoding) = INT64_ENCODING_NUMBER];
   int64 updated_at = 15 [(sebuf.http.int64_encoding) = INT64_ENCODING_NUMBER];
   Perspectives perspectives = 16;
-  Projections projections = 17;
+  // Deprecated (#8967): newly seeded payloads omit it; a payload cached
+  // before the change may carry it until the next seed-forecasts run.
+  // Kept for v1 wire compatibility.
+  Projections projections = 17 [deprecated = true];
   ForecastCase case_file = 18;
   // Score delta from the deep simulation pipeline: +0.08 to +0.12, or
   // -0.12 or -0.15; 0 when it has not run.

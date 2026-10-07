@@ -43442,6 +43442,7 @@ components:
                 perspectives:
                     $ref: '#/components/schemas/worldmonitor_forecast_v1_Perspectives'
                 projections:
+                    deprecated: true
                     $ref: '#/components/schemas/worldmonitor_forecast_v1_Projections'
                 caseFile:
                     $ref: '#/components/schemas/worldmonitor_forecast_v1_ForecastCase'
@@ -43516,20 +43517,16 @@ components:
                 h24:
                     type: number
                     format: double
-                    description: Projected 24-hour probability.
                 d7:
                     type: number
                     format: double
-                    description: Projected 7-day probability.
                 d30:
                     type: number
                     format: double
-                    description: Projected 30-day probability.
             description: |-
-                Bounded presentation-path probabilities from domain curves.
-                 Market forecasts are peak-anchored, so the value at the forecast's own
-                 time_horizon can differ from the headline probability;
-                 non-market forecasts preserve their emitted horizon as anchor.
+                Deprecated (#8967): newly seeded payloads omit it; a payload cached
+                 before the change may carry it until the next seed-forecasts run. The
+                 seeder keeps these unscored horizon curves internal for horizon scoring.
         worldmonitor_forecast_v1_ForecastCase:
             type: object
             properties:
