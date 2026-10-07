@@ -78,7 +78,7 @@ export function computeScorecard(ledger, nowMs, options = {}) {
     schemaVersion: 2,
     generatedAt: nowMs,
     rollingWindowDays,
-    methodology: 'Brier/log score over resolved YES/NO published forecast windows; VOID and pending entries are counted for coverage but excluded from accuracy math.',
+    methodology: 'Brier/log score over resolved YES/NO published forecast windows; VOID and pending entries are counted for coverage but excluded from accuracy math. Each window is scored on the probability published at the time. While an outcome-fitted calibration gate passes, that probability is calibrated, and the API does not mark which ones are; after a switch between raw and calibrated publication, the rolling window mixes forecasts published under both.',
     totals: {
       entries: entries.length,
       resolved: resolved.length,
@@ -770,7 +770,8 @@ export function summarizeCalibrationShadow(rows, modeByDomain = {}, options = {}
 
 /**
  * The #7070 activation gate. Reports eligibility and every failing reason;
- * nothing reads `eligible` to change a published probability. Coverage, VOID
+ * seed-forecasts publishes calibrated probabilities only while `eligible`
+ * holds for the current map. Coverage, VOID
  * and origin mix ride beside the verdict (from `context`) so a cohort that
  * looks better only because its selection changed is visible next to it.
  */
