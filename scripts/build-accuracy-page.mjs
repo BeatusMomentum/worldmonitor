@@ -13,9 +13,10 @@ import {
   RECEIPT_VOID_REASON_LABELS,
   wilsonInterval,
 } from './_forecast-scorecard.mjs';
+import { MARKET_ALERT_BASE_RATE_RULE, MARKET_ALERT_RESOLUTION_RULE } from './_market-alert-ledger.mjs';
 
 /** Bump when the page copy changes so its lastmod advances without touching every sibling. */
-export const ACCURACY_CONTENT_VERSION = '2026-10-06';
+export const ACCURACY_CONTENT_VERSION = '2026-10-07';
 
 export const ACCURACY_PAGE_PATH = '/accuracy/';
 
@@ -43,6 +44,7 @@ export const SCORECARD_DECLARED_FIELDS = Object.freeze([
   'uncertainty',
   'funnel',
   'receipts',
+  'marketAlerts',
 ]);
 
 // A fixed vocabulary, because the page is public: an exception message or an
@@ -88,6 +90,10 @@ const FUNNEL_FIELDS = Object.freeze([
   'resolvedOfMatured', 'scoredOfMatured',
 ]);
 const PROPORTION_FIELDS = Object.freeze(['count', 'successes', 'rate', 'ci95']);
+// Mirrors MARKET_ALERT_FIELDS and MARKET_ALERT_ROW_FIELDS in
+// server/worldmonitor/forecast/v1/scorecard-fields.ts (a test pins the parity).
+const MARKET_ALERT_FIELDS = Object.freeze(['generatedAt', 'windowHours', 'rollingWindowDays', 'methodology', 'byType']);
+const MARKET_ALERT_ROW_FIELDS = Object.freeze(['type', 'scored', 'hitRate', 'baseN', 'baseHitRate', 'pairedHitRate', 'medianLeadTimeMs']);
 
 export const SCORECARD_NESTED_OBJECT_FIELDS = Object.freeze({
   totals: TOTALS_FIELDS,
@@ -96,12 +102,17 @@ export const SCORECARD_NESTED_OBJECT_FIELDS = Object.freeze({
   skill: SKILL_FIELDS,
   uncertainty: UNCERTAINTY_FIELDS,
   funnel: FUNNEL_FIELDS,
+  marketAlerts: MARKET_ALERT_FIELDS,
 });
 // Members that are themselves objects. The producer writes null for an
 // interval it cannot compute, and null is kept: it is the not-measurable state.
 export const SCORECARD_NESTED_CHILD_FIELDS = Object.freeze({
   uncertainty: { overallBrier: INTERVAL_FIELDS, skillBrier: INTERVAL_FIELDS },
   funnel: { resolvedOfMatured: PROPORTION_FIELDS, scoredOfMatured: PROPORTION_FIELDS },
+});
+// Members that are row lists, picked row by row.
+export const SCORECARD_NESTED_ROW_CHILD_FIELDS = Object.freeze({
+  marketAlerts: { byType: MARKET_ALERT_ROW_FIELDS },
 });
 const NESTED_ROW_FIELDS = Object.freeze({
   byDomain: DOMAIN_FIELDS,
@@ -172,6 +183,11 @@ export function selectDeclaredScorecardFields(payload) {
         if (!Object.hasOwn(nested, child) || nested[child] === null) continue;
         const picked = pickFields(nested[child], childFields);
         if (picked) nested[child] = picked;
+        else delete nested[child];
+      }
+      for (const [child, rowFields] of Object.entries(SCORECARD_NESTED_ROW_CHILD_FIELDS[field] ?? {})) {
+        if (!Object.hasOwn(nested, child)) continue;
+        if (Array.isArray(nested[child])) nested[child] = nested[child].map((row) => pickFields(row, rowFields)).filter(Boolean);
         else delete nested[child];
       }
       out[field] = nested;
@@ -751,6 +767,13 @@ export const ACCURACY_DOMAIN_LABELS = Object.freeze({
   infrastructure: 'Infra',
 });
 
+export const MARKET_ALERT_TYPE_LABELS = Object.freeze({
+  prediction_leads_news: 'Prediction market moved on a quiet news day',
+  explained_market_move: 'Market moved alongside related news',
+  silent_divergence: 'Market moved with no news found',
+  flow_price_divergence: 'Energy price rose with no pipeline news',
+});
+
 function domainLabel(domain) {
   return ACCURACY_DOMAIN_LABELS[domain]
     ?? String(domain).split('_').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -809,6 +832,65 @@ function marketSection(vsMarketSkill, escapeHtml) {
       : 'the two tied';
   return `      <h2>Against prediction markets</h2>
       <p>Measured over all scored entries that overlapped a liquid market, not over the narrower headline cohort. On ${escapeHtml(formatCount(vsMarketSkill.count))} such resolved questions the forecast Brier was ${escapeHtml(formatScore(vsMarketSkill.forecastBrier))} and the market Brier was ${escapeHtml(formatScore(vsMarketSkill.marketBrier))}. ${escapeHtml(BRIER_DELTA_CONVENTION)} Here the delta is ${escapeHtml(formatScore(delta))}, so on this sample ${escapeHtml(verdict)}.</p>`;
+}
+
+const NOT_YET_MEASURABLE = 'Not yet measurable';
+// A prediction question's topic words reach the news often with or without an
+// alert, so its hit rate means nothing until the control windows have scored.
+const CONTROL_GATED_ALERT_TYPES = new Set(['prediction_leads_news']);
+
+const isRate = (value) => isFiniteNumber(value) && value >= 0 && value <= 1;
+const isMeasurableCount = (value) => Number.isInteger(value) && value >= INTERVAL_MIN_SAMPLE;
+
+function formatLeadTime(ms) {
+  const minutes = Math.round(ms / 60_000);
+  const hours = Math.floor(minutes / 60);
+  if (hours === 0) return `${minutes} min`;
+  return minutes % 60 === 0 ? `${hours} h` : `${hours} h ${minutes % 60} min`;
+}
+
+function marketAlertCells(row) {
+  const compared = isMeasurableCount(row.baseN) && isRate(row.pairedHitRate) && isRate(row.baseHitRate);
+  const published = compared || !CONTROL_GATED_ALERT_TYPES.has(row.type);
+  const hit = published && isMeasurableCount(row.scored) && isRate(row.hitRate);
+  const leadMeasured = hit && Math.round(row.hitRate * row.scored) >= INTERVAL_MIN_SAMPLE;
+  return [
+    hit ? rateOf(row.hitRate, row.scored, 'alerts') : NOT_YET_MEASURABLE,
+    published && compared ? rateOf(row.pairedHitRate, row.baseN, 'alerts') : NOT_YET_MEASURABLE,
+    published && compared ? rateOf(row.baseHitRate, row.baseN, 'earlier windows') : NOT_YET_MEASURABLE,
+    leadMeasured && isFiniteNumber(row.medianLeadTimeMs) && row.medianLeadTimeMs >= 0 ? formatLeadTime(row.medianLeadTimeMs) : NOT_YET_MEASURABLE,
+  ];
+}
+
+function marketAlertsSection(marketAlerts, escapeHtml) {
+  const heading = '      <h2 id="market-alerts">Market alerts: did the news follow?</h2>';
+  if (!isPlainObject(marketAlerts) || !Array.isArray(marketAlerts.byType)) {
+    return `${heading}
+      <p>This edition carries no market-alert scores, so no market-alert hit rates are shown.</p>`;
+  }
+  const hours = isFiniteNumber(marketAlerts.windowHours) ? marketAlerts.windowHours : 6;
+  const days = isFiniteNumber(marketAlerts.rollingWindowDays) ? marketAlerts.rollingWindowDays : 30;
+  const generated = isFiniteNumber(marketAlerts.generatedAt) ? ` and were generated ${formatUtcDateTime(marketAlerts.generatedAt)}` : '';
+  const intro = `      <p>World Monitor raises a market alert when a market or a prediction market makes an unusual move. Some alerts fire when there is no news behind the move, and one type fires when related news is already out. Each alert is checked ${escapeHtml(formatCount(hours))} hours later. It counts as a hit if an established news outlet published a new story about the same company, commodity or topic in that time. The same check also runs on the same market for a stretch of the same length one day earlier, when no alert was raised, and that gives the base rate. An alert type is useful only when its hit rate is clearly above the base rate on the same alerts. The figures cover the last ${escapeHtml(formatCount(days))} days${escapeHtml(generated)}.</p>`;
+  const rules = `      <h3>How an alert is scored</h3>
+      <p>${escapeHtml(MARKET_ALERT_RESOLUTION_RULE)}</p>
+      <p>${escapeHtml(MARKET_ALERT_BASE_RATE_RULE)}</p>`;
+  if (marketAlerts.byType.length === 0) {
+    return `${heading}
+${intro}
+      <p>No market alert has been scored yet.</p>
+${rules}`;
+  }
+  return `${heading}
+${intro}
+      <div class="table-scroll"><table data-market-alerts>
+        <caption>Market-alert hit rates by alert type. Each figure is shown once ${escapeHtml(formatCount(INTERVAL_MIN_SAMPLE))} alerts are behind it and reads Not yet measurable below that, the same rule as the domain table. The two comparison columns count only the alerts whose earlier window could also be checked, so both rates describe the same alerts. The typical wait is shown once ${escapeHtml(formatCount(INTERVAL_MIN_SAMPLE))} alerts were followed by news. Prediction-market alerts are shown only once their earlier windows have been checked, because the topic words in a prediction question turn up in the news often anyway.</caption>
+        <thead><tr><th scope="col">Alert type</th><th scope="col">Alerts scored</th><th scope="col">News followed</th><th scope="col">News followed, compared alerts</th><th scope="col">News a day earlier, same markets</th><th scope="col">Typical wait for the news (median)</th></tr></thead>
+        <tbody>
+${marketAlerts.byType.map((row) => `          <tr data-alert-type="${escapeHtml(row.type)}"><th scope="row">${escapeHtml(MARKET_ALERT_TYPE_LABELS[row.type] ?? row.type)}</th><td>${escapeHtml(formatCount(row.scored))}</td>${marketAlertCells(row).map((cell) => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('\n')}
+        </tbody>
+      </table></div>
+${rules}`;
 }
 
 function cohortSection(skill, unknownSentence, escapeHtml) {
@@ -1011,6 +1093,7 @@ ${domainSection(scorecard, escapeHtml)}
       <h2>Accuracy by generation origin</h2>
 ${originTable(scorecard.byGenerationOrigin, scorecard.skill, unknownOriginStatus(scorecard), intervals, escapeHtml)}
 ${marketSection(scorecard.vsMarketSkill, escapeHtml)}
+${marketAlertsSection(scorecard.marketAlerts, escapeHtml)}
 ${limitsSection(omittedBuckets, escapeHtml)}
 ${relatedSection(baseUrl, tpl)}
 ${provenanceLine(state, dataset, snapshotPath, escapeHtml)}`;
