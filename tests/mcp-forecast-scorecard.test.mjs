@@ -29,6 +29,7 @@ const DECLARED = {
     scoredOfMatured: { count: 2, successes: 1, rate: 0.5, ci95: [0.094531, 0.905469] },
   },
   receipts: [{ question: 'Will Brent reach 104.89 USD/bbl?', forecastAt: 1, probability: 0.35, outcome: 'NO', resolvedAt: 2, sourceFeed: 'commodity-prices', observedValue: 100.75 }],
+  familyOutcomes: [{ forecastId: 'fc-conflict-1', outcome: 'YES' }, { forecastId: 'fc-conflict-1', outcome: 'VOID', voidReason: 'judge_disagreement' }],
 };
 
 const MARKET_ALERTS_STORED = {
@@ -138,6 +139,11 @@ describe('get_forecast_scorecard MCP projection (#8892)', () => {
     const serialized = JSON.stringify(result);
     assert.equal(serialized.includes('judgedLane'), false);
     assert.equal(serialized.includes('calibrationShadow'), false);
+  });
+
+  it('names every row list it serves in the tool description', () => {
+    assert.match(tool.description, /\breceipts\b/);
+    assert.match(tool.description, /\bfamilyOutcomes\b/);
   });
 
   it('declares every field it serves in outputSchema', () => {

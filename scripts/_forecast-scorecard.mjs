@@ -911,6 +911,7 @@ export const RECEIPT_VOID_REASON_LABELS = Object.freeze({
   all_judges_void: 'Both judges found the evidence insufficient',
   judge_disagreement: 'The judges disagreed',
   judge_retry_exhausted: 'The judges returned no verdict',
+  withheld_unpublished: 'This kind of forecast is no longer published',
   other: 'Could not be resolved',
 });
 const RECEIPT_OUTCOMES = new Set(['YES', 'NO', 'VOID']);
@@ -963,6 +964,45 @@ function publicReceipt(entry) {
     }
   }
   return receipt;
+}
+
+// Card chips (#5092): for each published family (forecast id) with an open
+// window, its newest resolved windows, newest first. A live card is the open
+// window, so these are the family's earlier outcomes, never the card's own.
+// Open windows outlive the snapshot that published them, so the families are
+// capped, keeping those seen most recently: the current snapshot's cards come
+// first (#5092 review: production held 55 open families for a 15-card panel).
+export const FAMILY_OUTCOME_LIMIT = 5;
+export const FAMILY_OUTCOME_FAMILY_LIMIT = 24;
+export const PUBLIC_FAMILY_OUTCOME_FIELDS = Object.freeze(['forecastId', 'outcome', 'voidReason']);
+
+export function buildFamilyOutcomes(ledger, nowMs, { limit = FAMILY_OUTCOME_LIMIT } = {}) {
+  const minResolvedAt = nowMs - DEFAULT_ROLLING_WINDOW_DAYS * DAY_MS;
+  const windows = normalizeLedger(ledger).filter((entry) => entry && !isHorizonEntry(entry) && isPublishedOriginEntry(entry));
+  const lastSeenById = new Map();
+  for (const entry of windows) {
+    if (entry.status !== 'pending' && entry.status !== 'pending-judge') continue;
+    lastSeenById.set(entry.id, Math.max(lastSeenById.get(entry.id) ?? 0, Number(entry.lastSeenAt) || 0));
+  }
+  const byFamily = new Map();
+  for (const entry of windows) {
+    if (entry.status !== 'resolved' || !lastSeenById.has(entry.id) || !RECEIPT_OUTCOMES.has(entry.outcome)) continue;
+    const resolvedAt = Number(entry.resolvedAt);
+    if (!Number.isFinite(resolvedAt) || resolvedAt < minResolvedAt) continue;
+    if (!byFamily.has(entry.id)) byFamily.set(entry.id, []);
+    byFamily.get(entry.id).push(entry);
+  }
+  const families = [...byFamily.keys()]
+    .sort((a, b) => lastSeenById.get(b) - lastSeenById.get(a) || (a < b ? -1 : 1))
+    .slice(0, FAMILY_OUTCOME_FAMILY_LIMIT)
+    .sort();
+  return families.flatMap((id) => byFamily.get(id)
+    // One cycle can settle two overdue windows at the same instant; the later deadline is the newer window.
+    .sort((a, b) => Number(b.resolvedAt) - Number(a.resolvedAt) || Number(b.deadline) - Number(a.deadline))
+    .slice(0, limit)
+    .map((entry) => (entry.outcome === 'VOID'
+      ? { forecastId: id, outcome: 'VOID', voidReason: Object.hasOwn(RECEIPT_VOID_REASON_LABELS, entry.evidence?.reason) ? entry.evidence.reason : 'other' }
+      : { forecastId: id, outcome: entry.outcome })));
 }
 
 // Published-origin forecast windows inside the rolling window: shadow,

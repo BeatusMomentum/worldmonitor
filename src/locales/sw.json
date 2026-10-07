@@ -2111,6 +2111,34 @@
         "measuredHint": "Jinsi ambavyo mwonekano uliotangazwa wa {{domain}} umefanya alama zaidi ya {{n}} mwonekano uliokadiria katika siku {{days}} zilizopita. Kiwango cha msingi ni kile kinachoshindwa kwa kujibu kila wakati kwa kiwango kilichogunduliwa cha ndiyo cha kikoa. Chini ni nzuri. Hii ni rekodi ya kikoa, sio ya mwonekano huu.",
         "unmeasured": "Haijapimwa bado",
         "unmeasuredHint": "{{domain}} utabiri una {{n}} matokeo yaliyokadiria katika siku {{days}} zilizopita. Kikoa kinahitaji {{min}} kabla usahihi wake kuonekana."
+      },
+      "resolution": {
+        "last": "Mwisho: {{outcome}}",
+        "lastSr": "Dirisha lililopita la utabiri huu liliamuliwa kuwa {{outcome}}.",
+        "history": "Madirisha ya karibuni, mapya kwanza: {{list}}",
+        "outcome": {
+          "yes": "NDIO",
+          "no": "HAPANA",
+          "void": "BATILI"
+        },
+        "void": {
+          "no_establishable_metric": "Chanzo hakikuwa na kipimo kwa swali hili",
+          "value_source_never_settled": "Chanzo hakikuchapisha thamani ya mwisho",
+          "count_source_window_not_retained": "Chanzo hakikuhifadhi tena dirisha la swali",
+          "unsupported_window": "Swali halikuweza kukaguliwa dhidi ya chanzo chake",
+          "unsupported_metric_key": "Swali halikuweza kukaguliwa dhidi ya chanzo chake",
+          "not_hard_spec": "Swali halikuweza kukaguliwa dhidi ya chanzo chake",
+          "missing_threshold": "Swali lilikosa kiwango cha kizingiti",
+          "missing_deadline": "Swali lilikosa tarehe ya mwisho",
+          "missing_generated_at": "Utabiri ulikosa tarehe ya kuanza",
+          "beyond_archive_horizon": "Hifadhi ya habari haikufunika tena dirisha la swali",
+          "no_archive_evidence": "Hifadhi ya habari haikuwa na kitu juu ya mada",
+          "all_judges_void": "Mahakimu wote wawili waliona ushahidi hautoshi",
+          "judge_disagreement": "Mahakimu hawakukubaliana",
+          "judge_retry_exhausted": "Mahakimu hawakutoa hukumu",
+          "withheld_unpublished": "Aina hii ya utabiri haichapishwi tena",
+          "other": "Haikuweza kuamuliwa"
+        }
       }
     },
     "escalationCorrelation": {
