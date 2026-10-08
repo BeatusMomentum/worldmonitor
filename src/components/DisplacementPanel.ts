@@ -83,6 +83,10 @@ export class DisplacementPanel extends Panel {
     });
   }
 
+  protected override updateFreshnessBadge(): void {
+    super.updateFreshnessBadge(this.activeTab === 'internal' || this.activeTab === 'crossBorder' ? null : undefined);
+  }
+
   public setCountryClickHandler(handler: (lat: number, lon: number) => void): void {
     this.onCountryClick = handler;
   }
@@ -126,6 +130,7 @@ export class DisplacementPanel extends Panel {
     }
     if (sources.length === 0) return;
     if (!sources.some((source) => source.id === this.activeTab)) this.activeTab = sources[0]!.id;
+    this.updateFreshnessBadge();
 
     const tabsHtml = `
       <div class="panel-tabs" role="tablist" aria-label="Displacement data view">
